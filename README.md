@@ -10,7 +10,7 @@ Standards-adjacent interoperability work is often spread across issue threads, d
 
 The working model is:
 
-**existing standards → candidate mappings/bindings → experiments/test evidence → upstream proposal**
+**upstream specifications → implementation analysis → mappings/bindings/profiles → experiments/test evidence → candidate upstream feedback → upstream proposal**
 
 ## Current work
 
@@ -28,9 +28,25 @@ Baseline:
 - Trust Tasks Framework 0.3 (repository baseline dated 2026-08-07)
 - MCP 2026-07-28
 
+### TSP-Enabled AI Agent Protocols
+
+The lab now also carries an exploratory implementation and interoperability analysis of the AIMWG TSP-Enabled AI Agent Protocols draft:
+
+- [Implementation analysis 0.1](analysis/tsp-enabled-ai-agents/0.1/README.md)
+- [Implementation gap analysis](analysis/tsp-enabled-ai-agents/0.1/implementation-gap-analysis.md)
+- [Requirements matrix](analysis/tsp-enabled-ai-agents/0.1/requirements-matrix.md)
+- [Interoperability risk register](analysis/tsp-enabled-ai-agents/0.1/interoperability-risk-register.md)
+- [TEA / MCP / Trust Tasks mapping](mappings/tea-mcp-trust-tasks.md)
+- [Experiment scaffolding](experiments/tsp-enabled-ai-agents/README.md)
+
+Baseline:
+
+- TSP-Enabled AI Agent Protocols v1.0 Draft / Editor's Copy, reviewed 2026-08-10
+
 ## Repository structure
 
 ```text
+analysis/      Implementation-gap analysis and interoperability risk assessment
 bindings/      Candidate protocol bindings
 mappings/      Cross-protocol concept and semantic mappings
 experiments/   Test plans, scenarios, vectors, and observations

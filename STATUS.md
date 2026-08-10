@@ -23,6 +23,7 @@ This repository contains independent, standards-adjacent interoperability work. 
 | Artifact | Version | Status | Baseline | Upstream status |
 |---|---:|---|---|---|
 | MCP Binding for Trust Tasks | 0.2 | Candidate | Trust Tasks 0.3; MCP 2026-07-28 | Not submitted |
+| TSP-Enabled AI Agent Protocols Implementation Analysis | 0.1 | Exploratory | AIMWG TSP-Enabled AI Agent Protocols v1.0 Draft, reviewed 2026-08-10 | Independent analysis; not submitted |
 
 ## Status rules
 

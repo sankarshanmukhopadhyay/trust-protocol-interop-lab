@@ -1,0 +1,10 @@
+{
+  "artifact": "TSP-Enabled AI Agent Protocols Implementation Analysis",
+  "version": "0.1",
+  "status": "exploratory",
+  "upstream": "Trust over IP AIMWG TSP-Enabled AI Agent Protocols",
+  "upstream_baseline": "v1.0 Draft / Editor's Copy",
+  "reviewed_date": "2026-08-10",
+  "upstream_status": "independent-analysis-not-submitted",
+  "implementation_status": "analysis-and-test-scaffolding"
+}
