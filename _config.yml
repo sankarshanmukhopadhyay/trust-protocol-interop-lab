@@ -1,0 +1,11 @@
+title: Trust Protocol Interop Lab
+description: Experimental trust-protocol bindings, mappings, and interoperability evidence
+theme: just-the-docs
+url: https://sankarshanmukhopadhyay.github.io
+baseurl: /trust-protocol-interop-lab
+
+aux_links:
+  Repository: https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab
+
+search_enabled: true
+heading_anchors: true

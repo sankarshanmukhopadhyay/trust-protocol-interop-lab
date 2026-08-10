@@ -1,0 +1,10 @@
+{
+  "artifact": "MCP Binding for Trust Tasks",
+  "version": "0.2",
+  "status": "candidate",
+  "trust_tasks_baseline": "0.3",
+  "trust_tasks_baseline_date": "2026-08-07",
+  "mcp_baseline": "2026-07-28",
+  "upstream_status": "not-submitted",
+  "implementation_status": "not-yet-tested"
+}
