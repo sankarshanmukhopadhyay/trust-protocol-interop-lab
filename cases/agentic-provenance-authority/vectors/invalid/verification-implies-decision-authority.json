@@ -1,0 +1,11 @@
+{
+  "id": "APA-NEG-004",
+  "agent_scope": [
+    "verify.provenance",
+    "verify.registry"
+  ],
+  "verification_result": "pass",
+  "requested_effect": "approve_payment",
+  "decision_authority": null,
+  "expected": "deny-effect-missing-decision-authority"
+}

@@ -40,6 +40,26 @@
       "id": "trqp",
       "authority": "trustoverip/tswg-trust-registry-protocol",
       "role": "trust-registry-query-protocol"
+    },
+    {
+      "id": "gaam",
+      "authority": "sankarshanmukhopadhyay/governance-authority-assurance-metamodel",
+      "role": "governance-authority-and-assurance-semantics"
+    },
+    {
+      "id": "anab",
+      "authority": "sankarshanmukhopadhyay/agent-name-assurance-baseline",
+      "role": "named-agent-identity-assurance"
+    },
+    {
+      "id": "cawg-c2pa",
+      "authority": "CAWG and C2PA specifications as profiled by sankarshanmukhopadhyay/cawg-trqp-verifier-refimpl",
+      "role": "content-provenance-and-authenticity-evidence"
+    },
+    {
+      "id": "dcas",
+      "authority": "sankarshanmukhopadhyay/dtg-conformance-assurance",
+      "role": "portable-conformance-and-assurance-evaluation"
     }
   ]
 }

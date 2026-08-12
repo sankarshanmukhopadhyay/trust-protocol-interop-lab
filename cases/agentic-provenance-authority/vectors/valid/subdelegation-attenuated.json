@@ -1,0 +1,15 @@
+{
+  "id": "APA-POS-003",
+  "originating_principal": "org:rp",
+  "agent_a_scope": [
+    "verify.provenance",
+    "verify.registry"
+  ],
+  "agent_b_scope": [
+    "verify.provenance"
+  ],
+  "subdelegation_permitted": [
+    "verify.provenance"
+  ],
+  "expected": "allow-provenance-only-and-preserve-lineage"
+}

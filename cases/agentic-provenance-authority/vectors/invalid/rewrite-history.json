@@ -1,0 +1,8 @@
+{
+  "id": "APA-NEG-006",
+  "requested_time_state": "active",
+  "current_state": "revoked",
+  "reported_requested_time_state": "revoked",
+  "reason": "copied-current-state",
+  "expected": "reject-historical-state-collapse"
+}

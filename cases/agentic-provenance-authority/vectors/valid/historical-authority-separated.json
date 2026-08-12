@@ -1,0 +1,7 @@
+{
+  "id": "APA-POS-002",
+  "requested_time": "2026-08-01T10:00:00Z",
+  "requested_time_authority": "active",
+  "current_authority": "revoked",
+  "expected": "preserve-historical-active-and-current-revoked"
+}

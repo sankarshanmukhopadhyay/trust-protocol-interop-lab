@@ -1,0 +1,7 @@
+{
+  "id": "APA-NEG-003",
+  "content_provenance": "valid",
+  "underlying_claim_evidence": "not-evaluated",
+  "derived_claim": "claim_true",
+  "expected": "reject-provenance-to-truth-inference"
+}

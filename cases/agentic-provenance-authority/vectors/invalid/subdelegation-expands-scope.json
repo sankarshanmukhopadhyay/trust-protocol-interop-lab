@@ -1,0 +1,11 @@
+{
+  "id": "APA-NEG-007",
+  "agent_a_scope": [
+    "verify.provenance"
+  ],
+  "agent_b_scope": [
+    "verify.provenance",
+    "verify.registry"
+  ],
+  "expected": "deny-non-attenuating-subdelegation"
+}

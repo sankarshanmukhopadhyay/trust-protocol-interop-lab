@@ -1,0 +1,7 @@
+{
+  "id": "APA-NEG-005",
+  "delegation_state": "revoked",
+  "freshness": "current",
+  "requested_action": "evidence.submit",
+  "expected": "deny-before-consequential-action"
+}

@@ -32,6 +32,7 @@ The working model is:
 | `IC-ARPA-A2A-TT-001` | ARPA ↔ A2A ↔ Trust Tasks | Experimental |
 | `IC-TT-TSMM-TIS-001` | Trust Tasks ↔ TSMM ↔ TIS | Experimental |
 | `IC-ARPA-TRQP-HIST-001` | ARPA ↔ TRQP lifecycle/historical resolution | Experimental |
+| `IC-AGENT-PROVENANCE-AUTH-001` | Agent identity ↔ authority ↔ provenance ↔ TRQP ↔ assurance | Candidate |
 
 The authoritative registry is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
 
@@ -43,6 +44,7 @@ The original work remains available at stable paths:
 - [MCP / Trust Tasks mapping](mappings/trust-tasks-mcp.md)
 - [TSP-Enabled AI Agent Protocols analysis 0.1](analysis/tsp-enabled-ai-agents/0.1/README.md)
 - [TEA / MCP / Trust Tasks mapping](mappings/tea-mcp-trust-tasks.md)
+- [Agentic provenance and authority mapping](mappings/agentic-provenance-authority.md)
 
 ## Portfolio-aware experimentation
 

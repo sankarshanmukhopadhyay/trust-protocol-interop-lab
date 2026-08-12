@@ -1,0 +1,7 @@
+{
+  "id": "APA-NEG-001",
+  "agent_identity": "verified",
+  "delegation_evidence": null,
+  "requested_action": "content.publish",
+  "expected": "deny-missing-delegation"
+}

@@ -113,6 +113,45 @@
         "scenarios": "cases/arpa-trqp-lifecycle/scenarios",
         "vectors": "cases/arpa-trqp-lifecycle/vectors"
       }
+    },
+    {
+      "id": "IC-AGENT-PROVENANCE-AUTH-001",
+      "title": "Agentic provenance and delegated verification",
+      "status": "candidate",
+      "question": "Can agent identity, delegated authority, content provenance, trust-registry verification, and assurance evidence compose without turning capability, provenance, or verification into unauthorized decision authority?",
+      "components": [
+        "gaam",
+        "tsmm",
+        "tis",
+        "anab",
+        "arpa",
+        "a2a",
+        "cawg-c2pa",
+        "trqp",
+        "dcas"
+      ],
+      "baselines": {
+        "gaam": "v0.9.0 Candidate Specification",
+        "tsmm": "v0.23.0",
+        "tis": "v0.12.0",
+        "anab": "v0.10.0",
+        "arpa": "v0.9.4",
+        "a2a": "current portfolio reference baseline reviewed 2026-08-12",
+        "cawg-c2pa": "local CAWG-TRQP agentic-assurance refinement dated 2026-08-12; experimental input, not upstream normative text",
+        "trqp": "upstream main baseline reviewed 2026-08-12",
+        "dcas": "v0.10.0"
+      },
+      "ownership": "cases/agentic-provenance-authority/ownership.yaml",
+      "invariants": "cases/agentic-provenance-authority/invariants.yaml",
+      "paths": {
+        "readme": "cases/agentic-provenance-authority/README.md",
+        "mapping": "mappings/agentic-provenance-authority.md",
+        "scenarios": "cases/agentic-provenance-authority/scenarios",
+        "vectors": "cases/agentic-provenance-authority/vectors",
+        "limitations": "cases/agentic-provenance-authority/known-limitations.md",
+        "experiment": "experiments/agentic-provenance-authority/test-plan.md",
+        "rahp_review": "reviews/rahp/IC-AGENT-PROVENANCE-AUTH-001.md"
+      }
     }
   ]
 }

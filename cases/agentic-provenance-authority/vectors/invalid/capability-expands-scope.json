@@ -1,0 +1,9 @@
+{
+  "id": "APA-NEG-002",
+  "advertised_capability": "payment.execute",
+  "delegated_scope": [
+    "payment.quote"
+  ],
+  "requested_action": "payment.execute",
+  "expected": "deny-scope-expansion"
+}

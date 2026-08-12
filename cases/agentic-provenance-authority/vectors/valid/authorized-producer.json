@@ -1,0 +1,12 @@
+{
+  "id": "APA-POS-001",
+  "agent_identity": "verified",
+  "principal": "org:publisher",
+  "delegation_state": "active",
+  "action": "content.transform",
+  "action_scope": "content.transform",
+  "resource_scope": "asset:listing-42",
+  "provenance": "valid",
+  "decision_authority": "human-editor",
+  "expected": "verification-pass-policy-evaluation-required"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "APA-NEG-008",
+  "portable_principal_reference": false,
+  "portable_delegation_reference": false,
+  "only_interaction_session_id": "session-123",
+  "expected": "reject-insufficient-portable-action-evidence"
+}

@@ -1,0 +1,52 @@
+{
+  "invariants": [
+    {
+      "id": "INV-APA-001",
+      "statement": "Authenticated or strongly bound agent identity MUST NOT be treated as evidence that the agent is delegated authority for the requested action."
+    },
+    {
+      "id": "INV-APA-002",
+      "statement": "Advertised capability, Agent Card metadata, or transport-level task success MUST NOT expand delegated action, resource, purpose, jurisdiction, or temporal scope."
+    },
+    {
+      "id": "INV-APA-003",
+      "statement": "Content provenance success MUST NOT be interpreted as proof that the represented claim is true, legally valid, safe, admissible, clinically correct, or otherwise substantively accepted."
+    },
+    {
+      "id": "INV-APA-004",
+      "statement": "A successful TRQP or registry query MUST NOT itself grant the caller authority to decide or produce a consequential effect."
+    },
+    {
+      "id": "INV-APA-005",
+      "statement": "Current authority and requested-time historical authority MUST remain distinguishable when lifecycle state has changed after the relevant action."
+    },
+    {
+      "id": "INV-APA-006",
+      "statement": "When current authority is required, revoked, suspended, expired, or insufficiently fresh authority MUST fail closed before consequential execution or reliance."
+    },
+    {
+      "id": "INV-APA-007",
+      "statement": "Sub-delegation MUST preserve originating-principal attribution and MUST monotonically attenuate, never expand, effective scope unless an independently authoritative grant exists."
+    },
+    {
+      "id": "INV-APA-008",
+      "statement": "Portable evidence MUST link the agent, principal, delegation, provenance object, verification inputs/result, applicable policy context, decision authority, and effect record without depending solely on an ephemeral interaction session."
+    },
+    {
+      "id": "INV-APA-009",
+      "statement": "Verification authority MUST remain distinct from decision authority; a verifier or verifier-agent MUST NOT silently acquire authority to publish, reject, pay, certify, diagnose, adjudicate, enforce, or otherwise create an effect."
+    },
+    {
+      "id": "INV-APA-010",
+      "statement": "A downstream assurance evaluation MUST report bounded evidence sufficiency and MUST NOT manufacture missing identity, delegation, provenance, lifecycle, or decision authority."
+    },
+    {
+      "id": "INV-APA-011",
+      "statement": "A consequential action MUST expose a replay or review path sufficient to inspect the authority and evidence state used at decision time, subject to declared retention and privacy constraints."
+    },
+    {
+      "id": "INV-APA-012",
+      "statement": "Redress or correction MUST preserve supersession and audit lineage rather than rewriting the historical action or provenance record."
+    }
+  ]
+}

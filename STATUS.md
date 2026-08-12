@@ -29,6 +29,7 @@ See [Evidence-Gated Maturity Model](docs/maturity-model.md).
 | IC-ARPA-A2A-TT-001 | Experimental | ARPA v0.9.4; A2A portfolio reference; Trust Tasks 0.3 |
 | IC-TT-TSMM-TIS-001 | Experimental | Trust Tasks 0.3; TSMM v0.23.0; TIS v0.12.0 |
 | IC-ARPA-TRQP-HIST-001 | Experimental | ARPA v0.9.4; TRQP upstream baseline |
+| IC-AGENT-PROVENANCE-AUTH-001 | Candidate | GAAM v0.9.0; TSMM v0.23.0; TIS v0.12.0; ANAB v0.10.0; ARPA v0.9.4; A2A; local CAWG-TRQP agentic baseline; TRQP; DCAS v0.10.0 |
 
 The machine-readable source of truth is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
 

@@ -1,0 +1,15 @@
+{
+  "governance_authority_assurance_semantics": "gaam",
+  "portable_trust_system_semantics": "tsmm",
+  "portable_artifact_contracts": "tis",
+  "named_agent_identity_assurance": "anab",
+  "agent_registry_authority_delegation_lifecycle": "arpa",
+  "agent_discovery_and_interaction": "a2a",
+  "content_provenance_authenticity_evidence": "cawg-c2pa",
+  "trust_registry_query_semantics": "trqp",
+  "assurance_evaluation": "dcas",
+  "authorization_decision": "local relying-party policy or separately identified decision authority",
+  "operational_effect": "application or institutional control plane",
+  "risk_harm_pressure_test": "RAHP method used by the lab; not a protocol dependency",
+  "interop_composition_invariants_vectors_evidence": "trust-protocol-interop-lab"
+}

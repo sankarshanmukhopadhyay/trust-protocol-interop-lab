@@ -19,4 +19,8 @@ A governed workbench for testing whether independently authoritative trust proto
 
 ## Active programme
 
-The current case catalog covers Trust Tasks/MCP, TEA/MCP/Trust Tasks, governed ARPA/A2A/Trust Task execution, Trust Task runtime assurance through TSMM/TIS, and ARPA/TRQP historical lifecycle projection.
+The current case catalog covers Trust Tasks/MCP, TEA/MCP/Trust Tasks, governed ARPA/A2A/Trust Task execution, Trust Task runtime assurance through TSMM/TIS, ARPA/TRQP historical lifecycle projection, and an agentic provenance/authority case that tests whether identity, delegation, provenance, verification, decision authority, and effects remain separable across a multi-protocol chain.
+
+## Featured agentic assurance case
+
+[`IC-AGENT-PROVENANCE-AUTH-001`](../cases/agentic-provenance-authority/README.md) is the portfolio cross-cut for delegated AI actors. It supplies semantic ownership, twelve invariants, five walkthrough scenarios, positive/negative vectors, an execution plan, and a RAHP pressure test. Its Candidate status is design-time only until reproducible executed evidence is recorded.
