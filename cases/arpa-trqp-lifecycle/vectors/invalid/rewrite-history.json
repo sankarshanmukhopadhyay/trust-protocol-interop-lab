@@ -1,0 +1,5 @@
+{
+  "id": "ARPA-TRQP-NEG-001",
+  "requested_time_state": "revoked-because-current",
+  "expected": "reject-historical-state-collapse"
+}

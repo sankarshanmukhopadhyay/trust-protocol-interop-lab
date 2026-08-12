@@ -1,0 +1,20 @@
+{
+  "invariants": [
+    {
+      "id": "INV-TIS-001",
+      "statement": "Trust Task lifecycle state MUST remain distinct from trust decision outcome."
+    },
+    {
+      "id": "INV-TIS-002",
+      "statement": "A positive trust decision MUST NOT be represented as proof that the consequential effect occurred."
+    },
+    {
+      "id": "INV-TIS-003",
+      "statement": "TIS packaging MUST preserve references to the originating Trust Task and relevant authority evidence."
+    },
+    {
+      "id": "INV-TIS-004",
+      "statement": "A TSMM projection MUST NOT redefine the normative Trust Task payload or response semantics."
+    }
+  ]
+}

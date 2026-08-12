@@ -1,0 +1,16 @@
+{
+  "invariants": [
+    {
+      "id": "INV-TEA-001",
+      "statement": "Authenticated Exchange MUST NOT be inferred from MCP request acceptance."
+    },
+    {
+      "id": "INV-TEA-002",
+      "statement": "A valid Trust Task proof MUST NOT by itself prove delegated authority."
+    },
+    {
+      "id": "INV-TEA-003",
+      "statement": "TEA exchange, Trust Task, MCP request, and MCP Task identifiers remain semantically distinct."
+    }
+  ]
+}

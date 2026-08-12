@@ -1,0 +1,4 @@
+{
+  "id": "TT-MCP-POS-001",
+  "expect": "MCP invocation preserves Trust Task id and semantic result"
+}

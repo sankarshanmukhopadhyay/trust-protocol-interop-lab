@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "source": {
+    "system": "dtg-portfolio-monitor",
+    "mode": "candidate-input-only"
+  },
+  "opportunities": [
+    {
+      "id": "IO-DTG-001",
+      "repositories": [
+        "dtgwg-trust-tasks-tf",
+        "dtgwg-cred-spec",
+        "dtgwg-zkp-tf"
+      ],
+      "signal": "capability-convergence",
+      "question": "How should proof-bearing credential evidence be admitted as Trust Task authorization input without treating proof validity as execution authority?",
+      "disposition": "candidate",
+      "related_case": null
+    },
+    {
+      "id": "IO-DTG-002",
+      "repositories": [
+        "dtgwg-agent-names-tf",
+        "agent-registry-protocol"
+      ],
+      "signal": "semantic-boundary",
+      "question": "Which conclusions may and may not be inferred when agent naming resolves independently from governed identity and authority state?",
+      "disposition": "candidate",
+      "related_case": null
+    }
+  ]
+}

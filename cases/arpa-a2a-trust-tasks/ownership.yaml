@@ -1,0 +1,9 @@
+{
+  "agent_identity_and_registry_state": "arpa",
+  "agent_card_and_interaction": "a2a",
+  "delegation_and_authority": "arpa",
+  "work_semantics": "trust-tasks",
+  "execution": "a2a",
+  "authorization_decision": "local relying-party policy",
+  "revocation": "arpa lifecycle state; consumer must evaluate freshness"
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sankarshanmukhopadhyay.github.io/trust-protocol-interop-lab/schemas/interoperability-case.schema.json",
+  "title": "Interop Case",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "status",
+    "question",
+    "components",
+    "baselines",
+    "ownership",
+    "invariants",
+    "paths"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^IC-[A-Z0-9-]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5
+    },
+    "status": {
+      "enum": [
+        "exploratory",
+        "experimental",
+        "candidate",
+        "interoperability-tested",
+        "proposed-upstream",
+        "upstreamed",
+        "superseded"
+      ]
+    },
+    "question": {
+      "type": "string",
+      "minLength": 10
+    },
+    "components": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "baselines": {
+      "type": "object",
+      "minProperties": 2,
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "ownership": {
+      "type": "string"
+    },
+    "invariants": {
+      "type": "string"
+    },
+    "paths": {
+      "type": "object",
+      "required": [
+        "readme"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "upstream": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

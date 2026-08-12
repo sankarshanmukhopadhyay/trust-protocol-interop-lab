@@ -1,0 +1,9 @@
+{
+  "id": "ARPA-A2A-TT-POS-001",
+  "authority_state": "active",
+  "advertised_capability": "purchase.quote",
+  "delegated_scope": [
+    "purchase.quote"
+  ],
+  "expected": "allow-policy-evaluation"
+}

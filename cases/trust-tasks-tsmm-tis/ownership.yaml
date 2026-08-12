@@ -1,0 +1,9 @@
+{
+  "work_item": "trust-tasks",
+  "semantic_runtime_projection": "tsmm",
+  "artifact_contracts": "tis",
+  "task_lifecycle": "trust-tasks",
+  "trust_decision": "local evaluator represented using TSMM/TIS",
+  "effect_admission": "local policy/runtime",
+  "evidence_packaging": "tis"
+}

@@ -6,7 +6,7 @@ The repository is intended to preserve useful standards-adjacent work without tu
 
 ## Working pipeline
 
-The repository may begin with analysis before a concrete binding or profile is justified:
+The repository may begin with analysis before a concrete binding or profile is justified. New work should normally be registered as an Interop Case once a bounded multi-component question exists:
 
 **upstream specifications → implementation analysis → mappings/bindings/profiles → experiments/test evidence → candidate upstream feedback → upstream proposal**
 
@@ -45,3 +45,8 @@ bindings/trust-tasks/mcp/0.3/
 A new upstream baseline or a material semantic change should normally produce a new artifact version.
 
 Implementation-analysis baselines follow the same rule. Once superseded, an analysis directory such as `analysis/tsp-enabled-ai-agents/0.1/` should remain an immutable record of what was observed against that upstream baseline.
+
+
+## Interop Case publication
+
+The case catalog is the machine-readable status source. Maturity must satisfy `docs/maturity-model.md`; upstream baselines remain authoritative and historical case evidence is retained when a case is superseded. Portfolio-monitor signals are candidate inputs only and do not bypass human case admission.

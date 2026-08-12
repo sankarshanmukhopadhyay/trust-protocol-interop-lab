@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interop Result",
+  "type": "object",
+  "required": [
+    "case_id",
+    "result_id",
+    "status",
+    "observations"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string"
+    },
+    "result_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "not-run"
+      ]
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "vectors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_manifest": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

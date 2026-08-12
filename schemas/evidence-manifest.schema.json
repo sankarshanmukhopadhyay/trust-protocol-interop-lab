@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interop Evidence Manifest",
+  "type": "object",
+  "required": [
+    "case_id",
+    "evidence_id",
+    "claim_scope",
+    "artifacts",
+    "result_summary"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string"
+    },
+    "evidence_id": {
+      "type": "string"
+    },
+    "claim_scope": {
+      "type": "string"
+    },
+    "executed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runner": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "role"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "result_summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

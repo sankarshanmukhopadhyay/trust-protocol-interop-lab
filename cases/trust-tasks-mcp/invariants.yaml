@@ -1,0 +1,16 @@
+{
+  "invariants": [
+    {
+      "id": "INV-TT-MCP-001",
+      "statement": "MCP taskId MUST NOT be interpreted as a Trust Task identifier."
+    },
+    {
+      "id": "INV-TT-MCP-002",
+      "statement": "MCP session or MRTR state MUST NOT be interpreted as Trust Ceremony continuity."
+    },
+    {
+      "id": "INV-TT-MCP-003",
+      "statement": "Successful MCP authentication or invocation MUST NOT imply authority to perform the Trust Task."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "identity": "Trust Task proof / profile; MCP connection identity remains transport-local",
+  "execution": "mcp",
+  "work_semantics": "trust-tasks",
+  "correlation": "Trust Task ids remain distinct from MCP request/task ids",
+  "authorization": "local policy using external authority evidence",
+  "ceremony": "trust-tasks / trust-ceremony semantics"
+}

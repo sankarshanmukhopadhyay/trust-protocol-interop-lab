@@ -1,0 +1,8 @@
+{
+  "id": "ARPA-A2A-TT-NEG-002",
+  "advertised_capability": "purchase.execute",
+  "delegated_scope": [
+    "purchase.quote"
+  ],
+  "expected": "deny-scope-expansion"
+}

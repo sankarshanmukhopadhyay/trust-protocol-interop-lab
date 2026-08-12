@@ -1,0 +1,6 @@
+{
+  "id": "ARPA-TRQP-POS-001",
+  "requested_time_state": "active",
+  "current_state": "revoked",
+  "expected": "return-both-with-distinct-semantics"
+}

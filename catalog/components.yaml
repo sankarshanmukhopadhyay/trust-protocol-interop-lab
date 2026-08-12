@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "components": [
+    {
+      "id": "trust-tasks",
+      "authority": "trustoverip/dtgwg-trust-tasks-tf",
+      "role": "verifiable-work-semantics"
+    },
+    {
+      "id": "mcp",
+      "authority": "modelcontextprotocol",
+      "role": "interaction-and-execution-mechanics"
+    },
+    {
+      "id": "tea-tsp",
+      "authority": "trustoverip AIMWG TSP-Enabled AI Agent Protocols draft",
+      "role": "agent-identity-authenticated-exchange-and-authority-evidence"
+    },
+    {
+      "id": "arpa",
+      "authority": "sankarshanmukhopadhyay/agent-registry-protocol",
+      "role": "governed-agent-authority-control-plane"
+    },
+    {
+      "id": "a2a",
+      "authority": "a2aproject/A2A",
+      "role": "agent-discovery-and-interaction-protocol"
+    },
+    {
+      "id": "tsmm",
+      "authority": "sankarshanmukhopadhyay/trust-systems-meta-model",
+      "role": "trust-system-semantic-model"
+    },
+    {
+      "id": "tis",
+      "authority": "sankarshanmukhopadhyay/trust-infrastructure-schemas",
+      "role": "portable-machine-readable-trust-artifacts"
+    },
+    {
+      "id": "trqp",
+      "authority": "trustoverip/tswg-trust-registry-protocol",
+      "role": "trust-registry-query-protocol"
+    }
+  ]
+}

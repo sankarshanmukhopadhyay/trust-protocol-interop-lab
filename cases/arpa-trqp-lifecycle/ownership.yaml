@@ -1,0 +1,7 @@
+{
+  "authoritative_agent_state": "arpa",
+  "projection_query_interface": "trqp",
+  "requested_time_resolution": "arpa historical resolution projected through binding",
+  "present_consequence": "consumer policy",
+  "projection_freshness": "projection/operator evidence"
+}

@@ -1,0 +1,20 @@
+{
+  "invariants": [
+    {
+      "id": "INV-HIST-001",
+      "statement": "TRQP projection MUST NOT become authoritative merely because it exposes ARPA state."
+    },
+    {
+      "id": "INV-HIST-002",
+      "statement": "Requested-time state MUST remain distinct from current state."
+    },
+    {
+      "id": "INV-HIST-003",
+      "statement": "Later revocation MUST NOT silently rewrite the historical fact of earlier authority."
+    },
+    {
+      "id": "INV-HIST-004",
+      "statement": "Historical truth MUST NOT by itself determine present consequence; the consuming policy owns that decision."
+    }
+  ]
+}

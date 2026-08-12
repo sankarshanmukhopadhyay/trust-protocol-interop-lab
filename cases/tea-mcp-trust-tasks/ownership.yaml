@@ -1,0 +1,9 @@
+{
+  "identity": "tea-tsp",
+  "authenticated_exchange": "tea-tsp",
+  "execution": "mcp",
+  "work_semantics": "trust-tasks",
+  "delegation": "tea-tsp or external trust framework",
+  "authorization": "local policy",
+  "correlation": "layer-specific identifiers with explicit binding only"
+}

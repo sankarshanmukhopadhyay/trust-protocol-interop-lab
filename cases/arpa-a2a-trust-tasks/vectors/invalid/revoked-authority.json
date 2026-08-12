@@ -1,0 +1,5 @@
+{
+  "id": "ARPA-A2A-TT-NEG-001",
+  "authority_state": "revoked",
+  "expected": "deny-before-consequential-execution"
+}

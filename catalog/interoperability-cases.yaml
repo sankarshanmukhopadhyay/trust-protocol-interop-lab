@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "IC-TT-MCP-001",
+      "title": "Trust Tasks over MCP",
+      "status": "candidate",
+      "question": "Can MCP provide execution mechanics while Trust Tasks retain semantic work identity, correlation, and response semantics?",
+      "components": [
+        "trust-tasks",
+        "mcp"
+      ],
+      "baselines": {
+        "trust-tasks": "0.3 repository baseline dated 2026-08-07",
+        "mcp": "2026-07-28"
+      },
+      "ownership": "cases/trust-tasks-mcp/ownership.yaml",
+      "invariants": "cases/trust-tasks-mcp/invariants.yaml",
+      "paths": {
+        "readme": "cases/trust-tasks-mcp/README.md",
+        "binding": "bindings/trust-tasks/mcp/0.2/spec.md",
+        "scenarios": "experiments/mcp-trust-tasks/test-plan.md",
+        "limitations": "cases/trust-tasks-mcp/known-limitations.md",
+        "vectors": "cases/trust-tasks-mcp/vectors"
+      }
+    },
+    {
+      "id": "IC-TEA-MCP-TT-001",
+      "title": "TEA TSP, MCP, and Trust Tasks composition",
+      "status": "experimental",
+      "question": "Can authenticated agent exchange, MCP execution, and verifiable Trust Task semantics compose without collapsing agreement, authority, execution, or correlation state?",
+      "components": [
+        "tea-tsp",
+        "mcp",
+        "trust-tasks"
+      ],
+      "baselines": {
+        "tea-tsp": "v1.0 Draft reviewed 2026-08-10",
+        "mcp": "2026-07-28",
+        "trust-tasks": "0.3 repository baseline dated 2026-08-07"
+      },
+      "ownership": "cases/tea-mcp-trust-tasks/ownership.yaml",
+      "invariants": "cases/tea-mcp-trust-tasks/invariants.yaml",
+      "paths": {
+        "readme": "cases/tea-mcp-trust-tasks/README.md",
+        "mapping": "mappings/tea-mcp-trust-tasks.md",
+        "scenarios": "experiments/tsp-enabled-ai-agents/README.md"
+      }
+    },
+    {
+      "id": "IC-ARPA-A2A-TT-001",
+      "title": "Governed agent discovery to Trust Task execution",
+      "status": "experimental",
+      "question": "Can ARPA authority state, A2A discovery and interaction, and Trust Task work semantics compose while preserving explicit authorization and revocation boundaries?",
+      "components": [
+        "arpa",
+        "a2a",
+        "trust-tasks"
+      ],
+      "baselines": {
+        "arpa": "v0.9.4",
+        "a2a": "current portfolio reference baseline reviewed 2026-08-12",
+        "trust-tasks": "0.3 repository baseline dated 2026-08-07"
+      },
+      "ownership": "cases/arpa-a2a-trust-tasks/ownership.yaml",
+      "invariants": "cases/arpa-a2a-trust-tasks/invariants.yaml",
+      "paths": {
+        "readme": "cases/arpa-a2a-trust-tasks/README.md",
+        "scenarios": "cases/arpa-a2a-trust-tasks/scenarios",
+        "vectors": "cases/arpa-a2a-trust-tasks/vectors"
+      }
+    },
+    {
+      "id": "IC-TT-TSMM-TIS-001",
+      "title": "Trust Task runtime assurance composition",
+      "status": "experimental",
+      "question": "Can a Trust Task be projected into TSMM runtime semantics and packaged as TIS evidence without changing task, decision, or effect-admission ownership?",
+      "components": [
+        "trust-tasks",
+        "tsmm",
+        "tis"
+      ],
+      "baselines": {
+        "trust-tasks": "0.3 repository baseline dated 2026-08-07",
+        "tsmm": "v0.23.0",
+        "tis": "v0.12.0"
+      },
+      "ownership": "cases/trust-tasks-tsmm-tis/ownership.yaml",
+      "invariants": "cases/trust-tasks-tsmm-tis/invariants.yaml",
+      "paths": {
+        "readme": "cases/trust-tasks-tsmm-tis/README.md",
+        "scenarios": "cases/trust-tasks-tsmm-tis/scenarios",
+        "vectors": "cases/trust-tasks-tsmm-tis/vectors"
+      }
+    },
+    {
+      "id": "IC-ARPA-TRQP-HIST-001",
+      "title": "ARPA to TRQP lifecycle and historical resolution",
+      "status": "experimental",
+      "question": "Can a read-only TRQP projection of ARPA state support current and historical verification without conflating projection state, authoritative state, or present consequence?",
+      "components": [
+        "arpa",
+        "trqp"
+      ],
+      "baselines": {
+        "arpa": "v0.9.4",
+        "trqp": "upstream main baseline reviewed 2026-08-12"
+      },
+      "ownership": "cases/arpa-trqp-lifecycle/ownership.yaml",
+      "invariants": "cases/arpa-trqp-lifecycle/invariants.yaml",
+      "paths": {
+        "readme": "cases/arpa-trqp-lifecycle/README.md",
+        "scenarios": "cases/arpa-trqp-lifecycle/scenarios",
+        "vectors": "cases/arpa-trqp-lifecycle/vectors"
+      }
+    }
+  ]
+}

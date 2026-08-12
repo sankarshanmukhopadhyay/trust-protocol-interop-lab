@@ -1,0 +1,6 @@
+{
+  "id": "TT-TIS-NEG-001",
+  "decision": "allow",
+  "effect_evidence": null,
+  "expected": "must-not-claim-effect-occurred"
+}
