@@ -36,3 +36,8 @@ The machine-readable source of truth is [`catalog/interoperability-cases.yaml`](
 ## Claim boundary
 
 No case currently claims `Interoperability Tested`. Repository-controlled scenarios and vectors are preparation and candidate evidence until an executed, reproducible evidence package is recorded.
+
+
+## Standards intelligence status
+
+The lab contains a **seed standards register** with governed source attribution, explicit portfolio relevance, relationship semantics, validation, and generated views. GSMI/GBBC is acknowledged as the initial discovery source. All seed entries remain `candidate` until canonical-source verification and project-level mapping evidence are completed. No seed entry currently creates a normative portfolio dependency.

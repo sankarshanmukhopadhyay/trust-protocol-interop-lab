@@ -24,6 +24,8 @@ jobs:
           python scripts/validate_catalog.py
           python scripts/validate_cases.py
           python scripts/validate_evidence.py
+          python scripts/validate_standards.py
+          python scripts/generate_standards.py
           python scripts/generate_readiness.py
           python scripts/check_links.py
       - uses: ruby/setup-ruby@v1

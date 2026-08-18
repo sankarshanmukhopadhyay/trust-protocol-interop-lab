@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "SRC-GSMI-STANDARDS",
+      "name": "Global Standards Mapping Initiative (GSMI) — Standards",
+      "publisher": "Global Blockchain Business Council (GBBC)",
+      "url": "https://gsmi.gbbc.io/standards",
+      "role": "discovery-catalogue",
+      "authority": "external-source",
+      "normative": false,
+      "credit": "Standards discovery is informed by the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI and GBBC retain authority over their own materials; inclusion here does not imply endorsement by GSMI or GBBC.",
+      "usage_constraints": [
+        "Treat catalogue inclusion as a discovery signal, not as a conformance requirement.",
+        "Verify each standard against its authoritative publisher before making normative or compatibility claims.",
+        "Preserve the authoritative publisher, canonical URI, version or date, and review evidence in local records.",
+        "Do not infer GSMI or GBBC endorsement of this repository, its mappings, findings, or assurance conclusions."
+      ],
+      "last_reviewed": "2026-08-18"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "relationship_types": {
+    "depends-on": "Required by a bounded local implementation or conformance profile.",
+    "profiles": "The local project constrains or specializes the external standard.",
+    "implements": "The local project provides an implementation of the external standard.",
+    "maps-to": "A documented semantic or architectural correspondence exists.",
+    "compatible-with": "The systems may compose without a dependency claim.",
+    "informs": "The standard is design input only.",
+    "assesses": "The standard is an assurance or pressure-test target.",
+    "contrasts-with": "The local model deliberately differs in a material way.",
+    "supersedes": "A documented replacement relationship exists.",
+    "out-of-scope": "Reviewed and intentionally excluded."
+  },
+  "projects": {
+    "open-national-digital-trust-framework": {"lens": "jurisdiction-neutral capability and implementation-option mapping"},
+    "trust-systems-meta-model": {"lens": "semantic decomposition and trust-system completeness"},
+    "governance-authority-assurance-metamodel": {"lens": "authority, delegation, scope, lifecycle, revocation and assurance"},
+    "agent-registry-protocol": {"lens": "agent discovery, registry, authority and lifecycle interoperability"},
+    "dtgwg-zkp-tf": {"lens": "privacy-preserving proof and personhood/liveness interaction"},
+    "PolicyMesh": {"lens": "policy semantics, portability and decision context"},
+    "rahp-toolkit": {"lens": "risk, harms, security and cross-specification pressure testing"},
+    "trust-protocol-interop-lab": {"lens": "composition, semantic ownership and executable interoperability evidence"},
+    "trust-infrastructure-glossary": {"lens": "terminology harmonization without silent semantic equivalence"}
+  }
+}

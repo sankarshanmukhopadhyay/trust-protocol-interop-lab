@@ -21,6 +21,9 @@ The working model is:
 - [Evidence-gated maturity model](docs/maturity-model.md)
 - [Evidence model](docs/evidence-model.md)
 - [Interoperability readiness](docs/interoperability-readiness.md)
+- [Standards intelligence method](standards/methodology.md)
+- [Portfolio standards register](standards/generated/standards-register.md)
+- [Standards × portfolio matrix](standards/generated/portfolio-matrix.md)
 - [Repository and artifact status](STATUS.md)
 
 ## Current interoperability cases
@@ -46,6 +49,12 @@ The original work remains available at stable paths:
 - [TEA / MCP / Trust Tasks mapping](mappings/tea-mcp-trust-tasks.md)
 - [Agentic provenance and authority mapping](mappings/agentic-provenance-authority.md)
 
+## Standards intelligence
+
+The [`standards/`](standards/README.md) layer turns external standards catalogues into governed discovery, mapping, and assurance inputs. Its initial discovery source is the **Global Standards Mapping Initiative (GSMI)**, an initiative of the **Global Blockchain Business Council (GBBC)**. We gratefully acknowledge GSMI/GBBC for maintaining an open standards-mapping resource. GSMI is used as a discovery source only: canonical standards publishers remain authoritative, and inclusion here does not imply GSMI/GBBC endorsement.
+
+The register records explicit relationship semantics such as `maps-to`, `informs`, `assesses`, and `depends-on`; only an explicit, evidenced `depends-on` relationship can create a local normative dependency. Generated views expose portfolio applicability without converting catalogue discovery into conformance claims.
+
 ## Portfolio-aware experimentation
 
 The [`observatory/`](observatory/README.md) accepts convergence and change signals from systems such as `dtg-portfolio-monitor`. Signals can nominate interoperability questions, but they **cannot automatically admit cases or create interoperability claims**. Human review retains that authority.
@@ -65,6 +74,7 @@ evidence/      Executed, portable interoperability evidence
 observatory/   Candidate interoperability signals from portfolio monitoring
 reviews/       RAHP and other pressure-test reviews
 schemas/       Machine-readable lab governance/evidence contracts
+standards/     Governed external-standards discovery, mappings and generated portfolio views
 proposals/     Upstream-oriented proposal material
 docs/          Architecture, maturity, evidence and publication guidance
 scripts/       Deterministic repository validation and readiness generation
@@ -76,6 +86,8 @@ scripts/       Deterministic repository validation and readiness generation
 python scripts/validate_catalog.py
 python scripts/validate_cases.py
 python scripts/validate_evidence.py
+python scripts/validate_standards.py
+python scripts/generate_standards.py
 python scripts/generate_readiness.py
 python scripts/check_links.py
 ```

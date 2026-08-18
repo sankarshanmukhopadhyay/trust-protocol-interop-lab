@@ -16,6 +16,9 @@ A governed workbench for testing whether independently authoritative trust proto
 5. [Interoperability readiness](interoperability-readiness.md)
 6. [Architecture](architecture.md)
 7. [Publication model](publication-model.md)
+8. [Standards intelligence method](../standards/methodology.md)
+9. [Portfolio standards register](../standards/generated/standards-register.md)
+10. [Standards × portfolio matrix](../standards/generated/portfolio-matrix.md)
 
 ## Active programme
 
@@ -24,3 +27,8 @@ The current case catalog covers Trust Tasks/MCP, TEA/MCP/Trust Tasks, governed A
 ## Featured agentic assurance case
 
 [`IC-AGENT-PROVENANCE-AUTH-001`](../cases/agentic-provenance-authority/README.md) is the portfolio cross-cut for delegated AI actors. It supplies semantic ownership, twelve invariants, five walkthrough scenarios, positive/negative vectors, an execution plan, and a RAHP pressure test. Its Candidate status is design-time only until reproducible executed evidence is recorded.
+
+
+## Standards intelligence programme
+
+The lab now maintains a governed standards-intelligence layer seeded from the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is credited as a discovery source; standards publishers remain authoritative, and local mappings remain repository-owned analytical claims.
