@@ -11,3 +11,7 @@ The case declares semantic ownership and invariants before execution. Scenarios 
 ## Evidence target
 
 A future run should produce reproducible results plus an evidence manifest linking every conclusion to the exercised vectors and baselines.
+
+## Current Trust Tasks pressure point
+
+The pinned Trust Tasks baseline now exposes pre-effect authority re-evaluation, duplicate-execution protection, semantic task control, and partial-application disposition as explicit runtime events. The TSMM/TIS composition should preserve these as separate decision/evidence events rather than collapsing them into a single final task status.

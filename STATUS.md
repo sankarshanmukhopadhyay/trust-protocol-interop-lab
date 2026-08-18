@@ -24,10 +24,10 @@ See [Evidence-Gated Maturity Model](docs/maturity-model.md).
 
 | Case | Status | Baseline summary |
 |---|---|---|
-| IC-TT-MCP-001 | Candidate | Trust Tasks 0.3; MCP 2026-07-28 |
-| IC-TEA-MCP-TT-001 | Experimental | TEA v1.0 Draft; MCP 2026-07-28; Trust Tasks 0.3 |
-| IC-ARPA-A2A-TT-001 | Experimental | ARPA v0.9.4; A2A portfolio reference; Trust Tasks 0.3 |
-| IC-TT-TSMM-TIS-001 | Experimental | Trust Tasks 0.3; TSMM v0.23.0; TIS v0.12.0 |
+| IC-TT-MCP-001 | Candidate | Trust Tasks ED 0.3 @ 7e0d755; MCP 2026-07-28 |
+| IC-TEA-MCP-TT-001 | Experimental | TEA v1.0 Draft; MCP 2026-07-28; Trust Tasks ED 0.3 @ 7e0d755 |
+| IC-ARPA-A2A-TT-001 | Experimental | ARPA v0.9.4; A2A portfolio reference; Trust Tasks ED 0.3 @ 7e0d755 |
+| IC-TT-TSMM-TIS-001 | Experimental | Trust Tasks ED 0.3 @ 7e0d755; TSMM v0.23.0; TIS v0.12.0 |
 | IC-ARPA-TRQP-HIST-001 | Experimental | ARPA v0.9.4; TRQP upstream baseline |
 | IC-AGENT-PROVENANCE-AUTH-001 | Candidate | GAAM v0.9.0; TSMM v0.23.0; TIS v0.12.0; ANAB v0.10.0; ARPA v0.9.4; A2A; local CAWG-TRQP agentic baseline; TRQP; DCAS v0.10.0 |
 | IC-XSP-001 | **Interoperability Tested** | VC Data Model 2.0; Data Integrity 1.0; OpenID4VCI 1.0; OpenID4VP 1.0 |
@@ -43,3 +43,7 @@ The machine-readable source of truth is [`catalog/interoperability-cases.yaml`](
 ## Standards intelligence status
 
 The lab contains an **analysed standards register** with governed source attribution, explicit portfolio relevance, relationship semantics, canonical publisher verification, lifecycle notes, TSMM semantic mappings, GAAM authority mappings, RAHP assessment candidates, and cross-specification pressure-test candidates. GSMI/GBBC is acknowledged as the initial discovery source. All 12 current seed standards have canonical-source verification records; none currently creates a normative portfolio dependency. RAHP entries remain governed candidates. Cross-spec candidates `XSP-001` and `XSP-002` have been promoted to executed Interop Cases with bounded evidence; the remaining cross-spec entries are still candidates.
+
+### Trust Tasks baseline provenance
+
+Current Trust Tasks-dependent cases are pinned to editor’s-draft commit `7e0d755f5b815498c861cacecee5cae49b3f14eb` (2026-08-16). The upstream document still identifies itself as version 0.3, so the commit pin is the reproducible baseline; older MCP binding v0.2 remains the immutable 2026-08-07 baseline.

@@ -90,7 +90,7 @@ The Trust Task proof should not be treated as proof of authority unless a profil
 
 MCP can transport the invocation that carries a Trust Task document, but MCP should not become the owner of Trust Task identifiers, response correlation, ceremony semantics, or delegation evidence.
 
-The existing [MCP Binding for Trust Tasks 0.2](../bindings/trust-tasks/mcp/0.2/spec.md) follows this approach by keeping Trust Task, Trust Ceremony, MCP execution, and authorization as distinct semantic layers.
+The current [MCP Binding for Trust Tasks 0.3](../bindings/trust-tasks/mcp/0.3/spec.md) follows this approach by keeping Trust Task, Trust Ceremony, MCP execution, and authorization as distinct semantic layers.
 
 ### 4. Which layer owns correlation?
 

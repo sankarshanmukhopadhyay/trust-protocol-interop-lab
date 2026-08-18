@@ -11,14 +11,14 @@
         "mcp"
       ],
       "baselines": {
-        "trust-tasks": "0.3 repository baseline dated 2026-08-07",
+        "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)",
         "mcp": "2026-07-28"
       },
       "ownership": "cases/trust-tasks-mcp/ownership.yaml",
       "invariants": "cases/trust-tasks-mcp/invariants.yaml",
       "paths": {
         "readme": "cases/trust-tasks-mcp/README.md",
-        "binding": "bindings/trust-tasks/mcp/0.2/spec.md",
+        "binding": "bindings/trust-tasks/mcp/0.3/spec.md",
         "scenarios": "experiments/mcp-trust-tasks/test-plan.md",
         "limitations": "cases/trust-tasks-mcp/known-limitations.md",
         "vectors": "cases/trust-tasks-mcp/vectors"
@@ -37,7 +37,7 @@
       "baselines": {
         "tea-tsp": "v1.0 Draft reviewed 2026-08-10",
         "mcp": "2026-07-28",
-        "trust-tasks": "0.3 repository baseline dated 2026-08-07"
+        "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)"
       },
       "ownership": "cases/tea-mcp-trust-tasks/ownership.yaml",
       "invariants": "cases/tea-mcp-trust-tasks/invariants.yaml",
@@ -60,7 +60,7 @@
       "baselines": {
         "arpa": "v0.9.4",
         "a2a": "current portfolio reference baseline reviewed 2026-08-12",
-        "trust-tasks": "0.3 repository baseline dated 2026-08-07"
+        "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)"
       },
       "ownership": "cases/arpa-a2a-trust-tasks/ownership.yaml",
       "invariants": "cases/arpa-a2a-trust-tasks/invariants.yaml",
@@ -81,7 +81,7 @@
         "tis"
       ],
       "baselines": {
-        "trust-tasks": "0.3 repository baseline dated 2026-08-07",
+        "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)",
         "tsmm": "v0.23.0",
         "tis": "v0.12.0"
       },

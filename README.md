@@ -42,7 +42,7 @@ The authoritative registry is [`catalog/interoperability-cases.yaml`](catalog/in
 
 The original work remains available at stable paths:
 
-- [MCP Binding for Trust Tasks v0.2](bindings/trust-tasks/mcp/0.2/spec.md)
+- [MCP Binding for Trust Tasks v0.3](bindings/trust-tasks/mcp/0.3/spec.md)
 - [MCP / Trust Tasks mapping](mappings/trust-tasks-mcp.md)
 - [TSP-Enabled AI Agent Protocols analysis 0.1](analysis/tsp-enabled-ai-agents/0.1/README.md)
 - [TEA / MCP / Trust Tasks mapping](mappings/tea-mcp-trust-tasks.md)

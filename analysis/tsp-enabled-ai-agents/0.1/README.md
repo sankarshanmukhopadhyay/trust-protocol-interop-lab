@@ -49,7 +49,7 @@ Each finding is captured as an implementation gap, then traced to likely interop
 
 ## Relationship to other lab work
 
-The existing [MCP Binding for Trust Tasks 0.2](../../../bindings/trust-tasks/mcp/0.2/spec.md) already makes explicit choices about conformance, semantic separation, correlation, execution, and authorization boundaries. This analysis uses those choices as interoperability reference points, not as requirements imposed on the TEA draft.
+The current [MCP Binding for Trust Tasks 0.3](../../../bindings/trust-tasks/mcp/0.3/spec.md) already makes explicit choices about conformance, semantic separation, correlation, execution, and authorization boundaries. This analysis uses those choices as interoperability reference points, not as requirements imposed on the TEA draft.
 
 The mapping artifact asks where TEA, MCP, and Trust Tasks should compose without collapsing identity, transport, execution, authority, agreement, or evidence semantics into one layer.
 

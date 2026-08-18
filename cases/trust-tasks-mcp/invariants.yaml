@@ -11,6 +11,58 @@
     {
       "id": "INV-TT-MCP-003",
       "statement": "Successful MCP authentication or invocation MUST NOT imply authority to perform the Trust Task."
+    },
+    {
+      "id": "INV-TT-MCP-004",
+      "statement": "MCP tasks/cancel MUST NOT be interpreted as trust-task-control(cancel), or vice versa, without an explicit conforming policy transition."
+    },
+    {
+      "id": "INV-TT-MCP-005",
+      "statement": "Portable Trust Task cancellation MUST remain meaningful independently of MCP session or execution-handle continuity."
+    },
+    {
+      "id": "INV-TT-MCP-006",
+      "statement": "An authorized suspended Trust Task MUST NOT perform subsequent irreversible effects until valid resumption."
+    },
+    {
+      "id": "INV-TT-MCP-007",
+      "statement": "Resumption MUST re-evaluate applicable acceptance and authority conditions and MUST NOT resume after the target expiresAt."
+    },
+    {
+      "id": "INV-TT-MCP-008",
+      "statement": "Required authorization and control conditions MUST be re-evaluated immediately before each irreversible effect."
+    },
+    {
+      "id": "INV-TT-MCP-009",
+      "statement": "Duplicate MCP delivery MUST NOT cause a consequential Trust Task effect to execute twice."
+    },
+    {
+      "id": "INV-TT-MCP-010",
+      "statement": "Reuse of a Trust Task id with different document content MUST be rejected as a conflict."
+    },
+    {
+      "id": "INV-TT-MCP-011",
+      "statement": "MCP/JSON-RPC identifiers MUST NOT substitute for Trust Task document identity in duplicate-execution decisions."
+    },
+    {
+      "id": "INV-TT-MCP-012",
+      "statement": "Proof omission MUST require an explicit security profile that states the effective producer-to-consumer security boundary."
+    },
+    {
+      "id": "INV-TT-MCP-013",
+      "statement": "MCP tool input validation MUST NOT substitute for resolved Trust Task payload-schema validation."
+    },
+    {
+      "id": "INV-TT-MCP-014",
+      "statement": "Cancellation after partial application MUST preserve evidence of effects already applied rather than report clean rollback."
+    },
+    {
+      "id": "INV-TT-MCP-015",
+      "statement": "External reliance on a Trust Task citation SHOULD bind the cited content with the Framework task digest rather than id equality alone."
+    },
+    {
+      "id": "INV-TT-MCP-016",
+      "statement": "trust-task-ok MUST NOT replace a task-specific success response or become a relied-upon continuation contract."
     }
   ]
 }

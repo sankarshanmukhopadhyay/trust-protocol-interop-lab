@@ -50,6 +50,8 @@ MCP provides interaction and execution mechanics:
 
 MCP execution state is not Trust Task semantic state.
 
+The current MCP binding also preserves Trust Tasks semantic task control (`cancel`, `suspend`, `resume`), duplicate-execution protection, pre-effect authority re-evaluation, task-specific payload validation, and task-digest-bound portable evidence. These properties must survive MCP retries, cancellation, asynchronous task handles, and connection changes without being redefined by them.
+
 ### DTG and governance evidence
 
 DTG or another trust framework may supply evidence concerning:
