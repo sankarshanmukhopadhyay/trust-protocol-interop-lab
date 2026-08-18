@@ -97,3 +97,51 @@ For every materially relevant standard, reviewers should ask:
 ## Change monitoring
 
 A source change means a mapping **may be stale**. It does not establish a defect. Monitoring should create a review candidate; issue publication remains a governed, human-reviewed action unless a repository explicitly adopts a bounded auto-filing policy.
+
+## Canonical verification contract
+
+Before an entry can be `analysed`, the register records a canonical verification object containing:
+
+- the selected version or draft identifier;
+- publisher lifecycle/status;
+- a pinned or publisher-stable baseline URI;
+- publisher-controlled evidence URIs;
+- the verification date; and
+- a lifecycle note describing material newer drafts, revisions, expiry, or instability.
+
+Verification is intentionally narrower than assurance. It answers **"what publisher artifact are we analysing?"**, not **"is this sufficient for trust?"**
+
+A baseline MUST NOT automatically advance when an upstream `latest` URI changes. The new upstream version creates a reassessment candidate so mappings and evidence can be reviewed before the local baseline moves.
+
+## TSMM semantic coverage
+
+`standards/mappings/tsmm.yaml` analyses every registered standard against the TSMM v0.23.0 semantic surface used by this lab:
+
+- entity;
+- authority;
+- delegation;
+- policy;
+- evidence;
+- lifecycle;
+- verification;
+- trust decision;
+- operational effect; and
+- runtime governance.
+
+Coverage codes are `D` (direct), `P` (partial), `E` (external or assumed), and `N` (not a core responsibility). These are analytical classifications, not TSMM conformance claims.
+
+## GAAM authority coverage
+
+`standards/mappings/gaam.yaml` analyses the same standards against GAAM v0.9.0 authority and assurance concerns: authority source, delegation, scope, revocation, evidence, assurance, trust decision, effect, accountability, and appeal/remedy.
+
+The purpose is to expose where a technically valid protocol artifact can still leave an authority or governance dependency outside its own scope.
+
+## Candidate promotion gates
+
+The generated RAHP and cross-specification registers deliberately stop short of filing findings or creating Interop Cases.
+
+A **RAHP candidate** requires a separate promotion decision that pins the target baseline, selects a RAHP deployment/review mode, records affected-party and failure hypotheses, produces test evidence, and receives human disposition.
+
+A **cross-specification candidate** requires a separate Interop Case admission decision with pinned component baselines, semantic ownership, invariants, scenarios, negative vectors, expected outcomes, and evidence targets.
+
+This separation keeps standards intelligence useful without turning discovery into issue noise.

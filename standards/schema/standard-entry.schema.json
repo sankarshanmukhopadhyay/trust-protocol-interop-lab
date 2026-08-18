@@ -3,26 +3,149 @@
   "$id": "https://sankarshanmukhopadhyay.github.io/trust-protocol-interop-lab/standards/schema/standard-entry.schema.json",
   "title": "Portfolio standards-intelligence entry",
   "type": "object",
-  "required": ["id", "title", "publisher", "canonical_uri", "domains", "portfolio_relevance", "relationships", "normative_dependency", "review"],
+  "required": [
+    "id",
+    "title",
+    "publisher",
+    "canonical_uri",
+    "domains",
+    "portfolio_relevance",
+    "relationships",
+    "normative_dependency",
+    "review",
+    "verification"
+  ],
   "properties": {
-    "id": {"type": "string", "pattern": "^STD-[A-Z0-9-]+$"},
-    "title": {"type": "string", "minLength": 1},
-    "publisher": {"type": "string", "minLength": 1},
-    "canonical_uri": {"type": "string", "format": "uri"},
-    "status": {"type": "string"},
-    "domains": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
-    "source_relationships": {"type": "array", "items": {"type": "object", "required": ["source_id", "relationship"]}},
-    "portfolio_relevance": {"type": "object", "minProperties": 1},
-    "relationships": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
-    "normative_dependency": {"type": "boolean"},
+    "id": {
+      "type": "string",
+      "pattern": "^STD-[A-Z0-9-]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonical_uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "status": {
+      "type": "string"
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "relationship"
+        ]
+      }
+    },
+    "portfolio_relevance": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "relationships": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "normative_dependency": {
+      "type": "boolean"
+    },
     "review": {
       "type": "object",
-      "required": ["state", "last_reviewed", "verification"],
+      "required": [
+        "state",
+        "last_reviewed",
+        "verification"
+      ],
       "properties": {
-        "state": {"enum": ["candidate", "mapped", "analysed", "pressure-tested", "retired"]},
-        "last_reviewed": {"type": "string", "format": "date"},
-        "verification": {"type": "string"}
+        "state": {
+          "enum": [
+            "candidate",
+            "mapped",
+            "analysed",
+            "pressure-tested",
+            "retired"
+          ]
+        },
+        "last_reviewed": {
+          "type": "string",
+          "format": "date"
+        },
+        "verification": {
+          "type": "string"
+        }
       }
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "state",
+        "verified_on",
+        "version",
+        "publisher_status",
+        "baseline_uri",
+        "evidence_uris",
+        "lifecycle_note"
+      ],
+      "properties": {
+        "state": {
+          "const": "canonical-verified"
+        },
+        "verified_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publication_date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "baseline_uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "evidence_uris": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "lifecycle_note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
     }
   },
   "additionalProperties": true

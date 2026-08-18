@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "status": "candidate-register",
+  "governance": "A candidate is not an Interop Case. Promotion requires pinned baselines, semantic ownership, invariants, scenarios, negative vectors and evidence targets under the lab maturity model.",
+  "candidates": [
+    {
+      "id": "XSP-001",
+      "title": "Verifiable credential issuance \u2192 proof \u2192 presentation \u2192 reliance",
+      "priority": "critical",
+      "standards": [
+        "STD-W3C-VC-DM-2",
+        "STD-W3C-DATA-INTEGRITY",
+        "STD-OID4VCI",
+        "STD-OID4VP"
+      ],
+      "question": "Can a verifier preserve issuer authority, credential lifecycle, proof purpose, audience/purpose and relying-party policy as separately testable semantics across the full exchange?",
+      "candidate_invariants": [
+        "cryptographic verification never substitutes for issuer authority",
+        "credential status is evaluated at the relying decision boundary",
+        "presentation freshness and audience are bound to the decision",
+        "final authorization/effect is attributable to relying-party policy"
+      ],
+      "recommended_owner": "trust-protocol-interop-lab"
+    },
+    {
+      "id": "XSP-002",
+      "title": "DID resolution \u00d7 federation metadata \u00d7 authority",
+      "priority": "critical",
+      "standards": [
+        "STD-W3C-DID-CORE",
+        "STD-W3C-DID-RESOLUTION-1",
+        "STD-OPENID-FEDERATION-1"
+      ],
+      "question": "When identifiers and federation metadata are resolved successfully, which layer proves identifier control, federation membership, organizational authority and action scope?",
+      "candidate_invariants": [
+        "resolution evidence remains distinct from governance authority",
+        "trust-chain policy cannot widen local authority",
+        "stale/deactivated identifiers fail closed where material",
+        "authority source remains traversable"
+      ],
+      "recommended_owner": "trust-protocol-interop-lab"
+    },
+    {
+      "id": "XSP-003",
+      "title": "ISO mDL \u00d7 OpenID4VP presentation profile",
+      "priority": "high",
+      "standards": [
+        "STD-ISO-IEC-18013-5",
+        "STD-OID4VP"
+      ],
+      "question": "Can an mDL presented over OpenID4VP preserve reader/verifier authentication, purpose, consent boundary, minimal disclosure and issuer trust without semantic gaps?",
+      "candidate_invariants": [
+        "successful presentation does not imply permitted collection",
+        "requested attributes are purpose-scoped",
+        "issuer trust and verifier authority are independently evaluable",
+        "retention/use policy is externalized rather than silently assumed"
+      ],
+      "recommended_owner": "open-national-digital-trust-framework"
+    },
+    {
+      "id": "XSP-004",
+      "title": "C2PA provenance \u00d7 CAWG identity assertion \u00d7 authority",
+      "priority": "high",
+      "standards": [
+        "STD-C2PA",
+        "STD-CAWG-IDENTITY-ASSERTION"
+      ],
+      "question": "Can content provenance, identity control, lifecycle role and organizational/action authority remain distinguishable when a relying party evaluates a content claim?",
+      "candidate_invariants": [
+        "claim-generator signature is not conflated with named-actor authority",
+        "identity control is not treated as unrestricted role authority",
+        "role/credential status is evaluated at reliance time",
+        "provenance history remains traversable after updates"
+      ],
+      "recommended_owner": "trust-protocol-interop-lab"
+    },
+    {
+      "id": "XSP-005",
+      "title": "Selective disclosure credential \u00d7 OpenID4VP privacy boundary",
+      "priority": "medium",
+      "standards": [
+        "STD-IETF-SD-JWT-VC",
+        "STD-OID4VP"
+      ],
+      "question": "What privacy and correlation properties survive when a selectively disclosable credential is repeatedly presented to different verifiers?",
+      "candidate_invariants": [
+        "selective disclosure is not labelled unlinkability without evidence",
+        "holder binding policy is explicit",
+        "nonce and audience prevent replay to unintended verifiers",
+        "draft-version dependencies remain pinned"
+      ],
+      "recommended_owner": "dtgwg-zkp-tf"
+    },
+    {
+      "id": "XSP-006",
+      "title": "Consent records \u00d7 portable policy evaluation",
+      "priority": "medium",
+      "standards": [
+        "STD-ISO-IEC-27560"
+      ],
+      "projects": [
+        "PolicyMesh",
+        "open-national-digital-trust-framework"
+      ],
+      "question": "Can a portable consent record remain meaningful when policy, jurisdiction, purpose, controller/processor roles and withdrawal state are evaluated by another system?",
+      "candidate_invariants": [
+        "recorded consent is evidence, not universal authorization",
+        "withdrawal/supersession propagates to relying policy",
+        "purpose and processing scope remain machine-comparable",
+        "policy decision retains evidence references"
+      ],
+      "recommended_owner": "PolicyMesh"
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "model_baseline": {
+    "repository": "sankarshanmukhopadhyay/governance-authority-assurance-metamodel",
+    "version": "v0.9.0",
+    "authority_note": "GAAM remains authoritative for GAAM semantics; this lab matrix is an informative crosswalk."
+  },
+  "legend": {
+    "D": "direct",
+    "P": "partial",
+    "E": "external-or-assumed",
+    "N": "not-core-responsibility"
+  },
+  "axes": {
+    "authority_source": "Authority source",
+    "delegation": "Delegation",
+    "scope": "Scope/constraints",
+    "revocation": "Revocation/suspension",
+    "evidence": "Evidence",
+    "assurance": "Assurance/verification",
+    "trust_decision": "Trust decision",
+    "effect": "Operational effect",
+    "accountability": "Accountability/audit",
+    "appeal_remedy": "Appeal/remedy"
+  },
+  "mappings": [
+    {
+      "standard_id": "STD-C2PA",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "E",
+        "scope": "P",
+        "revocation": "D",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "P",
+        "effect": "D",
+        "accountability": "D",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Provenance/authenticity can establish what was signed and preserved; human/organizational authority and downstream reliance remain separate governance questions."
+    },
+    {
+      "standard_id": "STD-CAWG-IDENTITY-ASSERTION",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "E",
+        "scope": "D",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "P",
+        "effect": "P",
+        "accountability": "D",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Control over a digital identity and asserted lifecycle role should not be treated as unrestricted authority outside the governed role/credential context."
+    },
+    {
+      "standard_id": "STD-IETF-SD-JWT-VC",
+      "coverage": {
+        "authority_source": "E",
+        "delegation": "E",
+        "scope": "P",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "E",
+        "effect": "E",
+        "accountability": "P",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Selective disclosure and holder binding improve credential privacy/integrity but do not supply external authority, policy or remedy semantics."
+    },
+    {
+      "standard_id": "STD-ISO-IEC-18013-5",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "E",
+        "scope": "P",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "P",
+        "effect": "E",
+        "accountability": "P",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "mDL authenticity and holder binding do not cover how holder consent is obtained and do not by themselves settle relying-party authorization."
+    },
+    {
+      "standard_id": "STD-ISO-IEC-27560",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "E",
+        "scope": "D",
+        "revocation": "D",
+        "evidence": "D",
+        "assurance": "P",
+        "trust_decision": "E",
+        "effect": "E",
+        "accountability": "D",
+        "appeal_remedy": "P"
+      },
+      "authority_gap": "A consent record is evidence of recorded consent state; whether processing is authorized remains dependent on legal/policy context and lifecycle correctness."
+    },
+    {
+      "standard_id": "STD-OID4VCI",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "E",
+        "scope": "D",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "E",
+        "effect": "P",
+        "accountability": "P",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Issuance transport and authorization do not by themselves establish the legal/governance authority for the claims being issued or downstream reliance."
+    },
+    {
+      "standard_id": "STD-OID4VP",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "E",
+        "scope": "D",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "P",
+        "effect": "E",
+        "accountability": "P",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Presentation protocol verification remains subordinate to credential-format semantics, verifier policy, purpose limitation and authority evaluation."
+    },
+    {
+      "standard_id": "STD-OPENID-FEDERATION-1",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "P",
+        "scope": "D",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "P",
+        "effect": "E",
+        "accountability": "D",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Federation membership and trusted metadata chains are not automatically equivalent to authority for an application-specific action or effect."
+    },
+    {
+      "standard_id": "STD-W3C-DATA-INTEGRITY",
+      "coverage": {
+        "authority_source": "E",
+        "delegation": "E",
+        "scope": "P",
+        "revocation": "E",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "E",
+        "effect": "E",
+        "accountability": "P",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Cryptographic authenticity/integrity is evidence about a proof, not evidence that the signer was authorized to make the underlying claim or effect."
+    },
+    {
+      "standard_id": "STD-W3C-DID-CORE",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "P",
+        "scope": "P",
+        "revocation": "P",
+        "evidence": "P",
+        "assurance": "D",
+        "trust_decision": "E",
+        "effect": "E",
+        "accountability": "P",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Identifier control and verification relationships must not be promoted into registrar, organizational, professional or action authority without another authority source."
+    },
+    {
+      "standard_id": "STD-W3C-DID-RESOLUTION-1",
+      "coverage": {
+        "authority_source": "E",
+        "delegation": "E",
+        "scope": "P",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "D",
+        "trust_decision": "E",
+        "effect": "E",
+        "accountability": "D",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Successful/verifiable resolution establishes technical resolution confidence within a DID method, not the external governance authority of the DID controller."
+    },
+    {
+      "standard_id": "STD-W3C-VC-DM-2",
+      "coverage": {
+        "authority_source": "P",
+        "delegation": "E",
+        "scope": "P",
+        "revocation": "P",
+        "evidence": "D",
+        "assurance": "P",
+        "trust_decision": "E",
+        "effect": "E",
+        "accountability": "P",
+        "appeal_remedy": "E"
+      },
+      "authority_gap": "Credential validity and issuer/holder/verifier roles do not by themselves establish the issuer\u2019s real-world authority, relying-party policy, or permitted effect."
+    }
+  ]
+}

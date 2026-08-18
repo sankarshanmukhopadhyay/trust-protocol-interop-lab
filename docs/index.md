@@ -19,6 +19,11 @@ A governed workbench for testing whether independently authoritative trust proto
 8. [Standards intelligence method](../standards/methodology.md)
 9. [Portfolio standards register](../standards/generated/standards-register.md)
 10. [Standards × portfolio matrix](../standards/generated/portfolio-matrix.md)
+11. [Canonical standards verification](../standards/generated/verification-report.md)
+12. [Standards × TSMM semantic matrix](../standards/generated/tsmm-semantic-matrix.md)
+13. [Standards × GAAM authority matrix](../standards/generated/gaam-authority-matrix.md)
+14. [RAHP assessment candidates](../standards/generated/rahp-candidates.md)
+15. [Cross-specification test candidates](../standards/generated/cross-spec-candidates.md)
 
 ## Active programme
 
@@ -31,4 +36,4 @@ The current case catalog covers Trust Tasks/MCP, TEA/MCP/Trust Tasks, governed A
 
 ## Standards intelligence programme
 
-The lab now maintains a governed standards-intelligence layer seeded from the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is credited as a discovery source; standards publishers remain authoritative, and local mappings remain repository-owned analytical claims.
+The lab maintains a governed standards-intelligence layer seeded from the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is credited as a discovery source; standards publishers remain authoritative, and local mappings remain repository-owned analytical claims. The current register is canonically verified against publisher sources and generates TSMM semantic analysis, GAAM authority analysis, RAHP assessment candidates, and cross-specification pressure-test candidates.

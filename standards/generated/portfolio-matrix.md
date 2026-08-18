@@ -5,7 +5,9 @@ nav_order: 10
 ---
 # Standards × Portfolio Matrix
 
-Generated applicability view. Values indicate local analytical relevance, **not conformance or endorsement**.
+> **Source acknowledgement:** Initial standards discovery is informed by the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is a discovery source, not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply GSMI/GBBC endorsement.
+
+Values indicate local analytical relevance, **not conformance, dependency, compatibility or endorsement**.
 
 | Standard | `PolicyMesh` | `agent-registry-protocol` | `dtgwg-zkp-tf` | `governance-authority-assurance-metamodel` | `open-national-digital-trust-framework` | `rahp-toolkit` | `trust-protocol-interop-lab` | `trust-systems-meta-model` |
 |---|---|---|---|---|---|---|---|---|

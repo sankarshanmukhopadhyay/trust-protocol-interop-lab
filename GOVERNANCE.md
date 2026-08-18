@@ -30,3 +30,13 @@ A case may be marked `superseded` when its assumptions or upstream baseline no l
 ## Standards-intelligence governance
 
 Standards intelligence is governed by `standards/sources.yaml`, `standards/register.yaml`, and `standards/mappings/portfolio.yaml`. Discovery-source attribution MUST be preserved. A `depends-on` relationship MUST identify the repository-local requirement, profile, or implementation contract that creates the dependency. Source changes create review candidates rather than automatic defect claims.
+
+## Standards-intelligence analysis authority
+
+The standards-intelligence layer is a local analytical control plane. GSMI/GBBC is credited as the initial discovery source, while each standards publisher remains authoritative for its own specification lifecycle and text.
+
+Canonical-source verification may establish the identity, baseline, publication status, and lifecycle state of an external specification. It cannot establish that the specification is interoperable with another system, sufficient for an authority decision, conformantly implemented, safe, privacy preserving, or endorsed by GSMI/GBBC or the publisher.
+
+TSMM and GAAM matrices in this repository are informative crosswalks owned by this lab. They do not amend TSMM or GAAM and do not create conformance claims against those projects.
+
+RAHP assessment candidates and cross-specification candidates are non-finding work items. Promotion requires the evidence and human-review gates defined by the owning RAHP deployment or Interop Case maturity model. Automated monitoring MAY flag baseline drift, but MUST NOT silently move a pinned baseline, publish a finding, or create an interoperability claim.

@@ -24,6 +24,11 @@ The working model is:
 - [Standards intelligence method](standards/methodology.md)
 - [Portfolio standards register](standards/generated/standards-register.md)
 - [Standards × portfolio matrix](standards/generated/portfolio-matrix.md)
+- [Canonical standards verification](standards/generated/verification-report.md)
+- [Standards × TSMM semantic matrix](standards/generated/tsmm-semantic-matrix.md)
+- [Standards × GAAM authority matrix](standards/generated/gaam-authority-matrix.md)
+- [RAHP assessment candidates](standards/generated/rahp-candidates.md)
+- [Cross-specification test candidates](standards/generated/cross-spec-candidates.md)
 - [Repository and artifact status](STATUS.md)
 
 ## Current interoperability cases
@@ -53,7 +58,7 @@ The original work remains available at stable paths:
 
 The [`standards/`](standards/README.md) layer turns external standards catalogues into governed discovery, mapping, and assurance inputs. Its initial discovery source is the **Global Standards Mapping Initiative (GSMI)**, an initiative of the **Global Blockchain Business Council (GBBC)**. We gratefully acknowledge GSMI/GBBC for maintaining an open standards-mapping resource. GSMI is used as a discovery source only: canonical standards publishers remain authoritative, and inclusion here does not imply GSMI/GBBC endorsement.
 
-The register records explicit relationship semantics such as `maps-to`, `informs`, `assesses`, and `depends-on`; only an explicit, evidenced `depends-on` relationship can create a local normative dependency. Generated views expose portfolio applicability without converting catalogue discovery into conformance claims.
+The register records explicit relationship semantics such as `maps-to`, `informs`, `assesses`, and `depends-on`; only an explicit, evidenced `depends-on` relationship can create a local normative dependency. Commit 2 adds publisher-controlled baseline verification, lifecycle tracking, TSMM semantic coverage, GAAM authority coverage, RAHP assessment candidates, and cross-specification pressure-test candidates. Generated views expose these analyses without converting catalogue discovery or cryptographic verification into conformance, authority, compatibility, or endorsement claims.
 
 ## Portfolio-aware experimentation
 

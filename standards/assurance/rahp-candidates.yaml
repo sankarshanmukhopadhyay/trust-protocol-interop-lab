@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "status": "candidate-register",
+  "governance": "Candidates are triage inputs only. Promotion to a durable RAHP assessment requires explicit target/baseline selection, human review, evidence capture and disposition under the RAHP deployment rules.",
+  "candidates": [
+    {
+      "id": "RAHP-STD-001",
+      "title": "DID resolution confidence must not become authority by implication",
+      "priority": "critical",
+      "standards": [
+        "STD-W3C-DID-CORE",
+        "STD-W3C-DID-RESOLUTION-1"
+      ],
+      "projects": [
+        "governance-authority-assurance-metamodel",
+        "open-national-digital-trust-framework",
+        "trust-protocol-interop-lab"
+      ],
+      "risk_hypothesis": "A relying system treats successful or verifiable DID resolution, DID controller status, or resolved verification material as sufficient evidence of registrar, organizational, professional, or action authority.",
+      "test_focus": [
+        "resolution-result provenance",
+        "method-specific trust assumptions",
+        "version/caching freshness",
+        "authority-source separation",
+        "deactivation and historical resolution"
+      ],
+      "evidence_target": "Negative vectors where cryptographic control is valid but external authority is absent, expired, revoked or out of scope."
+    },
+    {
+      "id": "RAHP-STD-002",
+      "title": "Federation trust-chain scope versus application authority",
+      "priority": "high",
+      "standards": [
+        "STD-OPENID-FEDERATION-1"
+      ],
+      "projects": [
+        "agent-registry-protocol",
+        "governance-authority-assurance-metamodel",
+        "open-national-digital-trust-framework"
+      ],
+      "risk_hypothesis": "A valid federation trust chain or accepted entity metadata is interpreted as authorization for an application-level action outside the federation policy or delegated scope.",
+      "test_focus": [
+        "trust-anchor selection",
+        "metadata policy narrowing",
+        "authority attenuation",
+        "entity lifecycle",
+        "cross-federation recognition"
+      ],
+      "evidence_target": "Vectors proving that federation membership can verify while the requested effect is denied by local authority policy."
+    },
+    {
+      "id": "RAHP-STD-003",
+      "title": "Credential verification-to-reliance boundary",
+      "priority": "critical",
+      "standards": [
+        "STD-W3C-VC-DM-2",
+        "STD-W3C-DATA-INTEGRITY",
+        "STD-OID4VCI",
+        "STD-OID4VP"
+      ],
+      "projects": [
+        "open-national-digital-trust-framework",
+        "trust-systems-meta-model",
+        "governance-authority-assurance-metamodel"
+      ],
+      "risk_hypothesis": "A technically valid credential issuance/presentation/proof chain is treated as sufficient assurance for a trust decision without validating issuer authority, status, purpose, audience, policy or permitted effect.",
+      "test_focus": [
+        "issuer authority",
+        "credential status/lifecycle",
+        "presentation audience and nonce",
+        "proof purpose",
+        "relying-party policy",
+        "decision evidence"
+      ],
+      "evidence_target": "Positive and negative compositions separating signature validity, credential validity, issuer authority and final trust decision."
+    },
+    {
+      "id": "RAHP-STD-004",
+      "title": "mDL presentation, consent and verifier-authority seam",
+      "priority": "high",
+      "standards": [
+        "STD-ISO-IEC-18013-5",
+        "STD-OID4VP"
+      ],
+      "projects": [
+        "open-national-digital-trust-framework",
+        "trust-protocol-interop-lab"
+      ],
+      "risk_hypothesis": "A composition correctly authenticates mDL data but lacks explicit controls for consent acquisition, verifier purpose/authority or downstream data-use policy.",
+      "test_focus": [
+        "reader authentication",
+        "request purpose",
+        "holder consent boundary",
+        "minimal disclosure",
+        "issuer trust",
+        "retention/use constraints"
+      ],
+      "evidence_target": "Scenario set where the cryptographic exchange succeeds but policy must reject overbroad or unauthorized collection."
+    },
+    {
+      "id": "RAHP-STD-005",
+      "title": "Content provenance identity versus role authority",
+      "priority": "high",
+      "standards": [
+        "STD-C2PA",
+        "STD-CAWG-IDENTITY-ASSERTION"
+      ],
+      "projects": [
+        "governance-authority-assurance-metamodel",
+        "agent-registry-protocol",
+        "trust-protocol-interop-lab"
+      ],
+      "risk_hypothesis": "A valid C2PA/CAWG identity assertion is interpreted as proof that the named actor had authority to perform, approve, publish or license the represented action.",
+      "test_focus": [
+        "credential/control verification",
+        "asserted role semantics",
+        "organizational authority",
+        "claim generator versus named actor",
+        "revocation/status",
+        "relying-party decision"
+      ],
+      "evidence_target": "Vectors where identity/control and provenance validate but role authority is missing, narrower, expired or revoked."
+    },
+    {
+      "id": "RAHP-STD-006",
+      "title": "Selective disclosure privacy and holder-binding composition",
+      "priority": "medium",
+      "standards": [
+        "STD-IETF-SD-JWT-VC",
+        "STD-OID4VP"
+      ],
+      "projects": [
+        "dtgwg-zkp-tf",
+        "open-national-digital-trust-framework",
+        "trust-systems-meta-model"
+      ],
+      "risk_hypothesis": "Selective disclosure is treated as equivalent to unlinkability or sufficient privacy, while verifier correlation, holder-binding choices, stable issuer metadata or repeated disclosure patterns still permit unwanted linkage.",
+      "test_focus": [
+        "holder binding",
+        "nonce/audience freshness",
+        "cross-verifier correlation",
+        "minimum disclosure",
+        "issuer metadata",
+        "draft-version drift"
+      ],
+      "evidence_target": "Privacy pressure tests demonstrating which correlations remain observable despite valid selective disclosure."
+    }
+  ]
+}
