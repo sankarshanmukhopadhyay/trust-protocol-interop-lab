@@ -17,8 +17,8 @@ out.mkdir(parents=True, exist_ok=True)
 
 ACK = '> **Source acknowledgement:** Initial standards discovery is informed by the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is a discovery source, not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply GSMI/GBBC endorsement.\n\n'
 
-def front(title, order):
-    return f'---\nlayout: default\ntitle: {title}\nnav_order: {order}\n---\n'
+def front(title, order, parent='Standards Intelligence'):
+    return f'---\nlayout: default\ntitle: {title}\nparent: {parent}\nnav_order: {order}\n---\n'
 
 rows = []
 for s in standards:
@@ -71,8 +71,11 @@ xrows=[]
 for c in cross['candidates']:
     std=', '.join(f'`{x}`' for x in c['standards'])
     owner=f"`{c['recommended_owner']}`"
-    xrows.append(f"| `{c['id']}` | **{c['priority']}** | {c['title']} | {std} | {owner} | {c['question']} |")
-xpage=front('Cross-Spec Test Candidates',15)+'# Cross-Specification Pressure-Test Candidates\n\n'+ACK+cross['governance']+'\n\n| ID | Priority | Composition | Standards | Suggested owner | Pressure-test question |\n|---|---|---|---|---|---|\n'+'\n'.join(xrows)+'\n'
+    promotion=c.get('promotion', {})
+    state=promotion.get('state','candidate')
+    case_ref=f"`{promotion['interop_case']}`" if promotion.get('interop_case') else '—'
+    xrows.append(f"| `{c['id']}` | **{c['priority']}** | {state} | {c['title']} | {std} | {owner} | {case_ref} | {c['question']} |")
+xpage=front('Cross-Spec Test Candidates',15)+'# Cross-Specification Pressure-Test Candidates\n\n'+ACK+cross['governance']+'\n\n| ID | Priority | State | Composition | Standards | Suggested owner | Interop Case | Pressure-test question |\n|---|---|---|---|---|---|---|---|\n'+'\n'.join(xrows)+'\n'
 (out/'cross-spec-candidates.md').write_text(xpage)
 
 counts=Counter(s['review']['state'] for s in standards)
@@ -88,6 +91,7 @@ summary={
  'cross_spec_candidates':len(cross['candidates']),
  'critical_rahp_candidates':sum(c['priority']=='critical' for c in rahp['candidates']),
  'critical_cross_spec_candidates':sum(c['priority']=='critical' for c in cross['candidates']),
+ 'executed_cross_spec_candidates':sum(c.get('promotion',{}).get('state')=='executed' for c in cross['candidates']),
 }
 (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(f"Generated standards intelligence views for {len(standards)} verified entries.")

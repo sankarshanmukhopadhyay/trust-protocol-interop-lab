@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "case_id": "IC-XSP-001",
+  "semantic_owners": [
+    {
+      "semantic": "credential claims and lifecycle hooks",
+      "owner": "W3C VC Data Model"
+    },
+    {
+      "semantic": "cryptographic proof verification",
+      "owner": "W3C VC Data Integrity"
+    },
+    {
+      "semantic": "credential issuance transport and OAuth authorization",
+      "owner": "OpenID4VCI"
+    },
+    {
+      "semantic": "presentation request/response and transaction binding",
+      "owner": "OpenID4VP"
+    },
+    {
+      "semantic": "issuer trust and authority-for-purpose",
+      "owner": "deployment governance / relying party"
+    },
+    {
+      "semantic": "final authorization and effect",
+      "owner": "relying-party policy"
+    }
+  ],
+  "non_ownership_rule": "The Interop Lab does not redefine upstream credential, proof, issuance, or presentation semantics."
+}

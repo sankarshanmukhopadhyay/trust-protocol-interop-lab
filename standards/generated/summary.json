@@ -11,5 +11,6 @@
   "rahp_candidates": 6,
   "cross_spec_candidates": 6,
   "critical_rahp_candidates": 2,
-  "critical_cross_spec_candidates": 2
+  "critical_cross_spec_candidates": 2,
+  "executed_cross_spec_candidates": 2
 }

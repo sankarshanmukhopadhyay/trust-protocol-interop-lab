@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Standards × TSMM Semantic Matrix
+parent: Standards Intelligence
 nav_order: 12
 ---
 # Standards × TSMM Semantic Matrix

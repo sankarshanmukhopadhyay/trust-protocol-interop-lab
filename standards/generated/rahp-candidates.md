@@ -1,6 +1,7 @@
 ---
 layout: default
 title: RAHP Assessment Candidates
+parent: Standards Intelligence
 nav_order: 14
 ---
 # RAHP Assessment Candidate Register

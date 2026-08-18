@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Evidence Model
+parent: Evidence & Assurance
+nav_order: 10
 ---
 # Interoperability Evidence Model
 

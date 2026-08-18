@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Standards Register
+parent: Standards Intelligence
 nav_order: 9
 ---
 # Portfolio Standards Register

@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Semantic Ownership
+parent: Methods & Architecture
+nav_order: 20
 ---
 # Semantic Ownership
 

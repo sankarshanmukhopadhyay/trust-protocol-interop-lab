@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "case_id": "IC-XSP-002",
+  "semantic_owners": [
+    {
+      "semantic": "DID syntax, DID document and verification relationships",
+      "owner": "W3C DID Core"
+    },
+    {
+      "semantic": "DID resolution result, metadata and dereferencing",
+      "owner": "W3C DID Resolution"
+    },
+    {
+      "semantic": "federation membership, trust chains and metadata policy",
+      "owner": "OpenID Federation"
+    },
+    {
+      "semantic": "organizational/role authority",
+      "owner": "external governance authority / deployment"
+    },
+    {
+      "semantic": "delegated action scope",
+      "owner": "authority/delegation system"
+    },
+    {
+      "semantic": "final permitted effect",
+      "owner": "relying-party policy"
+    }
+  ],
+  "non_ownership_rule": "Resolution success and federation membership are evidence inputs, not universal action authority."
+}

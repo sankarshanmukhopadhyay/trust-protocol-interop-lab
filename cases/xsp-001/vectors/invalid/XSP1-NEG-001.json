@@ -1,0 +1,13 @@
+{
+  "id": "XSP1-NEG-001",
+  "issuer_authority": "unknown",
+  "proof": "valid",
+  "proof_purpose": "assertionMethod",
+  "credential_status": "active",
+  "audience": "match",
+  "freshness": "fresh",
+  "issuance_authorization": "valid",
+  "relying_policy": "allow",
+  "evidence_complete": true,
+  "expected": "deny-issuer-authority"
+}

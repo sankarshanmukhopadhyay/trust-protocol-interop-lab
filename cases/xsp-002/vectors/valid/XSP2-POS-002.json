@@ -1,0 +1,15 @@
+{
+  "id": "XSP2-POS-002",
+  "did_resolution": "success",
+  "did_state": "active",
+  "federation_chain": "valid",
+  "federation_membership": true,
+  "authority_source": "verified",
+  "authority_scope": [
+    "registry.read"
+  ],
+  "requested_action": "registry.read",
+  "local_policy": "deny",
+  "evidence_traversable": true,
+  "expected": "deny-policy"
+}

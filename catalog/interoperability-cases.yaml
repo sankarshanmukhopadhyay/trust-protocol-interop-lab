@@ -152,6 +152,64 @@
         "experiment": "experiments/agentic-provenance-authority/test-plan.md",
         "rahp_review": "reviews/rahp/IC-AGENT-PROVENANCE-AUTH-001.md"
       }
+    },
+    {
+      "id": "IC-XSP-001",
+      "title": "Verifiable credential issuance to reliance",
+      "status": "interoperability-tested",
+      "question": "Can issuer authority, credential lifecycle, proof purpose, presentation binding and relying-party policy remain separately testable across VC issuance, proof, presentation and reliance?",
+      "components": [
+        "vc-data-model",
+        "vc-data-integrity",
+        "oid4vci",
+        "oid4vp"
+      ],
+      "baselines": {
+        "vc-data-model": "W3C Recommendation 2.0 2025-05-15",
+        "vc-data-integrity": "W3C Recommendation 1.0 2025-05-15",
+        "oid4vci": "OpenID Final Specification 1.0 2025-09-16",
+        "oid4vp": "OpenID Final Specification 1.0 2025-07-09"
+      },
+      "ownership": "cases/xsp-001/ownership.yaml",
+      "invariants": "cases/xsp-001/invariants.yaml",
+      "paths": {
+        "readme": "cases/xsp-001/README.md",
+        "mapping": "mappings/xsp-001-credential-reliance.md",
+        "scenarios": "cases/xsp-001/scenarios",
+        "vectors": "cases/xsp-001/vectors",
+        "limitations": "cases/xsp-001/known-limitations.md",
+        "experiment": "experiments/xsp-001/README.md",
+        "rahp_review": "reviews/rahp/IC-XSP-001.md",
+        "evidence": "evidence/xsp-001/evidence-manifest.json"
+      }
+    },
+    {
+      "id": "IC-XSP-002",
+      "title": "DID resolution and federation authority composition",
+      "status": "interoperability-tested",
+      "question": "Can DID resolution, federation trust-chain evidence, organizational authority and action scope compose without resolution or membership becoming unauthorized decision authority?",
+      "components": [
+        "did-core",
+        "did-resolution",
+        "openid-federation"
+      ],
+      "baselines": {
+        "did-core": "W3C Recommendation 1.0 2022-07-19",
+        "did-resolution": "W3C Candidate Recommendation Snapshot 2026-08-06",
+        "openid-federation": "OpenID Final Specification 1.0 2026-02-17"
+      },
+      "ownership": "cases/xsp-002/ownership.yaml",
+      "invariants": "cases/xsp-002/invariants.yaml",
+      "paths": {
+        "readme": "cases/xsp-002/README.md",
+        "mapping": "mappings/xsp-002-did-federation-authority.md",
+        "scenarios": "cases/xsp-002/scenarios",
+        "vectors": "cases/xsp-002/vectors",
+        "limitations": "cases/xsp-002/known-limitations.md",
+        "experiment": "experiments/xsp-002/README.md",
+        "rahp_review": "reviews/rahp/IC-XSP-002.md",
+        "evidence": "evidence/xsp-002/evidence-manifest.json"
+      }
     }
   ]
 }

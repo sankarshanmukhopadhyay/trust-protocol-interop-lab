@@ -1,0 +1,93 @@
+{
+  "case_id": "IC-XSP-001",
+  "result_id": "IC-XSP-001-RESULT-20260818",
+  "status": "pass",
+  "claim_scope": "executed semantic-composition interoperability only; excludes wire-protocol conformance and external certification",
+  "executed_at": "2026-08-18T01:10:46Z",
+  "observations": [
+    "10/10 vectors matched declared expected behavior",
+    "All decisions were produced by the repository-owned deterministic semantic reference evaluator."
+  ],
+  "vectors": [
+    {
+      "id": "XSP1-POS-001",
+      "kind": "valid",
+      "expected": "allow",
+      "observed": "allow",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/valid/XSP1-POS-001.json"
+    },
+    {
+      "id": "XSP1-POS-002",
+      "kind": "valid",
+      "expected": "allow",
+      "observed": "allow",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/valid/XSP1-POS-002.json"
+    },
+    {
+      "id": "XSP1-POS-003",
+      "kind": "valid",
+      "expected": "allow",
+      "observed": "allow",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/valid/XSP1-POS-003.json"
+    },
+    {
+      "id": "XSP1-POS-004",
+      "kind": "valid",
+      "expected": "deny-policy",
+      "observed": "deny-policy",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/valid/XSP1-POS-004.json"
+    },
+    {
+      "id": "XSP1-NEG-001",
+      "kind": "invalid",
+      "expected": "deny-issuer-authority",
+      "observed": "deny-issuer-authority",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/invalid/XSP1-NEG-001.json"
+    },
+    {
+      "id": "XSP1-NEG-002",
+      "kind": "invalid",
+      "expected": "deny-status",
+      "observed": "deny-status",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/invalid/XSP1-NEG-002.json"
+    },
+    {
+      "id": "XSP1-NEG-003",
+      "kind": "invalid",
+      "expected": "deny-audience",
+      "observed": "deny-audience",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/invalid/XSP1-NEG-003.json"
+    },
+    {
+      "id": "XSP1-NEG-004",
+      "kind": "invalid",
+      "expected": "deny-freshness",
+      "observed": "deny-freshness",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/invalid/XSP1-NEG-004.json"
+    },
+    {
+      "id": "XSP1-NEG-005",
+      "kind": "invalid",
+      "expected": "deny-proof",
+      "observed": "deny-proof",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/invalid/XSP1-NEG-005.json"
+    },
+    {
+      "id": "XSP1-NEG-006",
+      "kind": "invalid",
+      "expected": "deny-proof-purpose",
+      "observed": "deny-proof-purpose",
+      "pass": true,
+      "source": "cases/xsp-001/vectors/invalid/XSP1-NEG-006.json"
+    }
+  ]
+}

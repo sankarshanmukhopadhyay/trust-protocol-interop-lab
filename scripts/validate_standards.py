@@ -12,6 +12,8 @@ tsmm = load('standards/mappings/tsmm.yaml')
 gaam = load('standards/mappings/gaam.yaml')
 rahp = load('standards/assurance/rahp-candidates.yaml')
 cross = load('standards/cross-spec/candidates.yaml')
+cases = load('catalog/interoperability-cases.yaml')['cases']
+case_by_id = {c['id']: c for c in cases}
 
 allowed_rel = set(portfolio['relationship_types'])
 source_ids = {s['id'] for s in sources['sources']}
@@ -116,6 +118,23 @@ for register_name, doc, prefix in [('RAHP candidates', rahp, 'RAHP-STD-'), ('Cro
                 errors.append(f'{cid}: unknown project {p}')
         if c.get('priority') not in {'critical', 'high', 'medium', 'low'}:
             errors.append(f'{cid}: invalid priority')
+        promotion = c.get('promotion')
+        if promotion:
+            if register_name != 'Cross-spec candidates':
+                errors.append(f'{cid}: promotion metadata is only defined for cross-spec candidates')
+            elif promotion.get('state') != 'executed':
+                errors.append(f'{cid}: unknown promotion state {promotion.get("state")}')
+            else:
+                ic = promotion.get('interop_case')
+                if ic not in case_by_id:
+                    errors.append(f'{cid}: promoted Interop Case {ic} not found')
+                elif case_by_id[ic].get('status') != 'interoperability-tested':
+                    errors.append(f'{cid}: promoted Interop Case {ic} is not interoperability-tested')
+                ep = promotion.get('evidence')
+                if not ep or not (ROOT / ep).exists():
+                    errors.append(f'{cid}: promoted evidence path is missing')
+                if not promotion.get('completed_on'):
+                    errors.append(f'{cid}: completed_on is required for executed promotion')
 
 if errors:
     print('Standards validation failed:')

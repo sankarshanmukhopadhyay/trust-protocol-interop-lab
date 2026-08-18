@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Standards × GAAM Authority Matrix
+parent: Standards Intelligence
 nav_order: 13
 ---
 # Standards × GAAM Authority Matrix

@@ -60,6 +60,41 @@
       "id": "dcas",
       "authority": "sankarshanmukhopadhyay/dtg-conformance-assurance",
       "role": "portable-conformance-and-assurance-evaluation"
+    },
+    {
+      "id": "vc-data-model",
+      "authority": "W3C Verifiable Credentials Data Model v2.0",
+      "role": "credential-data-model"
+    },
+    {
+      "id": "vc-data-integrity",
+      "authority": "W3C Verifiable Credential Data Integrity 1.0",
+      "role": "credential-proof-and-integrity"
+    },
+    {
+      "id": "oid4vci",
+      "authority": "OpenID Foundation OpenID for Verifiable Credential Issuance 1.0",
+      "role": "credential-issuance-protocol"
+    },
+    {
+      "id": "oid4vp",
+      "authority": "OpenID Foundation OpenID for Verifiable Presentations 1.0",
+      "role": "credential-presentation-protocol"
+    },
+    {
+      "id": "did-core",
+      "authority": "W3C Decentralized Identifiers (DIDs) v1.0",
+      "role": "identifier-and-controller-data-model"
+    },
+    {
+      "id": "did-resolution",
+      "authority": "W3C DID Resolution v1.0 Candidate Recommendation Snapshot 2026-08-06",
+      "role": "identifier-resolution-protocol"
+    },
+    {
+      "id": "openid-federation",
+      "authority": "OpenID Foundation OpenID Federation 1.0",
+      "role": "federation-trust-chain-and-metadata-policy"
     }
   ]
 }

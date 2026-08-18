@@ -5,7 +5,7 @@
   "candidates": [
     {
       "id": "XSP-001",
-      "title": "Verifiable credential issuance \u2192 proof \u2192 presentation \u2192 reliance",
+      "title": "Verifiable credential issuance → proof → presentation → reliance",
       "priority": "critical",
       "standards": [
         "STD-W3C-VC-DM-2",
@@ -20,11 +20,17 @@
         "presentation freshness and audience are bound to the decision",
         "final authorization/effect is attributable to relying-party policy"
       ],
-      "recommended_owner": "trust-protocol-interop-lab"
+      "recommended_owner": "trust-protocol-interop-lab",
+      "promotion": {
+        "state": "executed",
+        "interop_case": "IC-XSP-001",
+        "evidence": "evidence/xsp-001/evidence-manifest.json",
+        "completed_on": "2026-08-18"
+      }
     },
     {
       "id": "XSP-002",
-      "title": "DID resolution \u00d7 federation metadata \u00d7 authority",
+      "title": "DID resolution × federation metadata × authority",
       "priority": "critical",
       "standards": [
         "STD-W3C-DID-CORE",
@@ -38,11 +44,17 @@
         "stale/deactivated identifiers fail closed where material",
         "authority source remains traversable"
       ],
-      "recommended_owner": "trust-protocol-interop-lab"
+      "recommended_owner": "trust-protocol-interop-lab",
+      "promotion": {
+        "state": "executed",
+        "interop_case": "IC-XSP-002",
+        "evidence": "evidence/xsp-002/evidence-manifest.json",
+        "completed_on": "2026-08-18"
+      }
     },
     {
       "id": "XSP-003",
-      "title": "ISO mDL \u00d7 OpenID4VP presentation profile",
+      "title": "ISO mDL × OpenID4VP presentation profile",
       "priority": "high",
       "standards": [
         "STD-ISO-IEC-18013-5",
@@ -59,7 +71,7 @@
     },
     {
       "id": "XSP-004",
-      "title": "C2PA provenance \u00d7 CAWG identity assertion \u00d7 authority",
+      "title": "C2PA provenance × CAWG identity assertion × authority",
       "priority": "high",
       "standards": [
         "STD-C2PA",
@@ -76,7 +88,7 @@
     },
     {
       "id": "XSP-005",
-      "title": "Selective disclosure credential \u00d7 OpenID4VP privacy boundary",
+      "title": "Selective disclosure credential × OpenID4VP privacy boundary",
       "priority": "medium",
       "standards": [
         "STD-IETF-SD-JWT-VC",
@@ -93,7 +105,7 @@
     },
     {
       "id": "XSP-006",
-      "title": "Consent records \u00d7 portable policy evaluation",
+      "title": "Consent records × portable policy evaluation",
       "priority": "medium",
       "standards": [
         "STD-ISO-IEC-27560"

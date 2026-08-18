@@ -16,20 +16,12 @@ The working model is:
 
 ## Start here
 
-- [Interoperability model](docs/interoperability-model.md)
-- [Semantic ownership](docs/semantic-ownership.md)
-- [Evidence-gated maturity model](docs/maturity-model.md)
-- [Evidence model](docs/evidence-model.md)
-- [Interoperability readiness](docs/interoperability-readiness.md)
-- [Standards intelligence method](standards/methodology.md)
-- [Portfolio standards register](standards/generated/standards-register.md)
-- [Standards × portfolio matrix](standards/generated/portfolio-matrix.md)
-- [Canonical standards verification](standards/generated/verification-report.md)
-- [Standards × TSMM semantic matrix](standards/generated/tsmm-semantic-matrix.md)
-- [Standards × GAAM authority matrix](standards/generated/gaam-authority-matrix.md)
-- [RAHP assessment candidates](standards/generated/rahp-candidates.md)
-- [Cross-specification test candidates](standards/generated/cross-spec-candidates.md)
-- [Repository and artifact status](STATUS.md)
+- **[Rendered documentation home](docs/index.md)** — task-oriented entry point for GitHub Pages.
+- **[Assessments](docs/assessments.md)** — executed and in-progress Interop Cases.
+- **[Standards Intelligence](docs/standards-intelligence.md)** — GSMI-informed discovery, canonical verification, semantic/authority matrices, and pressure-test pipeline.
+- **[Evidence & Assurance](docs/evidence-and-assurance.md)** — evidence packages, RAHP reviews, claim boundaries, and readiness.
+- **[Methods & Architecture](docs/methods.md)** — interoperability model, semantic ownership, maturity, architecture, and publication governance.
+- **[Repository and artifact status](STATUS.md)** — machine-readable status translated for maintainers.
 
 ## Current interoperability cases
 
@@ -41,6 +33,8 @@ The working model is:
 | `IC-TT-TSMM-TIS-001` | Trust Tasks ↔ TSMM ↔ TIS | Experimental |
 | `IC-ARPA-TRQP-HIST-001` | ARPA ↔ TRQP lifecycle/historical resolution | Experimental |
 | `IC-AGENT-PROVENANCE-AUTH-001` | Agent identity ↔ authority ↔ provenance ↔ TRQP ↔ assurance | Candidate |
+| `IC-XSP-001` | VC Data Model ↔ Data Integrity ↔ OpenID4VCI ↔ OpenID4VP ↔ relying policy | **Interoperability Tested (semantic scope)** |
+| `IC-XSP-002` | DID Core ↔ DID Resolution ↔ OpenID Federation ↔ authority | **Interoperability Tested (semantic scope)** |
 
 The authoritative registry is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
 
@@ -90,6 +84,8 @@ scripts/       Deterministic repository validation and readiness generation
 ```bash
 python scripts/validate_catalog.py
 python scripts/validate_cases.py
+python experiments/xsp-001/run.py
+python experiments/xsp-002/run.py
 python scripts/validate_evidence.py
 python scripts/validate_standards.py
 python scripts/generate_standards.py

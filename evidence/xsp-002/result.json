@@ -1,0 +1,101 @@
+{
+  "case_id": "IC-XSP-002",
+  "result_id": "IC-XSP-002-RESULT-20260818",
+  "status": "pass",
+  "claim_scope": "executed semantic-composition interoperability only; excludes wire-protocol conformance and external certification",
+  "executed_at": "2026-08-18T01:10:48Z",
+  "observations": [
+    "11/11 vectors matched declared expected behavior",
+    "All decisions were produced by the repository-owned deterministic semantic reference evaluator."
+  ],
+  "vectors": [
+    {
+      "id": "XSP2-POS-001",
+      "kind": "valid",
+      "expected": "allow",
+      "observed": "allow",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/valid/XSP2-POS-001.json"
+    },
+    {
+      "id": "XSP2-POS-002",
+      "kind": "valid",
+      "expected": "deny-policy",
+      "observed": "deny-policy",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/valid/XSP2-POS-002.json"
+    },
+    {
+      "id": "XSP2-POS-003",
+      "kind": "valid",
+      "expected": "allow",
+      "observed": "allow",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/valid/XSP2-POS-003.json"
+    },
+    {
+      "id": "XSP2-POS-004",
+      "kind": "valid",
+      "expected": "allow",
+      "observed": "allow",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/valid/XSP2-POS-004.json"
+    },
+    {
+      "id": "XSP2-NEG-001",
+      "kind": "invalid",
+      "expected": "deny-authority",
+      "observed": "deny-authority",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/invalid/XSP2-NEG-001.json"
+    },
+    {
+      "id": "XSP2-NEG-002",
+      "kind": "invalid",
+      "expected": "deny-scope",
+      "observed": "deny-scope",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/invalid/XSP2-NEG-002.json"
+    },
+    {
+      "id": "XSP2-NEG-003",
+      "kind": "invalid",
+      "expected": "deny-did-state",
+      "observed": "deny-did-state",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/invalid/XSP2-NEG-003.json"
+    },
+    {
+      "id": "XSP2-NEG-004",
+      "kind": "invalid",
+      "expected": "deny-federation",
+      "observed": "deny-federation",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/invalid/XSP2-NEG-004.json"
+    },
+    {
+      "id": "XSP2-NEG-005",
+      "kind": "invalid",
+      "expected": "deny-resolution",
+      "observed": "deny-resolution",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/invalid/XSP2-NEG-005.json"
+    },
+    {
+      "id": "XSP2-NEG-006",
+      "kind": "invalid",
+      "expected": "deny-untraceable-authority",
+      "observed": "deny-untraceable-authority",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/invalid/XSP2-NEG-006.json"
+    },
+    {
+      "id": "XSP2-NEG-007",
+      "kind": "invalid",
+      "expected": "deny-policy-widening",
+      "observed": "deny-policy-widening",
+      "pass": true,
+      "source": "cases/xsp-002/vectors/invalid/XSP2-NEG-007.json"
+    }
+  ]
+}

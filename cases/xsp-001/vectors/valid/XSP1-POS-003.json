@@ -1,0 +1,14 @@
+{
+  "id": "XSP1-POS-003",
+  "issuer_authority": "trusted-for-purpose",
+  "proof": "valid",
+  "proof_purpose": "assertionMethod",
+  "credential_status": "active",
+  "audience": "match",
+  "freshness": "fresh",
+  "issuance_authorization": "expired-after-issuance",
+  "relying_policy": "allow",
+  "evidence_complete": true,
+  "expected": "allow",
+  "note": "later reliance is not made invalid solely because issuance OAuth authorization has ended"
+}

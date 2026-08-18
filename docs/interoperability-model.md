@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Interoperability Model
+parent: Methods & Architecture
+nav_order: 10
 ---
 # Interoperability Model
 

@@ -1,0 +1,13 @@
+{
+  "id": "XSP1-POS-001",
+  "issuer_authority": "trusted-for-purpose",
+  "proof": "valid",
+  "proof_purpose": "assertionMethod",
+  "credential_status": "active",
+  "audience": "match",
+  "freshness": "fresh",
+  "issuance_authorization": "valid",
+  "relying_policy": "allow",
+  "evidence_complete": true,
+  "expected": "allow"
+}

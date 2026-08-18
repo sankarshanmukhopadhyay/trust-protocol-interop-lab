@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "case_id": "IC-XSP-001",
+  "invariants": [
+    {
+      "id": "XSP1-INV-01",
+      "statement": "Cryptographic proof verification MUST NOT substitute for issuer authority for the claim and purpose."
+    },
+    {
+      "id": "XSP1-INV-02",
+      "statement": "Credential lifecycle/status MUST be evaluated at the reliance boundary when status is material to the decision."
+    },
+    {
+      "id": "XSP1-INV-03",
+      "statement": "Presentation freshness MUST be bound to the relying transaction."
+    },
+    {
+      "id": "XSP1-INV-04",
+      "statement": "Presentation audience MUST bind the presentation to the intended verifier."
+    },
+    {
+      "id": "XSP1-INV-05",
+      "statement": "Proof purpose MUST remain explicit and compatible with the verification operation."
+    },
+    {
+      "id": "XSP1-INV-06",
+      "statement": "Issuance authorization MUST NOT be interpreted as relying-party authorization for a later effect."
+    },
+    {
+      "id": "XSP1-INV-07",
+      "statement": "Relying-party policy MUST own the final authorization/effect decision."
+    },
+    {
+      "id": "XSP1-INV-08",
+      "statement": "Evidence references sufficient to reconstruct proof, lifecycle, audience/freshness, issuer authority and policy decision MUST remain attributable."
+    }
+  ]
+}

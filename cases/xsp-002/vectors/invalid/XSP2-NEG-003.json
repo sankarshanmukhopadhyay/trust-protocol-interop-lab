@@ -1,0 +1,15 @@
+{
+  "id": "XSP2-NEG-003",
+  "did_resolution": "success",
+  "did_state": "deactivated",
+  "federation_chain": "valid",
+  "federation_membership": true,
+  "authority_source": "verified",
+  "authority_scope": [
+    "registry.read"
+  ],
+  "requested_action": "registry.read",
+  "local_policy": "allow",
+  "evidence_traversable": true,
+  "expected": "deny-did-state"
+}

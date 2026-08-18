@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Interoperability Readiness
+parent: Assessments
+nav_order: 90
 ---
 # Interoperability Readiness
 
@@ -14,5 +16,7 @@ Generated from the machine-readable case catalog.
 | IC-TT-TSMM-TIS-001 | experimental | yes | yes | 1 | 1 | no |
 | IC-ARPA-TRQP-HIST-001 | experimental | yes | yes | 1 | 1 | no |
 | IC-AGENT-PROVENANCE-AUTH-001 | candidate | yes | yes | 3 | 8 | no |
+| IC-XSP-001 | interoperability-tested | yes | yes | 4 | 6 | yes |
+| IC-XSP-002 | interoperability-tested | yes | yes | 4 | 7 | yes |
 
 A status is an evidence-bounded repository claim, not external certification.

@@ -30,14 +30,16 @@ See [Evidence-Gated Maturity Model](docs/maturity-model.md).
 | IC-TT-TSMM-TIS-001 | Experimental | Trust Tasks 0.3; TSMM v0.23.0; TIS v0.12.0 |
 | IC-ARPA-TRQP-HIST-001 | Experimental | ARPA v0.9.4; TRQP upstream baseline |
 | IC-AGENT-PROVENANCE-AUTH-001 | Candidate | GAAM v0.9.0; TSMM v0.23.0; TIS v0.12.0; ANAB v0.10.0; ARPA v0.9.4; A2A; local CAWG-TRQP agentic baseline; TRQP; DCAS v0.10.0 |
+| IC-XSP-001 | **Interoperability Tested** | VC Data Model 2.0; Data Integrity 1.0; OpenID4VCI 1.0; OpenID4VP 1.0 |
+| IC-XSP-002 | **Interoperability Tested** | DID Core 1.0; DID Resolution CR 2026-08-06; OpenID Federation 1.0 |
 
 The machine-readable source of truth is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
 
 ## Claim boundary
 
-No case currently claims `Interoperability Tested`. Repository-controlled scenarios and vectors are preparation and candidate evidence until an executed, reproducible evidence package is recorded.
+`IC-XSP-001` and `IC-XSP-002` now claim **Interoperability Tested** only for their executed semantic-composition reference models. Their evidence packages contain deterministic positive/negative vectors, executed results, reproducibility instructions, manifests, and hashes. This status does **not** claim wire-protocol conformance, production interoperability, external certification, or legal authority. Other cases remain at their existing maturity levels.
 
 
 ## Standards intelligence status
 
-The lab contains an **analysed standards register** with governed source attribution, explicit portfolio relevance, relationship semantics, canonical publisher verification, lifecycle notes, TSMM semantic mappings, GAAM authority mappings, RAHP assessment candidates, and cross-specification pressure-test candidates. GSMI/GBBC is acknowledged as the initial discovery source. All 12 current seed standards have canonical-source verification records; none currently creates a normative portfolio dependency. RAHP and cross-spec entries are governed candidates, not findings or Interop Cases, until separately promoted through their evidence gates.
+The lab contains an **analysed standards register** with governed source attribution, explicit portfolio relevance, relationship semantics, canonical publisher verification, lifecycle notes, TSMM semantic mappings, GAAM authority mappings, RAHP assessment candidates, and cross-specification pressure-test candidates. GSMI/GBBC is acknowledged as the initial discovery source. All 12 current seed standards have canonical-source verification records; none currently creates a normative portfolio dependency. RAHP entries remain governed candidates. Cross-spec candidates `XSP-001` and `XSP-002` have been promoted to executed Interop Cases with bounded evidence; the remaining cross-spec entries are still candidates.

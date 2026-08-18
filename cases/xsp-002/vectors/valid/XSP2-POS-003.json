@@ -1,0 +1,16 @@
+{
+  "id": "XSP2-POS-003",
+  "did_resolution": "success",
+  "did_state": "active",
+  "federation_chain": "not-required",
+  "federation_membership": false,
+  "authority_source": "verified",
+  "authority_scope": [
+    "sign.document"
+  ],
+  "requested_action": "sign.document",
+  "local_policy": "allow",
+  "evidence_traversable": true,
+  "expected": "allow",
+  "note": "federation membership is not universal prerequisite when another governed authority source applies"
+}

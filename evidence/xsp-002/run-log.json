@@ -1,0 +1,9 @@
+{
+  "case_id": "IC-XSP-002",
+  "executed_at": "2026-08-18T01:10:48Z",
+  "runner": "experiments/xsp-002/run.py",
+  "python": "stdlib-only",
+  "vector_count": 11,
+  "passed": 11,
+  "failed": 0
+}

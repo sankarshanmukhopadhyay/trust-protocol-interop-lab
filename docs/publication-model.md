@@ -17,7 +17,7 @@ Not every artifact must traverse every stage. Analysis can conclude that no new 
 1. **Exploratory** — establish the problem, implementation gaps, risks, and semantic boundaries.
 2. **Experimental** — draft a coherent design, profile, mapping, or executable scenario.
 3. **Candidate** — stabilize normative language sufficiently for structured review.
-4. **Interoperability Tested** — exercise the design through implementations and test vectors.
+4. **Interoperability Tested** — exercise the design through implementations and/or a bounded executable semantic reference model with test vectors, with the evidence claim scope stated explicitly.
 5. **Proposed Upstream** — open an upstream discussion, issue, or pull request.
 6. **Upstreamed / Superseded** — record the authoritative outcome.
 

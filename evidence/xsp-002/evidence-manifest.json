@@ -1,0 +1,105 @@
+{
+  "case_id": "IC-XSP-002",
+  "evidence_id": "IC-XSP-002-EVIDENCE-20260818",
+  "claim_scope": "executed semantic-composition interoperability only; excludes wire-protocol conformance and external certification",
+  "executed_at": "2026-08-18T01:10:48Z",
+  "runner": "experiments/xsp-002/run.py",
+  "artifacts": [
+    {
+      "path": "result.json",
+      "role": "executed-result",
+      "sha256": "d7a97e1e9096458b2fe86d93c29e8280590dbffbaec985794d742fbea084a139"
+    },
+    {
+      "path": "run-log.json",
+      "role": "run-log",
+      "sha256": "d9f7dab23f693d3b35df04d4bd32b2fa660f94e0542ca7d1c388c813e3723579"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/invalid/XSP2-NEG-001.json",
+      "role": "test-vector",
+      "sha256": "1bed6d3b8ac77e937e6dc8bb24219d03ea5f3bcbd0e9072eb5b97df5afa0cdad"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/invalid/XSP2-NEG-002.json",
+      "role": "test-vector",
+      "sha256": "8c84b7b0ffcbbd6d348ee8c54edf37b40d5935e6678f40c2c6f63d906925ccd6"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/invalid/XSP2-NEG-003.json",
+      "role": "test-vector",
+      "sha256": "94c2a603bc5640079fbf2cc10c534d721f8994ec24f08501cc29d525ccdafe63"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/invalid/XSP2-NEG-004.json",
+      "role": "test-vector",
+      "sha256": "0f6a92f239186bdffac35c6147d297df243daaf3b6ecade769f7bae23a02d3e5"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/invalid/XSP2-NEG-005.json",
+      "role": "test-vector",
+      "sha256": "3e623f243cb459e936ca9bdc5c291005deaf92d3586bb3a844e62795c808a794"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/invalid/XSP2-NEG-006.json",
+      "role": "test-vector",
+      "sha256": "f87f91943801305ffebc1e510f402724499706fada969e97b0f00588bc5e26c8"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/invalid/XSP2-NEG-007.json",
+      "role": "test-vector",
+      "sha256": "3bde24c6deca7a7b0f96d52d6e52fdaa7e154014d586a12dc94a0dd4974c6c6d"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/valid/XSP2-POS-001.json",
+      "role": "test-vector",
+      "sha256": "edfc5f2c445cbefc4b1283b337c9f7ddf0acd3c24c785d5988024cb0ba44b9b5"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/valid/XSP2-POS-002.json",
+      "role": "test-vector",
+      "sha256": "7b70c27fa92d1714b75b06acb13537746fc3d6eeba475283c435109c43d8cd29"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/valid/XSP2-POS-003.json",
+      "role": "test-vector",
+      "sha256": "be4e5c55229ceca8be2881eff24ab0cce3d7d3d888ebede290a66e63f318950d"
+    },
+    {
+      "path": "../../cases/xsp-002/vectors/valid/XSP2-POS-004.json",
+      "role": "test-vector",
+      "sha256": "9b0a9be2a4e13b33846dd1f4779978949e550a60bbfda25ead73fed7af5615a2"
+    },
+    {
+      "path": "../../cases/xsp-002/invariants.yaml",
+      "role": "invariant-set",
+      "sha256": "618b0945226775027d6496eacbfbb5e9cf3968198fa6d44f36ccda6c15529aa8"
+    },
+    {
+      "path": "../../cases/xsp-002/ownership.yaml",
+      "role": "semantic-ownership",
+      "sha256": "eb1f9ff045f92748c61aa19b3614f3524a91b69fbc73b9ec07275dd8952f1fa3"
+    },
+    {
+      "path": "../../cases/xsp-002/known-limitations.md",
+      "role": "known-limitations",
+      "sha256": "39144b07417d27304f22cb37a6aa60d8c9c81159fe97939cca9cfca9df63e94e"
+    },
+    {
+      "path": "../../cases/xsp-002/source-basis.md",
+      "role": "source-basis",
+      "sha256": "7f12a3d4afff0723d74b2e63f3a420f1c775f3120a30de741e01dc2445729955"
+    },
+    {
+      "path": "../../experiments/xsp-002/run.py",
+      "role": "reference-evaluator",
+      "sha256": "e808539f68b522ffe5612b866015e88c8f7804642cc64dd314fbf4e1ce5da4d2"
+    }
+  ],
+  "result_summary": {
+    "status": "pass",
+    "vectors": 11,
+    "passed": 11,
+    "failed": 0
+  }
+}

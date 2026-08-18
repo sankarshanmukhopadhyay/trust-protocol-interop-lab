@@ -40,3 +40,16 @@ Canonical-source verification may establish the identity, baseline, publication 
 TSMM and GAAM matrices in this repository are informative crosswalks owned by this lab. They do not amend TSMM or GAAM and do not create conformance claims against those projects.
 
 RAHP assessment candidates and cross-specification candidates are non-finding work items. Promotion requires the evidence and human-review gates defined by the owning RAHP deployment or Interop Case maturity model. Automated monitoring MAY flag baseline drift, but MUST NOT silently move a pinned baseline, publish a finding, or create an interoperability claim.
+## Executed semantic interoperability claims
+
+An Interop Case MAY reach `interoperability-tested` through a repository-owned executable semantic reference model when all of the following are true:
+
+- the case question is explicitly about semantic composition rather than wire compatibility;
+- upstream baselines and semantic ownership are pinned;
+- positive and negative vectors exercise the declared invariants;
+- a deterministic evaluator and reproduction command are published;
+- an evidence manifest binds the result, vectors, invariants, ownership, source basis, limitations, and evaluator with integrity hashes; and
+- the claim scope explicitly excludes protocol implementation conformance, external certification, and any authority not established by the evidence.
+
+This route does not lower the evidence bar. It narrows the claim to what is actually executable and observable. A later wire-level or multi-implementation claim requires additional evidence and MUST NOT inherit broader meaning from the semantic result.
+

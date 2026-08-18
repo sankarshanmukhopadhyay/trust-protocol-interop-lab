@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "case_id": "IC-XSP-002",
+  "invariants": [
+    {
+      "id": "XSP2-INV-01",
+      "statement": "Successful DID resolution MUST remain distinct from organizational or legal authority."
+    },
+    {
+      "id": "XSP2-INV-02",
+      "statement": "A valid federation trust chain MAY establish federation membership but MUST NOT by itself establish unrestricted action authority."
+    },
+    {
+      "id": "XSP2-INV-03",
+      "statement": "Federation metadata policy MUST NOT widen authority granted by an external authority source."
+    },
+    {
+      "id": "XSP2-INV-04",
+      "statement": "Deactivated or materially stale DID state MUST fail closed before consequential reliance."
+    },
+    {
+      "id": "XSP2-INV-05",
+      "statement": "Expired or invalid federation trust chains MUST fail closed."
+    },
+    {
+      "id": "XSP2-INV-06",
+      "statement": "Authority source and action scope MUST remain traversable from the final decision."
+    },
+    {
+      "id": "XSP2-INV-07",
+      "statement": "Delegated action scope MUST be within the authority source scope."
+    },
+    {
+      "id": "XSP2-INV-08",
+      "statement": "The relying party MUST retain responsibility for the final policy/effect decision."
+    }
+  ]
+}

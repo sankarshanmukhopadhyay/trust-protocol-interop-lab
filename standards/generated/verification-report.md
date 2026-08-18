@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Canonical Verification
+parent: Standards Intelligence
 nav_order: 11
 ---
 # Canonical Source Verification

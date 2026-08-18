@@ -1,5 +1,14 @@
-# RAHP Pressure-Test Reviews
+---
+layout: default
+title: RAHP reviews
+parent: Evidence & Assurance
+nav_order: 25
+---
+# RAHP reviews
 
-Consequential Interop Cases may receive a Risks and Harms Prevention (RAHP) review. The review asks who can be affected when individually valid components compose incorrectly, what failure modes become possible at the seam, and which prevention, detection, redress, or evidence controls should be tested.
+RAHP reviews pressure-test composition seams against harms, authority failure, lifecycle failure, and assurance gaps. They do not declare upstream specifications conformant or non-conformant.
 
-RAHP is used here as a pressure-testing method, not as a protocol dependency or a claim of upstream RAHP conformance.
+- [XSP-001 — credential reliance](IC-XSP-001.md)
+- [XSP-002 — DID/federation authority](IC-XSP-002.md)
+- [Agentic provenance and delegated verification](IC-AGENT-PROVENANCE-AUTH-001.md)
+- [ARPA/A2A/Trust Tasks](IC-ARPA-A2A-TT-001.md)

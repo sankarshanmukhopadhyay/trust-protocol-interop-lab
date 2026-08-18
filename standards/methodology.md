@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Standards Intelligence Method
-nav_order: 8
+parent: Standards Intelligence
+nav_order: 5
 ---
 # Standards Intelligence Method
 
