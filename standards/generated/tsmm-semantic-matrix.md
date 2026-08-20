@@ -6,11 +6,11 @@ nav_order: 12
 ---
 # Standards × TSMM Semantic Matrix
 
-> **Source acknowledgement:** Initial standards discovery is informed by the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is a discovery source, not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply GSMI/GBBC endorsement.
+> **Source acknowledgement:** Standards discovery is informed by registered sources including GSMI/GBBC. Discovery sources are not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply endorsement.
 
 Baseline: `v0.23.0`. TSMM is the canonical semantic model; this lab mapping is informative analysis and does not modify TSMM.
 
-`D` = direct; `P` = partial; `E` = external-or-assumed; `N` = not-core-responsibility. These values are analytical coverage classifications, not claims of conformance.
+`D` = direct; `P` = partial; `E` = external-or-assumed; `N` = not-core-responsibility. These values are analytical coverage classifications, not claims of conformance. Corpus entries without an explicit mapping remain intentionally unmapped until reviewed.
 
 | Standard | Entity/actor semantics | Authority source and bounded authority | Delegation and lineage | Policy context/evaluation | Evidence semantics | Lifecycle state/change | Technical verification | Relying-party trust decision | Authorized/observed effect | Runtime governance/enforcement | Key boundary |
 |---|---|---|---|---|---|---|---|---|---|---|---|
