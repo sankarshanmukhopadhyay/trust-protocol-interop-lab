@@ -6,7 +6,7 @@ nav_order: 14
 ---
 # RAHP Assessment Candidate Register
 
-> **Source acknowledgement:** Initial standards discovery is informed by the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is a discovery source, not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply GSMI/GBBC endorsement.
+> **Source acknowledgement:** Standards discovery is informed by registered sources including GSMI/GBBC. Discovery sources are not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply endorsement.
 
 Candidates are triage inputs only. Promotion to a durable RAHP assessment requires explicit target/baseline selection, human review, evidence capture and disposition under the RAHP deployment rules.
 
@@ -18,3 +18,6 @@ Candidates are triage inputs only. Promotion to a durable RAHP assessment requir
 | `RAHP-STD-004` | **high** | mDL presentation, consent and verifier-authority seam | `STD-ISO-IEC-18013-5`, `STD-OID4VP` | `open-national-digital-trust-framework`, `trust-protocol-interop-lab` | A composition correctly authenticates mDL data but lacks explicit controls for consent acquisition, verifier purpose/authority or downstream data-use policy. |
 | `RAHP-STD-005` | **high** | Content provenance identity versus role authority | `STD-C2PA`, `STD-CAWG-IDENTITY-ASSERTION` | `governance-authority-assurance-metamodel`, `agent-registry-protocol`, `trust-protocol-interop-lab` | A valid C2PA/CAWG identity assertion is interpreted as proof that the named actor had authority to perform, approve, publish or license the represented action. |
 | `RAHP-STD-006` | **medium** | Selective disclosure privacy and holder-binding composition | `STD-IETF-SD-JWT-VC`, `STD-OID4VP` | `dtgwg-zkp-tf`, `open-national-digital-trust-framework`, `trust-systems-meta-model` | Selective disclosure is treated as equivalent to unlinkability or sufficient privacy, while verifier correlation, holder-binding choices, stable issuer metadata or repeated disclosure patterns still permit unwanted linkage. |
+| `RAHP-CAND-ISO-23516` | **high** | STD-ISO-TS-23516-2026 | `STD-ISO-TS-23516-2026` | — | A system can satisfy a technical interoperability profile while losing authority, lifecycle or accountability semantics across the composition boundary. |
+| `RAHP-CAND-ISO-23644` | **high** | STD-ISO-TR-23644-2023 | `STD-ISO-TR-23644-2023` | — | A technically valid trust anchor is treated as sufficient evidence of governance authority or authorization when those semantics are external to the anchor. |
+| `RAHP-CAND-ISO-23635` | **medium** | STD-ISO-TS-23635-2022 | `STD-ISO-TS-23635-2022` | — | Governance guidance is documented but cannot be translated into observable enforcement, revocation, accountability and evidence requirements at runtime. |

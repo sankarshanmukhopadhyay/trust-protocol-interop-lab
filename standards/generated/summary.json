@@ -1,15 +1,17 @@
 {
-  "version": 2,
-  "total": 12,
+  "version": 3,
+  "total": 21,
+  "core_total": 12,
+  "corpus_total": 9,
   "states": {
-    "analysed": 12
+    "analysed": 21
   },
-  "canonical_verified": 12,
+  "canonical_verified": 21,
   "normative_dependencies": 0,
   "tsmm_mappings": 12,
   "gaam_mappings": 12,
-  "rahp_candidates": 6,
-  "cross_spec_candidates": 6,
+  "rahp_candidates": 9,
+  "cross_spec_candidates": 9,
   "critical_rahp_candidates": 2,
   "critical_cross_spec_candidates": 2,
   "executed_cross_spec_candidates": 2
