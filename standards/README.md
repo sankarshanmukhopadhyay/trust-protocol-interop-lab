@@ -4,37 +4,50 @@ This directory contains the lab's governed external-standards intelligence layer
 
 ## Source and acknowledgement
 
-The initial discovery source is the **Global Standards Mapping Initiative (GSMI)** from the **Global Blockchain Business Council (GBBC)**. We gratefully acknowledge GSMI/GBBC for maintaining an open, crowdsourced standards-mapping resource that helps identify relevant technical standards bodies and standards activity.
+The initial discovery source is the **Global Standards Mapping Initiative (GSMI)** from the **Global Blockchain Business Council (GBBC)**. GSMI is used here as a **discovery catalogue**, not as normative authority. The authoritative source for a standard is its publisher. Inclusion in this repository does not imply endorsement by GSMI, GBBC, ISO, or any other standards body.
 
-GSMI is used here as a **discovery catalogue**, not as normative authority. The authoritative source for a standard is its publisher. Inclusion in this register does not imply endorsement by GSMI, GBBC, or any standards body.
+GSMI 6.0 Technical Standards is also registered as a discovery and standards-ecosystem taxonomy source. Its distinctions among global, regional, national, industry-specific, consortium and initiative actors inform the local standards-body model. The source document is not mirrored; only derived metadata, attribution and publisher links are maintained.
 
-The portfolio also does not claim that every locally selected specification is itself a GSMI-listed row. GSMI supplies the landscape/discovery context; local reviewers select adjacent specifications where they materially intersect portfolio architecture and then verify those specifications against publisher-controlled sources.
+## Standards Intelligence v2
 
-## Commit 2 assurance state
+The corpus now has three explicit governance layers:
 
-The seed register has now moved from discovery-only candidates to **canonical-source-verified and analysed** entries. Each entry records:
+1. **Sources** — where a candidate was discovered and which publisher-controlled source verifies it.
+2. **Bodies** — what kind of standards authority or standards-development actor produced or governs the work.
+3. **Standards** — pinned specification baselines, lifecycle state, portfolio relevance and assurance relationships.
 
-- a deliberate version or draft baseline;
-- publisher status;
-- a publisher-controlled baseline URI;
-- verification evidence URIs;
-- lifecycle notes where a newer draft, revision, or unstable dependency exists; and
-- an explicit local non-dependency posture unless a repository separately establishes `depends-on`.
+The seed register remains in `register.yaml`. Coherent publisher or domain families can be added as validated shards under `corpus/`, allowing the corpus to scale without turning the seed register into an ungoverned monolith.
 
-Canonical verification proves only that the local record accurately identifies the publisher baseline/status. It does **not** prove interoperability, implementation conformance, legal effect, authority sufficiency, security, privacy, or endorsement.
+The first v2 shard is the ISO/TC 307 corpus, covering portfolio-relevant vocabulary, architecture, taxonomy/ontology, privacy, identity-management, smart-contract, interoperability, governance and trust-anchor publications.
 
 ## Files
 
-- `sources.yaml` — governed source register and GSMI/GBBC attribution.
-- `register.yaml` — portfolio-relevant standards, canonical verification and local dispositions.
+- `sources.yaml` — governed source register, including GSMI and canonical publisher catalogues.
+- `bodies.yaml` — standards-body authority metadata.
+- `register.yaml` — core portfolio-relevant standards and pinned verification baselines.
+- `corpus/` — validated standards-family shards extending the core register.
 - `mappings/portfolio.yaml` — relationship vocabulary and project analysis lenses.
 - `mappings/tsmm.yaml` — standards × TSMM semantic coverage analysis.
 - `mappings/gaam.yaml` — standards × GAAM authority/assurance coverage analysis.
 - `assurance/rahp-candidates.yaml` — governed RAHP assessment-candidate register.
 - `cross-spec/candidates.yaml` — governed cross-specification pressure-test candidates.
 - `schema/standard-entry.schema.json` — machine-verifiable standards-entry contract.
+- `schema/standards-body.schema.json` — machine-verifiable standards-body contract.
 - `methodology.md` — admission, verification, mapping, assurance and monitoring method.
-- `generated/` — deterministic human-readable views; do not hand-edit.
+- `generated/` — deterministic human-readable views; do not hand-edit generated artifacts.
+
+## Validation
+
+Run both generations of standards validation:
+
+```bash
+python scripts/validate_standards.py
+python scripts/validate_standards_v2.py
+```
+
+`validate_standards_v2.py` checks the combined identifier space across the core register and all corpus shards, validates source and standards-body references, requires HTTPS canonical baselines, and enforces baseline-pinning metadata for shard entries.
+
+GitHub Actions now executes repository assurance validation on pull requests and pushes to `main`, including catalog, cases, evidence, standards, executable cross-spec tests, generated-output cleanliness and link checks.
 
 ## Governance invariant
 
