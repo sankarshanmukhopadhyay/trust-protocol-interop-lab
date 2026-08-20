@@ -27,6 +27,7 @@ jobs:
           python experiments/xsp-002/run.py
           python scripts/validate_evidence.py
           python scripts/validate_standards.py
+          python scripts/validate_standards_v2.py
           python scripts/generate_standards.py
           python scripts/generate_readiness.py
           python scripts/check_links.py
