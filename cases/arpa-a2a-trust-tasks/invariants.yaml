@@ -15,6 +15,30 @@
     {
       "id": "INV-ARPA-A2A-004",
       "statement": "Portable action evidence MUST link the invoked agent, authority evidence, Trust Task, and result without depending solely on an A2A session."
+    },
+    {
+      "id": "INV-ARPA-A2A-005",
+      "statement": "A2A actor lineage metadata MUST be treated as attribution history and MUST NOT by itself establish delegated authority."
+    },
+    {
+      "id": "INV-ARPA-A2A-006",
+      "statement": "Monotonic scope narrowing in a reported actor chain establishes only internal well-formedness; authority MUST be independently resolved from evidence controlled outside the caller-supplied chain."
+    },
+    {
+      "id": "INV-ARPA-A2A-007",
+      "statement": "A delegating actor MUST append its own lineage hop without rewriting prior hops; received and forwarded lineage representations SHOULD be retained where mutation detection is required."
+    },
+    {
+      "id": "INV-ARPA-A2A-008",
+      "statement": "Missing, unresolvable, cryptographically invalid, revoked, expired, and authorization-denied evidence states MUST remain distinguishable in portable results."
+    },
+    {
+      "id": "INV-ARPA-A2A-009",
+      "statement": "A lineage evidence reference MUST be context-bound or domain-separated when reuse across trust domains could create replay or misbinding risk."
+    },
+    {
+      "id": "INV-ARPA-A2A-010",
+      "statement": "Lineage disclosure MUST be minimized to the information required for the relying decision and audit purpose; durable cross-context identifiers MUST NOT be required when a less correlating representation can satisfy the same assurance objective."
     }
   ]
 }

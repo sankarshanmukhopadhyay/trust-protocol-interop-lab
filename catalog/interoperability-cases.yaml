@@ -51,15 +51,15 @@
       "id": "IC-ARPA-A2A-TT-001",
       "title": "Governed agent discovery to Trust Task execution",
       "status": "experimental",
-      "question": "Can ARPA authority state, A2A discovery and interaction, and Trust Task work semantics compose while preserving explicit authorization and revocation boundaries?",
+      "question": "Can ARPA authority state, proposed A2A actor-chain attribution, A2A discovery/interaction, and Trust Task work semantics compose without treating lineage metadata as authority or losing revocation and evidence boundaries?",
       "components": [
         "arpa",
         "a2a",
         "trust-tasks"
       ],
       "baselines": {
-        "arpa": "v0.9.4",
-        "a2a": "current portfolio reference baseline reviewed 2026-08-12",
+        "arpa": "v0.9.5",
+        "a2a": "A2A v1.0 plus issue #2028 actor-chain proposal reviewed 2026-08-20 (informative, non-normative)",
         "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)"
       },
       "ownership": "cases/arpa-a2a-trust-tasks/ownership.yaml",
@@ -67,7 +67,9 @@
       "paths": {
         "readme": "cases/arpa-a2a-trust-tasks/README.md",
         "scenarios": "cases/arpa-a2a-trust-tasks/scenarios",
-        "vectors": "cases/arpa-a2a-trust-tasks/vectors"
+        "vectors": "cases/arpa-a2a-trust-tasks/vectors",
+        "mapping": "mappings/a2a-actor-chain-authority.md",
+        "limitations": "cases/arpa-a2a-trust-tasks/known-limitations.md"
       }
     },
     {

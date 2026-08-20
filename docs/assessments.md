@@ -23,3 +23,8 @@ Interop Cases are evidence-gated composition tests. Start with the two completed
 - [Evidence model](evidence-model.md)
 
 Statuses are local evidence claims, not external certification.
+
+
+## Active delegation-lineage pressure test
+
+`IC-ARPA-A2A-TT-001` now includes an informative pressure test of A2A issue #2028 actor-chain semantics, preserving the boundary between attribution metadata, independently resolved authority evidence, and Trust Task effect admission.
