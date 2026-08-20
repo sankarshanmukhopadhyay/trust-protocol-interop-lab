@@ -43,11 +43,21 @@ jobs:
           python experiments/xsp-001/run.py
           python experiments/xsp-002/run.py
 
-      - name: Exercise deterministic generators
+      - name: Regenerate deterministic outputs
         run: |
           python scripts/generate_standards.py
           python scripts/generate_readiness.py
-          git diff --check
+
+      - name: Upload regenerated standards views
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regenerated-standards
+          path: standards/generated/
+          if-no-files-found: error
+
+      - name: Check generated tree is clean
+        run: git diff --exit-code
 
       - name: Check repository links
         run: python scripts/check_links.py
