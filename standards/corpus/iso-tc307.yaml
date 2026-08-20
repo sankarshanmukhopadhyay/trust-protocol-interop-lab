@@ -1,0 +1,323 @@
+{
+  "version": 1,
+  "corpus_id": "CORPUS-ISO-TC307",
+  "title": "ISO/TC 307 blockchain and distributed ledger technologies corpus",
+  "selection_basis": "Portfolio-relevant ISO/TC 307 publications identified through GSMI standards landscape context and verified against ISO publisher pages.",
+  "standards": [
+    {
+      "id": "STD-ISO-22739-2024",
+      "title": "ISO 22739:2024 Blockchain and distributed ledger technologies — Vocabulary",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "international-standard",
+      "canonical_uri": "https://www.iso.org/standard/82208.html",
+      "status": "published",
+      "domains": ["vocabulary", "semantics", "blockchain", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "trust-systems-meta-model": "high",
+        "open-national-digital-trust-framework": "medium",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO 22739:2024",
+        "publisher_status": "Published International Standard",
+        "publication_date": "2024-01",
+        "baseline_uri": "https://www.iso.org/standard/82208.html",
+        "evidence_uris": ["https://www.iso.org/standard/82208.html"],
+        "lifecycle_note": "Edition 2 is published and ISO identifies a future edition work item. The local baseline remains pinned to 2024 until deliberate reassessment."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "monthly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-23257-2022",
+      "title": "ISO 23257:2022 Blockchain and distributed ledger technologies — Reference architecture",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "international-standard",
+      "canonical_uri": "https://www.iso.org/standard/75093.html",
+      "status": "published-under-revision",
+      "domains": ["architecture", "roles", "interoperability", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "trust-systems-meta-model": "high",
+        "governance-authority-assurance-metamodel": "medium",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO 23257:2022",
+        "publisher_status": "Published International Standard — revision work underway",
+        "publication_date": "2022-02",
+        "baseline_uri": "https://www.iso.org/standard/75093.html",
+        "evidence_uris": ["https://www.iso.org/standard/75093.html", "https://www.iso.org/standard/93164.html"],
+        "lifecycle_note": "Edition 1 remains the published baseline; ISO/AWI 23257 is under development as edition 2."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "monthly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-TS-23258-2021",
+      "title": "ISO/TS 23258:2021 Blockchain and distributed ledger technologies — Taxonomy and Ontology",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "technical-specification",
+      "canonical_uri": "https://www.iso.org/standard/75094.html",
+      "status": "published-under-revision",
+      "domains": ["taxonomy", "ontology", "semantics", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "trust-systems-meta-model": "high",
+        "governance-authority-assurance-metamodel": "medium",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO/TS 23258:2021",
+        "publisher_status": "Published Technical Specification — revision work underway",
+        "publication_date": "2021-11",
+        "baseline_uri": "https://www.iso.org/standard/75094.html",
+        "evidence_uris": ["https://www.iso.org/standard/75094.html", "https://www.iso.org/standard/93165.html"],
+        "lifecycle_note": "Published edition 1 remains the local baseline while edition 2 is under development."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "monthly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-TR-23244-2020",
+      "title": "ISO/TR 23244:2020 Blockchain and distributed ledger technologies — Privacy and personally identifiable information protection considerations",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "technical-report",
+      "canonical_uri": "https://www.iso.org/standard/75061.html",
+      "status": "published",
+      "domains": ["privacy", "pii", "risk", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "open-national-digital-trust-framework": "high",
+        "dtgwg-zkp-tf": "high",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO/TR 23244:2020",
+        "publisher_status": "Published Technical Report",
+        "publication_date": "2020-05",
+        "baseline_uri": "https://www.iso.org/standard/75061.html",
+        "evidence_uris": ["https://www.iso.org/standard/75061.html"],
+        "lifecycle_note": "Published technical report used as privacy-analysis context; inclusion creates no local compliance requirement."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "quarterly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-TR-23249-2022",
+      "title": "ISO/TR 23249:2022 Blockchain and distributed ledger technologies — Overview of existing DLT systems for identity management",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "technical-report",
+      "canonical_uri": "https://www.iso.org/standard/80805.html",
+      "status": "published",
+      "domains": ["identity", "architecture", "interfaces", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "open-national-digital-trust-framework": "high",
+        "trust-systems-meta-model": "medium",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO/TR 23249:2022",
+        "publisher_status": "Published Technical Report",
+        "publication_date": "2022-05",
+        "baseline_uri": "https://www.iso.org/standard/80805.html",
+        "evidence_uris": ["https://www.iso.org/standard/80805.html"],
+        "lifecycle_note": "Published overview of DLT identity systems; descriptive coverage does not establish authority sufficiency for any identity mechanism."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "quarterly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-TR-23455-2019",
+      "title": "ISO/TR 23455:2019 Blockchain and distributed ledger technologies — Overview of and interactions between smart contracts in blockchain and distributed ledger technology systems",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "technical-report",
+      "canonical_uri": "https://www.iso.org/standard/75624.html",
+      "status": "published",
+      "domains": ["smart-contracts", "execution", "interaction", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "medium",
+        "trust-systems-meta-model": "high",
+        "governance-authority-assurance-metamodel": "high",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO/TR 23455:2019",
+        "publisher_status": "Published Technical Report",
+        "publication_date": "2019-09",
+        "baseline_uri": "https://www.iso.org/standard/75624.html",
+        "evidence_uris": ["https://www.iso.org/standard/75624.html"],
+        "lifecycle_note": "Technical smart-contract interactions are analysed separately from legal authority and binding effect."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "quarterly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-TS-23516-2026",
+      "title": "ISO/TS 23516:2026 Blockchain and distributed ledger technology — Interoperability framework",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "technical-specification",
+      "canonical_uri": "https://www.iso.org/standard/82098.html",
+      "status": "published",
+      "domains": ["interoperability", "architecture", "interfaces", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "trust-systems-meta-model": "high",
+        "governance-authority-assurance-metamodel": "medium",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO/TS 23516:2026",
+        "publisher_status": "Published Technical Specification",
+        "publication_date": "2026-03",
+        "baseline_uri": "https://www.iso.org/standard/82098.html",
+        "evidence_uris": ["https://www.iso.org/standard/82098.html"],
+        "lifecycle_note": "Directly relevant interoperability framework. TPIL treats its technical interoperability scope separately from authority, delegation, lifecycle and relying-party governance sufficiency."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "monthly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-TS-23635-2022",
+      "title": "ISO/TS 23635:2022 Blockchain and distributed ledger technologies — Guidelines for governance",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "technical-specification",
+      "canonical_uri": "https://www.iso.org/standard/76480.html",
+      "status": "published-confirmed",
+      "domains": ["governance", "risk", "regulation", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "governance-authority-assurance-metamodel": "high",
+        "trust-systems-meta-model": "high",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "informs", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO/TS 23635:2022",
+        "publisher_status": "Published Technical Specification — confirmed 2025",
+        "publication_date": "2022-02",
+        "baseline_uri": "https://www.iso.org/standard/76480.html",
+        "evidence_uris": ["https://www.iso.org/standard/76480.html"],
+        "lifecycle_note": "Confirmed current by ISO in 2025. Governance guidance is mapped as an analytical input, not as evidence that a composed protocol has executable authority controls."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "quarterly", "reassessment_on_status_change": true}
+    },
+    {
+      "id": "STD-ISO-TR-23644-2023",
+      "title": "ISO/TR 23644:2023 Blockchain and distributed ledger technologies — Overview of trust anchors for DLT-based identity management",
+      "publisher": "ISO",
+      "publisher_id": "BODY-ISO",
+      "technical_committee_id": "BODY-ISO-TC307",
+      "artifact_type": "technical-report",
+      "canonical_uri": "https://www.iso.org/standard/81773.html",
+      "status": "published",
+      "domains": ["trust-anchors", "identity", "authority", "dlt"],
+      "source_relationships": [
+        {"source_id": "SRC-GSMI-TECHNICAL-STANDARDS-6", "relationship": "discovery-context"},
+        {"source_id": "SRC-ISO-TC307", "relationship": "canonical-catalogue"}
+      ],
+      "portfolio_relevance": {
+        "trust-protocol-interop-lab": "high",
+        "governance-authority-assurance-metamodel": "high",
+        "open-national-digital-trust-framework": "high",
+        "rahp-toolkit": "assessment-target"
+      },
+      "relationships": ["maps-to", "contrasts-with", "assesses"],
+      "normative_dependency": false,
+      "review": {"state": "analysed", "last_reviewed": "2026-08-20", "verification": "canonical-source-verified"},
+      "verification": {
+        "state": "canonical-verified",
+        "verified_on": "2026-08-20",
+        "version": "ISO/TR 23644:2023",
+        "publisher_status": "Published Technical Report",
+        "publication_date": "2023-05",
+        "baseline_uri": "https://www.iso.org/standard/81773.html",
+        "evidence_uris": ["https://www.iso.org/standard/81773.html"],
+        "lifecycle_note": "Trust-anchor concepts are relevant to authority analysis, but cryptographic or technical trust anchors are not automatically equivalent to governance authority or relying-party authorization."
+      },
+      "monitoring": {"baseline_pinned": true, "cadence": "quarterly", "reassessment_on_status_change": true}
+    }
+  ]
+}
