@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sankarshanmukhopadhyay.github.io/trust-protocol-interop-lab/standards/schema/standards-body.schema.json",
+  "title": "Standards body authority metadata",
+  "type": "object",
+  "required": ["id", "name", "class", "authority_level", "jurisdiction", "standards_process", "publication_authority", "canonical_uri"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^BODY-[A-Z0-9-]+$"},
+    "name": {"type": "string", "minLength": 1},
+    "class": {
+      "enum": [
+        "global-formal-standards-body",
+        "regional-standards-body",
+        "national-standards-body",
+        "international-technical-committee",
+        "industry-specific-standards-organization",
+        "consortium-alliance",
+        "industry-initiative",
+        "regulatory-entity",
+        "association"
+      ]
+    },
+    "authority_level": {"type": "string", "minLength": 1},
+    "jurisdiction": {"type": "string", "minLength": 1},
+    "parent_body_id": {"type": "string", "pattern": "^BODY-[A-Z0-9-]+$"},
+    "standards_process": {"type": "string", "minLength": 1},
+    "publication_authority": {"type": "boolean"},
+    "canonical_uri": {"type": "string", "format": "uri"}
+  },
+  "additionalProperties": true
+}
