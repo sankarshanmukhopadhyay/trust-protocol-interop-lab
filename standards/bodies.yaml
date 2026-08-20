@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "authority_model": "Standards-body metadata classifies the institutional source of a publication. Authority level is descriptive and does not establish local normative dependency, implementation conformance, or endorsement.",
+  "bodies": [
+    {
+      "id": "BODY-ISO",
+      "name": "International Organization for Standardization",
+      "class": "global-formal-standards-body",
+      "authority_level": "international",
+      "jurisdiction": "global",
+      "standards_process": "member-body consensus and balloting",
+      "publication_authority": true,
+      "canonical_uri": "https://www.iso.org/"
+    },
+    {
+      "id": "BODY-ISO-TC307",
+      "name": "ISO/TC 307 Blockchain and distributed ledger technologies",
+      "class": "international-technical-committee",
+      "authority_level": "international",
+      "jurisdiction": "global",
+      "parent_body_id": "BODY-ISO",
+      "standards_process": "ISO technical committee process",
+      "publication_authority": false,
+      "canonical_uri": "https://www.iso.org/committee/6266604.html"
+    },
+    {
+      "id": "BODY-W3C",
+      "name": "World Wide Web Consortium",
+      "class": "industry-specific-standards-organization",
+      "authority_level": "international-consortium",
+      "jurisdiction": "global",
+      "standards_process": "W3C standards process",
+      "publication_authority": true,
+      "canonical_uri": "https://www.w3.org/"
+    },
+    {
+      "id": "BODY-IETF",
+      "name": "Internet Engineering Task Force",
+      "class": "industry-specific-standards-organization",
+      "authority_level": "international-consensus-community",
+      "jurisdiction": "global",
+      "standards_process": "IETF open consensus and RFC process",
+      "publication_authority": true,
+      "canonical_uri": "https://www.ietf.org/"
+    },
+    {
+      "id": "BODY-GBBC-GSMI",
+      "name": "Global Blockchain Business Council — Global Standards Mapping Initiative",
+      "class": "industry-initiative",
+      "authority_level": "discovery-and-convening",
+      "jurisdiction": "global",
+      "standards_process": "research, mapping and industry collaboration",
+      "publication_authority": false,
+      "canonical_uri": "https://www.gbbc.io/"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "source_corpus": "CORPUS-ISO-TC307",
+  "candidates": [
+    {
+      "id": "XSP-CAND-ISO-ARCH-INTEROP",
+      "title": "Reference architecture × interoperability framework × DID resolution",
+      "standards": ["STD-ISO-23257-2022", "STD-ISO-TS-23516-2026", "STD-W3C-DID-CORE", "STD-W3C-DID-RESOLUTION-1"],
+      "question": "Does technical interoperability preserve the identity, role and authority semantics assumed by the participating architectures?",
+      "required_evidence": ["pinned component baselines", "semantic ownership matrix", "positive and negative resolution vectors", "authority-boundary disposition"],
+      "promotion_state": "candidate"
+    },
+    {
+      "id": "XSP-CAND-ISO-TRUST-ANCHOR-AUTH",
+      "title": "DLT trust anchors × DID resolution × OpenID Federation × authority",
+      "standards": ["STD-ISO-TR-23644-2023", "STD-W3C-DID-RESOLUTION-1", "STD-OPENID-FEDERATION-1"],
+      "question": "When does resolving cryptographic or federation trust material support a legitimate authority claim, and which authorization semantics remain external?",
+      "required_evidence": ["trust-anchor semantics", "resolution evidence states", "federation chain evidence", "GAAM authority mapping", "negative authority vectors"],
+      "promotion_state": "candidate"
+    },
+    {
+      "id": "XSP-CAND-ISO-GOV-AGENT",
+      "title": "DLT governance × agent delegation × executable trust tasks",
+      "standards": ["STD-ISO-TS-23635-2022"],
+      "local_components": ["agent-registry-protocol", "trust-tasks", "PolicyMesh"],
+      "question": "Can governance obligations survive delegated machine execution with testable evidence of authority, scope, revocation and accountability?",
+      "required_evidence": ["delegation chain", "scope narrowing tests", "revocation vectors", "policy decision evidence", "redress and accountability disposition"],
+      "promotion_state": "candidate"
+    }
+  ],
+  "governance_note": "Candidate creation does not create an Interop Case or interoperability claim. Promotion requires the existing Interop Case admission and evidence gates."
+}

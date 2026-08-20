@@ -5,93 +5,119 @@ from collections import Counter
 
 ROOT = Path(__file__).resolve().parents[1]
 load = lambda p: json.loads((ROOT / p).read_text())
-data = load('standards/register.yaml')
+core = load('standards/register.yaml')
 tsmm = load('standards/mappings/tsmm.yaml')
 gaam = load('standards/mappings/gaam.yaml')
 rahp = load('standards/assurance/rahp-candidates.yaml')
 cross = load('standards/cross-spec/candidates.yaml')
-standards = sorted(data['standards'], key=lambda x: x['id'])
-byid = {s['id']: s for s in standards}
+
+standards = list(core['standards'])
+for shard in sorted((ROOT / 'standards/corpus').glob('*.yaml')):
+    standards.extend(json.loads(shard.read_text()).get('standards', []))
+standards = sorted(standards, key=lambda x: x['id'])
+
+rahp_candidates = list(rahp['candidates'])
+for shard in sorted((ROOT / 'standards/assurance').glob('*-rahp-candidates.yaml')):
+    extra = json.loads(shard.read_text())
+    for c in extra.get('candidates', []):
+        rahp_candidates.append({
+            'id': c['id'],
+            'priority': c.get('priority', 'medium'),
+            'title': c.get('title', c['standard_id']),
+            'standards': [c['standard_id']],
+            'projects': c.get('projects', []),
+            'risk_hypothesis': c['failure_hypothesis'],
+        })
+
+cross_candidates = list(cross['candidates'])
+for shard in sorted((ROOT / 'standards/cross-spec').glob('*-candidates.yaml')):
+    if shard.name == 'candidates.yaml':
+        continue
+    extra = json.loads(shard.read_text())
+    for c in extra.get('candidates', []):
+        cross_candidates.append({
+            'id': c['id'],
+            'priority': c.get('priority', 'medium'),
+            'title': c['title'],
+            'standards': c.get('standards', []),
+            'recommended_owner': c.get('recommended_owner', 'trust-protocol-interop-lab'),
+            'question': c['question'],
+            'promotion': {'state': c.get('promotion_state', 'candidate')},
+        })
+
 out = ROOT / 'standards/generated'
 out.mkdir(parents=True, exist_ok=True)
-
-ACK = '> **Source acknowledgement:** Initial standards discovery is informed by the Global Standards Mapping Initiative (GSMI), an initiative of the Global Blockchain Business Council (GBBC). GSMI is a discovery source, not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply GSMI/GBBC endorsement.\n\n'
+ACK = '> **Source acknowledgement:** Standards discovery is informed by registered sources including GSMI/GBBC. Discovery sources are not normative authority. Canonical publishers remain authoritative. Inclusion here does not imply endorsement.\n\n'
 
 def front(title, order, parent='Standards Intelligence'):
     return f'---\nlayout: default\ntitle: {title}\nparent: {parent}\nnav_order: {order}\n---\n'
 
-rows = []
+rows=[]
 for s in standards:
-    projects = ', '.join(f"`{k}` ({v})" for k, v in sorted(s['portfolio_relevance'].items()))
-    v = s['verification']
-    rows.append(f"| `{s['id']}` | [{s['title']}]({s['canonical_uri']}) | {s['publisher']} | {v['version']} | {v['publisher_status']} | {s['review']['state']} | {'yes' if s['normative_dependency'] else 'no'} | {projects} |")
-register = front('Standards Register', 9) + '# Portfolio Standards Register\n\n' + ACK + 'Generated from `standards/register.yaml`. Canonical verification confirms publisher baseline/status only; it is **not** a conformance, compatibility, authority-sufficiency, or endorsement claim.\n\n| ID | Standard | Publisher | Verified baseline | Publisher status | Review state | Normative dependency | Portfolio relevance |\n|---|---|---|---|---|---|---|---|\n' + '\n'.join(rows) + '\n'
+    projects=', '.join(f"`{k}` ({v})" for k,v in sorted(s['portfolio_relevance'].items()))
+    v=s['verification']
+    artifact=s.get('artifact_type','core-register')
+    rows.append(f"| `{s['id']}` | [{s['title']}]({s['canonical_uri']}) | {s['publisher']} | {artifact} | {v['version']} | {v['publisher_status']} | {s['review']['state']} | {'yes' if s['normative_dependency'] else 'no'} | {projects} |")
+register=front('Standards Register',9)+'# Portfolio Standards Register\n\n'+ACK+'Generated from the core register plus validated corpus shards. Canonical verification confirms publisher baseline/status only; it is **not** a conformance, compatibility, authority-sufficiency, or endorsement claim.\n\n| ID | Standard | Publisher | Artifact type | Verified baseline | Publisher status | Review state | Normative dependency | Portfolio relevance |\n|---|---|---|---|---|---|---|---|---|\n'+'\n'.join(rows)+'\n'
 (out/'standards-register.md').write_text(register)
 
-projects = sorted({p for s in standards for p in s['portfolio_relevance']})
-header = '| Standard | ' + ' | '.join(f'`{p}`' for p in projects) + ' |\n'
-sep = '|---|' + '---|' * len(projects) + '\n'
+projects=sorted({p for s in standards for p in s['portfolio_relevance']})
+header='| Standard | '+' | '.join(f'`{p}`' for p in projects)+' |\n'
+sep='|---|'+'---|'*len(projects)+'\n'
 body=[]
 for s in standards:
-    body.append(f"| `{s['id']}` | " + ' | '.join(s['portfolio_relevance'].get(p, '—') for p in projects) + ' |')
-matrix = front('Standards × Portfolio Matrix', 10) + '# Standards × Portfolio Matrix\n\n' + ACK + 'Values indicate local analytical relevance, **not conformance, dependency, compatibility or endorsement**.\n\n' + header + sep + '\n'.join(body) + '\n'
-(out/'portfolio-matrix.md').write_text(matrix)
+    body.append(f"| `{s['id']}` | "+' | '.join(s['portfolio_relevance'].get(p,'—') for p in projects)+' |')
+(out/'portfolio-matrix.md').write_text(front('Standards × Portfolio Matrix',10)+'# Standards × Portfolio Matrix\n\n'+ACK+'Values indicate local analytical relevance, **not conformance, dependency, compatibility or endorsement**.\n\n'+header+sep+'\n'.join(body)+'\n')
 
 verification_rows=[]
 for s in standards:
     v=s['verification']; date=v.get('publication_date') or 'not recorded'
-    verification_rows.append(f"| `{s['id']}` | `{v['version']}` | {v['publisher_status']} | {date} | {v['verified_on']} | {v['lifecycle_note']} |")
-verification = front('Canonical Verification', 11) + '# Canonical Source Verification\n\n' + ACK + 'Every entry is verified against publisher-controlled sources and pinned to a deliberate baseline. A newer draft does not automatically move the portfolio baseline.\n\n| Standard | Baseline | Publisher status | Publication | Verified | Lifecycle note |\n|---|---|---|---|---|---|\n' + '\n'.join(verification_rows) + '\n'
-(out/'verification-report.md').write_text(verification)
+    monitoring=s.get('monitoring',{})
+    cadence=monitoring.get('cadence','core-register policy')
+    verification_rows.append(f"| `{s['id']}` | `{v['version']}` | {v['publisher_status']} | {date} | {v['verified_on']} | {cadence} | {v['lifecycle_note']} |")
+(out/'verification-report.md').write_text(front('Canonical Verification',11)+'# Canonical Source Verification\n\n'+ACK+'Every entry is pinned to a deliberate baseline. A newer draft does not automatically move the portfolio baseline.\n\n| Standard | Baseline | Publisher status | Publication | Verified | Monitor | Lifecycle note |\n|---|---|---|---|---|---|---|\n'+'\n'.join(verification_rows)+'\n')
 
 
-def semantic_matrix(doc, title, order, gap_field):
-    axes=list(doc['axes'])
-    rows=[]
-    for m in sorted(doc['mappings'], key=lambda x:x['standard_id']):
-        cells=[m['coverage'][a] for a in axes]
-        rows.append('| `'+m['standard_id']+'` | '+' | '.join(cells)+' | '+m[gap_field]+' |')
+def semantic_matrix(doc,title,order,gap_field):
+    axes=list(doc['axes']); rows=[]
+    for m in sorted(doc['mappings'],key=lambda x:x['standard_id']):
+        rows.append('| `'+m['standard_id']+'` | '+' | '.join(m['coverage'][a] for a in axes)+' | '+m[gap_field]+' |')
     legends='; '.join(f'`{k}` = {v}' for k,v in doc['legend'].items())
     hdr='| Standard | '+' | '.join(doc['axes'][a] for a in axes)+' | Key boundary |\n'
     sep='|---|'+'---|'*len(axes)+'---|\n'
-    return front(title, order)+f'# {title}\n\n{ACK}Baseline: `{doc["model_baseline"]["version"]}`. {doc["model_baseline"]["authority_note"]}\n\n{legends}. These values are analytical coverage classifications, not claims of conformance.\n\n'+hdr+sep+'\n'.join(rows)+'\n'
+    return front(title,order)+f'# {title}\n\n{ACK}Baseline: `{doc["model_baseline"]["version"]}`. {doc["model_baseline"]["authority_note"]}\n\n{legends}. These values are analytical coverage classifications, not claims of conformance. Corpus entries without an explicit mapping remain intentionally unmapped until reviewed.\n\n'+hdr+sep+'\n'.join(rows)+'\n'
 
 (out/'tsmm-semantic-matrix.md').write_text(semantic_matrix(tsmm,'Standards × TSMM Semantic Matrix',12,'key_gap'))
 (out/'gaam-authority-matrix.md').write_text(semantic_matrix(gaam,'Standards × GAAM Authority Matrix',13,'authority_gap'))
 
 rrows=[]
-for c in rahp['candidates']:
-    std=', '.join(f'`{x}`' for x in c['standards'])
-    projects=', '.join(f'`{x}`' for x in c.get('projects',[]))
+for c in rahp_candidates:
+    std=', '.join(f'`{x}`' for x in c['standards']); projects=', '.join(f'`{x}`' for x in c.get('projects',[])) or '—'
     rrows.append(f"| `{c['id']}` | **{c['priority']}** | {c['title']} | {std} | {projects} | {c['risk_hypothesis']} |")
-rpage=front('RAHP Assessment Candidates',14)+'# RAHP Assessment Candidate Register\n\n'+ACK+rahp['governance']+'\n\n| ID | Priority | Candidate | Standards | Portfolio targets | Risk hypothesis |\n|---|---|---|---|---|---|\n'+'\n'.join(rrows)+'\n'
-(out/'rahp-candidates.md').write_text(rpage)
+(out/'rahp-candidates.md').write_text(front('RAHP Assessment Candidates',14)+'# RAHP Assessment Candidate Register\n\n'+ACK+rahp['governance']+'\n\n| ID | Priority | Candidate | Standards | Portfolio targets | Risk hypothesis |\n|---|---|---|---|---|---|\n'+'\n'.join(rrows)+'\n')
 
 xrows=[]
-for c in cross['candidates']:
-    std=', '.join(f'`{x}`' for x in c['standards'])
-    owner=f"`{c['recommended_owner']}`"
-    promotion=c.get('promotion', {})
-    state=promotion.get('state','candidate')
-    case_ref=f"`{promotion['interop_case']}`" if promotion.get('interop_case') else '—'
-    xrows.append(f"| `{c['id']}` | **{c['priority']}** | {state} | {c['title']} | {std} | {owner} | {case_ref} | {c['question']} |")
-xpage=front('Cross-Spec Test Candidates',15)+'# Cross-Specification Pressure-Test Candidates\n\n'+ACK+cross['governance']+'\n\n| ID | Priority | State | Composition | Standards | Suggested owner | Interop Case | Pressure-test question |\n|---|---|---|---|---|---|---|---|\n'+'\n'.join(xrows)+'\n'
-(out/'cross-spec-candidates.md').write_text(xpage)
+for c in cross_candidates:
+    std=', '.join(f'`{x}`' for x in c['standards']) or '—'; promotion=c.get('promotion',{}); state=promotion.get('state','candidate'); case_ref=f"`{promotion['interop_case']}`" if promotion.get('interop_case') else '—'
+    xrows.append(f"| `{c['id']}` | **{c['priority']}** | {state} | {c['title']} | {std} | `{c['recommended_owner']}` | {case_ref} | {c['question']} |")
+(out/'cross-spec-candidates.md').write_text(front('Cross-Spec Test Candidates',15)+'# Cross-Specification Pressure-Test Candidates\n\n'+ACK+cross['governance']+'\n\n| ID | Priority | State | Composition | Standards | Suggested owner | Interop Case | Pressure-test question |\n|---|---|---|---|---|---|---|---|\n'+'\n'.join(xrows)+'\n')
 
 counts=Counter(s['review']['state'] for s in standards)
 summary={
- 'version':2,
+ 'version':3,
  'total':len(standards),
+ 'core_total':len(core['standards']),
+ 'corpus_total':len(standards)-len(core['standards']),
  'states':dict(sorted(counts.items())),
  'canonical_verified':sum(s.get('verification',{}).get('state')=='canonical-verified' for s in standards),
  'normative_dependencies':sum(bool(s['normative_dependency']) for s in standards),
  'tsmm_mappings':len(tsmm['mappings']),
  'gaam_mappings':len(gaam['mappings']),
- 'rahp_candidates':len(rahp['candidates']),
- 'cross_spec_candidates':len(cross['candidates']),
- 'critical_rahp_candidates':sum(c['priority']=='critical' for c in rahp['candidates']),
- 'critical_cross_spec_candidates':sum(c['priority']=='critical' for c in cross['candidates']),
- 'executed_cross_spec_candidates':sum(c.get('promotion',{}).get('state')=='executed' for c in cross['candidates']),
+ 'rahp_candidates':len(rahp_candidates),
+ 'cross_spec_candidates':len(cross_candidates),
+ 'critical_rahp_candidates':sum(c['priority']=='critical' for c in rahp_candidates),
+ 'critical_cross_spec_candidates':sum(c['priority']=='critical' for c in cross_candidates),
+ 'executed_cross_spec_candidates':sum(c.get('promotion',{}).get('state')=='executed' for c in cross_candidates),
 }
 (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
-print(f"Generated standards intelligence views for {len(standards)} verified entries.")
+print(f"Generated standards intelligence views for {len(standards)} verified entries ({summary['core_total']} core, {summary['corpus_total']} corpus).")

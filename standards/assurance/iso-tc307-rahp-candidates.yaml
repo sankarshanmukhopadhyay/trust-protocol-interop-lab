@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "source_corpus": "CORPUS-ISO-TC307",
+  "candidates": [
+    {
+      "id": "RAHP-CAND-ISO-23516",
+      "standard_id": "STD-ISO-TS-23516-2026",
+      "priority": "high",
+      "failure_hypothesis": "A system can satisfy a technical interoperability profile while losing authority, lifecycle or accountability semantics across the composition boundary.",
+      "affected_parties": ["relying party", "credential or identity subject", "delegating principal", "system operator"],
+      "test_targets": ["semantic preservation", "authority preservation", "lifecycle propagation", "evidence durability", "failure visibility"]
+    },
+    {
+      "id": "RAHP-CAND-ISO-23644",
+      "standard_id": "STD-ISO-TR-23644-2023",
+      "priority": "high",
+      "failure_hypothesis": "A technically valid trust anchor is treated as sufficient evidence of governance authority or authorization when those semantics are external to the anchor.",
+      "affected_parties": ["identity subject", "relying party", "governance authority"],
+      "test_targets": ["authority provenance", "scope", "revocation", "trust decision", "remedy"]
+    },
+    {
+      "id": "RAHP-CAND-ISO-23635",
+      "standard_id": "STD-ISO-TS-23635-2022",
+      "priority": "medium",
+      "failure_hypothesis": "Governance guidance is documented but cannot be translated into observable enforcement, revocation, accountability and evidence requirements at runtime.",
+      "affected_parties": ["participant", "operator", "regulator", "affected third party"],
+      "test_targets": ["decision rights", "enforcement", "revocation", "audit evidence", "appeal and redress"]
+    }
+  ],
+  "promotion_rule": "A candidate becomes a RAHP assessment only after target baseline, deployment mode, affected-party model, evidence plan and human disposition are recorded."
+}

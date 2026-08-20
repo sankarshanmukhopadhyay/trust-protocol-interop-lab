@@ -1,0 +1,53 @@
+name: Repository assurance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install validation dependencies
+        run: python -m pip install --disable-pip-version-check pyyaml jsonschema
+
+      - name: Validate catalog
+        run: python scripts/validate_catalog.py
+
+      - name: Validate interoperability cases
+        run: python scripts/validate_cases.py
+
+      - name: Validate evidence
+        run: python scripts/validate_evidence.py
+
+      - name: Validate core standards intelligence
+        run: python scripts/validate_standards.py
+
+      - name: Validate standards corpus v2
+        run: python scripts/validate_standards_v2.py
+
+      - name: Run executable cross-spec tests
+        run: |
+          python experiments/xsp-001/run.py
+          python experiments/xsp-002/run.py
+
+      - name: Exercise deterministic generators
+        run: |
+          python scripts/generate_standards.py
+          python scripts/generate_readiness.py
+          git diff --check
+
+      - name: Check repository links
+        run: python scripts/check_links.py
