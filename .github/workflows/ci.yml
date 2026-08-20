@@ -61,3 +61,12 @@ jobs:
 
       - name: Check repository links
         run: python scripts/check_links.py
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Build GitHub Pages site
+        run: bundle exec jekyll build
