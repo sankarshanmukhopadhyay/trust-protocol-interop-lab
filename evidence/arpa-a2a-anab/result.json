@@ -1,0 +1,69 @@
+{
+  "case_id": "IC-ARPA-A2A-TT-001",
+  "result_id": "IC-ARPA-A2A-TT-001-RESULT-20260820",
+  "status": "pass",
+  "claim_scope": "executed semantic composition of ARPA v0.9.5, ANAB v0.10.0 assurance inputs, A2A v1.0 interaction metadata, and Trust Tasks; excludes live-network, cryptographic, upstream-conformance, and certification claims",
+  "executed_at": "2026-08-20T12:00:00Z",
+  "observations": [
+    "7/7 vectors matched declared behavior",
+    "Identity and name assurance remained separate from delegated authority and effect admission."
+  ],
+  "vectors": [
+    {
+      "id": "ARPA-A2A-TT-POS-001",
+      "kind": "valid",
+      "expected": "allow-policy-evaluation",
+      "observed": "allow-policy-evaluation",
+      "pass": true,
+      "source": "cases/arpa-a2a-trust-tasks/vectors/valid/governed-execution.json"
+    },
+    {
+      "id": "ARPA-A2A-ANAB-NEG-001",
+      "kind": "invalid",
+      "expected": "deny-name-mismatch",
+      "observed": "deny-name-mismatch",
+      "pass": true,
+      "source": "cases/arpa-a2a-trust-tasks/vectors/invalid/anab-name-mismatch.json"
+    },
+    {
+      "id": "ARPA-A2A-ANAB-NEG-003",
+      "kind": "invalid",
+      "expected": "deny-assurance-status",
+      "observed": "deny-assurance-status",
+      "pass": true,
+      "source": "cases/arpa-a2a-trust-tasks/vectors/invalid/anab-revoked.json"
+    },
+    {
+      "id": "ARPA-A2A-ANAB-NEG-002",
+      "kind": "invalid",
+      "expected": "deny-assurance-freshness",
+      "observed": "deny-assurance-freshness",
+      "pass": true,
+      "source": "cases/arpa-a2a-trust-tasks/vectors/invalid/anab-stale.json"
+    },
+    {
+      "id": "ARPA-A2A-ANAB-NEG-004",
+      "kind": "invalid",
+      "expected": "deny-assurance-evidence",
+      "observed": "deny-assurance-evidence",
+      "pass": true,
+      "source": "cases/arpa-a2a-trust-tasks/vectors/invalid/anab-unbound-evidence.json"
+    },
+    {
+      "id": "ARPA-A2A-TT-NEG-001",
+      "kind": "invalid",
+      "expected": "deny-before-consequential-execution",
+      "observed": "deny-before-consequential-execution",
+      "pass": true,
+      "source": "cases/arpa-a2a-trust-tasks/vectors/invalid/revoked-authority.json"
+    },
+    {
+      "id": "ARPA-A2A-TT-NEG-002",
+      "kind": "invalid",
+      "expected": "deny-scope-expansion",
+      "observed": "deny-scope-expansion",
+      "pass": true,
+      "source": "cases/arpa-a2a-trust-tasks/vectors/invalid/scope-expansion.json"
+    }
+  ]
+}

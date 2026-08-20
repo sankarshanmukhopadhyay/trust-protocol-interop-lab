@@ -50,15 +50,17 @@
     {
       "id": "IC-ARPA-A2A-TT-001",
       "title": "Governed agent discovery to Trust Task execution",
-      "status": "experimental",
-      "question": "Can ARPA authority state, proposed A2A actor-chain attribution, A2A discovery/interaction, and Trust Task work semantics compose without treating lineage metadata as authority or losing revocation and evidence boundaries?",
+      "status": "interoperability-tested",
+      "question": "Can ARPA authority state, ANAB name assurance, proposed A2A actor-chain attribution, A2A discovery/interaction, and Trust Task work semantics compose without treating identity, assurance, or lineage metadata as authority or losing revocation and evidence boundaries?",
       "components": [
         "arpa",
+        "anab",
         "a2a",
         "trust-tasks"
       ],
       "baselines": {
         "arpa": "v0.9.5",
+        "anab": "v0.10.0 experimental A2A assurance gate",
         "a2a": "A2A v1.0 plus issue #2028 actor-chain proposal reviewed 2026-08-20 (informative, non-normative)",
         "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)"
       },
@@ -69,7 +71,9 @@
         "scenarios": "cases/arpa-a2a-trust-tasks/scenarios",
         "vectors": "cases/arpa-a2a-trust-tasks/vectors",
         "mapping": "mappings/a2a-actor-chain-authority.md",
-        "limitations": "cases/arpa-a2a-trust-tasks/known-limitations.md"
+        "limitations": "cases/arpa-a2a-trust-tasks/known-limitations.md",
+        "experiment": "experiments/arpa-a2a-anab/run.py",
+        "evidence": "evidence/arpa-a2a-anab/evidence-manifest.json"
       }
     },
     {

@@ -1,16 +1,20 @@
 # IC-ARPA-A2A-TT-001 — Governed agent discovery to Trust Task execution
 
-**Status:** Experimental
+**Status:** Interoperability Tested (bounded semantic composition)
 
-Tests whether governed agent registry state can constrain A2A discovery and invocation while Trust Tasks retain the semantics of the requested work.
+Tests whether governed agent registry state and ANAB name/operator assurance can constrain A2A discovery and invocation while Trust Tasks retain the semantics of the requested work.
 
 ## Method
 
-The case declares semantic ownership and invariants before execution. Scenarios cover both successful composition and fail-closed behavior. The current baseline is experiment-ready but has not yet earned an `Interoperability Tested` claim.
+The case declares semantic ownership and invariants before execution. Its deterministic runner exercises positive and negative vectors and publishes hash-bound evidence. The resulting `Interoperability Tested` claim is limited to this repository-owned semantic evaluator; it excludes live-network and cryptographic interoperability.
 
 ## Evidence target
 
-A future run should produce reproducible results plus an evidence manifest linking every conclusion to the exercised vectors and baselines.
+Run `python3 experiments/arpa-a2a-anab/run.py`. The result, log, and evidence manifest are written under `evidence/arpa-a2a-anab/`.
+
+## ANAB assurance boundary
+
+The experiment admits current, integrity-bound ANAB name and operator evidence before consequential interaction. Name mismatch, stale or revoked assurance, and unbound evidence fail closed. Passing ANAB checks does not create delegation: ARPA authority state, scope, and relying-party policy remain separate gates.
 
 ## Current Trust Tasks pressure point
 

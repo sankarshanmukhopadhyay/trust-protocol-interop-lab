@@ -1,0 +1,1 @@
+{"id":"ARPA-A2A-ANAB-NEG-002","authority_state":"active","card_name":"Payments Agent","anab_name":"Payments Agent","anab_identity_status":"verified","anab_freshness":"stale","anab_declaration_digest_match":true,"anab_card_binding_valid":true,"advertised_capability":"payment.quote","delegated_scope":["payment.quote"],"consequential":true,"expected":"deny-assurance-freshness"}

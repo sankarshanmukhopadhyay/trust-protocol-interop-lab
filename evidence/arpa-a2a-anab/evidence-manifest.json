@@ -1,0 +1,80 @@
+{
+  "case_id": "IC-ARPA-A2A-TT-001",
+  "evidence_id": "IC-ARPA-A2A-TT-001-EVIDENCE-20260820",
+  "claim_scope": "executed semantic composition of ARPA v0.9.5, ANAB v0.10.0 assurance inputs, A2A v1.0 interaction metadata, and Trust Tasks; excludes live-network, cryptographic, upstream-conformance, and certification claims",
+  "executed_at": "2026-08-20T12:00:00Z",
+  "runner": "experiments/arpa-a2a-anab/run.py",
+  "artifacts": [
+    {
+      "path": "result.json",
+      "role": "executed-result",
+      "sha256": "4dd9bcc1266b9eda48fa268fbbb937ae0a1755eb509dc02c8fd0da8df3140c8e"
+    },
+    {
+      "path": "run-log.json",
+      "role": "run-log",
+      "sha256": "aa6173a2b8575b66d0597c08ce88491460f43cc889bb62767e996d80ee27c462"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/vectors/invalid/anab-name-mismatch.json",
+      "role": "test-vector",
+      "sha256": "4cf7a39f2309457b0e35dab35743c45977befe7aa3845b48c972619ff6d58e90"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/vectors/invalid/anab-revoked.json",
+      "role": "test-vector",
+      "sha256": "0c8af6fbd79b091a5c5b16b213831402633fb0038f026b73f029ec9510d2fb17"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/vectors/invalid/anab-stale.json",
+      "role": "test-vector",
+      "sha256": "8d82c11ed113931f1f76c079bcf4c3c717c59413a431c4f2f4bc76ce36525322"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/vectors/invalid/anab-unbound-evidence.json",
+      "role": "test-vector",
+      "sha256": "2e2ae2298a019edf08bea8329a470afaec8518ac1c64007c279187052d3a85b3"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/vectors/invalid/revoked-authority.json",
+      "role": "test-vector",
+      "sha256": "16b9fa3526e056ae537b1ecf288a3b26c914c4e6129209e6673d7504360d28b9"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/vectors/invalid/scope-expansion.json",
+      "role": "test-vector",
+      "sha256": "15695d2e4a3f7b2bdb1cb4840adf707d340d1d224c1db9c8fbe17f01372a07fe"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/vectors/valid/governed-execution.json",
+      "role": "test-vector",
+      "sha256": "855794be2215261b0df8dd57ecbcf59be224cbeeccb18349ddcc77b0e0186683"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/invariants.yaml",
+      "role": "invariant-set",
+      "sha256": "96034e70c57e761ed37b6ad31e2fe5298b7f8308c7bc3184212922f6212e79fc"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/ownership.yaml",
+      "role": "semantic-ownership",
+      "sha256": "5c5f95438aad1e3358b10252277f9a6391f5189375c3d221d2bcac68c74b944c"
+    },
+    {
+      "path": "../../cases/arpa-a2a-trust-tasks/known-limitations.md",
+      "role": "known-limitations",
+      "sha256": "d693f23e523ed4dc6cb84d19b708eb59bd8fdd27f6830ef8953fa41b6136e7e4"
+    },
+    {
+      "path": "../../experiments/arpa-a2a-anab/run.py",
+      "role": "reference-evaluator",
+      "sha256": "7d7c90333cb56169a8158372a034f908e91b5cb637088a6981182ed8a71089d1"
+    }
+  ],
+  "result_summary": {
+    "status": "pass",
+    "vectors": 7,
+    "passed": 7,
+    "failed": 0
+  }
+}
