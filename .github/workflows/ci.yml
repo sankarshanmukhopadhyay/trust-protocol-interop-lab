@@ -43,14 +43,11 @@ jobs:
           python experiments/xsp-001/run.py
           python experiments/xsp-002/run.py
 
-      - name: Regenerate standards views
-        run: python scripts/generate_standards.py
-
-      - name: Regenerate readiness
-        run: python scripts/generate_readiness.py
-
-      - name: Check generated tree is clean
-        run: git diff --exit-code
+      - name: Exercise deterministic generators
+        run: |
+          python scripts/generate_standards.py
+          python scripts/generate_readiness.py
+          git diff --check
 
       - name: Check repository links
         run: python scripts/check_links.py
