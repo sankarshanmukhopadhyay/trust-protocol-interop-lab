@@ -1,9 +1,16 @@
 {
   "id": "ARPA-A2A-TT-POS-001",
   "authority_state": "active",
+  "card_name": "Procurement Agent",
+  "anab_name": "Procurement Agent",
+  "anab_identity_status": "verified",
+  "anab_freshness": "fresh",
+  "anab_declaration_digest_match": true,
+  "anab_card_binding_valid": true,
   "advertised_capability": "purchase.quote",
   "delegated_scope": [
     "purchase.quote"
   ],
+  "consequential": true,
   "expected": "allow-policy-evaluation"
 }

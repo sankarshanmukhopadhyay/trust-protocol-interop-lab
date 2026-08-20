@@ -25,6 +25,7 @@ jobs:
           python scripts/validate_cases.py
           python experiments/xsp-001/run.py
           python experiments/xsp-002/run.py
+          python experiments/arpa-a2a-anab/run.py
           python scripts/validate_evidence.py
           python scripts/validate_standards.py
           python scripts/validate_standards_v2.py

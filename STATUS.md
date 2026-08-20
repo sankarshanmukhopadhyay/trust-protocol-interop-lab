@@ -26,7 +26,7 @@ See [Evidence-Gated Maturity Model](docs/maturity-model.md).
 |---|---|---|
 | IC-TT-MCP-001 | Candidate | Trust Tasks ED 0.3 @ 7e0d755; MCP 2026-07-28 |
 | IC-TEA-MCP-TT-001 | Experimental | TEA v1.0 Draft; MCP 2026-07-28; Trust Tasks ED 0.3 @ 7e0d755 |
-| IC-ARPA-A2A-TT-001 | Experimental | ARPA v0.9.5; A2A portfolio reference; Trust Tasks ED 0.3 @ 7e0d755 |
+| IC-ARPA-A2A-TT-001 | **Interoperability Tested** | ARPA v0.9.5; ANAB v0.10.0; A2A v1.0; Trust Tasks ED 0.3 @ 7e0d755 |
 | IC-TT-TSMM-TIS-001 | Experimental | Trust Tasks ED 0.3 @ 7e0d755; TSMM v0.23.0; TIS v0.12.0 |
 | IC-ARPA-TRQP-HIST-001 | Experimental | ARPA v0.9.4; TRQP upstream baseline |
 | IC-AGENT-PROVENANCE-AUTH-001 | Candidate | GAAM v0.9.0; TSMM v0.23.0; TIS v0.12.0; ANAB v0.10.0; ARPA v0.9.4; A2A; local CAWG-TRQP agentic baseline; TRQP; DCAS v0.10.0 |
@@ -37,7 +37,7 @@ The machine-readable source of truth is [`catalog/interoperability-cases.yaml`](
 
 ## Claim boundary
 
-`IC-XSP-001` and `IC-XSP-002` claim **Interoperability Tested** only for their executed semantic-composition reference models. Their evidence packages contain deterministic positive/negative vectors, executed results, reproducibility instructions, manifests, and hashes. This status does **not** claim wire-protocol conformance, production interoperability, external certification, or legal authority. Other cases remain at their existing maturity levels.
+`IC-XSP-001`, `IC-XSP-002`, and `IC-ARPA-A2A-TT-001` claim **Interoperability Tested** only for their executed semantic-composition reference models. Their evidence packages contain deterministic positive/negative vectors, executed results, reproducibility instructions, manifests, and hashes. This status does **not** claim wire-protocol conformance, production interoperability, external certification, or legal authority. Other cases remain at their existing maturity levels.
 
 ## Standards intelligence status
 

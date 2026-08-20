@@ -1,0 +1,9 @@
+{
+  "case_id": "IC-ARPA-A2A-TT-001",
+  "executed_at": "2026-08-20T12:00:00Z",
+  "runner": "experiments/arpa-a2a-anab/run.py",
+  "python": "stdlib-only",
+  "vector_count": 7,
+  "passed": 7,
+  "failed": 0
+}

@@ -39,6 +39,22 @@
     {
       "id": "INV-ARPA-A2A-010",
       "statement": "Lineage disclosure MUST be minimized to the information required for the relying decision and audit purpose; durable cross-context identifiers MUST NOT be required when a less correlating representation can satisfy the same assurance objective."
+    },
+    {
+      "id": "INV-ARPA-A2A-011",
+      "statement": "The A2A Agent Card name and ANAB assured name MUST be materially consistent before ANAB evidence is admitted."
+    },
+    {
+      "id": "INV-ARPA-A2A-012",
+      "statement": "Stale, suspended, or revoked ANAB identity state MUST NOT be accepted as current name or operator assurance."
+    },
+    {
+      "id": "INV-ARPA-A2A-013",
+      "statement": "ANAB name, operator, or card-binding assurance MUST NOT create delegated authority or expand ARPA scope."
+    },
+    {
+      "id": "INV-ARPA-A2A-014",
+      "statement": "A verified ANAB claim MUST be integrity-bound to its declaration and Agent Card verification material before consequential reliance."
     }
   ]
 }

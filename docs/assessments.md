@@ -7,7 +7,7 @@ permalink: /assessments/
 ---
 # Assessments
 
-Interop Cases are evidence-gated composition tests. Start with the two completed standards pressure tests or use the readiness table for the whole case estate.
+Interop Cases are evidence-gated composition tests. Start with the completed standards pressure tests or use the readiness table for the whole case estate.
 
 ## Completed standards pressure tests
 
@@ -15,6 +15,7 @@ Interop Cases are evidence-gated composition tests. Start with the two completed
 |---|---|---|
 | [XSP-001](../cases/xsp-001/README.md) | Can credential verification remain separate from issuer authority and relying policy? | Executed semantic vectors |
 | [XSP-002](../cases/xsp-002/README.md) | Can DID resolution and federation membership remain separate from action authority? | Executed semantic vectors |
+| [IC-ARPA-A2A-TT-001](../cases/arpa-a2a-trust-tasks/README.md) | Can governed discovery and name assurance constrain A2A interaction without becoming delegated authority? | Executed semantic vectors and hash-bound evidence |
 
 ## Portfolio case estate
 
