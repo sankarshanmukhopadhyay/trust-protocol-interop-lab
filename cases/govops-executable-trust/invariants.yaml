@@ -1,0 +1,44 @@
+{
+  "invariants": [
+    {
+      "id": "INV-GOVOPS-001",
+      "statement": "A GovOps capability represents an exposed (action, resource) operation only and MUST NOT itself imply identity, entitlement, authority, or permission."
+    },
+    {
+      "id": "INV-GOVOPS-002",
+      "statement": "The GovOps capability_id MUST remain the identifier of the governed capability across the experiment; no TSMM, GAAM, or TIS identifier may replace it."
+    },
+    {
+      "id": "INV-GOVOPS-003",
+      "statement": "Possessing valid authority evidence MUST NOT itself produce an authorization decision; valid authority is not equivalent to Allow."
+    },
+    {
+      "id": "INV-GOVOPS-004",
+      "statement": "Delegated authority MUST NOT exceed its source across relevant scope, jurisdiction, monetary or risk limits, temporal validity, or permission to further delegate."
+    },
+    {
+      "id": "INV-GOVOPS-005",
+      "statement": "The GovOps/PDP policy layer remains authoritative for runtime Allow, Deny, or Challenge; no TSMM, GAAM, or TIS artifact may independently convert Deny to Allow."
+    },
+    {
+      "id": "INV-GOVOPS-006",
+      "statement": "A portable authorization-decision artifact MUST be able to identify, directly or by immutable reference, the capability, request or principal context, policy version, evaluated evidence, authorization result, decision time, and decision point."
+    },
+    {
+      "id": "INV-GOVOPS-007",
+      "statement": "An observed runtime effect MUST be correlatable to the authorization decision that admitted it; an unrelated effect MUST NOT be treated as evidence of successful governed execution."
+    },
+    {
+      "id": "INV-GOVOPS-008",
+      "statement": "Authority revoked before authorization MUST NOT be treated as valid authority, while revocation after execution MUST NOT rewrite historical evidence; current validity and historical truth remain distinct."
+    },
+    {
+      "id": "INV-GOVOPS-009",
+      "statement": "Possession of a valid or complete evidence bundle MUST NOT itself confer authority."
+    },
+    {
+      "id": "INV-GOVOPS-010",
+      "statement": "A later positive assurance evaluation MUST NOT retroactively authorize an action or runtime effect."
+    }
+  ]
+}
