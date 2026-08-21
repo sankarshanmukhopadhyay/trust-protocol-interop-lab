@@ -1,0 +1,12 @@
+{
+  "capability_definition": "govops",
+  "capability_identifier": "govops",
+  "runtime_authorization_policy": "govops/pdp",
+  "semantic_projection": "tsmm",
+  "authority_and_delegation": "gaam",
+  "revocation_semantics": "gaam",
+  "portable_artifact_contracts": "tis",
+  "decision_and_runtime_evidence": "tis",
+  "experimental_composition": "trust-protocol-interop-lab",
+  "maturity_and_findings": "trust-protocol-interop-lab"
+}

@@ -95,6 +95,11 @@
       "id": "openid-federation",
       "authority": "OpenID Foundation OpenID Federation 1.0",
       "role": "federation-trust-chain-and-metadata-policy"
+    },
+    {
+      "id": "govops",
+      "authority": "GovOpsWG/GovOps",
+      "role": "capability-and-operational-governance-architecture"
     }
   ]
 }
