@@ -1,0 +1,136 @@
+{
+  "case_id": "IC-GOVOPS-EXEC-TRUST-001",
+  "profile": "mappings/govops-executable-trust.md",
+  "scenarios": [
+    {
+      "id": "GOVOPS-SC-001",
+      "title": "Valid authority and policy Allow admit a correlated effect",
+      "purpose": "Exercise the complete positive state path without collapsing authority into authorization.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "action": "approve",
+        "resource": "loan",
+        "authority_state": "valid",
+        "delegation_within_source": true,
+        "policy_decision": "allow",
+        "effect_decision_match": true,
+        "effect_capability_match": true
+      },
+      "expected": {
+        "execution_state": "admitted",
+        "effect_state": "observed",
+        "evidence_state": "complete",
+        "assurance_state": "not_evaluated"
+      },
+      "invariants": ["INV-GOVOPS-001", "INV-GOVOPS-002", "INV-GOVOPS-003", "INV-GOVOPS-005", "INV-GOVOPS-006", "INV-GOVOPS-007"]
+    },
+    {
+      "id": "GOVOPS-SC-002",
+      "title": "Valid authority does not override policy Deny",
+      "purpose": "Prove that admissible authority evidence is only a policy input and cannot manufacture Allow.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "authority_state": "valid",
+        "delegation_within_source": true,
+        "policy_decision": "deny"
+      },
+      "expected": {
+        "execution_state": "blocked",
+        "effect_state": "absent",
+        "evidence_state": "complete"
+      },
+      "invariants": ["INV-GOVOPS-003", "INV-GOVOPS-005", "INV-GOVOPS-006"]
+    },
+    {
+      "id": "GOVOPS-SC-003",
+      "title": "Over-broad delegation is represented as inadmissible authority input",
+      "purpose": "Exercise monotonic narrowing and keep the resulting runtime decision under GovOps/PDP authority.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "source_monetary_limit": 100000,
+        "delegated_monetary_limit": 250000,
+        "delegation_within_source": false,
+        "authority_state": "insufficient",
+        "policy_decision": "deny"
+      },
+      "expected": {
+        "execution_state": "blocked",
+        "effect_state": "absent",
+        "evidence_state": "complete"
+      },
+      "invariants": ["INV-GOVOPS-004", "INV-GOVOPS-005", "INV-GOVOPS-006"]
+    },
+    {
+      "id": "GOVOPS-SC-004",
+      "title": "Pre-decision revocation invalidates authority input",
+      "purpose": "Establish that current authority validity is evaluated at authorization time.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "authority_revoked_before_decision": true,
+        "authority_state": "revoked",
+        "policy_decision": "deny"
+      },
+      "expected": {
+        "execution_state": "blocked",
+        "effect_state": "absent",
+        "evidence_state": "complete"
+      },
+      "invariants": ["INV-GOVOPS-005", "INV-GOVOPS-008"]
+    },
+    {
+      "id": "GOVOPS-SC-005",
+      "title": "Post-execution revocation preserves historical truth",
+      "purpose": "Keep current authority validity separate from immutable evidence of a previously authorized effect.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "authority_state_at_decision": "valid",
+        "policy_decision": "allow",
+        "effect_decision_match": true,
+        "effect_capability_match": true,
+        "authority_revoked_after_effect": true,
+        "current_authority_state": "revoked"
+      },
+      "expected": {
+        "execution_state": "admitted",
+        "effect_state": "observed",
+        "historical_evidence_preserved": true,
+        "current_authority_valid": false
+      },
+      "invariants": ["INV-GOVOPS-007", "INV-GOVOPS-008", "INV-GOVOPS-009"]
+    },
+    {
+      "id": "GOVOPS-SC-006",
+      "title": "Uncorrelated runtime effect fails evidence correlation",
+      "purpose": "Prevent an unrelated runtime observation from being treated as evidence of governed execution.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "policy_decision": "allow",
+        "effect_decision_match": false,
+        "effect_capability_match": true
+      },
+      "expected": {
+        "effect_state": "mismatched",
+        "evidence_state": "inconsistent",
+        "assurance_state": "fail"
+      },
+      "invariants": ["INV-GOVOPS-006", "INV-GOVOPS-007"]
+    },
+    {
+      "id": "GOVOPS-SC-007",
+      "title": "Complete evidence and later assurance cannot retro-authorize",
+      "purpose": "Exercise the one-way boundary from authorization to evidence and assurance.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "historical_policy_decision": "deny",
+        "evidence_state": "complete",
+        "later_assurance_state": "pass"
+      },
+      "expected": {
+        "historical_authorization_changed": false,
+        "authority_conferred_by_evidence": false,
+        "execution_state": "blocked"
+      },
+      "invariants": ["INV-GOVOPS-005", "INV-GOVOPS-009", "INV-GOVOPS-010"]
+    }
+  ]
+}
