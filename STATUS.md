@@ -32,6 +32,7 @@ See [Evidence-Gated Maturity Model](docs/maturity-model.md).
 | IC-AGENT-PROVENANCE-AUTH-001 | Candidate | GAAM v0.9.0; TSMM v0.23.0; TIS v0.12.0; ANAB v0.10.0; ARPA v0.9.4; A2A; local CAWG-TRQP agentic baseline; TRQP; DCAS v0.10.0 |
 | IC-XSP-001 | **Interoperability Tested** | VC Data Model 2.0; Data Integrity 1.0; OpenID4VCI 1.0; OpenID4VP 1.0 |
 | IC-XSP-002 | **Interoperability Tested** | DID Core 1.0; DID Resolution CR 2026-08-06; OpenID Federation 1.0 |
+| IC-GOVOPS-EXEC-TRUST-001 | Exploratory | GovOps main @ 3191248 (2026-08-12); TSMM v0.23.0; GAAM v0.9.0; TIS v0.12.0 |
 
 The machine-readable source of truth is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
 
