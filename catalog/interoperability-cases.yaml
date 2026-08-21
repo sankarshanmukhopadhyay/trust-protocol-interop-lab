@@ -6,10 +6,7 @@
       "title": "Trust Tasks over MCP",
       "status": "candidate",
       "question": "Can MCP provide execution mechanics while Trust Tasks retain semantic work identity, correlation, and response semantics?",
-      "components": [
-        "trust-tasks",
-        "mcp"
-      ],
+      "components": ["trust-tasks", "mcp"],
       "baselines": {
         "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)",
         "mcp": "2026-07-28"
@@ -29,11 +26,7 @@
       "title": "TEA TSP, MCP, and Trust Tasks composition",
       "status": "experimental",
       "question": "Can authenticated agent exchange, MCP execution, and verifiable Trust Task semantics compose without collapsing agreement, authority, execution, or correlation state?",
-      "components": [
-        "tea-tsp",
-        "mcp",
-        "trust-tasks"
-      ],
+      "components": ["tea-tsp", "mcp", "trust-tasks"],
       "baselines": {
         "tea-tsp": "v1.0 Draft reviewed 2026-08-10",
         "mcp": "2026-07-28",
@@ -52,12 +45,7 @@
       "title": "Governed agent discovery to Trust Task execution",
       "status": "interoperability-tested",
       "question": "Can ARPA authority state, ANAB name assurance, proposed A2A actor-chain attribution, A2A discovery/interaction, and Trust Task work semantics compose without treating identity, assurance, or lineage metadata as authority or losing revocation and evidence boundaries?",
-      "components": [
-        "arpa",
-        "anab",
-        "a2a",
-        "trust-tasks"
-      ],
+      "components": ["arpa", "anab", "a2a", "trust-tasks"],
       "baselines": {
         "arpa": "v0.9.5",
         "anab": "v0.10.0 experimental A2A assurance gate",
@@ -81,11 +69,7 @@
       "title": "Trust Task runtime assurance composition",
       "status": "experimental",
       "question": "Can a Trust Task be projected into TSMM runtime semantics and packaged as TIS evidence without changing task, decision, or effect-admission ownership?",
-      "components": [
-        "trust-tasks",
-        "tsmm",
-        "tis"
-      ],
+      "components": ["trust-tasks", "tsmm", "tis"],
       "baselines": {
         "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)",
         "tsmm": "v0.23.0",
@@ -104,10 +88,7 @@
       "title": "ARPA to TRQP lifecycle and historical resolution",
       "status": "experimental",
       "question": "Can a read-only TRQP projection of ARPA state support current and historical verification without conflating projection state, authoritative state, or present consequence?",
-      "components": [
-        "arpa",
-        "trqp"
-      ],
+      "components": ["arpa", "trqp"],
       "baselines": {
         "arpa": "v0.9.4",
         "trqp": "upstream main baseline reviewed 2026-08-12"
@@ -125,17 +106,7 @@
       "title": "Agentic provenance and delegated verification",
       "status": "candidate",
       "question": "Can agent identity, delegated authority, content provenance, trust-registry verification, and assurance evidence compose without turning capability, provenance, or verification into unauthorized decision authority?",
-      "components": [
-        "gaam",
-        "tsmm",
-        "tis",
-        "anab",
-        "arpa",
-        "a2a",
-        "cawg-c2pa",
-        "trqp",
-        "dcas"
-      ],
+      "components": ["gaam", "tsmm", "tis", "anab", "arpa", "a2a", "cawg-c2pa", "trqp", "dcas"],
       "baselines": {
         "gaam": "v0.9.0 Candidate Specification",
         "tsmm": "v0.23.0",
@@ -164,12 +135,7 @@
       "title": "Verifiable credential issuance to reliance",
       "status": "interoperability-tested",
       "question": "Can issuer authority, credential lifecycle, proof purpose, presentation binding and relying-party policy remain separately testable across VC issuance, proof, presentation and reliance?",
-      "components": [
-        "vc-data-model",
-        "vc-data-integrity",
-        "oid4vci",
-        "oid4vp"
-      ],
+      "components": ["vc-data-model", "vc-data-integrity", "oid4vci", "oid4vp"],
       "baselines": {
         "vc-data-model": "W3C Recommendation 2.0 2025-05-15",
         "vc-data-integrity": "W3C Recommendation 1.0 2025-05-15",
@@ -194,11 +160,7 @@
       "title": "DID resolution and federation authority composition",
       "status": "interoperability-tested",
       "question": "Can DID resolution, federation trust-chain evidence, organizational authority and action scope compose without resolution or membership becoming unauthorized decision authority?",
-      "components": [
-        "did-core",
-        "did-resolution",
-        "openid-federation"
-      ],
+      "components": ["did-core", "did-resolution", "openid-federation"],
       "baselines": {
         "did-core": "W3C Recommendation 1.0 2022-07-19",
         "did-resolution": "W3C Candidate Recommendation Snapshot 2026-08-06",
@@ -215,6 +177,31 @@
         "experiment": "experiments/xsp-002/README.md",
         "rahp_review": "reviews/rahp/IC-XSP-002.md",
         "evidence": "evidence/xsp-002/evidence-manifest.json"
+      }
+    },
+    {
+      "id": "IC-GOVOPS-EXEC-TRUST-001",
+      "title": "GovOps capability governance and executable trust composition",
+      "status": "exploratory",
+      "question": "Can a GovOps authorization capability be projected through portable semantic, authority, delegation, decision, and evidence artifacts without changing GovOps capability semantics, transferring authorization authority, or collapsing capability, authority, entitlement, evidence, and assurance boundaries?",
+      "components": ["govops", "tsmm", "gaam", "tis"],
+      "baselines": {
+        "govops": "main @ 319124840565e3ccf82fcf6b8dc45c9582a0186f (2026-08-12)",
+        "tsmm": "v0.23.0",
+        "gaam": "v0.9.0 Candidate Specification",
+        "tis": "v0.12.0"
+      },
+      "ownership": "cases/govops-executable-trust/ownership.yaml",
+      "invariants": "cases/govops-executable-trust/invariants.yaml",
+      "admission": {
+        "decision": "admitted",
+        "date": "2026-08-21",
+        "discussion": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/discussions/6",
+        "scope": "bounded experimental composition; no upstream conformance, endorsement, integration, or normative relationship claimed",
+        "upstream_clarification": "capability_id correlation semantics remain open and attributable to GovOpsWG"
+      },
+      "paths": {
+        "readme": "cases/govops-executable-trust/README.md"
       }
     }
   ]
