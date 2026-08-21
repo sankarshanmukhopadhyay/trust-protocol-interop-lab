@@ -182,7 +182,7 @@
     {
       "id": "IC-GOVOPS-EXEC-TRUST-001",
       "title": "GovOps capability governance and executable trust composition",
-      "status": "exploratory",
+      "status": "experimental",
       "question": "Can a GovOps authorization capability be projected through portable semantic, authority, delegation, decision, and evidence artifacts without changing GovOps capability semantics, transferring authorization authority, or collapsing capability, authority, entitlement, evidence, and assurance boundaries?",
       "components": ["govops", "tsmm", "gaam", "tis"],
       "baselines": {
@@ -201,7 +201,9 @@
         "upstream_clarification": "capability_id correlation semantics remain open and attributable to GovOpsWG"
       },
       "paths": {
-        "readme": "cases/govops-executable-trust/README.md"
+        "readme": "cases/govops-executable-trust/README.md",
+        "mapping": "mappings/govops-executable-trust.md",
+        "scenarios": "cases/govops-executable-trust/scenarios/scenarios.yaml"
       }
     }
   ]
