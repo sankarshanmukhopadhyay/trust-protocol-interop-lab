@@ -2,7 +2,7 @@
 
 Experimental compositions, bindings, profiles, mappings, negative tests, and interoperability evidence connecting decentralized trust infrastructure with agent and application protocols.
 
-> **Status:** Independent experimental work. Nothing in this repository is an approved specification of the Trust over IP Foundation, DTGWG, the Trust Tasks Task Force, the Model Context Protocol project, or any other referenced standards body unless explicitly stated.
+> **Status:** Independent experimental work. Nothing in this repository is an approved specification of the Trust over IP Foundation, DTGWG, the Trust Tasks Task Force, the Model Context Protocol project, GovOpsWG, or any other referenced standards body unless explicitly stated.
 
 ## Mission
 
@@ -29,14 +29,47 @@ The working model is:
 |---|---|---|
 | `IC-TT-MCP-001` | Trust Tasks ↔ MCP | Candidate |
 | `IC-TEA-MCP-TT-001` | TEA/TSP ↔ MCP ↔ Trust Tasks | Experimental |
-| `IC-ARPA-A2A-TT-001` | ARPA ↔ A2A ↔ Trust Tasks | Experimental |
+| `IC-ARPA-A2A-TT-001` | ARPA ↔ ANAB ↔ A2A ↔ Trust Tasks | **Interoperability Tested (semantic scope)** |
 | `IC-TT-TSMM-TIS-001` | Trust Tasks ↔ TSMM ↔ TIS | Experimental |
 | `IC-ARPA-TRQP-HIST-001` | ARPA ↔ TRQP lifecycle/historical resolution | Experimental |
 | `IC-AGENT-PROVENANCE-AUTH-001` | Agent identity ↔ authority ↔ provenance ↔ TRQP ↔ assurance | Candidate |
 | `IC-XSP-001` | VC Data Model ↔ Data Integrity ↔ OpenID4VCI ↔ OpenID4VP ↔ relying policy | **Interoperability Tested (semantic scope)** |
 | `IC-XSP-002` | DID Core ↔ DID Resolution ↔ OpenID Federation ↔ authority | **Interoperability Tested (semantic scope)** |
+| [`IC-GOVOPS-EXEC-TRUST-001`](cases/govops-executable-trust/README.md) | GovOps capability ↔ TSMM ↔ GAAM ↔ TIS | Experimental |
 
 The authoritative registry is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
+
+## Worked real-world case: governed loan approval
+
+`IC-GOVOPS-EXEC-TRUST-001` uses a deliberately ordinary but consequential enterprise action to make executable-governance boundaries concrete: a bank exposes a capability to **approve a loan**, and a delegated credit officer attempts to exercise it.
+
+The capability is only the operation being requested:
+
+```yaml
+capability_id: govops:loan:approve
+operation:
+  action: approve
+  resource: loan
+```
+
+That does not answer whether the officer is authorized to approve this particular loan. The case walks the request through distinct governance states:
+
+```text
+GovOps capability
+  → request/principal context
+  → GAAM authority and delegation checks
+  → GovOps/PDP policy decision
+  → execution admission
+  → observed runtime effect
+  → TIS portable evidence
+  → later assurance
+```
+
+A representative path is a credit officer with delegated approval authority up to INR 5,000,000 attempting to approve an INR 3,500,000 loan within the applicable product and jurisdiction. Valid delegation is an input to authorization, not an `Allow` decision by itself. The GovOps/PDP policy layer still decides whether the transaction may proceed. If admitted, the resulting loan-status transition must be correlated to the exact authorization decision, and TIS evidence can record what happened without becoming a new source of authority.
+
+The same model exercises the more important failure cases: an INR 7,500,000 request exceeds delegated authority; a revoked delegation cannot authorize a new action; a post-execution revocation does not erase historical evidence of an earlier valid decision; an unrelated database update cannot be presented as the authorized effect; and a later positive assurance result cannot retroactively turn a denied action into an authorized one.
+
+This is the practical purpose of the lab: to make boundaries such as **capability ≠ authority ≠ authorization ≠ execution ≠ evidence ≠ assurance** observable and testable across independently governed systems. See the [GovOps executable-trust case](cases/govops-executable-trust/README.md) and its [mapping](mappings/govops-executable-trust.md).
 
 ## Existing versioned artifacts
 
@@ -47,6 +80,7 @@ The original work remains available at stable paths:
 - [TSP-Enabled AI Agent Protocols analysis 0.1](analysis/tsp-enabled-ai-agents/0.1/README.md)
 - [TEA / MCP / Trust Tasks mapping](mappings/tea-mcp-trust-tasks.md)
 - [Agentic provenance and authority mapping](mappings/agentic-provenance-authority.md)
+- [GovOps executable trust mapping](mappings/govops-executable-trust.md)
 
 ## Standards intelligence
 
@@ -86,8 +120,10 @@ python scripts/validate_catalog.py
 python scripts/validate_cases.py
 python experiments/xsp-001/run.py
 python experiments/xsp-002/run.py
+python experiments/arpa-a2a-anab/run.py
 python scripts/validate_evidence.py
 python scripts/validate_standards.py
+python scripts/validate_standards_v2.py
 python scripts/generate_standards.py
 python scripts/generate_readiness.py
 python scripts/check_links.py
