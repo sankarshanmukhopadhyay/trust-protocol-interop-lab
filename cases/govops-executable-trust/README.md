@@ -79,13 +79,94 @@ Assume the following actors and parameters:
 
 The transaction is intentionally ordinary. The value of the experiment comes from making every governance transition observable.
 
+## Swimlane: responsibility and authority through the transaction
+
+The sequence below is the primary responsibility view. It is intentionally asymmetric: each lane contributes a bounded artifact or decision, and no downstream lane is permitted to manufacture authority that belongs upstream.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Officer as Credit Officer A
+    participant App as Loan Application
+    participant GAAM as Authority / Delegation Evaluation
+    participant PDP as GovOps / PDP
+    participant Runtime as Loan Runtime
+    participant TIS as Evidence Packaging
+    participant Assurance as Assurance Evaluator
+
+    Officer->>App: Request approve LN-2026-004217<br/>INR 3,500,000
+    App->>App: Resolve capability<br/>govops:loan:approve
+    Note over App: Capability identifies an operation.<br/>It does not confer authority.
+
+    App->>GAAM: Evaluate delegated authority<br/>principal + scope + amount + jurisdiction + time
+    GAAM-->>App: Authority evidence eligible<br/>within INR 5,000,000 ceiling
+    Note over GAAM,App: Valid authority evidence ≠ Allow
+
+    App->>PDP: Authorization request<br/>request context + policy v17 + evidence
+    PDP-->>App: decision_id + Allow
+    Note over PDP: GovOps/PDP owns the runtime<br/>Allow / Deny / Challenge result.
+
+    App->>Runtime: Admit approved effect
+    Runtime-->>App: effect_id<br/>credit-reviewed → approved
+    Note over App,Runtime: Effect must correlate to<br/>the admitting decision.
+
+    App->>TIS: Package request + authority + decision + effect
+    TIS-->>App: evidence_bundle_id
+    Note over TIS: Evidence records governance state.<br/>Evidence does not confer authority.
+
+    Assurance->>TIS: Evaluate historical evidence
+    TIS-->>Assurance: Evidence bundle
+    Assurance-->>App: assurance_result_id
+    Note over Assurance: Assurance cannot retroactively<br/>change the runtime decision.
+```
+
+### What the swimlane makes testable
+
+The diagram exposes six independently testable ownership boundaries: capability publication, authority/delegation evaluation, runtime authorization, effect admission, portable evidence production, and later assurance. A successful vector must preserve the hand-off between lanes rather than flattening them into a single generic "permission" state.
+
+## State flow: authorization and execution
+
+The runtime state machine below separates **request state**, **authority eligibility**, **authorization state**, and **execution state**. In particular, `Allow` is necessary for the tested successful path but is not itself proof that the expected effect occurred.
+
+```mermaid
+stateDiagram-v2
+    [*] --> CapabilityKnown
+    CapabilityKnown --> RequestCreated: invocation created
+
+    RequestCreated --> AuthorityEligible: delegation valid and in scope
+    RequestCreated --> AuthorityRejected: absent / expired / revoked / out of scope
+
+    AuthorityRejected --> Denied: fail closed
+    AuthorityEligible --> PolicyEvaluation: submit request + evidence
+
+    PolicyEvaluation --> Allowed: PDP = Allow
+    PolicyEvaluation --> Denied: PDP = Deny
+    PolicyEvaluation --> Challenged: PDP = Challenge
+
+    Challenged --> PolicyEvaluation: required context supplied
+    Challenged --> Denied: challenge unsatisfied
+
+    Allowed --> EffectAdmitted: execution gate accepts decision
+    EffectAdmitted --> EffectObserved: expected correlated effect occurs
+    EffectAdmitted --> ExecutionMismatch: wrong or uncorrelated effect
+
+    EffectObserved --> EvidencePackaged
+    ExecutionMismatch --> EvidenceFailure
+    Denied --> EvidencePackaged: denial may still be evidenced
+
+    EvidencePackaged --> Assessed
+    EvidenceFailure --> Assessed
+
+    Assessed --> [*]
+```
+
+The critical prohibited transitions are implicit in what is absent from the machine: there is no direct `CapabilityKnown → Allowed`, no `AuthorityEligible → EffectAdmitted`, no `EvidencePackaged → Allowed`, and no `Assessed → Allowed` path.
+
 ## Walkthrough: authorized path
 
 ### 1. Capability discovery
 
-The application exposes `govops:loan:approve` for the `approve / loan` operation.
-
-At this stage the system knows only **what operation exists**. No authority or authorization has been established.
+The application exposes `govops:loan:approve` for the `approve / loan` operation. At this stage the system knows only **what operation exists**. No authority or authorization has been established.
 
 ```text
 capability_id = govops:loan:approve
@@ -95,9 +176,7 @@ capability_id = govops:loan:approve
 
 ### 2. Request context is created
 
-Credit Officer A requests approval of loan `LN-2026-004217` for INR 3,500,000.
-
-The lab profile gives the invocation a separate request correlation identifier:
+Credit Officer A requests approval of loan `LN-2026-004217` for INR 3,500,000. The lab profile gives the invocation a separate request correlation identifier:
 
 ```yaml
 request_id: req:LN-2026-004217:approve:01
@@ -115,9 +194,7 @@ jurisdiction: IN-WB
 
 GAAM semantics are used to represent the authority chain and its constraints. Credit Officer A has an active delegation from the Regional Credit Manager to approve secured retail loans in West Bengal up to INR 5,000,000.
 
-The requested INR 3,500,000 transaction is within the delegated limit. The delegation is therefore **eligible authority evidence** for policy evaluation.
-
-That still does not mean the request is allowed.
+The requested INR 3,500,000 transaction is within the delegated limit. The delegation is therefore **eligible authority evidence** for policy evaluation. That still does not mean the request is allowed.
 
 ```text
 valid authority evidence ≠ Allow
@@ -125,9 +202,7 @@ valid authority evidence ≠ Allow
 
 ### 4. GovOps/PDP makes the runtime decision
 
-The request context, applicable policy version, and evaluated evidence are submitted to the GovOps/PDP policy layer.
-
-Assume `loan-approval-policy:v17` also checks product eligibility, risk thresholds, maker-checker separation, sanctions screening, and outstanding exposure. Those controls all pass.
+The request context, applicable policy version, and evaluated evidence are submitted to the GovOps/PDP policy layer. Assume `loan-approval-policy:v17` also checks product eligibility, risk thresholds, maker-checker separation, sanctions screening, and outstanding exposure. Those controls all pass.
 
 The policy layer produces:
 
@@ -144,8 +219,6 @@ This is the point at which runtime authorization exists. TSMM, GAAM, TIS, and th
 ### 5. The effect is admitted and executed
 
 Because the authoritative runtime decision is `Allow`, the loan system admits the effect and changes the loan state from `credit-reviewed` to `approved`.
-
-The observed effect receives its own correlation identifier:
 
 ```yaml
 effect_id: effect:LN-2026-004217:approved:01
@@ -183,17 +256,40 @@ A positive assurance result can support confidence in the historical execution, 
 positive assurance ≠ retroactive authorization
 ```
 
+## Revocation and historical truth
+
+Revocation is time-relative. The same delegation artifact can correctly support a historical authorization before revocation and correctly fail a later authorization after revocation. The evidence layer must therefore preserve both **decision-time validity** and **current validity** rather than replacing one with the other.
+
+```mermaid
+flowchart TD
+    D[Delegation issued<br/>ceiling INR 5,000,000] --> T1{Authorization time}
+
+    T1 -->|10:00<br/>delegation active| V[Authority valid at decision time]
+    V --> P[PDP evaluates policy]
+    P -->|Allow| E[Correlated loan approval effect]
+    E --> H[Historical evidence recorded]
+
+    H --> R[Delegation revoked at 15:00]
+    R --> C[Current authority = revoked]
+    R --> HT[Historical 10:00 execution remains true]
+
+    T1 -->|16:00<br/>after revocation| X[Authority invalid for new request]
+    X --> N[No permissible execution admission]
+
+    C -. does not rewrite .-> HT
+```
+
+This is a central assurance property: **revocation changes future reliance on authority; it does not mutate truthful history**. An evaluator must be able to answer both “was the authority valid when this decision was made?” and “is the authority valid now?” without conflating the answers.
+
 ## Failure path A: delegated amount exceeded
 
-Now change only one field:
+Change only one field:
 
 ```yaml
 amount_inr: 7500000
 ```
 
 Credit Officer A is delegated authority only up to INR 5,000,000. The INR 7,500,000 request exceeds the source constraint.
-
-The expected governance outcome is:
 
 ```text
 capability exists
@@ -208,11 +304,7 @@ The important result is not merely a `Deny`. The evidence must make visible **wh
 
 ## Failure path B: authority revoked before decision
 
-Assume the delegation is revoked at 10:02 and the authorization request is evaluated at 10:04.
-
-The previously valid delegation cannot be treated as current authority. An old authority artifact or cached evidence bundle cannot override the revocation state.
-
-Expected result:
+Assume the delegation is revoked at 10:02 and the authorization request is evaluated at 10:04. The previously valid delegation cannot be treated as current authority. An old authority artifact or cached evidence bundle cannot override the revocation state.
 
 ```text
 revoked before authorization
@@ -220,27 +312,17 @@ revoked before authorization
   → no execution admission
 ```
 
-This tests current authority validity rather than historical truth.
-
 ## Historical path: authority revoked after execution
 
-Assume instead that the loan was validly approved at 10:00 and the officer's delegation was revoked at 15:00.
-
-The revocation changes what the officer may do **after 15:00**. It does not rewrite the earlier authorized execution or invalidate truthful evidence that the 10:00 approval occurred under then-valid authority.
+Assume instead that the loan was validly approved at 10:00 and the officer's delegation was revoked at 15:00. The revocation changes what the officer may do **after 15:00**. It does not rewrite the earlier authorized execution or invalidate truthful evidence that the 10:00 approval occurred under then-valid authority.
 
 ```text
 current authority validity ≠ historical execution truth
 ```
 
-This distinction is important for audit, dispute resolution, incident analysis, and regulated recordkeeping.
-
 ## Failure path C: unrelated effect presented as execution evidence
 
 Assume the PDP produces `Allow` for `LN-2026-004217`, but the evidence bundle points to a status update for `LN-2026-004300` or to a maintenance process that changed the record independently.
-
-The existence of an `Allow` and the existence of a runtime effect are insufficient. The effect must correlate to the exact decision and governed request.
-
-Expected result:
 
 ```text
 Allow + unrelated effect ≠ governed execution
@@ -248,9 +330,7 @@ Allow + unrelated effect ≠ governed execution
 
 ## Failure path D: later assurance attempts to repair a denial
 
-Assume the PDP returned `Deny`, but a later audit finds that the officer's delegation document was cryptographically valid and complete.
-
-The assurance result may conclude that the authority evidence was authentic. It cannot turn the historical `Deny` into `Allow`, nor can it legitimize an effect that occurred despite the denial.
+Assume the PDP returned `Deny`, but a later audit finds that the officer's delegation document was cryptographically valid and complete. The assurance result may conclude that the authority evidence was authentic. It cannot turn the historical `Deny` into `Allow`, nor can it legitimize an effect that occurred despite the denial.
 
 ```text
 valid evidence
@@ -259,11 +339,24 @@ valid evidence
   = still not authorized
 ```
 
-This is one of the central executable-governance boundaries in the case.
+## Identifier and evidence lineage
 
-## Why the identifiers are separate
+Separate identifiers preserve separate governance objects. Correlation is explicit and directional rather than inferred from a convenient common key.
 
-The experiment deliberately uses separate identifiers for separate governance objects:
+```mermaid
+flowchart LR
+    C[capability_id<br/>governed operation] --> R[request_id<br/>invocation context]
+    R --> D[decision_id<br/>runtime authorization]
+    D --> E[effect_id<br/>observed execution]
+    C --> B[evidence_bundle_id]
+    R --> B
+    D --> B
+    E --> B
+    B --> A[assurance_result_id<br/>later evaluation]
+
+    A -. cannot rewrite .-> D
+    B -. does not confer .-> C
+```
 
 | Identifier | What it identifies | Authority owner in this profile |
 |---|---|---|
@@ -274,7 +367,7 @@ The experiment deliberately uses separate identifiers for separate governance ob
 | `evidence_bundle_id` | portable evidence package | TIS-compatible artifact layer |
 | `assurance_result_id` | later assurance evaluation | assurance process |
 
-This prevents a convenient identifier from silently becoming a universal semantic key. In particular, the lab does not assume that GovOps intends `capability_id` to identify requests, decisions, effects, or evidence bundles.
+The lab does not assume that GovOps intends `capability_id` to identify requests, decisions, effects, or evidence bundles.
 
 ## Experimental mapping
 
