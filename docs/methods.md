@@ -13,3 +13,5 @@ permalink: /methods/
 - [Architecture](architecture.md)
 - [Publication model](publication-model.md)
 - [Terminology](terminology.md)
+- [DTG Boundary-Condition Taxonomy](boundary-condition-taxonomy.md)
+- [DTG Portfolio Capability Matrix](dtg-portfolio-capability-matrix.md)
