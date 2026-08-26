@@ -1,0 +1,58 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: experimental-construction-evidence
+source_issue: 26
+profile:
+  id: EXP-BBS-2023-01
+  repository: sankarshanmukhopadhyay/dtgwg-zkp-tf
+  commit: 6e1356812716dbd0e551272251e3e825132a8268
+  profile_path: docs/implementation-guide/conformance/experimental-bbs-2023-construction-profile.yaml
+  normative: false
+construction:
+  scheme: BBS
+  curve: BLS12-381
+  hash_variant: SHA-256
+  library: "@digitalbazaar/bls12-381-multikey@2.2.0"
+  operations:
+    - multi-message-signature
+    - derived-selective-disclosure-proof
+    - derived-proof-verification
+context_binding:
+  mechanism: BBS-presentationHeader
+  case_local_adapter: true
+  canonical_input_fields:
+    - verifier
+    - challenge
+    - purpose
+  encoding: "UTF-8 JSON object"
+  claim_boundary: >-
+    The experiment proves that the selected BBS derived proof is bound to the
+    supplied presentationHeader. The mapping of verifier, challenge and purpose
+    into that header is an Interop Lab adapter and is not represented as
+    upstream DTG or VC Data Integrity normative encoding.
+source_evidence:
+  artifact_class: case-local-signed-message-envelope
+  upstream_dtg_native: false
+  signed_fields:
+    - eligible
+    - provider_class_authorised
+    - authority_provenance_class
+    - protected_provider_identity
+    - protected_provider_location
+    - protected_relationship_type
+    - case_identifier
+    - durable_subject_identifier
+    - durable_provider_identifier
+claim_boundary:
+  proves:
+    - real BBS signature generation and derived-proof verification
+    - selective disclosure of signed messages
+    - crypto-pass plus privacy-fail behavior for PA-NEG-001
+    - replay failure when BBS presentationHeader changes for PA-ADV-001
+  does_not_prove:
+    - full W3C Data Integrity bbs-2023 processing or conformance
+    - upstream DTG credential/VRC/VWC realization of the case-local eligibility predicate
+    - Trust Task wire interoperability
+    - private status or registry resolution
+    - DPIP-native execution
+    - production deployment security
