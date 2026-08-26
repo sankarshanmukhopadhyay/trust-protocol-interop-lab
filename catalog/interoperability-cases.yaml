@@ -180,6 +180,41 @@
       }
     },
     {
+      "id": "IC-DTG-PROTECTED-ACCESS-001",
+      "title": "Protected-person confidential service access",
+      "status": "experimental",
+      "question": "Can a protected person establish a narrowly scoped entitlement from an authorised provider without exposing the protected provider, relationship, location, case identifier, or durable cross-context correlator?",
+      "components": ["dtg-credentials", "trust-tasks", "dtg-zkp-experimental", "dpip"],
+      "baselines": {
+        "dtg-credentials": "trustoverip/dtgwg-cred-spec @ b89f389abbdae77ba60b673c0836c781c2b54169",
+        "trust-tasks": "trustoverip/dtgwg-trust-tasks-spec @ cfcb72aaaeca4478c470b0f571c760626b7177a9",
+        "dtg-zkp-experimental": "sankarshanmukhopadhyay/dtgwg-zkp-tf @ 6e1356812716dbd0e551272251e3e825132a8268 (local experimental fork)",
+        "dpip": "sankarshanmukhopadhyay/dtg-privacy-implementation-profile @ 3e5d286853178bec9b6579ecbdccd1932c281fc7 (local implementation profile)"
+      },
+      "ownership": "cases/dtg-protected-access/ownership.yaml",
+      "invariants": "cases/dtg-protected-access/invariants.yaml",
+      "admission": {
+        "decision": "admitted",
+        "date": "2026-08-26",
+        "discussion_set": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/discussions",
+        "evidence_issue": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/20",
+        "evidence_pr": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/pull/21",
+        "scope": "bounded experimental semantic-composition execution; no external DPIP certification, wire-protocol conformance, upstream defect finding, endorsement, or normative vertical profile claimed",
+        "maturity_basis": "all three deterministic vectors matched expected outcomes; execution evidence is sufficient for experimental catalog admission but not interoperability-tested maturity"
+      },
+      "paths": {
+        "readme": "cases/dtg-protected-access/README.md",
+        "baselines": "cases/dtg-protected-access/baselines.yaml",
+        "mapping": "cases/dtg-protected-access/artifact-mapping.yaml",
+        "scenarios": "cases/dtg-protected-access/scenarios/scenario.yaml",
+        "vectors": "cases/dtg-protected-access/vectors",
+        "limitations": "cases/dtg-protected-access/known-limitations.md",
+        "dpip_profile": "cases/dtg-protected-access/dpip/interaction-profile.yaml",
+        "experiment": "experiments/dtg-protected-access/run.py",
+        "result": "results/dtg-protected-access/run-results.json"
+      }
+    },
+    {
       "id": "IC-GOVOPS-EXEC-TRUST-001",
       "title": "GovOps capability governance and executable trust composition",
       "status": "experimental",

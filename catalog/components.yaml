@@ -97,6 +97,21 @@
       "role": "federation-trust-chain-and-metadata-policy"
     },
     {
+      "id": "dtg-credentials",
+      "authority": "trustoverip/dtgwg-cred-spec",
+      "role": "dtg-relationship-credential-and-witness-semantics"
+    },
+    {
+      "id": "dtg-zkp-experimental",
+      "authority": "sankarshanmukhopadhyay/dtgwg-zkp-tf local experimental fork",
+      "role": "dtg-privacy-preserving-proof-and-composed-presentation-experiment"
+    },
+    {
+      "id": "dpip",
+      "authority": "sankarshanmukhopadhyay/dtg-privacy-implementation-profile",
+      "role": "composed-dtg-interaction-privacy-evaluation"
+    },
+    {
       "id": "govops",
       "authority": "GovOpsWG/GovOps",
       "role": "capability-and-operational-governance-architecture"
