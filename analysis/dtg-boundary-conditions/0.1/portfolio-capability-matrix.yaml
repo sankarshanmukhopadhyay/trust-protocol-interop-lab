@@ -1,0 +1,148 @@
+version: "0.1"
+status: experimental
+authority: trust-protocol-interop-lab
+classification_model:
+  specified: "Direct, attributable upstream text or executable evidence clearly establishes the relevant capability for the boundary condition."
+  partially-specified: "Relevant capability exists but one or more semantics, lifecycle states, privacy properties or composition rules remain incomplete for this boundary condition."
+  composition-dependent: "No single component is expected to establish the property; the result depends on the composed interaction and must be tested end to end."
+  unclear: "Available evidence is insufficient to classify support. This is not a defect finding."
+  gap-candidate: "Evidence suggests the required capability may be absent or incompatible, but promotion to a defect or upstream issue requires a bounded executable case or stronger specification evidence."
+component_roles:
+  credentials-vrc: "relationship, credential and provable-fact semantics"
+  trust-tasks: "trust-task evidence and interaction interfaces"
+  zkp: "privacy-preserving proof construction and verification semantics"
+  directory-registry: "authoritative discovery, status and trust-registry resolution surfaces"
+  dpip: "composed-interaction privacy evaluation and evidence"
+  assurance-redress: "finding, assurance, correction and redress evidence surfaces"
+entries:
+  - condition: BC-AUTH-PROVENANCE
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: unclear
+    directory-registry: composition-dependent
+    dpip: composition-dependent
+    assurance-redress: partially-specified
+    rationale: "Authority provenance crosses relationship evidence, task evidence, authoritative sources and relying policy; no single artifact should be treated as authority by possession alone."
+  - condition: BC-BOUNDED-DELEGATION
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: composition-dependent
+    directory-registry: unclear
+    dpip: composition-dependent
+    assurance-redress: partially-specified
+    rationale: "Scope and provenance may be expressible upstream, but attenuation, private proof and composed enforcement require cross-component evidence."
+  - condition: BC-CURRENT-AUTHORITY
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: unclear
+    directory-registry: composition-dependent
+    dpip: composition-dependent
+    assurance-redress: partially-specified
+    rationale: "Current authority requires relationship state, time, authoritative resolution and relying interpretation to align."
+  - condition: BC-HISTORICAL-TRUTH
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: unclear
+    directory-registry: partially-specified
+    dpip: unclear
+    assurance-redress: partially-specified
+    rationale: "The portfolio has lifecycle and evidence concepts, but preservation of historical truth while denying present authority requires explicit case evidence."
+  - condition: BC-SUPERSESSION
+    credentials-vrc: unclear
+    trust-tasks: unclear
+    zkp: unclear
+    directory-registry: partially-specified
+    dpip: unclear
+    assurance-redress: partially-specified
+    rationale: "Supersession is distinct from revocation and expiry; current evidence does not justify claiming complete portfolio semantics."
+  - condition: BC-STATE-TERMINATION
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: composition-dependent
+    directory-registry: partially-specified
+    dpip: composition-dependent
+    assurance-redress: partially-specified
+    rationale: "Status mechanisms exist across the ecosystem, but semantic distinction among suspension, expiry, revocation, supersession and termination must be demonstrated."
+  - condition: BC-STATE-TRANSITION
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: unclear
+    directory-registry: composition-dependent
+    dpip: composition-dependent
+    assurance-redress: partially-specified
+    rationale: "State transition is inherently temporal and composed; individual component validity does not establish the correct authority state for the whole flow."
+  - condition: BC-CONFLICTING-AUTHORITY
+    credentials-vrc: unclear
+    trust-tasks: unclear
+    zkp: unclear
+    directory-registry: partially-specified
+    dpip: composition-dependent
+    assurance-redress: gap-candidate
+    rationale: "The boundary scenarios require contradictory current-state assertions to be observable; explicit conflict-handling and redress semantics require targeted evidence."
+  - condition: BC-MINIMUM-DISCLOSURE
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: specified
+    directory-registry: composition-dependent
+    dpip: specified
+    assurance-redress: partially-specified
+    rationale: "Privacy-capable proof mechanisms and composed privacy evaluation contribute directly, but metadata, registry, task and credential surfaces can still create over-disclosure."
+  - condition: BC-NON-DISCOVERABILITY
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: composition-dependent
+    directory-registry: composition-dependent
+    dpip: specified
+    assurance-redress: partially-specified
+    rationale: "Non-discoverability cannot be inferred from selective disclosure alone because issuer, status, registry and task metadata may reveal protected relationships."
+  - condition: BC-CORRELATION-RESISTANCE
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: specified
+    directory-registry: composition-dependent
+    dpip: specified
+    assurance-redress: partially-specified
+    rationale: "This is a portfolio-level privacy property: privacy-capable primitives do not guarantee an unlinkable composed interaction."
+  - condition: BC-TEMPORAL-VALIDITY
+    credentials-vrc: partially-specified
+    trust-tasks: partially-specified
+    zkp: composition-dependent
+    directory-registry: partially-specified
+    dpip: composition-dependent
+    assurance-redress: partially-specified
+    rationale: "Time appears across validity, status and evidence, but the decision-time semantics of a composed authority claim require explicit execution."
+  - condition: BC-REPLAY-RESISTANCE
+    credentials-vrc: composition-dependent
+    trust-tasks: partially-specified
+    zkp: partially-specified
+    directory-registry: composition-dependent
+    dpip: composition-dependent
+    assurance-redress: partially-specified
+    rationale: "Replay safety depends on challenge/context binding plus current state; it cannot be assigned to proof construction alone."
+  - condition: BC-RECOVERY
+    credentials-vrc: unclear
+    trust-tasks: unclear
+    zkp: unclear
+    directory-registry: composition-dependent
+    dpip: composition-dependent
+    assurance-redress: gap-candidate
+    rationale: "Recovery/restoration of authority after a temporary condition is not yet evidenced sufficiently across the DTG portfolio and is a priority for the contingent-authority scenario."
+  - condition: BC-REDRESS
+    credentials-vrc: unclear
+    trust-tasks: unclear
+    zkp: unclear
+    directory-registry: unclear
+    dpip: partially-specified
+    assurance-redress: partially-specified
+    rationale: "Assurance can preserve findings and evidence, but a complete affected-party correction and remedy path must remain separate from cryptographic verification and needs further mapping."
+next_slice:
+  candidate_case: IC-DTG-PROTECTED-ACCESS-001
+  question: "Can a protected person establish a narrowly scoped entitlement from an authorised provider without exposing the protected provider, relationship, location, case identifier or durable cross-context correlator?"
+  initial_conditions:
+    - BC-AUTH-PROVENANCE
+    - BC-MINIMUM-DISCLOSURE
+    - BC-NON-DISCOVERABILITY
+    - BC-CORRELATION-RESISTANCE
+    - BC-REPLAY-RESISTANCE
+  admission_status: not-admitted
+  note: "The matrix nominates this slice for construction; it does not admit the case or create an upstream finding."
