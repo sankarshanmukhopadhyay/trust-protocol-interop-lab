@@ -1,0 +1,103 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+current_status: experimental
+target_status: interoperability-tested
+source_issue: 24
+promotion_policy:
+  all_mandatory_gates_must_be_satisfied: true
+  blocked_gate_requires_attributable_dependency: true
+  no_status_promotion_on_modeled_assertion_only: true
+  no_upstream_defect_without_evidence: true
+status_values:
+  - satisfied
+  - partially-satisfied
+  - blocked
+  - not-started
+gates:
+  - id: PA-G1-NATIVE-ARTIFACTS
+    title: Native artifact realization
+    mandatory: true
+    status: partially-satisfied
+    current_evidence:
+      - cases/dtg-protected-access/artifact-mapping.yaml
+      - cases/dtg-protected-access/baselines.yaml
+    gap: "Case-local predicates remain where current upstream DTG semantics do not directly realize the protected-access proposition."
+    next_action: "Materialize concrete credential, Trust Task, proof/presentation, and relying-decision artifacts for the existing three vectors."
+  - id: PA-G2-INDEPENDENT-BOUNDARIES
+    title: Independent component boundaries
+    mandatory: true
+    status: not-started
+    current_evidence:
+      - experiments/dtg-protected-access/run.py
+    gap: "Current evaluator is repository-local and does not yet cross independently instantiated producer/consumer boundaries."
+    next_action: "Split producer, proof/presentation, and verifier/evaluator responsibilities into independently invokable stages."
+  - id: PA-G3-WIRE-ARTIFACTS
+    title: Concrete wire artifacts
+    mandatory: true
+    status: not-started
+    current_evidence: []
+    gap: "The current run records semantic observations rather than a captured set of serialized protocol artifacts."
+    next_action: "Capture request, evidence, presentation/proof, status/authority inputs, and decision outputs per vector."
+  - id: PA-G4-REAL-CRYPTO
+    title: Real cryptographic verification
+    mandatory: true
+    status: blocked
+    current_evidence:
+      - cases/dtg-protected-access/baselines.yaml
+      - results/dtg-protected-access/run-results.json
+    gap: "cryptographic_verification is currently an executed semantic proposition, not evidence of a concrete selected ZKP construction being run end to end."
+    blocker_class: implementation-or-profile-selection
+    next_action: "Select the concrete construction/profile from the pinned ZKP baseline and implement proof generation/verification for PA-POS-001 and PA-NEG-001."
+  - id: PA-G5-CONTEXT-BINDING
+    title: Context-binding execution
+    mandatory: true
+    status: partially-satisfied
+    current_evidence:
+      - cases/dtg-protected-access/vectors
+      - results/dtg-protected-access/run-results.json
+    gap: "Replay rejection is deterministic but still modeled rather than produced by actual proof/presentation context binding."
+    next_action: "Bind verifier, challenge, and purpose in the concrete presentation and replay it under PA-ADV-001."
+  - id: PA-G6-DPIP-NATIVE
+    title: DPIP-native evaluation
+    mandatory: true
+    status: partially-satisfied
+    current_evidence:
+      - cases/dtg-protected-access/dpip-interaction.yaml
+      - results/dtg-protected-access/run-results.json
+    gap: "The Interop Lab evaluator is DPIP-shaped but does not yet preserve a result emitted by DPIP's own executable machinery."
+    next_action: "Create a DPIP-native interaction fixture, execute it in the DPIP repository, and import the resulting attributable artifact."
+  - id: PA-G7-CORRELATION-OBSERVATION
+    title: Observable correlation analysis
+    mandatory: true
+    status: partially-satisfied
+    current_evidence:
+      - cases/dtg-protected-access/observability.yaml
+      - results/dtg-protected-access/run-results.json
+    gap: "Correlation surfaces are declared and evaluated semantically but not yet observed across two concrete relying contexts."
+    next_action: "Run the same subject/provider relationship across two verifier contexts and compare all emitted identifiers and metadata surfaces."
+  - id: PA-G8-EVIDENCE-MANIFEST
+    title: Reproducible evidence manifest
+    mandatory: true
+    status: not-started
+    current_evidence: []
+    gap: "No hashed evidence manifest yet binds the protected-access inputs, outputs, logs, component versions, and DPIP result."
+    next_action: "Create an evidence manifest after concrete execution artifacts exist."
+  - id: PA-G9-CLAIM-BOUNDARY
+    title: Claim-boundary review
+    mandatory: true
+    status: partially-satisfied
+    current_evidence:
+      - cases/dtg-protected-access/known-limitations.md
+      - catalog/interoperability-cases.yaml
+    gap: "Current exclusions are documented for experimental maturity but must be reviewed against the concrete interoperability execution before promotion."
+    next_action: "Update limitations and catalog claim scope after all execution gates are satisfied."
+summary:
+  satisfied: 0
+  partially_satisfied: 5
+  blocked: 1
+  not_started: 3
+  promotion_ready: false
+next_executable_work_item:
+  id: PA-NEXT-001
+  title: Materialize concrete protected-access proof artifacts
+  rationale: "Real cryptographic execution and native artifacts unlock context-binding, wire capture, DPIP-native execution, correlation observation, and the final evidence manifest."
