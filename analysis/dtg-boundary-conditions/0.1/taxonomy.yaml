@@ -1,0 +1,89 @@
+version: "0.1"
+status: experimental
+scope: dtg-boundary-condition-analysis
+authority: trust-protocol-interop-lab
+source_basis:
+  - protected-person confidential service access discussion
+  - child protection, care, adoption and transition to majority discussion
+  - incapacity, emergency authority, recovery and death discussion
+principles:
+  - "Boundary conditions are jurisdiction-neutral analytical concepts, not vertical profiles."
+  - "Historical truth, current validity, current authority, and disclosure permission are distinct states."
+  - "A capability contribution does not imply semantic ownership."
+  - "Unknown support is recorded as unclear rather than inferred to be a gap."
+conditions:
+  - id: BC-AUTH-PROVENANCE
+    name: authority provenance
+    definition: "The ability to establish the legitimate source and derivation of authority without treating possession of an artifact or existence of a relationship as sufficient authority."
+    test_question: "Can the relying interaction establish why an actor is authorised, by whom or by what rule, and within what scope?"
+    pressures: [protected-person, relationship-lifecycle, contingent-authority]
+  - id: BC-BOUNDED-DELEGATION
+    name: bounded delegation
+    definition: "Delegated authority remains constrained by purpose, scope, time, context and any restriction on further delegation."
+    test_question: "Can delegated action be accepted within scope and rejected outside it without identity takeover?"
+    pressures: [protected-person, contingent-authority]
+  - id: BC-CURRENT-AUTHORITY
+    name: current authority
+    definition: "The authority that is operative at the decision time, independently of whether an older relationship or credential remains historically valid."
+    test_question: "Can a verifier distinguish authority that existed previously from authority that is operative now?"
+    pressures: [relationship-lifecycle, contingent-authority]
+  - id: BC-HISTORICAL-TRUTH
+    name: historical truth
+    definition: "The preservation of evidence that a relationship, authority state or action was valid at an earlier time even after current authority changes."
+    test_question: "Can historical validity remain auditable without conferring present authority?"
+    pressures: [relationship-lifecycle, contingent-authority]
+  - id: BC-SUPERSESSION
+    name: supersession
+    definition: "A later authoritative state can replace the operative effect of an earlier state without falsifying the earlier state's history."
+    test_question: "Can a new authority state govern future decisions while prior evidence remains historically interpretable?"
+    pressures: [relationship-lifecycle, contingent-authority]
+  - id: BC-STATE-TERMINATION
+    name: suspension, expiry, revocation and termination distinction
+    definition: "Different lifecycle events that make an artifact or authority non-operative retain distinguishable semantics rather than collapsing into a generic invalid state."
+    test_question: "Can an implementation tell why authority is no longer operative and apply the correct temporal and historical consequences?"
+    pressures: [protected-person, relationship-lifecycle, contingent-authority]
+  - id: BC-STATE-TRANSITION
+    name: explicit state transition
+    definition: "Material changes in relationship, capacity, delegation or authority are represented as transitions with attributable causes and applicable times."
+    test_question: "Can the composed flow identify the state applicable at the decision time and the event that changed it?"
+    pressures: [relationship-lifecycle, contingent-authority]
+  - id: BC-CONFLICTING-AUTHORITY
+    name: conflicting authority
+    definition: "Competing assertions about current authority or state are surfaced as a conflict requiring resolution rather than silently resolved by implementation order."
+    test_question: "Does contradictory evidence produce an observable conflict rather than an arbitrary success?"
+    pressures: [relationship-lifecycle, contingent-authority]
+  - id: BC-MINIMUM-DISCLOSURE
+    name: minimum disclosure
+    definition: "A relying interaction exposes no more subject, relationship, authority or contextual information than is necessary for the legitimate decision."
+    test_question: "Can the relying party establish its required predicate without receiving unnecessary underlying facts?"
+    pressures: [protected-person, relationship-lifecycle, contingent-authority]
+  - id: BC-NON-DISCOVERABILITY
+    name: protected relationship non-discoverability
+    definition: "Successful proof or verification does not create an unintended mechanism to enumerate or discover other protected relationships or service connections."
+    test_question: "Can the required fact be proven without making unrelated relationships discoverable?"
+    pressures: [protected-person, relationship-lifecycle]
+  - id: BC-CORRELATION-RESISTANCE
+    name: correlation resistance
+    definition: "Ordinary composed interactions avoid unnecessary stable identifiers, metadata or status mechanisms that allow cross-context correlation."
+    test_question: "Can separate relying parties correlate the subject or protected relationship solely from artifacts emitted by the normal flow?"
+    pressures: [protected-person]
+  - id: BC-TEMPORAL-VALIDITY
+    name: temporal validity
+    definition: "Claims, authority and proofs are evaluated against the time relevant to the decision rather than treated as timeless facts."
+    test_question: "Can the evaluator distinguish valid-at-T1 from valid-now and bind the decision to the appropriate time?"
+    pressures: [relationship-lifecycle, contingent-authority]
+  - id: BC-REPLAY-RESISTANCE
+    name: replay resistance across state change
+    definition: "Artifacts valid in one context or authority state cannot silently be reused as evidence of current authority after the relevant context or state changes."
+    test_question: "Does a previously valid presentation fail safely when replayed after expiry, supersession, recovery or termination?"
+    pressures: [protected-person, contingent-authority]
+  - id: BC-RECOVERY
+    name: authority recovery and restoration
+    definition: "Where a temporary authority state ends, the system can restore the applicable authority state without erasing valid history or preserving obsolete powers."
+    test_question: "Can self-authority or a successor state resume cleanly after a temporary condition ends?"
+    pressures: [contingent-authority]
+  - id: BC-REDRESS
+    name: redress and correction
+    definition: "Incorrect, stale or contested relationship and authority states have an attributable path for challenge, correction, supersession or remedy."
+    test_question: "Can an affected party contest a wrong state and can later evidence show how it was corrected?"
+    pressures: [protected-person, relationship-lifecycle, contingent-authority]
