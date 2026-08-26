@@ -1,0 +1,37 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: pre-admission
+source_taxonomy: analysis/dtg-boundary-conditions/0.1/taxonomy.yaml
+invariants:
+  - id: PA-INV-AUTH-01
+    boundary_condition: BC-AUTH-PROVENANCE
+    statement: "A successful entitlement decision has attributable authority provenance without requiring disclosure of the protected provider identity or location."
+    evaluate: authority_provenance
+    pass_when: "provider_class_authorised is true and provenance is attributable while protected provider identity/location remain unobserved"
+  - id: PA-INV-PRIV-01
+    boundary_condition: BC-MINIMUM-DISCLOSURE
+    statement: "The verifier observes only information required for the relying decision."
+    evaluate: minimum_disclosure
+    prohibited_observations:
+      - protected_provider_identity
+      - protected_provider_location
+      - protected_relationship_type
+      - case_identifier
+      - durable_subject_identifier
+      - durable_provider_identifier
+  - id: PA-INV-PRIV-02
+    boundary_condition: BC-NON-DISCOVERABILITY
+    statement: "The ordinary proof result does not expose or enable enumeration of the protected provider or other protected service relationships."
+    evaluate: non_discoverability
+  - id: PA-INV-PRIV-03
+    boundary_condition: BC-CORRELATION-RESISTANCE
+    statement: "Artifacts emitted by the normal flow do not provide a stable identifier usable to correlate the protected person or provider across relying contexts."
+    evaluate: correlation_resistance
+  - id: PA-INV-CTX-01
+    boundary_condition: BC-REPLAY-RESISTANCE
+    statement: "A presentation is valid only for its bound verifier, challenge and decision context and cannot silently establish validity in another context."
+    evaluate: context_binding
+    required_bindings:
+      - verifier
+      - challenge
+      - purpose
