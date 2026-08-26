@@ -67,12 +67,17 @@ gates:
   - id: PA-G6-DPIP-NATIVE
     title: DPIP-native evaluation
     mandatory: true
-    status: partially-satisfied
+    status: satisfied
     current_evidence:
       - cases/dtg-protected-access/dpip-interaction.yaml
       - results/dtg-protected-access/run-results.json
-    gap: "The Interop Lab evaluator is DPIP-shaped but does not yet preserve a result emitted by DPIP's own executable machinery."
-    next_action: "Create a DPIP-native interaction fixture, execute it in the DPIP repository, and import the resulting attributable artifact."
+      - "DPIP commit: 666e11008fb3b2de96819b28c502b43edb24384f"
+      - "DPIP result: results/c8-pa-pos-001.yaml"
+      - "DPIP result: results/c8-pa-neg-001.yaml"
+      - "DPIP result: results/c8-pa-adv-001.yaml"
+      - "DPIP main validation: actions/runs/32982456896"
+    gap: null
+    next_action: "Retain the immutable DPIP result pin and preserve each vector's explicit PASS/FAIL/INDETERMINATE claim boundary in later evidence packaging."
   - id: PA-G7-CORRELATION-OBSERVATION
     title: Observable correlation analysis
     mandatory: true
@@ -88,8 +93,8 @@ gates:
     mandatory: true
     status: not-started
     current_evidence: []
-    gap: "Runtime BBS evidence exists but no hashed manifest yet binds the complete protected-access inputs, outputs, logs, component versions, DPIP result, and runtime artifacts."
-    next_action: "Create the final evidence manifest after DPIP-native and cross-context execution artifacts exist."
+    gap: "Runtime BBS and DPIP evidence exist but no hashed manifest yet binds the complete protected-access inputs, outputs, logs, component versions, DPIP result, and runtime artifacts."
+    next_action: "Create the final evidence manifest after cross-context execution artifacts exist."
   - id: PA-G9-CLAIM-BOUNDARY
     title: Claim-boundary review
     mandatory: true
@@ -98,15 +103,16 @@ gates:
       - cases/dtg-protected-access/known-limitations.md
       - cases/dtg-protected-access/bbs-construction.yaml
       - catalog/interoperability-cases.yaml
-    gap: "Construction-level exclusions are explicit, but the final interoperability claim boundary must be reviewed after native-component and DPIP execution."
+      - "DPIP commit: 666e11008fb3b2de96819b28c502b43edb24384f"
+    gap: "Construction and DPIP result exclusions are explicit, but the final interoperability claim boundary must still be reviewed after native-component, cross-context, and wire execution gates are satisfied."
     next_action: "Update limitations and catalog claim scope after all execution gates are satisfied."
 summary:
-  satisfied: 2
-  partially_satisfied: 5
+  satisfied: 3
+  partially_satisfied: 4
   blocked: 0
   not_started: 2
   promotion_ready: false
 next_executable_work_item:
-  id: PA-NEXT-002
-  title: Execute protected-access fixture through DPIP-native machinery
-  rationale: "Real BBS verification and context binding are now evidenced. The highest-leverage next dependency is an attributable DPIP-native result, followed by cross-context correlation observation and independent component staging."
+  id: PA-G7-CORRELATION-OBSERVATION
+  title: Execute protected-access correlation observation across two relying contexts
+  rationale: "Real BBS verification, context binding, and DPIP-native privacy evaluation are now attributable. The next highest-leverage dependency is direct observation of cross-context correlation surfaces before independent component staging and final evidence packaging."
