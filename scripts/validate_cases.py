@@ -2,8 +2,10 @@
 import json
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[1]
-cases = json.loads((ROOT / 'catalog/interoperability-cases.yaml').read_text())['cases']
+cases = yaml.safe_load((ROOT / 'catalog/interoperability-cases.yaml').read_text())['cases']
 rank = {
     'exploratory': 1,
     'experimental': 2,
@@ -28,9 +30,9 @@ for c in cases:
     missing_baselines = set(c['components']) - set(c['baselines'])
     assert not missing_baselines, f"{c['id']}: missing baselines for {sorted(missing_baselines)}"
 
-    inv_doc = json.loads((ROOT / c['invariants']).read_text())
+    inv_doc = yaml.safe_load((ROOT / c['invariants']).read_text())
     inv = inv_doc.get('invariants', [])
-    own = json.loads((ROOT / c['ownership']).read_text())
+    own = yaml.safe_load((ROOT / c['ownership']).read_text())
     assert own, f"{c['id']}: empty ownership"
 
     for item in inv:
