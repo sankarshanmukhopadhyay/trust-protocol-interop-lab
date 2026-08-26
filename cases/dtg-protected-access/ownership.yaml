@@ -1,0 +1,40 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: pre-admission
+lab_authority:
+  owns:
+    - bounded scenario composition
+    - invariant definitions
+    - vector fixtures
+    - local evaluator behavior
+    - local evidence and findings
+  does_not_own:
+    - upstream credential semantics
+    - Trust Tasks semantics
+    - ZKP construction semantics
+    - directory or registry authority semantics
+    - DPIP normative semantics
+    - jurisdictional entitlement or protection law
+semantic_surfaces:
+  credentials_vrc:
+    contribution: "relationship, entitlement and provable-fact representation"
+    ownership: upstream
+  trust_tasks:
+    contribution: "interaction and evidence interfaces where applicable"
+    ownership: upstream
+  zkp:
+    contribution: "privacy-preserving proof construction and verification semantics"
+    ownership: upstream
+  directory_registry:
+    contribution: "authority/status discovery where required"
+    ownership: upstream
+  dpip:
+    contribution: "composed-interaction privacy evaluation"
+    ownership: upstream
+  relying_policy:
+    contribution: "local service decision from verified predicate and policy"
+    ownership: deployer-or-relying-party
+rules:
+  - "A capability contribution is not semantic ownership."
+  - "Cryptographic proof validity is not sufficient for the case outcome."
+  - "A local failure is not an upstream defect until evidence supports an attributable missing or incompatible requirement."
