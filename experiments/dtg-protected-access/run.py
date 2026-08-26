@@ -41,7 +41,9 @@ def evaluate(vector_doc: dict) -> dict:
     observations = setup.get("observations", {})
 
     authority = setup.get("authority_provenance", {})
-    authority_ok = bool(authority.get("attributable")) and bool(authority.get("provider_class_authorised"))
+    authority_ok = (
+        bool(authority.get("attributable")) and bool(authority.get("provider_class_authorised"))
+    ) or bool(observations.get("provider_class_authorised"))
 
     prohibited_present = set(v.get("prohibited_observations_present", []))
     prohibited_from_observation = PROHIBITED.intersection(observations.keys())
