@@ -1,0 +1,139 @@
+{
+  "admission_recommendation": "eligible-for-admission-review",
+  "all_expected_outcomes_matched": true,
+  "case": "IC-DTG-PROTECTED-ACCESS-001",
+  "dpip_binding": {
+    "baseline": "3e5d286853178bec9b6579ecbdccd1932c281fc7",
+    "claim_scope": "repository-owned semantic execution bound to DPIP interaction/profile semantics; not external certification",
+    "interaction_profile": "cases/dtg-protected-access/dpip/interaction-profile.yaml",
+    "target_profile": "PP-4"
+  },
+  "evaluator_version": "0.1",
+  "vectors": [
+    {
+      "checks": {
+        "authority_provenance": "pass",
+        "case_outcome": "pass",
+        "context_binding": "pass",
+        "correlation_resistance": "pass",
+        "cryptographic_verification": "pass",
+        "minimum_disclosure": "pass",
+        "non_discoverability": "pass"
+      },
+      "dpip_claim_results": {
+        "PA-PC-1": "pass",
+        "PA-PC-2": "pass",
+        "PA-PC-3": "pass",
+        "PA-PC-4": "pass",
+        "PA-PC-5": "pass"
+      },
+      "expected": {
+        "authority_provenance": "pass",
+        "case_outcome": "pass",
+        "context_binding": "pass",
+        "correlation_resistance": "pass",
+        "minimum_disclosure": "pass",
+        "non_discoverability": "pass"
+      },
+      "matches_expected": true,
+      "privacy_observations": {
+        "discoverable_protected_relationships": [],
+        "prohibited_fields": [],
+        "stable_cross_context_identifiers": []
+      },
+      "vector_class": "positive",
+      "vector_id": "PA-POS-001",
+      "verifier_observations": {
+        "eligible": true,
+        "proof_context_valid": true,
+        "provider_class_authorised": true
+      }
+    },
+    {
+      "checks": {
+        "authority_provenance": "pass",
+        "case_outcome": "fail",
+        "context_binding": "pass",
+        "correlation_resistance": "fail",
+        "cryptographic_verification": "pass",
+        "minimum_disclosure": "fail",
+        "non_discoverability": "fail"
+      },
+      "dpip_claim_results": {
+        "PA-PC-1": "fail",
+        "PA-PC-2": "fail",
+        "PA-PC-3": "fail",
+        "PA-PC-4": "fail",
+        "PA-PC-5": "pass"
+      },
+      "expected": {
+        "authority_provenance": "pass",
+        "case_outcome": "fail",
+        "context_binding": "pass",
+        "correlation_resistance": "fail",
+        "minimum_disclosure": "fail",
+        "non_discoverability": "fail"
+      },
+      "matches_expected": true,
+      "privacy_observations": {
+        "discoverable_protected_relationships": [
+          "P is associated with provider-S"
+        ],
+        "prohibited_fields": [
+          "protected_provider_identity",
+          "protected_provider_location"
+        ],
+        "stable_cross_context_identifiers": [
+          "provider-S"
+        ]
+      },
+      "vector_class": "negative",
+      "vector_id": "PA-NEG-001",
+      "verifier_observations": {
+        "eligible": true,
+        "proof_context_valid": true,
+        "protected_provider_identity": "provider-S",
+        "protected_provider_location": "confidential-location",
+        "provider_class_authorised": true
+      }
+    },
+    {
+      "checks": {
+        "authority_provenance": "pass",
+        "case_outcome": "fail",
+        "context_binding": "fail",
+        "correlation_resistance": "pass",
+        "cryptographic_verification": "pass",
+        "minimum_disclosure": "pass",
+        "non_discoverability": "pass"
+      },
+      "dpip_claim_results": {
+        "PA-PC-1": "pass",
+        "PA-PC-2": "pass",
+        "PA-PC-3": "pass",
+        "PA-PC-4": "pass",
+        "PA-PC-5": "fail"
+      },
+      "expected": {
+        "authority_provenance": "pass",
+        "case_outcome": "fail",
+        "context_binding": "fail",
+        "correlation_resistance": "pass",
+        "minimum_disclosure": "pass",
+        "non_discoverability": "pass"
+      },
+      "matches_expected": true,
+      "privacy_observations": {
+        "discoverable_protected_relationships": [],
+        "prohibited_fields": [],
+        "stable_cross_context_identifiers": []
+      },
+      "vector_class": "adversarial",
+      "vector_id": "PA-ADV-001",
+      "verifier_observations": {
+        "eligible": true,
+        "provider_class_authorised": true
+      }
+    }
+  ]
+}
