@@ -1,0 +1,33 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: pre-admission
+pinned_at: "2026-08-26"
+baselines:
+  - id: dtg-credentials
+    repository: trustoverip/dtgwg-cred-spec
+    authority_class: upstream-dtg-specification
+    commit: b89f389abbdae77ba60b673c0836c781c2b54169
+    role: relationship-credential-and-witness-semantics
+    note: "The current baseline requires the VWC digest to bind to a specific VRC edge; possession or validity of that artifact is not treated by this case as sufficient relying-party authority."
+  - id: dtg-trust-tasks
+    repository: trustoverip/dtgwg-trust-tasks-spec
+    authority_class: upstream-dtg-specification
+    commit: cfcb72aaaeca4478c470b0f571c760626b7177a9
+    role: trust-task-interaction-and-evidence-semantics
+    note: "Current Spec-Up-T migrated baseline; task identifiers or task evidence must not be assumed to be privacy-preserving or non-correlating without execution evidence."
+  - id: dtg-zkp-local-fork
+    repository: sankarshanmukhopadhyay/dtgwg-zkp-tf
+    authority_class: local-experimental-fork
+    commit: 6e1356812716dbd0e551272251e3e825132a8268
+    role: privacy-preserving-proof-and-composed-presentation-experiment
+    note: "Local implementation/research baseline only; it is not represented as upstream DTG normative text."
+  - id: dpip
+    repository: sankarshanmukhopadhyay/dtg-privacy-implementation-profile
+    authority_class: local-implementation-profile
+    commit: 3e5d286853178bec9b6579ecbdccd1932c281fc7
+    role: composed-interaction-privacy-evaluation
+    note: "DPIP evaluates the composed interaction; its result does not rewrite component semantics."
+rules:
+  - "A pinned baseline establishes reproducibility, not conformance or sufficiency."
+  - "Upstream repositories remain authoritative for their own semantics."
+  - "Local fork/profile baselines MUST be identified as experimental/local when cited in evidence."

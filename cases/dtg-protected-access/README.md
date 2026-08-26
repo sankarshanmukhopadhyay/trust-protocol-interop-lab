@@ -12,6 +12,17 @@ This is the first vertical slice nominated by the DTG boundary-condition taxonom
 
 The slice is intentionally jurisdiction-neutral. It does not define a shelter, domestic-violence, child-protection, social-service, or other vertical profile. `protected_provider` is an abstract service relationship whose disclosure may create safety or privacy harm.
 
+## Pinned DTG baselines
+
+The pre-admission slice is now bound to exact repository states in [`baselines.yaml`](baselines.yaml):
+
+- `trustoverip/dtgwg-cred-spec` @ `b89f389abbdae77ba60b673c0836c781c2b54169` — upstream credential/VRC/VWC semantics;
+- `trustoverip/dtgwg-trust-tasks-spec` @ `cfcb72aaaeca4478c470b0f571c760626b7177a9` — upstream Trust Tasks specification baseline;
+- `sankarshanmukhopadhyay/dtgwg-zkp-tf` @ `6e1356812716dbd0e551272251e3e825132a8268` — local experimental ZKP/composed-presentation baseline;
+- `sankarshanmukhopadhyay/dtg-privacy-implementation-profile` @ `3e5d286853178bec9b6579ecbdccd1932c281fc7` — local DPIP composed-privacy evaluation baseline.
+
+Pinning makes the experiment reproducible. It does **not** establish that any baseline fully supports the case or convert local fork/profile material into upstream normative DTG text.
+
 ## Boundary conditions under test
 
 - `BC-AUTH-PROVENANCE` — entitlement evidence must have an attributable authority source without revealing unnecessary provider identity.
@@ -51,6 +62,12 @@ durable_provider_identifier: null
 
 The null values are semantic expectations: the evaluator must confirm that those fields or equivalent correlating information are absent from the observable result, not merely blank in a fixture.
 
+## Concrete mapping status
+
+[`artifact-mapping.yaml`](artifact-mapping.yaml) records each case concept as `direct-mapping`, `candidate-mapping`, or `not-yet-evidenced`. This prevents the local experiment from silently inventing upstream semantics.
+
+In particular, `eligible` remains a **case-local predicate** derived from attributable evidence; the current credential baseline is not claimed to define a universal eligibility predicate. VRC/VWC evidence can contribute relationship provenance, but relationship evidence is not automatically current entitlement, disclosure permission, or authorization.
+
 ## Three-vector slice
 
 | Vector | Class | Expected outcome | Main proposition |
@@ -74,9 +91,21 @@ relationship existence
 
 A verifier may receive a cryptographically valid artifact and the composed interaction may still fail this case because the artifact over-discloses protected information or is invalid for the current context.
 
+## Observable privacy surface
+
+[`observations.yaml`](observations.yaml) defines measurements over the **complete verifier-visible interaction**, including credential claims, issuer/subject metadata, proof metadata, Trust Task/thread identifiers, status or registry traffic, service/endpoint metadata, and derived identifiers.
+
+This is deliberate: selective disclosure at the credential layer is insufficient evidence of non-discoverability or unlinkability if another surface reveals the same protected relationship or durable handle.
+
+## DPIP handoff
+
+[`dpip-handoff.yaml`](dpip-handoff.yaml) defines the narrow input/output contract for the next implementation gate. It requires DPIP to evaluate minimum disclosure, effective correlation scope, protected-relationship observability and context binding for all three vectors.
+
+The handoff is a contract for future implementation, not a claim that the current DPIP baseline already contains the exact fixture/profile.
+
 ## Execution model
 
-A later evaluator should consume the scenario, invariants, and vectors and produce at least:
+A later evaluator should consume the scenario, invariants, vectors, mapping, observations and DPIP result and produce at least:
 
 - `cryptographic_verification` — pass/fail/not-evaluated;
 - `authority_provenance` — pass/fail;
@@ -90,13 +119,20 @@ The case outcome is conjunctive for the invariants applicable to each vector. A 
 
 ## Path to admission
 
-This construction becomes eligible for case-admission review only after:
+The following gates are now complete:
 
-1. upstream baselines and semantic owners are pinned;
-2. the abstract proof/input fields are mapped to concrete DTG artifacts;
-3. a deterministic evaluator can run all three vectors;
-4. expected observations are shown to be measurable rather than assumed;
+1. exact upstream/local experimental baselines are pinned;
+2. abstract case concepts have explicit mapping states;
+3. privacy/correlation observations are defined;
+4. the DPIP handoff contract is defined.
+
+The construction becomes eligible for case-admission review only after:
+
+1. the candidate artifact mappings are instantiated as concrete fixtures;
+2. a deterministic evaluator can run all three vectors;
+3. a concrete DPIP interaction fixture/profile binding produces results for the vectors;
+4. expected observations are demonstrated in execution rather than only declared;
 5. limitations and unresolved ownership questions are reviewed; and
 6. the resulting admission claim remains no broader than the executable evidence.
 
-Until those gates are met, this directory is a pre-admission test design, not a catalog entry.
+Until those gates are met, this directory remains a pre-admission test design, not a catalog entry.

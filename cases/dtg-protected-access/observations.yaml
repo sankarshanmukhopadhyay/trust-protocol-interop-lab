@@ -1,0 +1,29 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: pre-admission
+observations:
+  - id: OBS-DIRECT-DISCLOSURE
+    description: "Inspect the verifier-visible payload for protected provider identity, provider location, relationship type, case identifier and durable subject/provider identifiers."
+    pass_when: "No prohibited value or semantically equivalent identifier is observable in PA-POS-001."
+    applies_to: [BC-MINIMUM-DISCLOSURE, BC-NON-DISCOVERABILITY]
+  - id: OBS-METADATA-DISCLOSURE
+    description: "Inspect issuer, subject, proof, task/thread, status, endpoint, registry and auxiliary metadata for information that reveals the protected provider or relationship."
+    pass_when: "No ordinary metadata surface makes the protected relationship discoverable in PA-POS-001."
+    applies_to: [BC-NON-DISCOVERABILITY, BC-CORRELATION-RESISTANCE]
+  - id: OBS-SUBJECT-CORRELATION
+    description: "Compare subject-visible and derived identifiers across independent verifier contexts."
+    pass_when: "No stable subject handle emitted by the normal flow is sufficient by itself to correlate the two contexts."
+    applies_to: [BC-CORRELATION-RESISTANCE]
+  - id: OBS-PROVIDER-CORRELATION
+    description: "Compare issuer/provider/task/status/endpoint artifacts across independent contexts for a durable provider handle."
+    pass_when: "The normal flow does not expose a stable protected-provider handle unnecessary to the decision."
+    applies_to: [BC-NON-DISCOVERABILITY, BC-CORRELATION-RESISTANCE]
+  - id: OBS-OVERDISCLOSURE
+    description: "For PA-NEG-001, confirm that cryptographic verification can pass while prohibited provider/location information is visible."
+    pass_when: "The evaluator returns fail-privacy despite cryptographic_verification=pass."
+    applies_to: [BC-MINIMUM-DISCLOSURE]
+  - id: OBS-CONTEXT-REPLAY
+    description: "Replay an originally valid presentation under a changed verifier, challenge, purpose or transaction/task context."
+    pass_when: "Original proof validity does not produce a successful current case outcome; context binding fails safely."
+    applies_to: [BC-REPLAY-RESISTANCE]
+measurement_rule: "Observations are made over the complete verifier-visible interaction, not only disclosed credential claims."

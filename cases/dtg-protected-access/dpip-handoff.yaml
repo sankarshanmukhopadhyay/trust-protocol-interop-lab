@@ -1,0 +1,50 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: pre-admission
+purpose: "Define the narrow handoff from Interop Lab vectors to a future DPIP execution without asserting that DPIP already contains the exact fixture/profile."
+dpip_baseline:
+  repository: sankarshanmukhopadhyay/dtg-privacy-implementation-profile
+  commit: 3e5d286853178bec9b6579ecbdccd1932c281fc7
+inputs_required:
+  interaction_id: "stable only within the execution fixture"
+  vector_id: "PA-POS-001 | PA-NEG-001 | PA-ADV-001"
+  verifier_context:
+    - verifier_id_or_context_handle
+    - challenge
+    - purpose
+    - transaction_or_task_context
+  declared_disclosures:
+    may_learn:
+      - eligible
+      - provider_class_authorised
+      - proof_context_valid
+    must_not_learn:
+      - protected_provider_identity
+      - protected_provider_location
+      - protected_relationship_type
+      - case_identifier
+      - durable_subject_identifier
+      - durable_provider_identifier
+  observable_surfaces:
+    - credential_claims
+    - credential_metadata
+    - proof_metadata
+    - trust_task_or_thread_metadata
+    - status_or_registry_metadata
+    - service_or_endpoint_metadata
+    - derived_identifiers
+  expected_vector_outcomes:
+    PA-POS-001: pass
+    PA-NEG-001: fail-privacy
+    PA-ADV-001: fail-context
+required_results:
+  - minimum_disclosure
+  - effective_correlation_scope
+  - observable_protected_relationship_disclosure
+  - context_binding
+  - case_outcome
+binding_rules:
+  - "DPIP evaluates the complete observable interaction, not only credential payload disclosure."
+  - "A cryptographic pass cannot override a privacy or context failure."
+  - "The DPIP result is evidence for the bounded case and does not change upstream specification semantics."
+next_implementation_gate: "Create a concrete DPIP interaction fixture/profile binding and execute the three vectors against the pinned baseline."
