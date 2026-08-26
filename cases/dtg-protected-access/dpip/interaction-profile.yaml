@@ -1,0 +1,90 @@
+dpip_version: "0.1-draft"
+interaction:
+  id: IC-DTG-PROTECTED-ACCESS-001
+  version: "0.1"
+  title: Protected-person confidential service access
+  purpose: >-
+    Evaluate whether a protected person can establish a narrowly scoped entitlement
+    from an authorised provider without exposing protected-provider identity,
+    location, relationship, case identifiers, or durable cross-context correlators.
+  target_profile: PP-4
+  invariants: [P1, P2, P3, P4, P5, P6]
+  construction_neutral: true
+provenance:
+  interop_case: IC-DTG-PROTECTED-ACCESS-001
+  interop_issue: https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/20
+  dpip_baseline: 3e5d286853178bec9b6579ecbdccd1932c281fc7
+actors:
+  - id: holder
+    role: protected person presenting the case-local eligibility predicate
+  - id: provider
+    role: protected service provider whose specific identity is not required by the relying decision
+  - id: authority
+    role: source establishing provider-class authority
+  - id: verifier
+    role: relying party evaluating the narrow eligibility predicate
+  - id: adversarial_verifier
+    role: verifier attempting replay or correlation
+privacy_claims:
+  - id: PA-PC-1
+    property: data-minimisation
+    subject: contextual-graph
+    scope: complete verifier-visible interaction
+    expected_status: PASS
+    invariants: [P1, P3, P4, P5]
+  - id: PA-PC-2
+    property: non-disclosure-protected-provider
+    subject: identifier
+    scope: provider identity and location at verifier observation
+    expected_status: PASS
+    invariants: [P1, P3, P4]
+  - id: PA-PC-3
+    property: non-disclosure-protected-relationship
+    subject: relationship
+    scope: protected-service relationship at verifier observation
+    expected_status: PASS
+    invariants: [P1, P3, P4]
+  - id: PA-PC-4
+    property: cross-context-unlinkability
+    subject: presentation
+    scope: subject, provider, case and presentation correlation surfaces
+    expected_status: PASS
+    invariants: [P2, P4, P5]
+  - id: PA-PC-5
+    property: context-binding
+    subject: presentation
+    scope: verifier, challenge and purpose
+    expected_status: PASS
+    invariants: [P4, P6]
+requirements:
+  - id: PA-R1
+    normative_strength: MUST
+    statement: The verifier learns only the case-local eligibility result, provider-class authority result, and proof-context validity required by the decision.
+    invariants: [P1, P3, P4, P5]
+  - id: PA-R2
+    normative_strength: MUST NOT
+    statement: The successful interaction exposes protected-provider identity, provider location, protected relationship type, case identifier, or durable subject/provider identifier.
+    invariants: [P1, P2, P3, P4, P5]
+  - id: PA-R3
+    normative_strength: MUST
+    statement: Cryptographic proof validity is recorded separately from the privacy result of the composed interaction.
+    invariants: [P4, P5]
+  - id: PA-R4
+    normative_strength: MUST
+    statement: A presentation is valid only for its bound verifier, challenge and purpose.
+    invariants: [P4, P6]
+tests:
+  - id: PA-POS-001
+    type: positive
+    claims: [PA-PC-1, PA-PC-2, PA-PC-3, PA-PC-4, PA-PC-5]
+    expected: PASS
+  - id: PA-NEG-001
+    type: negative
+    claims: [PA-PC-1, PA-PC-2, PA-PC-3, PA-PC-4]
+    expected: FAIL because verifier-visible protected provider and location data violate composed privacy even when cryptographic verification passes.
+  - id: PA-ADV-001
+    type: adversarial
+    claims: [PA-PC-3, PA-PC-4, PA-PC-5]
+    expected: FAIL because verifier/challenge/purpose context does not match the original presentation while protected-service privacy remains preserved.
+exceptions:
+  - description: The `eligible` predicate is case-local test semantics and is not represented as an upstream DTG normative credential field.

@@ -43,6 +43,7 @@ jobs:
           python experiments/xsp-001/run.py
           python experiments/xsp-002/run.py
           python experiments/arpa-a2a-anab/run.py
+          python experiments/dtg-protected-access/run.py --check
 
       - name: Regenerate deterministic outputs
         run: |
