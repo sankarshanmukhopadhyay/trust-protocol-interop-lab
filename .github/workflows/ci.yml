@@ -45,6 +45,29 @@ jobs:
           python experiments/arpa-a2a-anab/run.py
           python experiments/dtg-protected-access/run.py --check
 
+      - name: Set up Node for BBS evidence
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install BBS construction dependency
+        working-directory: experiments/dtg-protected-access-bbs
+        run: npm install --package-lock=false --ignore-scripts --no-audit --no-fund
+
+      - name: Run protected-access BBS construction evidence
+        run: node experiments/dtg-protected-access-bbs/run.mjs --output-dir "${{ runner.temp }}/protected-access-bbs"
+
+      - name: Upload protected-access BBS evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: protected-access-bbs-evidence
+          path: ${{ runner.temp }}/protected-access-bbs/
+          if-no-files-found: error
+
+      - name: Remove transient BBS dependencies
+        run: rm -rf experiments/dtg-protected-access-bbs/node_modules
+
       - name: Regenerate deterministic outputs
         run: |
           python scripts/generate_standards.py
