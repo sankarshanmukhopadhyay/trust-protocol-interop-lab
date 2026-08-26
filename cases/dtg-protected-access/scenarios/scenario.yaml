@@ -1,0 +1,59 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: pre-admission
+scenario:
+  id: PA-SCENARIO-001
+  title: narrowly scoped protected-person entitlement
+  actors:
+    protected_person: P
+    protected_provider: S
+    authority_source: A
+    relying_party: R
+    adversary: X
+  relying_question: "Is P eligible for service under an authorised provider class?"
+  permitted_observations:
+    eligible: true
+    provider_class_authorised: true
+    proof_context_valid: true
+  prohibited_observation_classes:
+    - protected_provider_identity
+    - protected_provider_location
+    - protected_relationship_type
+    - case_identifier
+    - durable_subject_identifier
+    - durable_provider_identifier
+  abstract_inputs:
+    entitlement:
+      subject_ref: local-subject-reference
+      predicate: eligible
+      value: true
+      authority_class: recognised-protected-service-provider
+      protected_provider_ref: provider-private-reference
+      case_ref: case-private-reference
+    proof_request:
+      requested_predicates:
+        - eligible
+        - provider_class_authorised
+      verifier: R
+      challenge: challenge-R-001
+      purpose: service-access
+    proof_response:
+      disclosed:
+        eligible: true
+        provider_class_authorised: true
+      bound_context:
+        verifier: R
+        challenge: challenge-R-001
+        purpose: service-access
+      undisclosed:
+        - protected_provider_ref
+        - case_ref
+        - subject_ref
+  evaluation_order:
+    - cryptographic_verification
+    - authority_provenance
+    - context_binding
+    - minimum_disclosure
+    - non_discoverability
+    - correlation_resistance
+  decision_rule: "case_outcome passes only when every invariant applicable to the vector passes"
