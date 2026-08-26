@@ -1,0 +1,38 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+vector:
+  id: PA-ADV-001
+  class: adversarial
+  description: "A presentation valid for R and challenge-R-001 is replayed to X under a different verifier and challenge."
+  setup:
+    cryptographic_verification: pass
+    original_context:
+      verifier: R
+      challenge: challenge-R-001
+      purpose: service-access
+    replay_context:
+      verifier: X
+      challenge: challenge-X-777
+      purpose: unrelated-access
+    context_matches_presentation: false
+    observations:
+      eligible: true
+      provider_class_authorised: true
+    replay_artifact_identifiers:
+      stable_subject_identifier: null
+      stable_provider_identifier: null
+    discovered_relationships: []
+  expected:
+    authority_provenance: pass
+    minimum_disclosure: pass
+    non_discoverability: pass
+    correlation_resistance: pass
+    context_binding: fail
+    case_outcome: fail
+  failure_semantics:
+    classification: replay-context-mismatch
+    note: "Cryptographic validity of the original artifact does not establish validity for a different verifier, challenge or purpose. The replay must fail without exposing additional protected-service information."
+  boundary_conditions:
+    - BC-REPLAY-RESISTANCE
+    - BC-NON-DISCOVERABILITY
+    - BC-CORRELATION-RESISTANCE

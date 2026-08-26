@@ -1,0 +1,36 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+vector:
+  id: PA-POS-001
+  class: positive
+  description: "A valid entitlement is proven to R with attributable provider-class authority and no prohibited protected-service observations."
+  setup:
+    cryptographic_verification: pass
+    authority_provenance:
+      attributable: true
+      provider_class_authorised: true
+    context:
+      verifier: R
+      challenge: challenge-R-001
+      purpose: service-access
+      matches_presentation: true
+    observations:
+      eligible: true
+      provider_class_authorised: true
+      proof_context_valid: true
+  prohibited_observations_present: []
+  stable_cross_context_identifiers_present: []
+  discoverable_protected_relationships: []
+  expected:
+    authority_provenance: pass
+    minimum_disclosure: pass
+    non_discoverability: pass
+    correlation_resistance: pass
+    context_binding: pass
+    case_outcome: pass
+  boundary_conditions:
+    - BC-AUTH-PROVENANCE
+    - BC-MINIMUM-DISCLOSURE
+    - BC-NON-DISCOVERABILITY
+    - BC-CORRELATION-RESISTANCE
+    - BC-REPLAY-RESISTANCE

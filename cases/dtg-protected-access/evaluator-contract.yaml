@@ -1,0 +1,49 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+status: pre-admission
+inputs:
+  - scenario
+  - invariants
+  - vector
+required_checks:
+  cryptographic_verification:
+    type: enum
+    values: [pass, fail, not-evaluated]
+  authority_provenance:
+    type: enum
+    values: [pass, fail]
+  context_binding:
+    type: enum
+    values: [pass, fail]
+  minimum_disclosure:
+    type: enum
+    values: [pass, fail]
+  non_discoverability:
+    type: enum
+    values: [pass, fail]
+  correlation_resistance:
+    type: enum
+    values: [pass, fail]
+case_rule:
+  expression: "all applicable invariant checks == pass"
+  override_prohibited: "cryptographic_verification=pass MUST NOT override any privacy or context failure"
+expected_vectors:
+  PA-POS-001: pass
+  PA-NEG-001: fail
+  PA-ADV-001: fail
+required_output:
+  fields:
+    - vector_id
+    - check_results
+    - observed_fields
+    - prohibited_observations
+    - correlation_artifacts
+    - discovered_relationships
+    - case_outcome
+    - failure_semantics
+    - evidence_timestamp
+admission_gate:
+  executable_evaluator_required: true
+  concrete_upstream_baselines_required: true
+  concrete_artifact_mapping_required: true
+  evidence_manifest_required_for_interoperability_tested: true

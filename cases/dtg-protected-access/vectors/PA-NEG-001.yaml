@@ -1,0 +1,43 @@
+version: "0.1"
+case: IC-DTG-PROTECTED-ACCESS-001
+vector:
+  id: PA-NEG-001
+  class: negative
+  description: "The entitlement proof is cryptographically valid, but the verifier receives protected provider and location data that are unnecessary for the relying decision."
+  setup:
+    cryptographic_verification: pass
+    authority_provenance:
+      attributable: true
+      provider_class_authorised: true
+    context:
+      verifier: R
+      challenge: challenge-R-002
+      purpose: service-access
+      matches_presentation: true
+    observations:
+      eligible: true
+      provider_class_authorised: true
+      proof_context_valid: true
+      protected_provider_identity: provider-S
+      protected_provider_location: confidential-location
+  prohibited_observations_present:
+    - protected_provider_identity
+    - protected_provider_location
+  stable_cross_context_identifiers_present:
+    - provider-S
+  discoverable_protected_relationships:
+    - "P is associated with provider-S"
+  expected:
+    authority_provenance: pass
+    minimum_disclosure: fail
+    non_discoverability: fail
+    correlation_resistance: fail
+    context_binding: pass
+    case_outcome: fail
+  failure_semantics:
+    classification: privacy-over-disclosure
+    note: "Cryptographic verification remains successful; the composed interaction fails because privacy invariants are violated."
+  boundary_conditions:
+    - BC-MINIMUM-DISCLOSURE
+    - BC-NON-DISCOVERABILITY
+    - BC-CORRELATION-RESISTANCE
