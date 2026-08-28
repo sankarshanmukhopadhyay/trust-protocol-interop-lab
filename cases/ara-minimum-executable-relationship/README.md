@@ -1,116 +1,93 @@
-# IC-ARA-REL-001 — minimum executable Agent Relationship Architecture relationship
+# IC-ARA-REL-001 — Minimum Executable Agent Relationship Architecture
 
-> **Status: pre-admission construction.** This directory defines the first executable-ready ARA vertical slice. It is not yet an admitted Interop Case and makes no claim of ToIP approval, upstream conformance, production security, external certification, or complete implementation of the July 2026 ARA proposal.
+> **Current status: Interoperability Tested**
+>
+> **Admitted claim:** bounded executable semantic composition, adapter-backed at declared boundaries, with adversarial evidence and explicit standards/conformance exclusions.
+>
+> This repository is the executable companion to the **July 2026 revised Agent Relationship Architecture (ARA) proposal** used to start programme issue [#32](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/32). The source architecture document itself is not stored in this repository. This directory shows how its principal architectural claims were turned into a staged, falsifiable Interop Lab experiment.
 
-Parent program: [#32](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/32)  
-Foundation issue: [#33](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/33)
+Final admission: [#32](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/32) / [PR #57](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/pull/57)  
+Follow-along guide: [FOLLOW-ALONG.md](FOLLOW-ALONG.md)  
+Architecture-to-code map: [architecture-to-code.yaml](architecture-to-code.yaml)  
+Final claim boundary: [final-claim-boundary.md](final-claim-boundary.md)  
+Evidence manifest: [../../evidence/ara-minimum-executable-relationship/evidence-manifest.json](../../evidence/ara-minimum-executable-relationship/evidence-manifest.json)
 
-## Governing question
+## What was tested
 
-Can two independently controlled persistent Agent Roles perform one consequential relationship action **only when** identity, authority, exact agreement or other governing basis, deterministic Workflow authorization, exact task semantics, protected signing authority, capability scope, current relationship state, recipient-side verification, and evidence requirements all permit it — while preserving verifiable relationship evidence that survives Live Agent replacement and supports challenge, correction, remediation, continuation, and closure?
+The experiment asks whether two independently controlled persistent Agent Roles can perform one consequential bounded action **only when** all of the following align:
 
-The question is intentionally conjunctive. A PASS at one boundary does not compensate for a FAIL or missing evidence at another boundary.
+- identity/authentication;
+- current authority;
+- an exact governing agreement;
+- deterministic policy authorization;
+- a least-privilege capability;
+- exact Trust Task semantics;
+- protected cryptographic-use context;
+- current persistent relationship state;
+- independent counterparty verification;
+- execution/effect correlation;
+- sufficient attributable evidence.
 
-## Why this slice exists
+It also asks whether the relationship can remain defensible through:
 
-The ARA proposal integrates TSP, TSP-Enabled Agents, Trust Tasks, RCards, VRCs, VTAs, VTCs, persistent Agent Roles, Role Records, distributed Verifiable Relationship Records, Agreement Objects, capabilities, and Relationship Views. Implementing all of those simultaneously would make it difficult to distinguish an architectural failure from component immaturity or integration plumbing.
+- counterparty disagreement;
+- Live Agent replacement;
+- challenge and correction;
+- remediation and capability revocation;
+- explicit continuation or closure;
+- human/machine explanation through an Authorized Relationship View;
+- adversarial assurance, including false-independence pressure.
 
-This slice therefore starts with a deliberately small **adapter-backed walking skeleton**. The relationship semantics, state transitions, invariants, failure classes, and evidence obligations are real and machine-testable. Where a standards-native implementation is not yet integrated, the case uses an explicit Lab adapter and records the missing substitution evidence.
+The proposition is deliberately conjunctive. A valid identity, agreement, capability, signature, task, receipt, or assurance result cannot silently substitute for another required boundary.
 
-The case is intended to discover specification and implementation boundaries, not to pre-ordain them.
+## The bounded scenario
 
-## Initial synthetic relationship
+The synthetic case uses two persistent Agent Roles:
 
-A **data-owner Agent Role** permits a **research Agent Role** to perform one query-only operation against a synthetic protected dataset.
+- **A — Data-owner Agent Role** controls a synthetic protected dataset.
+- **B — Research Agent Role** requests one query-only operation.
 
-The relationship is intentionally narrow:
+The permitted action is intentionally narrow. Mutation and export are out of scope. This is not a normative research-data governance profile.
 
-- the dataset is synthetic;
-- the permitted operation is query-only;
-- mutation and export are prohibited;
-- an exact Agreement Object governs the action;
-- authority is independently represented from identity and agreement;
-- a deterministic Policy Gate decides whether the task may proceed;
-- capability is derived only after authorization and is scoped to the exact agreement/relationship/action;
-- protected signing is a separate decision boundary;
-- the receiver independently verifies rather than trusting the sender's internal conclusion;
-- each Agent Role maintains its own Role Record;
-- externally meaningful shared evidence is reconstructed as a distributed relationship intersection, not a central jointly writable master record;
-- the relationship can be challenged, corrected, remediated, revoked, continued, or closed without rewriting accepted history.
+A temporary Live Agent may propose intent, but it cannot directly sign or actuate. The consequential path is:
 
-This is not a normative research-data governance profile.
+```text
+Live Agent proposal
+      |
+      v
+persistent Agent Role + current Role Record
+      |
+      v
+Agreement + authority + deterministic Policy Gate
+      |
+      v
+scoped capability + exact Trust Task
+      |
+      v
+protected cryptographic-use boundary
+      |
+      v
+serialized transport across independent process boundary
+      |
+      v
+counterparty-local verification and policy
+      |
+      v
+execution admission + correlated effect evidence
+      |
+      v
+independent Role Records + distributed relationship evidence
+      |
+      v
+challenge / correction / remediation / continuation / closure
+      |
+      v
+Authorized Relationship View + adversarial assurance
+```
 
-## Actors and implementation roles
+## The most important architectural separations
 
-| Symbol | Role | Accountability boundary |
-|---|---|---|
-| `A` | Data-owner Agent Role | Persistent accountable role controlling the protected dataset relationship |
-| `A-live` | Live Agent for A | Temporary generative process that may propose media/intents but cannot directly sign or actuate |
-| `A-wf` | Deterministic Workflow / Policy Gate for A | Interprets the proposal against authority, agreement, policy, relationship state, and evidence requirements |
-| `A-ps` | Protected signer adapter for A | Exercises cryptographic use only for an authenticated, admitted, exact request |
-| `B` | Research Agent Role | Persistent counterparty role requesting the bounded query |
-| `B-live` | Live Agent for B | Temporary generative process; no independent consequential authority |
-| `B-wf` | Deterministic Workflow / verifier for B | Independently evaluates received artifacts and local policy/state |
-| `EXEC` | Query actuator | Performs only the capability-bounded synthetic query |
-| `RR-A` / `RR-B` | Role Records | Independently controlled persistent local state and evidence |
-| `VRR` | Distributed relationship evidence | Logical verifiable intersection reconstructed from exact shared objects, receipts, attestations, commitments, and checkpoints |
-| `H` | Authorized human reviewer | May receive a bounded Relationship View and perform required acceptance/escalation decisions |
-
-## Minimum ceremony
-
-The first executable ceremony is deliberately smaller than the complete ARA lifecycle:
-
-1. Resolve or instantiate persistent Agent Roles `A` and `B`.
-2. Create relationship-local branches in `RR-A` and `RR-B`.
-3. Construct an immutable Agreement Object proposal.
-4. Counterparty independently inspects the exact Agreement Object.
-5. Record exact acceptance/activation only when required conditions are satisfied.
-6. Bind authority evidence separately from identity and agreement.
-7. A Live Agent proposes the bounded query intent as non-operative media.
-8. The deterministic Workflow retrieves current Role Record head, relationship state, exact agreement, authority, applicable policy/duties, recipient, and evidence requirements.
-9. The Policy Gate emits `allow`, `deny`, `escalate`, or `indeterminate`.
-10. On `allow`, derive a narrow relationship/agreement-scoped capability.
-11. Construct the exact Trust Task / signed-action request.
-12. Submit it to the protected signer adapter.
-13. Sign only if the Workflow, Role Record head, authority, task type/version, recipient, payload, purpose, capability, nonce, and expiry are permitted.
-14. Serialize and transmit across an independent process/transport boundary.
-15. Counterparty independently verifies the signed task and its own relationship/policy state.
-16. Execute only the admitted query-only capability.
-17. Produce process and execution-effect evidence correlated to the exact decisions/task/capability.
-18. Advance `RR-A` and `RR-B` independently.
-19. Produce shared receipts/attestations/checkpoint material sufficient to reconstruct the distributed relationship intersection.
-20. Terminate a Live Agent and demonstrate continuation using persisted authorized state rather than conversation memory.
-21. Exercise challenge/correction/remediation/revocation.
-22. Continue or close without rewriting historical evidence.
-
-## State boundaries
-
-### Agent Role state
-
-Persistent identity, authority references, approved Workflow information, relationship branches, agreements, capability status, disputes, and authorized evidence required for continuity.
-
-### Live Agent state
-
-Ephemeral reasoning/context. It is not the trust root, relationship record, source of authority, signing boundary, or durable history.
-
-### Local Role Record state
-
-Each party's own state, including private evidence, local observations, exact copies of shared artifacts, receipts, and relationship-local transitions.
-
-### Distributed relationship evidence
-
-A logical intersection assembled only from source-attributed relationship-bearing material. It does not imply that all private Role Record contents are shared.
-
-The minimum model distinguishes:
-
-- exact shared object;
-- visible attestation/pointer to private or external evidence;
-- opaque commitment block whose contents are not yet collectively inspectable;
-- private local evidence outside the shared relationship state.
-
-## Critical semantic separations
-
-The case treats the following as executable non-implication rules:
+The implementation exists primarily to make these distinctions executable:
 
 ```text
 discovery != authorization
@@ -121,8 +98,9 @@ agreement != capability
 capability != legitimate authority
 valid delegation != policy authorization
 valid signature != legitimate action
-task conformance != profile conformance
-profile conformance != instance legitimacy
+task conformance != instance legitimacy
+sender allow != receiver allow
+transport delivery != receiver acceptance
 execution success != legitimate effect
 evidence != authority
 assurance != retroactive authorization
@@ -131,125 +109,199 @@ delivery / copy / decryption != inspection
 inspection != acceptance / agreement / truth
 record link != traversal / disclosure / authority
 current key or identity state != historical authority
-agreement closure != automatic closure of every larger relationship
+artifact multiplicity != independent evidence
+agreement closure != automatic relationship closure
+Relationship View != authority
 ```
 
-A later implementation must turn each materially applicable distinction into a positive or falsification test. Documentation alone does not satisfy the gate.
+These are not only documentation statements. The applicable distinctions are exercised by positive, negative, boundary, or adversarial vectors in the phase runners.
 
-## Decision boundaries
+## Follow the architecture into the implementation
 
-The slice must keep three authorization decisions separately observable:
+If you are reading the ARA architecture proposal, use [architecture-to-code.yaml](architecture-to-code.yaml) as the machine-readable crosswalk or [FOLLOW-ALONG.md](FOLLOW-ALONG.md) as the human guide.
 
-1. **Workflow authorization** — may the deterministic Workflow construct/submit this exact operation under current authority, agreement, policy, duties, state, and evidence?
-2. **Protected-signing authorization** — may the protected signer exercise the requested signing identity for this exact admitted object/context?
-3. **Counterparty verification** — will the receiver independently accept the signed task as current, authorized, conformant, and compatible with its own policy/relationship state?
+The implementation is intentionally split into independently inspectable boundaries:
 
-A fourth boundary, **execution admission**, must correlate the accepted request to the actual actuator effect.
+| Architecture concept | Primary implementation | Executable evidence |
+|---|---|---|
+| Persistent Agent Role / Role Record | `experiments/ara-role-record/engine.py` | `python experiments/ara-role-record/run.py --check` |
+| Agreement + policy + capability + task + execution admission | `experiments/ara-policy-spine/authorization.py` | `python experiments/ara-policy-spine/run.py --check` |
+| Protected signing | `experiments/ara-protected-signing/signer.py` | `python experiments/ara-protected-signing/run.py --check` |
+| Independent counterparty | `experiments/ara-independent-counterparty/sender.py`, `receiver.py` | `python experiments/ara-independent-counterparty/run.py --check` |
+| Distributed relationship evidence / VRR semantics | `experiments/ara-distributed-vrr/vrr.py` | `python experiments/ara-distributed-vrr/run.py --check` |
+| Replacement, challenge, remediation, revocation, closure | `experiments/ara-lifecycle-continuity/lifecycle.py` | `python experiments/ara-lifecycle-continuity/run.py --check` |
+| Authorized Relationship View | `experiments/ara-relationship-view/view.py` | `python experiments/ara-relationship-view/run.py --check` |
+| Adversarial / RAHP assurance | `experiments/ara-adversarial-assurance/assurance.py` | `python experiments/ara-adversarial-assurance/run.py --check` |
+| Standards-native boundary review | `experiments/ara-standards-boundary/run.py` | `python experiments/ara-standards-boundary/run.py --check` |
+| Final programme admission | `experiments/ara-program-admission/run.py` | `python experiments/ara-program-admission/run.py --check` |
 
-## Outcome vocabulary
+## Implementation programme and what each phase established
 
-The minimum slice uses explicit outcomes rather than a generic boolean:
+The programme deliberately moved from architecture hypothesis to executable evidence one boundary at a time.
 
-- `allowed`;
-- `denied`;
-- `escalated`;
-- `indeterminate`;
-- `unsupported`;
-- `invalid`;
-- `expired`;
-- `replayed`;
-- `stale-state`;
-- `revoked`;
-- `disputed`;
-- `remediated`;
-- `closed`.
+| Phase | Issue / PR | Question exercised | Result |
+|---|---|---|---|
+| Foundation | #33 / #44 | Can the proposal be reduced to falsifiable ownership boundaries, invariants, vectors and gates without premature admission? | Established executable-ready pre-admission case |
+| Baselines / reuse | #34 / #45 | Which existing DTG/ToIP/Lab assets are direct reuse, composition dependencies, candidates or adapters? | Pinned baselines and explicit gap register |
+| Role Record | #35 / #47 | Can persistent relationship state survive Live Agent replacement and reject stale/rollback/fork state? | Executable persistent state boundary |
+| Authorization spine | #36 / #49 | Do Agreement, authority, policy, capability, exact task and execution admission remain separate? | Executable conjunctive authorization path |
+| Protected signing | #37 / #50 | Can cryptographic use be non-bypassable and bound to exact admitted context? | Context-bound cryptographic-use receipts |
+| Independent counterparty | #38 / #51 | Can the receiver decide independently across a real process/serialization boundary? | Sender allow no longer implies receiver allow |
+| Distributed VRR | #39 / #52 | Can shared relationship evidence be reconstructed without a jointly writable master dossier? | Evidence intersection + explicit dispositions/checkpoints |
+| Lifecycle continuity | #40 / #53 | Can the relationship survive replacement, challenge, correction, remediation, revocation and closure? | Temporal legitimacy and history preservation |
+| Relationship View | #41 / #54 | Can an authorized reviewer understand the basis and uncertainty without unrestricted private access? | Source-traceable scoped explanation artifact |
+| Adversarial assurance | #42 / #55 | Do accumulated claims survive semantic inflation, false independence and assurance overreach? | RAHP-style pressure review + evidence manifest |
+| Standards boundary | #43 / #56 | Which adapters can actually be replaced or semantically bound without hidden glue? | Per-component standards disposition; residual adapters preserved |
+| Final admission | #32 / #57 | Is the bounded claim sufficiently evidenced for catalog admission? | Admitted as `interoperability-tested` |
 
-`indeterminate` means evidence is insufficient. It MUST NOT be converted into PASS merely to keep a workflow green.
+The phase judgment documents in this directory preserve alternatives considered, rejected approaches, residual uncertainty and the human acceptance boundary for each major step.
 
-## Initial vector families
+## Run the experiment
 
-The canonical vector inventory is machine-readable in [`vectors.yaml`](vectors.yaml). The initial families are:
+From the repository root with Python available:
 
-- legitimate end-to-end positive action;
-- identity without authority;
-- agreement without capability;
-- capability after authority revocation;
-- valid signature over illegitimate action;
-- direct Live Agent signing attempt;
-- stale Role Record head;
-- unilateral local annotation presented as shared state;
-- inspection represented as acceptance;
-- record link used as traversal/authority permission;
-- actuator effect not correlated to admitted decision;
-- Live Agent replacement continuity;
-- correction/remediation without history rewrite.
+```bash
+python experiments/ara-role-record/run.py --check
+python experiments/ara-policy-spine/run.py --check
+python experiments/ara-protected-signing/run.py --check
+python experiments/ara-independent-counterparty/run.py --check
+python experiments/ara-distributed-vrr/run.py --check
+python experiments/ara-lifecycle-continuity/run.py --check
+python experiments/ara-relationship-view/run.py --check
+python experiments/ara-adversarial-assurance/run.py --check
+python experiments/ara-standards-boundary/run.py --check
+python experiments/ara-program-admission/run.py --check
+```
 
-## Evidence model
+The final admission runner rechecks the high-level evidence gates and catalog state. The adversarial runner reruns the executable ARA phase stack and adds assurance-boundary pressure.
 
-Each executable vector should ultimately preserve, where applicable:
+Repository Assurance also executes these checks in CI.
 
-- input fixture identifiers and content hashes;
-- Agent Role and relationship identifiers;
-- exact Agreement Object/version;
-- authority/delegation evidence references;
-- applicable Role Record head(s);
-- Workflow identifier/version;
-- Policy Gate decision and reasons;
-- exact Trust Task identifier/version and instance;
-- capability identifier/scope/status;
-- protected-signing request/result and cryptographic-use receipt;
-- serialized transport artifact;
-- receiver verification result;
-- actuator admission and actual effect;
-- local Role Record transitions;
-- shared inspection/acknowledgment/disposition receipts;
-- relationship checkpoint/evidence package;
-- challenge/remediation/closure effects;
-- Relationship View source references.
+## What to inspect when a test passes
 
-Evidence proves only the claims its generating boundary owns. For example, an execution receipt does not become authority and an assurance result does not retroactively authorize a denied action.
+A green exit code is not the whole evidence story. For each phase, inspect:
 
-## Promotion model
+1. the phase `README.md`;
+2. the implementation module;
+3. the `run.py` vectors and expected refusal codes;
+4. the corresponding `phase*-judgment.md`;
+5. the final [evidence manifest](../../evidence/ara-minimum-executable-relationship/evidence-manifest.json);
+6. the [promotion gates](promotion-gates.yaml);
+7. the [final claim boundary](final-claim-boundary.md).
 
-[`promotion-gates.yaml`](promotion-gates.yaml) defines twelve evidence gates. At this foundation stage only the semantic-ownership/design gate may become satisfied. All implementation gates remain `not-started` until executable evidence exists.
+The phase runners emit deterministic JSON when run normally and can be inspected directly. Several also accept an output path for persisted evidence.
 
-A green repository build is necessary but not sufficient for promotion.
+## Evidence and state model
 
-## Planned implementation route
+The experiment keeps several kinds of state/evidence deliberately separate:
 
-The parent program decomposes implementation into issues #34–#43:
+- **Live Agent state** — ephemeral reasoning/context; never the durable authority or trust root.
+- **Role Record state** — persistent relationship-local state controlled by each Agent Role.
+- **Agreement state** — immutable/versioned governing terms and lifecycle.
+- **Policy decision** — deterministic allow/deny/escalate/indeterminate result.
+- **Capability state** — derived technical permission with scope, expiry and revocation.
+- **Task state** — exact operation semantics and instance bindings.
+- **Cryptographic-use evidence** — proof that the protected-use boundary exercised technical power for the admitted context.
+- **Counterparty decision** — independent recipient-side judgment.
+- **Execution/effect evidence** — correlated outcome of the exact admitted operation.
+- **Distributed relationship evidence** — exact shared objects, pointers, commitments, receipts, dispositions and checkpoints.
+- **Relationship View** — derived explanation; never a new source of authority.
+- **Assurance evidence** — evidence about the claim; never retroactive authorization.
 
-- #34 — pin baselines and map reuse;
-- #35 — persistent Role Record/state engine;
-- #36 — Agreement Object, Policy Gate, Trust Task, capability, execution admission;
-- #37 — protected-signing boundary;
-- #38 — two independent Agent Roles/processes and receiver verification;
-- #39 — distributed VRR/shared-state evidence;
-- #40 — continuity, challenge, correction, remediation, revocation, closure;
-- #41 — Authorized Relationship Views;
-- #42 — adversarial assurance, RAHP, maturity review;
-- #43 — standards-native substitution.
+## Distributed relationship evidence: what "shared" means
 
-## Pre-admission boundary
+The Phase 7 model deliberately rejects a central master relationship dossier.
 
-This case MUST NOT be added to `catalog/interoperability-cases.yaml` merely because the foundation artifacts exist.
+It distinguishes:
 
-Formal admission requires at least:
+- `shared_object` — exact content is relationship-shareable;
+- `source_pointer` — attributable reference without automatic traversal;
+- `opaque_commitment` — commitment exists but hidden content is not collectively known;
+- `private_role_evidence` — local evidence excluded from shared exports/checkpoints.
 
-- exact baselines and mapping status;
-- executable Role Record/state behavior;
-- deterministic Policy Gate/task/capability path;
-- protected-signing evidence;
-- independent sender/receiver execution boundary;
-- distributed relationship-state evidence;
-- deterministic positive/negative/adversarial results;
-- explicit limitations and claim boundary;
-- evidence-backed human admission decision.
+Receipt stages and semantic dispositions also remain distinct. Delivery, decryption or inspection never automatically mean acceptance.
 
-Until then, `IC-ARA-REL-001` is a pre-admission experimental construction.
+## Adversarial assurance
 
-## Judgment to preserve
+Phase 10 pressures not only mechanisms but **interpretation of evidence**.
 
-The first merged increment should make one architectural judgment durable:
+Examples:
 
-> **ARA implementation begins as a falsifiable Lab composition with explicit semantic boundaries and adapter substitution points, not as a prematurely normative standalone stack.**
+- missing required evidence becomes `INDETERMINATE`, not PASS;
+- assurance cannot create authority;
+- later assurance cannot retroactively authorize an originally refused action;
+- one party's state cannot masquerade as collective state;
+- disagreement remains visible;
+- recovery cannot outrun the last defensible checkpoint;
+- multiple artifacts under one control/source lineage do not count as independent support merely by number.
+
+See [phase10-rahp-pressure-review.md](phase10-rahp-pressure-review.md).
+
+## Standards-native result
+
+Phase 11 intentionally distinguishes three outcomes:
+
+1. **implementation substitution** — an independently governed implementation actually replaces the Lab adapter in the executed path;
+2. **normative semantic binding** — a pinned specification owns the relevant semantics, but no runtime replacement occurred;
+3. **residual adapter** — the local test double remains because exact executable substitution evidence is absent.
+
+The final result did **not** force standards substitutions for appearances.
+
+- Trust Tasks: normative semantic binding.
+- RCard: normative semantic binding.
+- VRC: normative semantic binding.
+- TSP transport: residual adapter.
+- OpenVTC VTA protected signer: residual adapter.
+
+See [phase11-standards-substitution-disposition.md](phase11-standards-substitution-disposition.md).
+
+## Final claim
+
+The admitted maturity statement is:
+
+> **Interoperability Tested — bounded executable semantic composition, adapter-backed at declared boundaries, with adversarial evidence and explicit standards/conformance exclusions.**
+
+This means the Lab has reproducible evidence for the bounded ARA composition semantics described above.
+
+It does **not** establish:
+
+- TSP wire-protocol conformance;
+- OpenVTC VTA conformance or hardware-backed key protection;
+- normative RCard/VRC runtime conformance;
+- production deployment security;
+- external certification or independent audit;
+- legal effect of authority, agreement, remediation or closure;
+- arbitrary multi-party/quorum ARA semantics;
+- proof that distinct evidence lineages are economically or organizationally independent;
+- universal ToIP ARA profile conformance;
+- standards-native replacement of every local adapter.
+
+See [final-claim-boundary.md](final-claim-boundary.md) for the authoritative statement.
+
+## Historical context: how this began
+
+The foundation version of this README correctly described the case as **pre-admission** and the later phases as planned work. That historical posture remains visible in the Issue → PR → merge trail beginning with #33 / #44 and in [judgment-log.md](judgment-log.md).
+
+The current landing page intentionally reports the **final programme state** instead of retaining stale pre-admission language. This is not a rewrite of the judgment history; it is a separation between:
+
+- the initial hypothesis and implementation plan; and
+- the final evidence-backed disposition.
+
+## Extending the experiment
+
+New work should preserve the same rule used throughout the programme:
+
+> Do not broaden a claim merely because a nearby standard, implementation, signature, credential, receipt, or green workflow appears persuasive.
+
+Likely follow-on experiments include:
+
+- real TSP endpoint substitution;
+- exact OpenVTC VTA protected-use mapping;
+- executable RCard/VRC providers;
+- an upstream ARA-specific Trust Task profile if warranted;
+- richer evidence-lineage independence provenance;
+- multi-party/quorum relationship semantics;
+- production persistence/recovery/key-management controls;
+- human-factors testing of Relationship Views.
+
+The architecture-to-code map and documentation-foundation check are intended to keep those future additions traceable to the architecture rather than accumulating as disconnected features.

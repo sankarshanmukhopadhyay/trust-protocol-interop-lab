@@ -75,6 +75,9 @@ jobs:
       - name: Run ARA final admission evidence
         run: python experiments/ara-program-admission/run.py --check
 
+      - name: Run ARA documentation-foundation check
+        run: python experiments/ara-documentation-foundation/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
