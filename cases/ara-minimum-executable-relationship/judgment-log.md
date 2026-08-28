@@ -132,15 +132,61 @@ A passing function call is insufficient if the test does not demonstrate what wo
 
 **Execution timing:** The minimum slice records the invariant now; systematic pressure occurs during the adversarial assurance phase when multiple trust/evidence paths are actually present.
 
-## Open judgments deliberately not resolved in phase 1
+## J-011 — phase 2 reuse posture
 
-The following decisions are intentionally deferred because evidence is not yet sufficient:
+**Question:** Is ARA primarily a new-stack implementation or a relationship-composition implementation over existing assets?
+
+**Decision:** Treat ARA as a composition-heavy implementation with a smaller set of genuinely new relationship-state components.
+
+**Evidence reviewed:** pinned Trust Tasks 0.5.0, TSP, TEA, DTG Credentials, OpenVTC VTI, ARPA, TSMM, Trust Graph Artifacts, TIS, existing Protocol Lab cases, DPIP, and RAHP baselines recorded in `baselines.yaml`.
+
+**Conclusion:** Direct reusable foundations are strong for generic exact-task semantics, TSP/TEA transport/control concepts, RCard/VRC semantics, authority/delegation, effect correlation, portable evidence, privacy/correlation observation, false-independence pressure testing, and evidence-insufficiency handling. The core new implementation pressure remains Role Record state, Agreement Object lifecycle, relationship-specific authorization composition, distributed VRR/collective-knowledge semantics, Live Agent replacement continuity, protected-signing binding, and Relationship Views.
+
+**Rejected conclusion:** Nearby concepts were not upgraded into ownership. In particular, ARPA relationships do not become the ARA relationship record; VRC does not become agreement/delegation; TIS evidence does not become authority; OpenVTC VTA does not yet prove the ARA TEA-to-VTA binding.
+
+**Evidence:** issue #34; `baselines.yaml`; `reuse-mapping.yaml`; `reuse-matrix.md`.
+
+## J-012 — generic Trust Tasks mapping strengthened
+
+**Question:** Does the current Trust Tasks baseline directly support the generic exact-task role assumed by ARA?
+
+**Decision:** Yes for the generic framework; no for ARA-specific relationship profiles/effects.
+
+**Changed conclusion:** Phase 1 deliberately left the mapping unresolved. Framework 0.5.0 now provides explicit lifecycle, freshness, identifier-correlation, retention/ingest/identifier-scope and error-model semantics. That is sufficient to classify the **generic exact-task framework** as `direct` reuse. Binding a task to an ARA Agreement Object, Role Record head, authority conjunction and distributed relationship-state effect remains `composition-dependent`.
+
+**Falsifier/reconsideration trigger:** If the executable slice requires semantics that cannot be expressed through a Trust Task profile without changing generic framework ownership, record the mismatch and reconsider the mapping rather than hiding it in an adapter.
+
+## J-013 — unresolved semantics remain local hypotheses
+
+**Question:** Should the Lab assign Agreement Object or Collective Knowledge Certificate/Relationship Knowledge Checkpoint semantics to an existing project now?
+
+**Decision:** No.
+
+**Reasoning:** The baseline review found adjacent evidence but no directly attributable source owning the complete required semantics. The Lab will implement only the minimum local experimental contracts needed to pressure-test them.
+
+**Alternatives considered:** assign agreement semantics to Trust Tasks; infer shared-knowledge semantics from generic receipts/evidence; defer all implementation until an upstream owner exists.
+
+**Selected:** bounded ARA-local hypothesis with explicit `not-yet-evidenced` mapping.
+
+**Upstream trigger:** raise or propose upstream ownership only after executable evidence demonstrates a stable requirement, falsifiers, and the boundary with existing component semantics.
+
+## J-014 — Phase 3 scope
+
+**Decision:** Issue #35 should implement the Role Record state boundary before importing Agreement, protected signing, TSP, VRC/RCard, or full policy-gate complexity.
+
+**Reasoning:** This preserves attribution. If persistence, stale-head, rollback, fork, correction, or Live Agent continuity semantics fail, we should learn that from the state model rather than from a full-stack integration failure.
+
+**Required next evidence:** deterministic state-transition receipts, replacement-Live-Agent continuation from persisted state only, stale/rollback/fork denial, and immutable correction history.
+
+## Open judgments deliberately not resolved yet
+
+The following decisions remain intentionally deferred because evidence is not yet sufficient:
 
 - exact long-lived Agent Role identity/control implementation;
 - exact canonical Role Record cryptographic representation;
-- which ARA operations already have direct Trust Task mappings;
-- whether RCard/VRC profiles directly satisfy the minimum participant/relationship evidence needs;
-- which VTA/OpenVTC implementation guarantees can replace the protected signer adapter;
+- exact ARA Agreement Object ownership beyond the local hypothesis;
+- exact Collective Knowledge Certificate/Relationship Knowledge Checkpoint ownership and necessity;
+- which VTA/OpenVTC guarantees can replace the protected signer adapter;
 - whether TSP integration changes privacy/correlation surfaces materially;
 - whether a dedicated reusable component/repository should graduate from the Lab;
 - exact criteria for `experimental` vs `interoperability-tested` maturity for this case.
