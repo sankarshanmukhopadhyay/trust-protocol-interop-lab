@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "case_id": "IC-ARA-REL-001",
+  "generated_for": "final catalog admission",
+  "decision_date": "2026-08-28",
+  "maturity_claim": "interoperability-tested",
+  "claim_scope": "bounded executable semantic composition, adapter-backed at declared boundaries, with adversarial evidence and explicit standards/conformance exclusions",
+  "reproduce": "python experiments/ara-program-admission/run.py --check",
+  "phase_merge_commits": {
+    "phase3-role-state": "4e3444af4114066016f53713364117b0444de70f",
+    "phase4-policy-task-capability": "c1722fdc2c4257eaba3e28b067d8e57448907828",
+    "phase5-protected-signing": "5a962fb7d1708f28450aa8e2b760f692ff1d8a7e",
+    "phase6-independent-counterparty": "215a946477adec34816a5548f7475600820d7da3",
+    "phase7-distributed-vrr": "91de616d058a35731d4ba3ad241efc750d217676",
+    "phase8-lifecycle-continuity": "686295e46b3feeb9a5d645b04f2c86dc17160536",
+    "phase9-relationship-view": "654ebeb58f6b7d17276d1337ccae71da0b44392f",
+    "phase10-adversarial-assurance": "34e0e6ba7c030bcc97e2a1e29d0ccedeb1fc09f9",
+    "phase11-standards-boundary": "f5ced1dc83f934a8389733fcdc5b29564cc16c03"
+  },
+  "executable_runner_blobs": {
+    "experiments/ara-role-record/run.py": "e6dbab70ba25ce13e40ed2963c82826d30707fbb",
+    "experiments/ara-policy-spine/run.py": "b0d6dce0ed194108fa71226c38627cf75c928d70",
+    "experiments/ara-protected-signing/run.py": "14c7877073d41caf3f5ba77cda4a30c1aa4ddafb",
+    "experiments/ara-independent-counterparty/run.py": "bf800174402daba30c4025cabbdc8e12274b0f81",
+    "experiments/ara-distributed-vrr/run.py": "4ec22d9a847ee5b9dacdb560bc41291cd60f2fb4",
+    "experiments/ara-lifecycle-continuity/run.py": "40904939d6e4b92fa3bf974d429782128f87154e",
+    "experiments/ara-relationship-view/run.py": "626c50bdcca19ba15eafb74884d77098fd23102f",
+    "experiments/ara-adversarial-assurance/run.py": "aa50b31dbc5b8811e5d9766b742c1943bf394da2",
+    "experiments/ara-standards-boundary/run.py": "1bb29da265fb907b513924980b7522a4180be20d",
+    "experiments/ara-program-admission/run.py": "ac41957a1aa6456f0d85551d2c01f229235921b2"
+  },
+  "source_basis": {
+    "baselines": "cases/ara-minimum-executable-relationship/baselines.yaml",
+    "ownership": "cases/ara-minimum-executable-relationship/ownership.yaml",
+    "invariants": "cases/ara-minimum-executable-relationship/invariants.yaml",
+    "promotion_gates": "cases/ara-minimum-executable-relationship/promotion-gates.yaml",
+    "final_claim_boundary": "cases/ara-minimum-executable-relationship/final-claim-boundary.md",
+    "rahp_pressure_review": "cases/ara-minimum-executable-relationship/phase10-rahp-pressure-review.md",
+    "standards_boundary": "cases/ara-minimum-executable-relationship/phase11-standards-substitution-disposition.md"
+  },
+  "catalog_vectors": {
+    "positive": "cases/ara-minimum-executable-relationship/catalog-vectors/valid/admission.json",
+    "negative": "cases/ara-minimum-executable-relationship/catalog-vectors/invalid/overclaim.json"
+  },
+  "exclusions": [
+    "wire-protocol conformance",
+    "production deployment security certification",
+    "external certification or independent audit",
+    "blanket TSP, OpenVTC VTA, RCard, VRC or ToIP ARA conformance",
+    "legal validity of authority, agreement, remediation or closure",
+    "arbitrary multi-party or quorum relationship semantics",
+    "proof that distinct evidence lineages are economically or organizationally independent",
+    "standards-native replacement of every local adapter"
+  ],
+  "integrity_note": "Git blob SHAs identify the admitted executable runner contents; merge commit SHAs identify the human-reviewed phase integration history. The final PR commit will bind this manifest, catalog entry, gates and claim boundary together."
+}
