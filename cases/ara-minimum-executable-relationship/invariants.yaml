@@ -8,7 +8,7 @@ principle: >-
 
 invariants:
   - id: ARA-I01-LIVE-AGENT-NON-ACTUATION
-    claim: A Live Agent cannot directly cause a consequential actuator effect.
+    statement: A Live Agent cannot directly cause a consequential actuator effect.
     owning_boundary: workflow-policy-gate
     required_positive_evidence:
       - admitted operation originated as proposal media and passed deterministic authorization
@@ -18,28 +18,28 @@ invariants:
     fail_condition: direct Live Agent path reaches signing or actuator without deterministic admission
 
   - id: ARA-I02-IDENTITY-NOT-AUTHORITY
-    claim: Valid identity/authentication alone is insufficient to authorize the relationship action.
+    statement: Valid identity/authentication alone is insufficient to authorize the relationship action.
     owning_boundary: workflow-policy-gate
     falsification_vectors:
       - ARA-NEG-002-IDENTITY-NO-AUTHORITY
     fail_condition: action is admitted solely because sender identity/signature is valid
 
   - id: ARA-I03-RELATIONSHIP-NOT-DELEGATION
-    claim: Relationship recognition evidence cannot be consumed as delegation or action authority.
+    statement: Relationship recognition evidence cannot be consumed as delegation or action authority.
     owning_boundary: workflow-policy-gate
     falsification_vectors:
       - ARA-NEG-015-RELATIONSHIP-AS-DELEGATION
     fail_condition: relationship edge/VRC-like evidence satisfies authority requirement without separate authority evidence
 
   - id: ARA-I04-AGREEMENT-NOT-CAPABILITY
-    claim: Agreement activation does not itself create technical execution capability.
+    statement: Agreement activation does not itself create technical execution capability.
     owning_boundary: capability-service
     falsification_vectors:
       - ARA-NEG-003-AGREEMENT-NO-CAPABILITY
     fail_condition: actuator accepts operation based only on active agreement
 
   - id: ARA-I05-CAPABILITY-NOT-LEGITIMATE-AUTHORITY
-    claim: Capability possession cannot override expired, revoked, or out-of-scope authority/agreement state.
+    statement: Capability possession cannot override expired, revoked, or out-of-scope authority/agreement state.
     owning_boundary: workflow-policy-gate
     falsification_vectors:
       - ARA-NEG-004-CAPABILITY-REVOKED-AUTHORITY
@@ -47,7 +47,7 @@ invariants:
     fail_condition: technically valid capability admits action after governing authority/relationship state forbids it
 
   - id: ARA-I06-WORKFLOW-SIGNER-RECEIVER-SEPARATION
-    claim: Workflow authorization, protected-signing authorization, and counterparty verification are independent observable decisions.
+    statement: Workflow authorization, protected-signing authorization, and counterparty verification are independent observable decisions.
     owning_boundary: composition
     required_positive_evidence:
       - distinct decision artifacts from sender Workflow, protected signer, and receiver verifier
@@ -57,7 +57,7 @@ invariants:
     fail_condition: one decision is treated as automatic PASS for another boundary
 
   - id: ARA-I07-TASK-CONFORMANCE-NOT-INSTANCE-LEGITIMACY
-    claim: Structurally valid exact task/schema does not establish authority, current agreement, policy authorization, or receiver acceptance.
+    statement: Structurally valid exact task/schema does not establish authority, current agreement, policy authorization, or receiver acceptance.
     owning_boundary: receiver-verifier
     falsification_vectors:
       - ARA-NEG-018-VALID-TASK-WRONG-RELATIONSHIP
@@ -65,7 +65,7 @@ invariants:
     fail_condition: task validity bypasses instance-governance checks
 
   - id: ARA-I08-PROTECTED-SIGNING-CONTEXT-BOUND
-    claim: Signing is bound to authenticated Workflow, current Role Record head, exact task/version, relationship, agreement, recipient, payload digest, authority decision, nonce, and expiry.
+    statement: Signing is bound to authenticated Workflow, current Role Record head, exact task/version, relationship, agreement, recipient, payload digest, authority decision, nonce, and expiry.
     owning_boundary: protected-signer
     falsification_vectors:
       - ARA-NEG-006-DIRECT-LIVE-AGENT-SIGN
@@ -76,7 +76,7 @@ invariants:
     fail_condition: signer accepts a request lacking or changing admitted context
 
   - id: ARA-I09-CURRENT-DEFENSIBLE-ROLE-STATE
-    claim: Consequential authorization and signing use the current defensible Role Record head and reject stale, replayed, rolled-back, or conflicting state.
+    statement: Consequential authorization and signing use the current defensible Role Record head and reject stale, replayed, rolled-back, or conflicting state.
     owning_boundary: role-record-and-protected-signer
     falsification_vectors:
       - ARA-NEG-007-STALE-ROLE-HEAD
@@ -85,7 +85,7 @@ invariants:
     fail_condition: earlier valid state can authorize a new action after a later authoritative transition
 
   - id: ARA-I10-HISTORY-PRESERVED
-    claim: Accepted historical state/evidence is corrected or remediated by append, not silent overwrite.
+    statement: Accepted historical state/evidence is corrected or remediated by append, not silent overwrite.
     owning_boundary: role-record
     falsification_vectors:
       - ARA-ADV-013-CORRECTION-NO-HISTORY-REWRITE
@@ -93,14 +93,14 @@ invariants:
     fail_condition: prior accepted event/object can be mutated or erased without an attributable superseding/correction event
 
   - id: ARA-I11-LOCAL-NOT-SHARED
-    claim: A unilateral local observation or interpretation is not represented as mutually shared relationship state.
+    statement: A unilateral local observation or interpretation is not represented as mutually shared relationship state.
     owning_boundary: distributed-relationship-record
     falsification_vectors:
       - ARA-NEG-008-LOCAL-AS-SHARED
     fail_condition: one party's local annotation appears in shared/collective state without required shared-object/receipt evidence
 
   - id: ARA-I12-RECEIPT-SEMANTICS-NOT-INFLATED
-    claim: Delivery, copy, resolution, decryption, inspection, acknowledgment, acceptance, dispute, and truth are distinct states.
+    statement: Delivery, copy, resolution, decryption, inspection, acknowledgment, acceptance, dispute, and truth are distinct states.
     owning_boundary: distributed-relationship-record
     falsification_vectors:
       - ARA-NEG-009-INSPECTION-AS-ACCEPTANCE
@@ -109,7 +109,7 @@ invariants:
     fail_condition: a lower-semantic receipt is interpreted as a stronger disposition
 
   - id: ARA-I13-LINK-NOT-TRAVERSAL-OR-AUTHORITY
-    claim: A relationship/agreement record link does not grant access, traversal, disclosure permission, authority, capability, or shared lifecycle state.
+    statement: A relationship/agreement record link does not grant access, traversal, disclosure permission, authority, capability, or shared lifecycle state.
     owning_boundary: relationship-view-and-policy
     falsification_vectors:
       - ARA-NEG-010-LINK-AS-TRAVERSAL
@@ -117,14 +117,14 @@ invariants:
     fail_condition: link existence automatically unlocks content or authority
 
   - id: ARA-I14-EXECUTION-EFFECT-CORRELATED
-    claim: A successful actuator effect is legitimate evidence only when correlated to the exact admitted decision, task, capability, relationship, and agreement.
+    statement: A successful actuator effect is legitimate evidence only when correlated to the exact admitted decision, task, capability, relationship, and agreement.
     owning_boundary: execution-admission
     falsification_vectors:
       - ARA-NEG-011-UNRELATED-EFFECT-AS-AUTHORIZED
     fail_condition: unrelated or independently caused effect is represented as the authorized action outcome
 
   - id: ARA-I15-EVIDENCE-NOT-AUTHORITY
-    claim: Execution, process, credential, or assurance evidence cannot itself authorize a new action unless a governing rule explicitly gives it that role.
+    statement: Execution, process, credential, or assurance evidence cannot itself authorize a new action unless a governing rule explicitly gives it that role.
     owning_boundary: workflow-policy-gate
     falsification_vectors:
       - ARA-NEG-030-EVIDENCE-AS-AUTHORITY
@@ -132,14 +132,14 @@ invariants:
     fail_condition: later evidence/assurance converts a denied or unauthorized action into authorized state
 
   - id: ARA-I16-INDETERMINATE-NOT-PASS
-    claim: Missing required evidence produces an explicit indeterminate/deny/escalate outcome and is never silently converted to PASS.
+    statement: Missing required evidence produces an explicit indeterminate/deny/escalate outcome and is never silently converted to PASS.
     owning_boundary: workflow-policy-gate-and-assurance
     falsification_vectors:
       - ARA-NEG-032-MISSING-EVIDENCE-AS-PASS
     fail_condition: absent required evidence is treated as satisfied
 
   - id: ARA-I17-LIVE-AGENT-CONTINUITY-FROM-PERSISTED-STATE
-    claim: A replacement Live Agent can continue only from authorized persistent state, not hidden prior model conversation memory.
+    statement: A replacement Live Agent can continue only from authorized persistent state, not hidden prior model conversation memory.
     owning_boundary: role-record-and-workflow
     required_positive_evidence:
       - ARA-POS-012-LIVE-AGENT-REPLACEMENT
@@ -148,7 +148,7 @@ invariants:
     fail_condition: correct continuation requires unavailable prior-session model state
 
   - id: ARA-I18-DISAGREEMENT-PRESERVED
-    claim: Parties may inspect the same exact object while retaining different semantic dispositions without one silently overwriting the other.
+    statement: Parties may inspect the same exact object while retaining different semantic dispositions without one silently overwriting the other.
     owning_boundary: distributed-relationship-record
     required_positive_evidence:
       - ARA-POS-034-SHARED-OBJECT-DISPUTED
@@ -157,7 +157,7 @@ invariants:
     fail_condition: checkpoint/shared state erases or normalizes an explicit dispute
 
   - id: ARA-I19-CURRENT-STATE-NOT-HISTORICAL-REWRITE
-    claim: Later revocation, rotation, remediation, or closure changes present consequences without rewriting historical validity of earlier actions that were legitimate at the time.
+    statement: Later revocation, rotation, remediation, or closure changes present consequences without rewriting historical validity of earlier actions that were legitimate at the time.
     owning_boundary: role-record-and-verifier
     falsification_vectors:
       - ARA-NEG-036-LATER-REVOCATION-INVALIDATES-PAST
@@ -165,14 +165,14 @@ invariants:
     fail_condition: present state is projected backward without historically applicable evidence
 
   - id: ARA-I20-FALSE-INDEPENDENCE-RESISTANCE
-    claim: Multiple credentials, issuers, witnesses, communities, votes, attestations, or evidence paths are not counted as independent support merely because they are numerous.
+    statement: Multiple credentials, issuers, witnesses, communities, votes, attestations, or evidence paths are not counted as independent support merely because they are numerous.
     owning_boundary: assurance-and-policy
     falsification_vectors:
       - ARA-ADV-038-CORRELATED-EVIDENCE-PATHS
     fail_condition: correlated/common-control evidence is treated as independent multiplicity without dependency analysis
 
   - id: ARA-I21-RELATIONSHIP-VIEW-NOT-AUTHORITY
-    claim: A Relationship View is an authorized rendering of source evidence, not a new source of authority or truth.
+    statement: A Relationship View is an authorized rendering of source evidence, not a new source of authority or truth.
     owning_boundary: relationship-view
     falsification_vectors:
       - ARA-NEG-039-VIEW-AS-AUTHORITY
@@ -180,7 +180,7 @@ invariants:
     fail_condition: view presentation changes underlying semantic status or authorization
 
   - id: ARA-I22-AGREEMENT-CLOSURE-BOUNDED
-    claim: Closing or suspending one agreement/branch does not automatically close unrelated agreements or the larger relationship unless governing semantics explicitly require it.
+    statement: Closing or suspending one agreement/branch does not automatically close unrelated agreements or the larger relationship unless governing semantics explicitly require it.
     owning_boundary: lifecycle-workflow
     falsification_vectors:
       - ARA-NEG-041-AGREEMENT-CLOSURE-AS-RELATIONSHIP-CLOSURE
