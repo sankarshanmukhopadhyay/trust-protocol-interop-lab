@@ -33,12 +33,13 @@ See [Evidence-Gated Maturity Model](docs/maturity-model.md).
 | IC-XSP-001 | **Interoperability Tested** | VC Data Model 2.0; Data Integrity 1.0; OpenID4VCI 1.0; OpenID4VP 1.0 |
 | IC-XSP-002 | **Interoperability Tested** | DID Core 1.0; DID Resolution CR 2026-08-06; OpenID Federation 1.0 |
 | IC-GOVOPS-EXEC-TRUST-001 | Experimental | GovOps main @ 3191248 (2026-08-12); TSMM v0.23.0; GAAM v0.9.0; TIS v0.12.0 |
+| IC-ARA-REL-001 | **Interoperability Tested** | Trust Tasks 0.5.0; TSP/DTG Credentials/OpenVTC pinned; Lab ARA Phases 3–11 |
 
 The machine-readable source of truth is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
 
 ## Claim boundary
 
-`IC-XSP-001`, `IC-XSP-002`, and `IC-ARPA-A2A-TT-001` claim **Interoperability Tested** only for their executed semantic-composition reference models. Their evidence packages contain deterministic positive/negative vectors, executed results, reproducibility instructions, manifests, and hashes. This status does **not** claim wire-protocol conformance, production interoperability, external certification, or legal authority. Other cases remain at their existing maturity levels.
+`IC-XSP-001`, `IC-XSP-002`, `IC-ARPA-A2A-TT-001`, and `IC-ARA-REL-001` claim **Interoperability Tested** only for their executed semantic-composition reference models. Their evidence packages contain deterministic positive/negative vectors, executed results, reproducibility instructions, manifests, and hashes. This status does **not** claim wire-protocol conformance, production interoperability, external certification, or legal authority. For `IC-ARA-REL-001`, that claim is specifically **bounded executable semantic composition, adapter-backed at declared boundaries, with adversarial evidence and explicit standards/conformance exclusions**. It does not claim TSP/OpenVTC VTA/RCard/VRC conformance, production security, external certification, legal effect, or standards-native replacement of every adapter. Other cases remain at their existing maturity levels.
 
 `IC-GOVOPS-EXEC-TRUST-001` is **Experimental** only: its capability/authority/decision/evidence mapping and seven scenario contracts make the Discussion #6 invariants testable, but no executable vectors or interoperability evidence have yet been published.
 
