@@ -2,13 +2,18 @@
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
+import sys
 import tempfile
 from pathlib import Path
 from typing import Any
 
-from authorization import (
+ROOT = Path(__file__).resolve().parents[2]
+ROLE_DIR = ROOT / "experiments" / "ara-role-record"
+sys.path.insert(0, str(ROLE_DIR))
+from engine import RoleRecordStore  # type: ignore  # noqa: E402
+
+from authorization import (  # noqa: E402
     AgreementLedger,
     CapabilityService,
     ExecutionAdmitter,
@@ -17,18 +22,6 @@ from authorization import (
     TrustTaskBuilder,
     digest,
 )
-
-ROOT = Path(__file__).resolve().parents[2]
-ROLE_ENGINE_PATH = ROOT / "experiments" / "ara-role-record" / "engine.py"
-
-
-def load_role_engine():
-    spec = importlib.util.spec_from_file_location("ara_role_record_engine", ROLE_ENGINE_PATH)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("cannot load Role Record engine")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 
 def record(results: list[dict[str, Any]], vector_id: str, expected: str, observed: str, evidence: Any) -> None:
@@ -59,10 +52,9 @@ def make_active_agreement() -> tuple[AgreementLedger, dict[str, Any]]:
     return ledger, ledger.snapshot("agr-research-001", 1)
 
 
-def make_role_state(temp: Path) -> tuple[Any, str, str]:
-    engine = load_role_engine()
+def make_role_state(temp: Path) -> tuple[RoleRecordStore, str, str]:
     rel_id = "urn:ara:relationship:research:001"
-    store = engine.RoleRecordStore(temp / "role-record.json", "urn:ara:agent-role:data-owner:001")
+    store = RoleRecordStore(temp / "role-record.json", "urn:ara:agent-role:data-owner:001")
     receipt = store.apply(
         transition_id="phase4-tr-001",
         relationship_id=rel_id,
@@ -91,7 +83,7 @@ def base_authority(rel_id: str) -> dict[str, Any]:
     return {**authority, "authority_ref": digest(authority)}
 
 
-def policy_inputs(*, rel_id: str, head: str, agreement: dict[str, Any], authority: dict[str, Any]) -> dict[str, Any]:
+def policy_inputs(rel_id: str, head: str, agreement: dict[str, Any], authority: dict[str, Any]) -> dict[str, Any]:
     return {
         "identity": {"subject": "role:data-owner", "authenticated": True},
         "authority": authority,
@@ -110,7 +102,6 @@ def policy_inputs(*, rel_id: str, head: str, agreement: dict[str, Any], authorit
 
 def build_task(
     builder: TrustTaskBuilder,
-    *,
     rel_id: str,
     head: str,
     agreement_ref: str,
@@ -118,6 +109,7 @@ def build_task(
     decision_ref: str,
     capability_ref: str,
     nonce: str,
+    *,
     task_id: str = SUPPORTED_TASK,
     expires_at: int = 20,
 ) -> dict[str, Any]:
@@ -153,13 +145,12 @@ def run_vectors() -> dict[str, Any]:
         builder = TrustTaskBuilder()
         admitter = ExecutionAdmitter()
 
-        # Agreement Object bytes/terms are immutable from caller-visible snapshots.
         snapshot = ledger.snapshot("agr-research-001", 1)
         snapshot["terms"]["actions"].append("mutate")
         fresh = ledger.snapshot("agr-research-001", 1)
         record(results, "P4-P01-agreement-immutable", "query-only", "query-only" if fresh["terms"]["actions"] == ["query"] else "mutated", fresh)
 
-        inputs = policy_inputs(rel_id=rel_id, head=head, agreement=agreement, authority=authority)
+        inputs = policy_inputs(rel_id, head, agreement, authority)
         allow = gate.evaluate(inputs)
         record(results, "P4-P02-policy-allow", "all_required_conditions_satisfied", allow["code"], allow)
 
@@ -175,25 +166,8 @@ def run_vectors() -> dict[str, Any]:
         )
         record(results, "P4-P03-capability-after-allow", "active", cap.get("status", "missing"), cap)
 
-        task = build_task(
-            builder,
-            rel_id=rel_id,
-            head=head,
-            agreement_ref=agreement["agreement_ref"],
-            authority_ref=authority["authority_ref"],
-            decision_ref=allow["decision_ref"],
-            capability_ref=cap["capability_ref"],
-            nonce="nonce-positive-001",
-        )
-        admitted = admitter.admit(
-            task=task,
-            decision=allow,
-            capability=cap,
-            authority=authority,
-            agreement=agreement,
-            current_role_record_head=head,
-            now=11,
-        )
+        task = build_task(builder, rel_id, head, agreement["agreement_ref"], authority["authority_ref"], allow["decision_ref"], cap["capability_ref"], "nonce-positive-001")
+        admitted = admitter.admit(task=task, decision=allow, capability=cap, authority=authority, agreement=agreement, current_role_record_head=head, now=11)
         record(results, "P4-P04-execution-admitted", "admitted", admitted["code"], admitted)
 
         observed_effect = {
@@ -209,103 +183,84 @@ def run_vectors() -> dict[str, Any]:
         correlated = admitter.validate_effect_correlation(receipt=admitted, observed_effect=observed_effect)
         record(results, "P4-P05-effect-correlated", "effect_correlated", correlated["code"], correlated)
 
-        # Identity is not authority.
         no_auth = dict(authority)
         no_auth["active"] = False
-        decision = gate.evaluate(policy_inputs(rel_id=rel_id, head=head, agreement=agreement, authority=no_auth))
+        decision = gate.evaluate(policy_inputs(rel_id, head, agreement, no_auth))
         record(results, "P4-N01-identity-without-authority", "authority_inactive_or_missing", decision["code"], decision)
 
-        # A valid authority object outside purpose scope is insufficient.
         narrow = dict(authority)
         narrow["purposes"] = ["audit-only"]
-        decision = gate.evaluate(policy_inputs(rel_id=rel_id, head=head, agreement=agreement, authority=narrow))
+        decision = gate.evaluate(policy_inputs(rel_id, head, agreement, narrow))
         record(results, "P4-N02-authority-purpose-out-of-scope", "authority_purpose_out_of_scope", decision["code"], decision)
 
-        # Accepted but not activated agreement cannot authorize execution.
         inactive_ledger = AgreementLedger()
         inactive_ledger.propose(agreement_id="agr-inactive", version=1, parties=["role:data-owner", "role:researcher"], terms=agreement["terms"])
         inactive_ledger.append_event(agreement_id="agr-inactive", version=1, event="accepted", actor="role:data-owner")
         inactive_ledger.append_event(agreement_id="agr-inactive", version=1, event="accepted", actor="role:researcher")
         inactive = inactive_ledger.snapshot("agr-inactive", 1)
-        inactive_inputs = policy_inputs(rel_id=rel_id, head=head, agreement=inactive, authority=authority)
-        decision = gate.evaluate(inactive_inputs)
+        decision = gate.evaluate(policy_inputs(rel_id, head, inactive, authority))
         record(results, "P4-N03-accepted-but-inactive-agreement", "agreement_not_active", decision["code"], decision)
 
-        # An allow decision without a technical capability still cannot execute.
-        missing_cap_task = build_task(
-            builder,
-            rel_id=rel_id,
-            head=head,
-            agreement_ref=agreement["agreement_ref"],
-            authority_ref=authority["authority_ref"],
-            decision_ref=allow["decision_ref"],
-            capability_ref="urn:missing-capability",
-            nonce="nonce-no-cap",
-        )
+        missing_cap_task = build_task(builder, rel_id, head, agreement["agreement_ref"], authority["authority_ref"], allow["decision_ref"], "urn:missing-capability", "nonce-no-cap")
         refused = admitter.admit(task=missing_cap_task, decision=allow, capability=None, authority=authority, agreement=agreement, current_role_record_head=head, now=11)
         record(results, "P4-N04-active-agreement-no-capability", "capability_missing", refused["code"], refused)
 
-        # Capability possession does not survive authority revocation.
         revoked_authority = dict(authority)
         revoked_authority["active"] = False
-        revoked_task = build_task(builder, rel_id=rel_id, head=head, agreement_ref=agreement["agreement_ref"], authority_ref=authority["authority_ref"], decision_ref=allow["decision_ref"], capability_ref=cap["capability_ref"], nonce="nonce-revoked-authority")
+        revoked_task = build_task(builder, rel_id, head, agreement["agreement_ref"], authority["authority_ref"], allow["decision_ref"], cap["capability_ref"], "nonce-revoked-authority")
         refused = admitter.admit(task=revoked_task, decision=allow, capability=cap, authority=revoked_authority, agreement=agreement, current_role_record_head=head, now=11)
         record(results, "P4-N05-capability-after-authority-revocation", "authority_revoked_or_inactive", refused["code"], refused)
 
-        # Capability is bound to the exact agreement.
-        wrong_agr_task = build_task(builder, rel_id=rel_id, head=head, agreement_ref="sha256:wrong-agreement", authority_ref=authority["authority_ref"], decision_ref=allow["decision_ref"], capability_ref=cap["capability_ref"], nonce="nonce-wrong-agreement")
+        wrong_agr_task = build_task(builder, rel_id, head, "sha256:wrong-agreement", authority["authority_ref"], allow["decision_ref"], cap["capability_ref"], "nonce-wrong-agreement")
         refused = admitter.admit(task=wrong_agr_task, decision=allow, capability=cap, authority=authority, agreement=agreement, current_role_record_head=head, now=11)
         record(results, "P4-N06-capability-wrong-agreement", "capability_wrong_agreement", refused["code"], refused)
 
-        wrong_task_inputs = policy_inputs(rel_id=rel_id, head=head, agreement=agreement, authority=authority)
+        wrong_task_inputs = policy_inputs(rel_id, head, agreement, authority)
         wrong_task_inputs["task_id"] = "ara/research-query/9.9"
         decision = gate.evaluate(wrong_task_inputs)
         record(results, "P4-N07-wrong-task-version", "unsupported_task_version", decision["code"], decision)
 
-        denied_inputs = policy_inputs(rel_id=rel_id, head=head, agreement=agreement, authority=authority)
+        denied_inputs = policy_inputs(rel_id, head, agreement, authority)
         denied_inputs["instance_policy"] = "deny"
-        decision = gate.evaluate(denied_inputs)
-        record(results, "P4-N08-policy-denial-despite-authority", "instance_policy_denied", decision["code"], decision)
+        denied_decision = gate.evaluate(denied_inputs)
+        record(results, "P4-N08-policy-denial-despite-authority", "instance_policy_denied", denied_decision["code"], denied_decision)
 
-        missing_inputs = policy_inputs(rel_id=rel_id, head=head, agreement=agreement, authority=authority)
+        missing_inputs = policy_inputs(rel_id, head, agreement, authority)
         missing_inputs["role_record_head"] = None
-        decision = gate.evaluate(missing_inputs)
-        record(results, "P4-N09-missing-evidence-indeterminate", "missing_required_evidence", decision["code"], decision)
-        record(results, "P4-N09b-indeterminate-not-pass", "indeterminate", decision["decision"], decision)
+        indeterminate = gate.evaluate(missing_inputs)
+        record(results, "P4-N09-missing-evidence-indeterminate", "missing_required_evidence", indeterminate["code"], indeterminate)
+        record(results, "P4-N09b-indeterminate-not-pass", "indeterminate", indeterminate["decision"], indeterminate)
 
-        # Effect evidence must correlate to the admitted task/decision/capability.
         forged_effect = dict(observed_effect)
         forged_effect["resource"] = "dataset:other"
         correlation = admitter.validate_effect_correlation(receipt=admitted, observed_effect=forged_effect)
         record(results, "P4-N10-uncorrelated-effect", "effect_not_correlated_to_admission", correlation["code"], correlation)
 
-        # Later assurance is evidence about a decision; it cannot rewrite the denied decision.
-        denied_cap = caps.issue(decision=decision, relationship_id=rel_id, agreement_ref=agreement["agreement_ref"], recipient="role:researcher", purpose="synthetic-research", resource="dataset:synthetic-001", action="query", expires_at=20)
-        record(results, "P4-N11-assurance-not-retroactive-authority", "capability_requires_allow_decision", denied_cap["code"], {"assurance": {"result": "pass", "scope": "implementation"}, "original_decision": decision, "capability_result": denied_cap})
+        denied_cap = caps.issue(decision=denied_decision, relationship_id=rel_id, agreement_ref=agreement["agreement_ref"], recipient="role:researcher", purpose="synthetic-research", resource="dataset:synthetic-001", action="query", expires_at=20)
+        record(results, "P4-N11-assurance-not-retroactive-authority", "capability_requires_allow_decision", denied_cap["code"], {"assurance": {"result": "pass", "scope": "implementation"}, "original_decision": denied_decision, "capability_result": denied_cap})
 
-        # Attenuation can narrow expiry but never expand it.
         child = caps.attenuate(cap["capability_ref"], expires_at=15)
         record(results, "P4-P06-capability-attenuation", "15", str(child.get("expires_at")), child)
         expanded = caps.attenuate(cap["capability_ref"], expires_at=25)
         record(results, "P4-N12-attenuation-cannot-expand", "attenuation_cannot_expand_expiry", expanded["code"], expanded)
 
         suspended = caps.set_status(child["capability_ref"], "suspended")
-        suspended_task = build_task(builder, rel_id=rel_id, head=head, agreement_ref=agreement["agreement_ref"], authority_ref=authority["authority_ref"], decision_ref=allow["decision_ref"], capability_ref=suspended["capability_ref"], nonce="nonce-suspended")
+        suspended_task = build_task(builder, rel_id, head, agreement["agreement_ref"], authority["authority_ref"], allow["decision_ref"], suspended["capability_ref"], "nonce-suspended")
         refused = admitter.admit(task=suspended_task, decision=allow, capability=suspended, authority=authority, agreement=agreement, current_role_record_head=head, now=11)
         record(results, "P4-N13-suspended-capability", "capability_not_active", refused["code"], refused)
 
         expired_cap = caps.issue(decision=allow, relationship_id=rel_id, agreement_ref=agreement["agreement_ref"], recipient="role:researcher", purpose="synthetic-research", resource="dataset:synthetic-001", action="query", expires_at=12)
-        expired_task = build_task(builder, rel_id=rel_id, head=head, agreement_ref=agreement["agreement_ref"], authority_ref=authority["authority_ref"], decision_ref=allow["decision_ref"], capability_ref=expired_cap["capability_ref"], nonce="nonce-expired-cap", expires_at=20)
+        expired_task = build_task(builder, rel_id, head, agreement["agreement_ref"], authority["authority_ref"], allow["decision_ref"], expired_cap["capability_ref"], "nonce-expired-cap", expires_at=20)
         refused = admitter.admit(task=expired_task, decision=allow, capability=expired_cap, authority=authority, agreement=agreement, current_role_record_head=head, now=12)
         record(results, "P4-N14-expired-capability", "capability_expired", refused["code"], refused)
 
         revoked_cap = caps.issue(decision=allow, relationship_id=rel_id, agreement_ref=agreement["agreement_ref"], recipient="role:researcher", purpose="synthetic-research", resource="dataset:synthetic-001", action="query", expires_at=20)
         revoked_cap = caps.set_status(revoked_cap["capability_ref"], "revoked")
-        revoked_cap_task = build_task(builder, rel_id=rel_id, head=head, agreement_ref=agreement["agreement_ref"], authority_ref=authority["authority_ref"], decision_ref=allow["decision_ref"], capability_ref=revoked_cap["capability_ref"], nonce="nonce-revoked-cap")
+        revoked_cap_task = build_task(builder, rel_id, head, agreement["agreement_ref"], authority["authority_ref"], allow["decision_ref"], revoked_cap["capability_ref"], "nonce-revoked-cap")
         refused = admitter.admit(task=revoked_cap_task, decision=allow, capability=revoked_cap, authority=authority, agreement=agreement, current_role_record_head=head, now=11)
         record(results, "P4-N15-revoked-capability", "capability_not_active", refused["code"], refused)
 
-        stale_inputs = policy_inputs(rel_id=rel_id, head=head, agreement=agreement, authority=authority)
+        stale_inputs = policy_inputs(rel_id, head, agreement, authority)
         stale_inputs["role_record_head"] = "sha256:older-valid-head"
         decision = gate.evaluate(stale_inputs)
         record(results, "P4-N16-stale-role-record-head", "stale_role_record_head", decision["code"], decision)
