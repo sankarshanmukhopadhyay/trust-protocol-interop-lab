@@ -295,26 +295,22 @@
       "status": "interoperability-tested",
       "question": "Can two independently controlled persistent Agent Roles perform one consequential bounded action only when identity, authority, agreement, policy, capability, exact task semantics, protected cryptographic-use context, and current relationship state permit it, while preserving independently verifiable relationship evidence through disagreement, Live Agent replacement, remediation, continuation, and closure?",
       "components": [
-        "agent-role-state",
-        "agreement-policy",
         "trust-tasks",
-        "protected-signing",
-        "counterparty-transport",
-        "distributed-vrr",
-        "relationship-view",
-        "assurance",
-        "standards-boundary"
+        "tea-tsp",
+        "arpa",
+        "tsmm",
+        "tis",
+        "dtg-credentials",
+        "dpip"
       ],
       "baselines": {
-        "agent-role-state": "Interop Lab ARA Phase 3 @ 4e3444af4114066016f53713364117b0444de70f",
-        "agreement-policy": "Interop Lab ARA Phase 4 @ c1722fdc2c4257eaba3e28b067d8e57448907828",
         "trust-tasks": "Trust Tasks Framework 0.5.0 @ 6425a74136c1d2dfa7115889abe0b3521700e887",
-        "protected-signing": "Interop Lab ARA Phase 5 @ 5a962fb7d1708f28450aa8e2b760f692ff1d8a7e; OpenVTC implementation candidate @ a71a1ca5766810ccd040f9b5f76f6c97dc41e168",
-        "counterparty-transport": "Interop Lab ARA Phase 6 local subprocess/file boundary @ 215a946477adec34816a5548f7475600820d7da3; TSP semantic baseline @ ea01152425d281da944f40e8da799d7fa7a79f51",
-        "distributed-vrr": "Interop Lab ARA Phase 7 @ 91de616d058a35731d4ba3ad241efc750d217676",
-        "relationship-view": "Interop Lab ARA Phase 9 @ 654ebeb58f6b7d17276d1337ccae71da0b44392f",
-        "assurance": "Interop Lab ARA Phase 10 @ 34e0e6ba7c030bcc97e2a1e29d0ccedeb1fc09f9",
-        "standards-boundary": "Interop Lab ARA Phase 11 @ f5ced1dc83f934a8389733fcdc5b29564cc16c03; DTG Credentials @ 344a66af868c192f15b511e7116ccab2039221de"
+        "tea-tsp": "TEA @ 5539ef542494ff43fed61791179f08dc5b6da186; TSP semantic baseline @ ea01152425d281da944f40e8da799d7fa7a79f51",
+        "arpa": "ARPA v0.9.0/v0.9.1 implementation baseline @ 968c7b70af8871395ab44d3fd98bf56d61785988",
+        "tsmm": "TSMM v0.24.0 @ 9b5fe542592f378ae0e78dce77db568d75663551",
+        "tis": "TIS portable-contract baseline @ bc6fb1a339fd8e8c3469f9e0bd999efdd6726412",
+        "dtg-credentials": "DTG Core Credentials baseline @ 344a66af868c192f15b511e7116ccab2039221de",
+        "dpip": "DPIP executable privacy baseline @ b41f5dd9f9a56d3b4cca19861e1884df45cdae83"
       },
       "ownership": "cases/ara-minimum-executable-relationship/ownership.yaml",
       "invariants": "cases/ara-minimum-executable-relationship/invariants.yaml",
