@@ -13,7 +13,10 @@ AUTHORIZED_WORKFLOWS = {
         "relationship.note",
         "relationship.evidence",
         "relationship.correction",
+        "relationship.challenge",
+        "relationship.remediation",
         "relationship.continue",
+        "relationship.close",
     },
 }
 FIXED_TIME_BASE = "2026-08-28T06:30:"
