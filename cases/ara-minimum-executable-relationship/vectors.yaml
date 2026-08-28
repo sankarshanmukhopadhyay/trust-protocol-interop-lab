@@ -1,0 +1,275 @@
+version: 1
+case_id: IC-ARA-REL-001
+status: executable-ready-design
+result_vocabulary:
+  - pass
+  - fail
+  - denied
+  - escalated
+  - indeterminate
+  - unsupported
+  - invalid
+  - expired
+  - replayed
+  - stale-state
+  - revoked
+  - disputed
+  - remediated
+  - closed
+
+vectors:
+  - id: ARA-POS-001-LEGITIMATE-QUERY
+    class: positive
+    proposition: >-
+      A query-only operation succeeds when identity, authority, exact agreement,
+      policy authorization, current state, exact task, capability, protected signing,
+      receiver verification, and execution admission all succeed.
+    applicable_invariants:
+      - ARA-I01-LIVE-AGENT-NON-ACTUATION
+      - ARA-I02-IDENTITY-NOT-AUTHORITY
+      - ARA-I04-AGREEMENT-NOT-CAPABILITY
+      - ARA-I05-CAPABILITY-NOT-LEGITIMATE-AUTHORITY
+      - ARA-I06-WORKFLOW-SIGNER-RECEIVER-SEPARATION
+      - ARA-I08-PROTECTED-SIGNING-CONTEXT-BOUND
+      - ARA-I14-EXECUTION-EFFECT-CORRELATED
+    expected: pass
+
+  - id: ARA-NEG-002-IDENTITY-NO-AUTHORITY
+    class: negative
+    mutation: sender identity and signature valid; authority evidence absent
+    expected_boundary: workflow-policy-gate
+    expected: denied
+
+  - id: ARA-NEG-003-AGREEMENT-NO-CAPABILITY
+    class: negative
+    mutation: agreement active; no capability issued
+    expected_boundary: execution-admission
+    expected: denied
+
+  - id: ARA-NEG-004-CAPABILITY-REVOKED-AUTHORITY
+    class: negative
+    mutation: capability remains syntactically valid after governing authority is revoked
+    expected_boundary: workflow-policy-gate
+    expected: revoked
+
+  - id: ARA-NEG-005-VALID-SIGNATURE-ILLEGITIMATE-ACTION
+    class: negative
+    mutation: cryptographic signature valid; relationship/agreement/authority context invalid
+    expected_boundary: receiver-verifier
+    expected: denied
+
+  - id: ARA-NEG-006-DIRECT-LIVE-AGENT-SIGN
+    class: adversarial
+    mutation: Live Agent calls protected signer without authenticated Workflow admission
+    expected_boundary: protected-signer
+    expected: denied
+
+  - id: ARA-NEG-007-STALE-ROLE-HEAD
+    class: adversarial
+    mutation: action references an earlier valid Role Record head after a newer authoritative transition
+    expected_boundary: role-record-and-protected-signer
+    expected: stale-state
+
+  - id: ARA-NEG-008-LOCAL-AS-SHARED
+    class: negative
+    mutation: one party's local interpretation is inserted into shared relationship state without shared-object/receipt evidence
+    expected_boundary: distributed-relationship-record
+    expected: fail
+
+  - id: ARA-NEG-009-INSPECTION-AS-ACCEPTANCE
+    class: negative
+    mutation: valid inspection receipt is interpreted as agreement/acceptance
+    expected_boundary: distributed-relationship-record
+    expected: fail
+
+  - id: ARA-NEG-010-LINK-AS-TRAVERSAL
+    class: adversarial
+    mutation: linked relationship/agreement record is automatically traversed despite absent access authorization
+    expected_boundary: relationship-view-and-policy
+    expected: denied
+
+  - id: ARA-NEG-011-UNRELATED-EFFECT-AS-AUTHORIZED
+    class: negative
+    mutation: actuator changes state, but effect cannot be correlated to exact admitted decision/task/capability
+    expected_boundary: execution-admission
+    expected: fail
+
+  - id: ARA-POS-012-LIVE-AGENT-REPLACEMENT
+    class: positive
+    proposition: replacement Live Agent continues from persisted authorized state with no prior conversation transcript
+    expected_boundary: role-record-and-workflow
+    expected: pass
+
+  - id: ARA-ADV-013-CORRECTION-NO-HISTORY-REWRITE
+    class: adversarial
+    proposition: correction/remediation appends a superseding event while prior accepted evidence remains verifiable
+    expected_boundary: role-record
+    expected: pass
+
+  - id: ARA-NEG-014-DIRECT-LIVE-AGENT-ACTUATION
+    class: adversarial
+    mutation: Live Agent attempts actuator call without deterministic admission/capability
+    expected_boundary: execution-admission
+    expected: denied
+
+  - id: ARA-NEG-015-RELATIONSHIP-AS-DELEGATION
+    class: negative
+    mutation: VRC-like relationship recognition is supplied as sole delegation/authority evidence
+    expected_boundary: workflow-policy-gate
+    expected: denied
+
+  - id: ARA-NEG-016-CAPABILITY-WRONG-AGREEMENT
+    class: negative
+    mutation: valid capability from another agreement/relationship is reused
+    expected_boundary: execution-admission
+    expected: denied
+
+  - id: ARA-NEG-017-SENDER-ALLOW-RECEIVER-DENY
+    class: boundary
+    mutation: sender Workflow allows, but receiver's own current policy/state denies
+    expected_boundary: receiver-verifier
+    expected: denied
+
+  - id: ARA-NEG-018-VALID-TASK-WRONG-RELATIONSHIP
+    class: negative
+    mutation: exact task schema/version valid; relationship/agreement reference wrong
+    expected_boundary: receiver-verifier
+    expected: denied
+
+  - id: ARA-NEG-019-VALID-TASK-EXPIRED-AUTHORITY
+    class: negative
+    mutation: task structurally valid; authority expired before current action
+    expected_boundary: workflow-policy-gate
+    expected: expired
+
+  - id: ARA-NEG-020-ARBITRARY-BYTES-SIGN
+    class: adversarial
+    mutation: authenticated caller requests signing of bytes not bound to an admitted exact action
+    expected_boundary: protected-signer
+    expected: denied
+
+  - id: ARA-NEG-021-RECIPIENT-SUBSTITUTION
+    class: adversarial
+    mutation: admitted signed-action request recipient is changed before signing/transmission
+    expected_boundary: protected-signer
+    expected: denied
+
+  - id: ARA-NEG-022-PAYLOAD-SUBSTITUTION
+    class: adversarial
+    mutation: payload bytes differ from Policy Gate admitted payload digest
+    expected_boundary: protected-signer
+    expected: denied
+
+  - id: ARA-NEG-023-REPLAYED-SIGNED-REQUEST
+    class: adversarial
+    mutation: valid previously signed request is replayed with consumed nonce/expired freshness
+    expected_boundary: receiver-verifier
+    expected: replayed
+
+  - id: ARA-NEG-024-ROLLBACK-ROLE-HEAD
+    class: adversarial
+    mutation: local store is restored to an earlier otherwise valid head
+    expected_boundary: role-record
+    expected: stale-state
+
+  - id: ARA-NEG-025-COMPETING-ROLE-HEADS
+    class: adversarial
+    mutation: two incompatible successor heads are presented as current
+    expected_boundary: role-record
+    expected: fail
+
+  - id: ARA-NEG-026-DELETE-ACCEPTED-HISTORY
+    class: adversarial
+    mutation: accepted state transition/evidence is removed instead of superseded
+    expected_boundary: role-record
+    expected: fail
+
+  - id: ARA-NEG-027-COPY-AS-INSPECTION
+    class: negative
+    mutation: delivery/copy receipt is promoted to inspection
+    expected_boundary: distributed-relationship-record
+    expected: fail
+
+  - id: ARA-NEG-028-DECRYPTION-AS-ACCEPTANCE
+    class: negative
+    mutation: successful decryption is promoted to semantic acceptance
+    expected_boundary: distributed-relationship-record
+    expected: fail
+
+  - id: ARA-NEG-029-LINK-AS-AUTHORITY
+    class: negative
+    mutation: typed link to another agreement/record is treated as inherited authority/capability
+    expected_boundary: workflow-policy-gate
+    expected: denied
+
+  - id: ARA-NEG-030-EVIDENCE-AS-AUTHORITY
+    class: negative
+    mutation: execution/process evidence is used as source authority for a new action
+    expected_boundary: workflow-policy-gate
+    expected: denied
+
+  - id: ARA-NEG-031-ASSURANCE-RETROACTIVE-AUTHORIZATION
+    class: negative
+    mutation: later positive assurance result is used to legitimize a previously denied action
+    expected_boundary: assurance-and-policy
+    expected: fail
+
+  - id: ARA-NEG-032-MISSING-EVIDENCE-AS-PASS
+    class: negative
+    mutation: required authority/state/evidence input missing
+    expected_boundary: workflow-policy-gate
+    expected: indeterminate
+
+  - id: ARA-NEG-033-REPLACEMENT-REQUIRES-HIDDEN-MEMORY
+    class: negative
+    mutation: persisted authorized state intentionally omits a material fact known only to prior Live Agent context
+    expected_boundary: role-record-and-workflow
+    expected: indeterminate
+
+  - id: ARA-POS-034-SHARED-OBJECT-DISPUTED
+    class: positive-boundary
+    proposition: both parties inspect identical bytes; one accepts as evidence-only and the other disputes content
+    expected_boundary: distributed-relationship-record
+    expected: disputed
+
+  - id: ARA-NEG-035-DISPUTE-AS-ACCEPTANCE
+    class: negative
+    mutation: checkpoint normalizes a party's explicit dispute into acceptance
+    expected_boundary: distributed-relationship-record
+    expected: fail
+
+  - id: ARA-NEG-036-LATER-REVOCATION-INVALIDATES-PAST
+    class: temporal
+    mutation: authority valid at event time is later revoked; verifier retroactively invalidates historical event solely because current state is revoked
+    expected_boundary: historical-verifier
+    expected: fail
+
+  - id: ARA-NEG-037-CURRENT-KEY-JUSTIFIES-HISTORICAL-ACTION
+    class: temporal
+    mutation: current key/control state is used as proof that same control/authority existed at earlier action time
+    expected_boundary: historical-verifier
+    expected: fail
+
+  - id: ARA-ADV-038-CORRELATED-EVIDENCE-PATHS
+    class: adversarial
+    mutation: multiple attestations/witnesses/credentials share common control or source but are counted as independent support
+    expected_boundary: assurance-and-policy
+    expected: fail
+
+  - id: ARA-NEG-039-VIEW-AS-AUTHORITY
+    class: negative
+    mutation: Authorized Relationship View is submitted as independent authority source for a new action
+    expected_boundary: workflow-policy-gate
+    expected: denied
+
+  - id: ARA-NEG-040-REDACTION-CREATES-VERIFIED-FACT
+    class: negative
+    mutation: redaction removes uncertainty/source qualification and leaves an assertion appearing verified
+    expected_boundary: relationship-view
+    expected: fail
+
+  - id: ARA-NEG-041-AGREEMENT-CLOSURE-AS-RELATIONSHIP-CLOSURE
+    class: lifecycle
+    mutation: closure of one agreement/branch automatically closes unrelated larger relationship state
+    expected_boundary: lifecycle-workflow
+    expected: fail
