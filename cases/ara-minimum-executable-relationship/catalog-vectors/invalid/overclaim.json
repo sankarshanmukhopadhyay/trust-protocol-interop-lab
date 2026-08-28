@@ -1,0 +1,10 @@
+{
+  "id": "ARA-CAT-N01-overclaim-refused",
+  "description": "A green ARA evidence stack must not be interpreted as TSP/VTA/RCard/VRC conformance, production security certification, or external certification.",
+  "expected": "claim_out_of_scope",
+  "prohibited_inference": [
+    "standards-conformance",
+    "production-security",
+    "external-certification"
+  ]
+}
