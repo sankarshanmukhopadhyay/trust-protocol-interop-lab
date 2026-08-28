@@ -45,6 +45,9 @@ jobs:
           python experiments/arpa-a2a-anab/run.py
           python experiments/dtg-protected-access/run.py --check
 
+      - name: Run ARA Role Record state evidence
+        run: python experiments/ara-role-record/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
