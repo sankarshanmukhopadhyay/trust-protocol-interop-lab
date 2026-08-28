@@ -69,6 +69,9 @@ jobs:
       - name: Run ARA adversarial-assurance evidence
         run: python experiments/ara-adversarial-assurance/run.py --check
 
+      - name: Run ARA standards-boundary evidence
+        run: python experiments/ara-standards-boundary/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
