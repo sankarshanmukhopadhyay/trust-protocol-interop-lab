@@ -1,0 +1,6 @@
+{
+  "id": "ARA-CAT-P01-bounded-admission",
+  "description": "The bounded ARA semantic-composition claim is admitted only when all evidence gates and final human claim-boundary review are satisfied.",
+  "expected": "interoperability-tested",
+  "claim_scope": "bounded executable semantic composition"
+}
