@@ -66,6 +66,9 @@ jobs:
       - name: Run ARA relationship-view evidence
         run: python experiments/ara-relationship-view/run.py --check
 
+      - name: Run ARA adversarial-assurance evidence
+        run: python experiments/ara-adversarial-assurance/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
