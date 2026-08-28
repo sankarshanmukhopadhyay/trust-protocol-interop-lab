@@ -1,0 +1,132 @@
+version: 1
+case_id: IC-ARA-REL-001
+captured_at: 2026-08-28
+purpose: distinguish implementation work from unresolved semantic/upstream ownership questions
+
+classes:
+  implementation-gap: required behavior is sufficiently understood for the Lab to implement without assigning new upstream semantics
+  composition-gap: behavior belongs to the ARA conjunction and needs executable evidence before any normative ownership proposal
+  upstream-semantic-gap: pinned upstream sources do not currently provide a directly attributable semantic contract needed by the ARA proposal
+  substitution-gap: local adapter can exercise the boundary but standards-native replacement evidence is missing
+  assurance-gap: implementation may exist but evidence/pressure testing is insufficient for the claimed maturity
+
+gaps:
+  - id: ARA-GAP-001
+    class: implementation-gap
+    surface: Role Record state engine
+    description: No executable ARA local Role Record with previous-head/current-head, rollback/fork detection and append-only correction exists.
+    owner_now: Interop Lab experimental implementation
+    next_issue: 35
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-002
+    class: upstream-semantic-gap
+    surface: Agreement Object
+    description: No pinned source directly owns the exact immutable/versioned agreement proposal/acceptance/activation contract required by the minimum ARA ceremony.
+    owner_now: ARA-local experimental contract
+    next_issue: 36
+    upstream_issue_warranted: false
+    reason: first obtain executable evidence showing which agreement semantics are actually necessary
+
+  - id: ARA-GAP-003
+    class: composition-gap
+    surface: instance-governance authorization conjunction
+    description: Existing authority, policy, task, capability and evidence semantics exist separately, but no source owns the complete ARA conjunction over current relationship/agreement state.
+    owner_now: Interop Lab composition
+    next_issue: 36
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-004
+    class: substitution-gap
+    surface: protected signing
+    description: OpenVTC VTA is a strong candidate implementation, but the exact TEA/Workflow/RoleRecord/Agreement/TrustTask signed-action binding and bypass-denial evidence are not yet demonstrated.
+    owner_now: Lab adapter first
+    next_issue: 37
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-005
+    class: implementation-gap
+    surface: independent receiver verification
+    description: Existing cases prove related semantic seams, but ARA has not yet executed two separately controlled Agent Roles over serialized artifacts.
+    owner_now: Interop Lab
+    next_issue: 38
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-006
+    class: composition-gap
+    surface: distributed Verifiable Relationship Record
+    description: No pinned source implements the proposed logical verifiable intersection across independently controlled Role Records.
+    owner_now: ARA-local experimental semantics
+    next_issue: 39
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-007
+    class: upstream-semantic-gap
+    surface: Collective Knowledge Certificate and Relationship Knowledge Checkpoint
+    description: No pinned source directly defines the proposed exact-inspection/party-set/checkpoint semantics without implying truth or agreement.
+    owner_now: unresolved; Lab hypothesis only
+    next_issue: 39
+    upstream_issue_warranted: false
+    reason: require falsification evidence before proposing specification ownership
+
+  - id: ARA-GAP-008
+    class: implementation-gap
+    surface: Live Agent replacement continuity
+    description: Durable agent concepts exist, but no ARA run proves continuity after destroying the original generative process and withholding its conversation state.
+    owner_now: Interop Lab
+    next_issue: 40
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-009
+    class: composition-gap
+    surface: challenge/remediation/closure
+    description: Lifecycle and redress semantics exist in TSMM/TGA/TIS/ARPA, but they have not been composed with ARA relationship evidence and capability state.
+    owner_now: Interop Lab composition
+    next_issue: 40
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-010
+    class: implementation-gap
+    surface: Authorized Relationship View
+    description: Portable evidence exists, but no deterministic privacy-bounded ARA view demonstrates legitimacy, dispute, dependencies and uncertainty to an authorized reviewer.
+    owner_now: Interop Lab
+    next_issue: 41
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-011
+    class: assurance-gap
+    surface: systematic ARA adversarial evidence
+    description: Phase 1 defines vectors and RAHP has reusable threat evidence, but the ARA runtime has not yet been pressure-tested.
+    owner_now: Interop Lab + RAHP where material
+    next_issue: 42
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-012
+    class: substitution-gap
+    surface: TSP standards-native transport
+    description: TSP is directly attributable for secure transport semantics, but ARA has not run the walking skeleton over TSP or measured resulting privacy/correlation surfaces.
+    owner_now: local transport adapter until substitution
+    next_issue: 43
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-013
+    class: substitution-gap
+    surface: RCard/VRC live use
+    description: RCard and VRC semantics are direct upstream reuse, but the ARA minimum ceremony has not yet exercised them as real artifacts.
+    owner_now: local participant/relationship fixtures until substitution
+    next_issue: 43
+    upstream_issue_warranted: false
+
+  - id: ARA-GAP-014
+    class: substitution-gap
+    surface: historical Agent Role identity/control
+    description: ARPA and DTG durable-identifier guidance provide concrete candidate properties, but no one implementation is selected or proven sufficient for ARA long-lived control and recovery.
+    owner_now: local identity/control adapter
+    next_issue: 43
+    upstream_issue_warranted: false
+
+rules:
+  - do not raise an upstream defect merely because an ARA requirement is composition-dependent
+  - do not turn not-yet-evidenced into unsupported by design
+  - upstream feedback requires execution evidence showing a stable semantic need or mismatch
+  - adapter-only and substitution-gap states are explicit non-conformance boundaries
