@@ -1,0 +1,370 @@
+version: 1
+case_id: IC-ARA-REL-001
+scenario_id: ARA-SCENARIO-001-MINIMUM-QUERY-RELATIONSHIP
+status: executable-ready-design
+purpose: >-
+  Define the minimum two-party relationship lifecycle used to exercise ARA
+  identity, authority, agreement, deterministic authorization, protected signing,
+  exact task, capability, independent verification, execution evidence,
+  persistent Role Records, distributed relationship evidence, continuity, and remediation.
+
+actors:
+  - id: A
+    type: persistent-agent-role
+    role: data-owner
+  - id: A-live
+    type: live-agent
+    accountable_through: A
+  - id: A-wf
+    type: deterministic-workflow
+    accountable_through: A
+  - id: A-ps
+    type: protected-signer
+    accountable_through: A
+  - id: B
+    type: persistent-agent-role
+    role: researcher
+  - id: B-live
+    type: live-agent
+    accountable_through: B
+  - id: B-wf
+    type: deterministic-workflow
+    accountable_through: B
+  - id: EXEC
+    type: actuator
+    role: synthetic-query-engine
+  - id: H
+    type: human-reviewer
+    role: authorized-principal-review
+
+resource:
+  id: synthetic-dataset-1
+  classification: protected-synthetic-data
+  allowed_operation: query
+  prohibited_operations:
+    - mutate
+    - export
+    - delegate-unbounded
+
+state_machines:
+  agreement:
+    states:
+      - absent
+      - proposed
+      - inspected
+      - accepted
+      - active
+      - disputed
+      - suspended
+      - remediated
+      - closed
+    allowed_transitions:
+      - [absent, proposed]
+      - [proposed, inspected]
+      - [inspected, accepted]
+      - [accepted, active]
+      - [active, disputed]
+      - [active, suspended]
+      - [disputed, remediated]
+      - [remediated, active]
+      - [active, closed]
+      - [suspended, closed]
+      - [remediated, closed]
+
+  capability:
+    states:
+      - absent
+      - issued
+      - attenuated
+      - suspended
+      - revoked
+      - expired
+    terminal:
+      - revoked
+      - expired
+
+  relationship_branch:
+    states:
+      - created
+      - qualifying
+      - negotiating
+      - active
+      - disputed
+      - remediating
+      - suspended
+      - closed
+
+workflow:
+  - step: 1
+    id: establish-persistent-roles
+    responsible: [A, B]
+    requires: []
+    outputs:
+      - agent-role-identifiers
+      - initial-role-record-heads
+    persistent_effect: local-role-record
+
+  - step: 2
+    id: create-relationship-branches
+    responsible: [A-wf, B-wf]
+    requires:
+      - agent-role-identifiers
+    outputs:
+      - relationship-id
+      - party-set-epoch-1
+    persistent_effect: local-role-record
+
+  - step: 3
+    id: propose-exact-agreement
+    responsible: B-wf
+    requires:
+      - relationship-id
+    outputs:
+      - immutable-agreement-object-v1
+      - content-id
+    persistent_effect: local-and-shareable
+
+  - step: 4
+    id: inspect-agreement
+    responsible: A-wf
+    requires:
+      - immutable-agreement-object-v1
+    outputs:
+      - inspection-receipt-a
+    rule: inspection != acceptance
+    persistent_effect: local-and-shareable
+
+  - step: 5
+    id: accept-and-activate-agreement
+    responsible: [A-wf, B-wf]
+    requires:
+      - inspection-receipt-a
+      - exact-agreement-content-id
+      - required-authorizations-if-any
+    outputs:
+      - acceptance-receipts
+      - agreement-state-active
+    persistent_effect: local-and-shareable
+
+  - step: 6
+    id: bind-authority-evidence
+    responsible: A-wf
+    requires:
+      - authority-evidence
+      - current-role-record-head
+    outputs:
+      - authority-evaluation-reference
+    rule: authority evidence != policy allow
+    persistent_effect: local
+
+  - step: 7
+    id: propose-query-intent
+    responsible: A-live
+    requires:
+      - bounded-context
+    outputs:
+      - proposal-media
+    rule: proposal media has no operative effect
+    persistent_effect: none-unless-authorized-recording
+
+  - step: 8
+    id: policy-gate
+    responsible: A-wf
+    requires:
+      - proposal-media
+      - current-role-record-head
+      - relationship-state
+      - agreement-state-active
+      - authority-evaluation-reference
+      - policy-and-duty-version
+      - recipient
+      - purpose
+      - evidence-requirements
+    outputs:
+      - policy-decision
+    outcomes:
+      - allowed
+      - denied
+      - escalated
+      - indeterminate
+    persistent_effect: local-role-record
+
+  - step: 9
+    id: derive-capability
+    responsible: A-wf
+    requires:
+      - policy-decision-allowed
+      - exact-agreement-reference
+      - exact-relationship-reference
+    outputs:
+      - query-only-capability
+    rule: capability != authority
+    persistent_effect: local-role-record
+
+  - step: 10
+    id: construct-exact-task
+    responsible: A-wf
+    requires:
+      - policy-decision-allowed
+      - query-only-capability
+    outputs:
+      - exact-task-instance
+    bindings:
+      - task-type-version
+      - relationship-id
+      - agreement-id-version
+      - authority-reference
+      - role-record-head
+      - recipient
+      - purpose
+      - payload-digest
+      - nonce
+      - expiry
+    persistent_effect: local-role-record
+
+  - step: 11
+    id: protected-signing
+    responsible: A-ps
+    requires:
+      - authenticated-workflow
+      - exact-task-instance
+      - current-defensible-role-record-head
+    outputs:
+      - signed-task
+      - cryptographic-use-receipt
+    refusal_if:
+      - direct-live-agent
+      - arbitrary-bytes
+      - stale-state
+      - recipient-substitution
+      - payload-substitution
+      - revoked-authority
+      - replay
+    persistent_effect: local-role-record
+
+  - step: 12
+    id: transmit
+    responsible: A-wf
+    requires:
+      - signed-task
+    outputs:
+      - serialized-wire-artifact
+      - transport-receipt
+    rule: transport success != receiver acceptance
+    persistent_effect: local-and-shareable
+
+  - step: 13
+    id: independent-counterparty-verification
+    responsible: B-wf
+    requires:
+      - serialized-wire-artifact
+      - B-current-role-record-head
+      - B-local-policy
+      - resolvable-required-evidence
+    outputs:
+      - receiver-decision
+    rule: sender policy allow != receiver allow
+    persistent_effect: B-role-record
+
+  - step: 14
+    id: execution-admission
+    responsible: B-wf
+    requires:
+      - receiver-decision-allowed
+      - current-query-only-capability
+      - exact-task-instance
+    outputs:
+      - actuator-admission
+    persistent_effect: B-role-record
+
+  - step: 15
+    id: execute-query
+    responsible: EXEC
+    requires:
+      - actuator-admission
+    outputs:
+      - synthetic-query-result
+      - execution-effect
+    prohibited:
+      - mutate
+      - export
+    persistent_effect: evidence-only
+
+  - step: 16
+    id: correlate-effect
+    responsible: B-wf
+    requires:
+      - execution-effect
+      - actuator-admission
+      - receiver-decision
+      - exact-task-instance
+    outputs:
+      - execution-effect-receipt
+    rule: unrelated effect != authorized effect
+    persistent_effect: B-role-record
+
+  - step: 17
+    id: update-local-role-records
+    responsible: [A-wf, B-wf]
+    requires:
+      - relevant-process-and-effect-evidence
+    outputs:
+      - A-new-role-record-head
+      - B-new-role-record-head
+    persistent_effect: local-role-record
+
+  - step: 18
+    id: build-distributed-relationship-evidence
+    responsible: [A-wf, B-wf]
+    requires:
+      - exact-shared-object-identifiers
+      - source-attestations
+      - inspection-and-disposition-receipts
+      - current-role-record-heads
+    outputs:
+      - relationship-checkpoint
+    rule: shared evidence != universal truth or agreement
+    persistent_effect: distributed-verifiable-intersection
+
+  - step: 19
+    id: replace-live-agent
+    responsible: A
+    requires:
+      - persisted-authorized-state
+    outputs:
+      - A-live-2
+    prohibited_input:
+      - prior-live-agent-private-conversation-memory
+    acceptance: continuation succeeds from authorized persisted state
+
+  - step: 20
+    id: challenge-remediate-or-close
+    responsible: [A-wf, B-wf, H]
+    requires:
+      - current-relationship-state
+      - attributable-challenge-or-closure-authority
+    outputs:
+      - dispute-or-remediation-event
+      - capability-status-update
+      - new-role-record-heads
+      - updated-relationship-checkpoint
+    rule: prior accepted history is not silently overwritten
+
+acceptance_chain:
+  required_for_positive_execution:
+    - identity/control attributable
+    - authority evidence sufficient and current
+    - exact agreement active
+    - policy gate allowed
+    - exact task supported and current
+    - narrow capability current
+    - protected signing accepted
+    - receiver independently allowed
+    - execution admission accepted
+    - actual effect correlated
+    - required evidence persisted
+
+claim_boundary: >-
+  This scenario specifies the minimum semantic and evidence sequence to implement.
+  Until runtime evidence exists, it is not proof that any step is supported by a
+  standards-native component or that the complete ARA proposal is realizable.

@@ -1,0 +1,123 @@
+version: 1
+case_id: IC-ARA-REL-001
+status: pre-admission
+promotion_ready: false
+principles:
+  - green repository assurance is necessary but not sufficient
+  - documentation intent does not satisfy an executable evidence gate
+  - missing evidence remains indeterminate or not-started
+  - adapter-backed evidence must not be relabeled as standards-native conformance
+  - each gate is independently attributable
+
+summary:
+  satisfied: 1
+  partially_satisfied: 0
+  blocked: 0
+  not_started: 11
+
+gates:
+  - id: ARA-G1-SEMANTIC-OWNERSHIP
+    mandatory: true
+    status: satisfied
+    question: Are minimum ARA objects, boundaries, non-implication rules, and falsification vectors explicitly defined without silently claiming upstream ownership?
+    evidence:
+      - cases/ara-minimum-executable-relationship/README.md
+      - cases/ara-minimum-executable-relationship/ownership.yaml
+      - cases/ara-minimum-executable-relationship/invariants.yaml
+      - cases/ara-minimum-executable-relationship/vectors.yaml
+      - cases/ara-minimum-executable-relationship/judgment-log.md
+    resolved_gap: pre-code semantic boundaries and falsification contract established
+    next_action: pin exact reusable component baselines and classify mapping evidence under issue 34
+
+  - id: ARA-G2-BASELINES-PINNED
+    mandatory: true
+    status: not-started
+    question: Are all reused upstream/local experimental components pinned to immutable baselines with explicit semantic mapping status?
+    evidence: []
+    gap: phase 2 baseline and reuse mapping not yet executed
+    next_action: issue 34
+
+  - id: ARA-G3-ROLE-STATE-EXECUTABLE
+    mandatory: true
+    status: not-started
+    question: Can persistent Agent Role/Role Record state advance, survive Live Agent replacement, and reject stale/rollback/fork transitions?
+    evidence: []
+    gap: no executable Role Record engine yet
+    next_action: issue 35
+
+  - id: ARA-G4-POLICY-TASK-CAPABILITY
+    mandatory: true
+    status: not-started
+    question: Does an exact Agreement Object, deterministic Policy Gate, Trust Task binding, capability derivation, and execution admission remain separately observable and executable?
+    evidence: []
+    gap: authorization spine not yet implemented
+    next_action: issue 36
+
+  - id: ARA-G5-PROTECTED-SIGNING
+    mandatory: true
+    status: not-started
+    question: Does protected signing refuse direct/unsupported/stale/substituted/replayed requests and emit attributable cryptographic-use receipts?
+    evidence: []
+    gap: protected signer boundary not yet implemented
+    next_action: issue 37
+
+  - id: ARA-G6-INDEPENDENT-COUNTERPARTY
+    mandatory: true
+    status: not-started
+    question: Do two independently controlled Agent Roles exchange serialized artifacts across a real process/transport boundary and verify independently?
+    evidence: []
+    gap: current case is design-only
+    next_action: issue 38
+
+  - id: ARA-G7-DISTRIBUTED-RELATIONSHIP-STATE
+    mandatory: true
+    status: not-started
+    question: Can the distributed relationship intersection be reconstructed from independent Role Records while preserving exact shared/private/receipt/disposition distinctions?
+    evidence: []
+    gap: VRR semantics not yet executable
+    next_action: issue 39
+
+  - id: ARA-G8-CONTINUITY-REMEDIATION
+    mandatory: true
+    status: not-started
+    question: Can replacement, challenge, correction, remediation, revocation, continuation, and closure execute without hidden model memory or history rewrite?
+    evidence: []
+    gap: lifecycle beyond initial action not yet executed
+    next_action: issue 40
+
+  - id: ARA-G9-RELATIONSHIP-VIEW
+    mandatory: true
+    status: not-started
+    question: Can an authorized reviewer receive a traceable, privacy-bounded view explaining action legitimacy, dispute, dependencies, and uncertainty?
+    evidence: []
+    gap: Relationship View not yet implemented
+    next_action: issue 41
+
+  - id: ARA-G10-ADVERSARIAL-EVIDENCE
+    mandatory: true
+    status: not-started
+    question: Have material ARA invariants survived systematic negative/adversarial pressure with reproducible evidence and RAHP review where warranted?
+    evidence: []
+    gap: full assurance run not yet performed
+    next_action: issue 42
+
+  - id: ARA-G11-STANDARDS-NATIVE-BOUNDARY
+    mandatory: false
+    status: not-started
+    question: Which local adapters have been successfully substituted by pinned standards-native or independently implemented components without breaking ARA invariants?
+    evidence: []
+    gap: substitution deliberately deferred until walking skeleton is evidenced
+    next_action: issue 43
+
+  - id: ARA-G12-CLAIM-BOUNDARY-REVIEW
+    mandatory: true
+    status: not-started
+    question: Has a human-reviewed final claim boundary distinguished semantic execution, implementation evidence, standards-native coverage, production security, certification, and unresolved gaps?
+    evidence: []
+    gap: final evidence does not yet exist
+    next_action: complete after issues 34-43 and record maintainer decision
+
+admission_rule: >-
+  Pre-admission construction may be admitted to the authoritative Interop Case catalog only
+  after the Lab has executable evidence sufficient for a bounded experimental claim and a
+  human maintainer explicitly accepts that claim. No catalog change is authorized by this file alone.

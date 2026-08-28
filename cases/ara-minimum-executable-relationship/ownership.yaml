@@ -1,0 +1,189 @@
+version: 1
+case_id: IC-ARA-REL-001
+status: pre-admission
+purpose: >-
+  Preserve semantic ownership and non-implication boundaries while the Agent
+  Relationship Architecture is implemented as an experimental Lab composition.
+
+lab_ownership:
+  owns:
+    - bounded composition design
+    - local adapter contracts
+    - executable invariants and vectors
+    - experiment orchestration
+    - evidence packaging
+    - maturity claims made by this Lab
+    - local findings and gap candidates
+  does_not_own:
+    - upstream Trust Tasks semantics
+    - upstream TSP or TEA semantics
+    - upstream RCard or VRC semantics
+    - OpenVTC VTA or VTC semantics
+    - ARPA semantics
+    - TSMM, Trust Graph Artifacts, or TIS semantics
+    - jurisdiction-specific fiduciary law
+    - production security certification
+    - ToIP approval or endorsement
+
+objects:
+  agent_role:
+    local_role: persistent accountable semantic/runtime role in the bounded case
+    intended_source_class: composition-dependent
+    may_establish:
+      - continuity anchor for local state and accountability
+    must_not_imply:
+      - authority for a particular action
+      - current capability
+      - counterparty acceptance
+
+  live_agent:
+    local_role: ephemeral generative process that proposes non-operative media/intents
+    intended_source_class: ARA architectural concept
+    may_establish:
+      - proposal provenance when recorded
+    must_not_imply:
+      - signing authority
+      - actuator authority
+      - durable relationship state
+
+  role_record:
+    local_role: persistent independently controlled local state/evidence substrate
+    intended_source_class: ARA architectural concept; implementation initially Lab-local
+    must_not_imply:
+      - that every local item is shared relationship state
+      - that local interpretation is mutually accepted
+
+  relationship_recognition:
+    local_role: evidence that a relationship edge is recognized
+    intended_source_class: candidate VRC mapping
+    must_not_imply:
+      - delegation
+      - agreement activation
+      - capability
+      - record traversal permission
+      - fiduciary status
+
+  agreement_object:
+    local_role: exact immutable/versioned terms accepted by required parties
+    intended_source_class: composition-dependent / ARA architectural concept
+    must_not_imply:
+      - authority source
+      - technical capability
+      - execution admission
+
+  authority_evidence:
+    local_role: evidence of legitimate authority/delegation for an action class
+    intended_source_class: candidate ARPA/TGA/TIS mapping to be pinned in phase 2
+    must_not_imply:
+      - policy authorization
+      - capability possession
+      - execution success
+
+  policy_gate:
+    local_role: deterministic instance-governance decision boundary
+    intended_source_class: composition-dependent; reuse GovOps/TGA patterns where evidenced
+    may_output:
+      - allowed
+      - denied
+      - escalated
+      - indeterminate
+    must_not_imply:
+      - protected-signing acceptance
+      - receiver acceptance
+      - actual execution effect
+
+  trust_task:
+    local_role: exact versioned operation semantics and signed-action binding
+    intended_source_class: Trust Tasks mapping to be pinned in phase 2
+    must_not_imply:
+      - legitimate authority by schema validity alone
+      - agreement activation
+      - receiver acceptance
+
+  capability:
+    local_role: narrow technical means to perform an admitted operation
+    intended_source_class: composition-dependent; candidate GovOps/TGA/TIS mapping
+    must_not_imply:
+      - legitimate authority
+      - current agreement
+      - successful execution
+
+  protected_signer:
+    local_role: separate cryptographic-use authorization boundary
+    intended_source_class: Lab adapter first; candidate OpenVTC VTA substitution later
+    must_not_imply:
+      - Workflow authorization
+      - receiver acceptance
+      - instance legitimacy solely because a signature is valid
+
+  transport:
+    local_role: serialized sender/receiver exchange boundary
+    intended_source_class: Lab adapter first; candidate TSP substitution later
+    must_not_imply:
+      - relationship recognition
+      - authority
+      - agreement
+      - task acceptance
+
+  execution_evidence:
+    local_role: attributable evidence of admitted/observed runtime effect
+    intended_source_class: candidate TIS/Lab evidence mapping
+    must_not_imply:
+      - authority
+      - retrospective legitimacy
+      - assurance
+
+  distributed_relationship_record:
+    local_role: >-
+      logical verifiable intersection of exact shared objects, source attestations,
+      pointers, commitments, receipts, semantic dispositions, and checkpoints across
+      independently controlled Role Records
+    intended_source_class: ARA architectural concept; implementation initially Lab-local
+    must_not_imply:
+      - central jointly writable master record
+      - truth or agreement for every included assertion
+      - access to private Role Record material
+      - traversal permission across links
+
+  relationship_view:
+    local_role: authorized rendering/proof package derived from attributable evidence
+    intended_source_class: ARA architectural concept; implementation initially Lab-local
+    must_not_imply:
+      - new authority
+      - greater access than the view recipient is authorized to receive
+      - absence of uncertainty merely because it is not displayed
+
+  assurance:
+    local_role: later evaluation of implementation/evidence claims
+    intended_source_class: Lab/RAHP and other pinned assurance sources
+    must_not_imply:
+      - retroactive authorization
+      - independent evidence multiplicity merely by count
+
+non_implication_rules:
+  - discovery != authorization
+  - authentication != authority
+  - relationship_recognition != agreement
+  - relationship != delegation
+  - agreement != capability
+  - capability != legitimate_authority
+  - delegation != policy_authorization
+  - valid_signature != legitimate_action
+  - task_conformance != profile_conformance
+  - profile_conformance != instance_legitimacy
+  - execution_success != legitimate_effect
+  - evidence != authority
+  - assurance != retroactive_authorization
+  - local_observation != shared_relationship_state
+  - delivery != inspection
+  - decryption != inspection
+  - inspection != acceptance
+  - acceptance != truth
+  - record_link != traversal_permission
+  - record_link != authority
+  - current_identity_state != historical_authority
+  - agreement_closure != larger_relationship_closure
+
+phase_2_obligation: >-
+  Replace intended_source_class placeholders with exact immutable baselines and a
+  direct/composition-dependent/adapter-only/candidate/not-yet-evidenced classification.
