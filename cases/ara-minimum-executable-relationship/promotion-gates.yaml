@@ -10,10 +10,10 @@ principles:
   - each gate is independently attributable
 
 summary:
-  satisfied: 1
+  satisfied: 2
   partially_satisfied: 0
   blocked: 0
-  not_started: 11
+  not_started: 10
 
 gates:
   - id: ARA-G1-SEMANTIC-OWNERSHIP
@@ -27,15 +27,25 @@ gates:
       - cases/ara-minimum-executable-relationship/vectors.yaml
       - cases/ara-minimum-executable-relationship/judgment-log.md
     resolved_gap: pre-code semantic boundaries and falsification contract established
-    next_action: pin exact reusable component baselines and classify mapping evidence under issue 34
+    next_action: preserve these boundaries while implementing the pinned reuse plan
 
   - id: ARA-G2-BASELINES-PINNED
     mandatory: true
-    status: not-started
+    status: satisfied
     question: Are all reused upstream/local experimental components pinned to immutable baselines with explicit semantic mapping status?
-    evidence: []
-    gap: phase 2 baseline and reuse mapping not yet executed
-    next_action: issue 34
+    evidence:
+      - cases/ara-minimum-executable-relationship/baselines.yaml
+      - cases/ara-minimum-executable-relationship/reuse-mapping.yaml
+      - cases/ara-minimum-executable-relationship/reuse-matrix.md
+      - cases/ara-minimum-executable-relationship/gap-register.yaml
+      - cases/ara-minimum-executable-relationship/adapter-plan.md
+      - cases/ara-minimum-executable-relationship/judgment-log.md
+    resolved_gap: >-
+      phase 2 pins exact inspected baselines and classifies every minimum-slice requirement as
+      direct, composition-dependent, adapter-only, candidate, or not-yet-evidenced; unresolved
+      Agreement Object and collective-knowledge semantics remain explicit rather than assigned
+      to a nearby component
+    next_action: issue 35 — implement the minimum persistent Role Record state engine without redesigning the mapped boundaries
 
   - id: ARA-G3-ROLE-STATE-EXECUTABLE
     mandatory: true
@@ -66,7 +76,7 @@ gates:
     status: not-started
     question: Do two independently controlled Agent Roles exchange serialized artifacts across a real process/transport boundary and verify independently?
     evidence: []
-    gap: current case is design-only
+    gap: current case is design/baseline mapped but not yet a two-runtime execution
     next_action: issue 38
 
   - id: ARA-G7-DISTRIBUTED-RELATIONSHIP-STATE
