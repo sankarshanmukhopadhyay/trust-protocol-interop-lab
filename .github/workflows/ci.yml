@@ -57,6 +57,9 @@ jobs:
       - name: Run ARA independent-counterparty evidence
         run: python experiments/ara-independent-counterparty/run.py --check
 
+      - name: Run ARA distributed-VRR evidence
+        run: python experiments/ara-distributed-vrr/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
