@@ -298,10 +298,9 @@
         "trust-tasks",
         "tea-tsp",
         "arpa",
-        "tsmm",
-        "tis",
         "dtg-credentials",
-        "dpip"
+        "tsmm",
+        "tis"
       ],
       "baselines": {
         "trust-tasks": "Trust Tasks Framework 0.5.0 @ 6425a74136c1d2dfa7115889abe0b3521700e887",
