@@ -1,0 +1,138 @@
+version: 1
+case_id: IC-ARA-REL-001
+captured_at: 2026-08-28
+purpose: >-
+  Immutable baseline register for ARA Phase 2. A pinned baseline is evidence of what was
+  inspected and reused; it is not evidence that the source owns an ARA semantic merely
+  because it contains a nearby concept.
+
+baseline_classes:
+  upstream-normative: source owned by an upstream standards/specification project
+  upstream-implementation: implementation source owned by an upstream project
+  local-specification: locally maintained specification or candidate specification
+  local-implementation: locally maintained implementation/profile artifact
+  lab-evidence: repository-owned experimental composition/evidence
+  assurance-evidence: assurance or privacy evidence used only within its declared scope
+
+baselines:
+  - id: trust-tasks
+    repository: trustoverip/dtgwg-trust-tasks-spec
+    version: Framework 0.5.0
+    commit: 6425a74136c1d2dfa7115889abe0b3521700e887
+    date: 2026-08-26
+    authority_class: upstream-normative
+    role: exact versioned inter-party task semantics, lifecycle, freshness, privacy/correlation declarations, error model
+    immutable_ref: https://github.com/trustoverip/dtgwg-trust-tasks-spec/commit/6425a74136c1d2dfa7115889abe0b3521700e887
+
+  - id: tsp
+    repository: trustoverip/tswg-tsp-specification
+    version: main baseline reviewed 2026-08-28
+    commit: ea01152425d281da944f40e8da799d7fa7a79f51
+    date: 2026-07-30
+    authority_class: upstream-normative
+    role: secure/authenticated TSP transport and endpoint relationship semantics
+    immutable_ref: https://github.com/trustoverip/tswg-tsp-specification/commit/ea01152425d281da944f40e8da799d7fa7a79f51
+
+  - id: tea
+    repository: trustoverip/aimwg-trust-enabled-agents
+    version: draft baseline reviewed 2026-08-28
+    commit: 5539ef542494ff43fed61791179f08dc5b6da186
+    date: 2026-06-04
+    authority_class: upstream-normative
+    role: TEA controller/domain-of-control, authenticated exchange, delegation/accountability framing
+    immutable_ref: https://github.com/trustoverip/aimwg-trust-enabled-agents/commit/5539ef542494ff43fed61791179f08dc5b6da186
+
+  - id: dtg-credentials
+    repository: trustoverip/dtgwg-cred-spec
+    version: main baseline reviewed 2026-08-28
+    commit: 344a66af868c192f15b511e7116ccab2039221de
+    date: 2026-08-27
+    authority_class: upstream-normative
+    role: RCard/VRC/VWC and VID relationship/credential semantics; DID-method considerations
+    immutable_ref: https://github.com/trustoverip/dtgwg-cred-spec/commit/344a66af868c192f15b511e7116ccab2039221de
+
+  - id: openvtc-vti
+    repository: OpenVTC/verifiable-trust-infrastructure
+    version: main implementation baseline reviewed 2026-08-28
+    commit: a71a1ca5766810ccd040f9b5f76f6c97dc41e168
+    date: 2026-08-28
+    authority_class: upstream-implementation
+    role: VTA/VTC implementation patterns, Trust Task dispatch, credential/key/policy protected trust functions
+    immutable_ref: https://github.com/OpenVTC/verifiable-trust-infrastructure/commit/a71a1ca5766810ccd040f9b5f76f6c97dc41e168
+
+  - id: arpa
+    repository: sankarshanmukhopadhyay/agent-registry-protocol
+    version: v0.9.0 Candidate + v0.9.1 adversarial-hardening amendment; implementation v0.9.5
+    commit: 968c7b70af8871395ab44d3fd98bf56d61785988
+    date: 2026-08-22
+    authority_class: local-specification
+    role: persistent agent registry/control-plane identity, scoped authority/delegation, lifecycle/revocation, evidence and federation surfaces
+    immutable_ref: https://github.com/sankarshanmukhopadhyay/agent-registry-protocol/commit/968c7b70af8871395ab44d3fd98bf56d61785988
+
+  - id: tsmm
+    repository: sankarshanmukhopadhyay/trust-systems-meta-model
+    version: v0.24.0
+    commit: 9b5fe542592f378ae0e78dce77db568d75663551
+    date: 2026-08-22
+    authority_class: local-specification
+    role: canonical trust-system semantics, authority topology, delegation structure, decision/effect model, lifecycle and redress semantics
+    immutable_ref: https://github.com/sankarshanmukhopadhyay/trust-systems-meta-model/commit/9b5fe542592f378ae0e78dce77db568d75663551
+
+  - id: tga
+    repository: sankarshanmukhopadhyay/trust-graph-artifacts
+    version: v0.12.1 alignment baseline
+    commit: 6a9c8c93b4748b06d9c421eb45c045edd93f3e5e
+    date: 2026-08-26
+    authority_class: local-implementation
+    role: downstream governance/assurance patterns for mandate, delegation, runtime authority, receipts, revocation, redress and agentic-system implementation guidance
+    immutable_ref: https://github.com/sankarshanmukhopadhyay/trust-graph-artifacts/commit/6a9c8c93b4748b06d9c421eb45c045edd93f3e5e
+
+  - id: tis
+    repository: sankarshanmukhopadhyay/trust-infrastructure-schemas
+    version: current portable-contract baseline reviewed 2026-08-28
+    commit: bc6fb1a339fd8e8c3469f9e0bd999efdd6726412
+    date: 2026-08-20
+    authority_class: local-implementation
+    role: portable schema contracts for authority boundaries, delegation lineage, decisions, execution/effect evidence and assurance packaging
+    immutable_ref: https://github.com/sankarshanmukhopadhyay/trust-infrastructure-schemas/commit/bc6fb1a339fd8e8c3469f9e0bd999efdd6726412
+
+  - id: interop-lab
+    repository: sankarshanmukhopadhyay/trust-protocol-interop-lab
+    version: ARA foundation and existing-case baseline
+    commit: dc7144ddb31b1c7b21d41aa68014a250eeedeb9e
+    date: 2026-08-28
+    authority_class: lab-evidence
+    role: experimental composition, semantic ownership, vectors, execution harnesses, evidence and maturity claims
+    immutable_ref: https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/commit/dc7144ddb31b1c7b21d41aa68014a250eeedeb9e
+    reused_cases:
+      - IC-ARPA-A2A-TT-001
+      - IC-TEA-MCP-TT-001
+      - IC-ARPA-TRQP-HIST-001
+      - IC-TT-TSMM-TIS-001
+      - IC-GOVOPS-EXEC-TRUST-001
+      - IC-DTG-PROTECTED-ACCESS-001
+
+  - id: dpip
+    repository: sankarshanmukhopadhyay/dtg-privacy-implementation-profile
+    version: current executable privacy baseline reviewed 2026-08-28
+    commit: b41f5dd9f9a56d3b4cca19861e1884df45cdae83
+    date: 2026-08-27
+    authority_class: assurance-evidence
+    role: composed privacy observation/evaluation, cross-context correlation falsification, INDETERMINATE evidence handling
+    immutable_ref: https://github.com/sankarshanmukhopadhyay/dtg-privacy-implementation-profile/commit/b41f5dd9f9a56d3b4cca19861e1884df45cdae83
+
+  - id: rahp
+    repository: sankarshanmukhopadhyay/rahp-toolkit
+    version: current assurance baseline reviewed 2026-08-28
+    commit: 7c2d1db1df35b06672a42ab3e196dedc124415eb
+    date: 2026-08-28
+    authority_class: assurance-evidence
+    role: risk/harm/security/composition pressure testing, false-independence evidence, counter-cases and bounded disposition
+    immutable_ref: https://github.com/sankarshanmukhopadhyay/rahp-toolkit/commit/7c2d1db1df35b06672a42ab3e196dedc124415eb
+
+rules:
+  - pinning a baseline does not establish semantic ownership
+  - local specifications and implementations are not represented as ToIP normative text
+  - Lab cases are evidence about bounded compositions, not certification of their inputs
+  - assurance evidence cannot authorize a runtime action
+  - where a requirement has no attributable owner, the mapping remains candidate, adapter-only, composition-dependent, or not-yet-evidenced

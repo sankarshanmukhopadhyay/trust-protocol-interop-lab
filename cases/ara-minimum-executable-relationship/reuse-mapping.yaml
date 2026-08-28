@@ -1,0 +1,250 @@
+version: 1
+case_id: IC-ARA-REL-001
+captured_at: 2026-08-28
+mapping_classes:
+  direct: pinned source directly owns or defines the needed semantic or executable contract
+  composition-dependent: requirement emerges from combining components; no single source owns the complete ARA behavior
+  adapter-only: Lab can exercise the requirement locally but standards-native implementation evidence is not yet present
+  candidate: plausible source mapping exists but needs further evidence before relying on it
+  not-yet-evidenced: no attributable source currently supports the required behavior
+
+requirements:
+  - id: ARA-R01-agent-role-continuity
+    requirement: persistent accountable Agent Role distinct from Live Agent lifetime
+    classification: composition-dependent
+    sources: [tea, arpa, tsmm, tga]
+    evidence: [IC-ARPA-A2A-TT-001, IC-ARPA-TRQP-HIST-001]
+    rationale: TEA and ARPA provide durable agent/control concepts and TSMM/TGA provide accountability/lifecycle semantics, but no pinned source directly defines the ARA Agent Role plus Role Record continuity contract.
+
+  - id: ARA-R02-live-agent-non-operative
+    requirement: generative Live Agent output cannot directly sign or actuate
+    classification: composition-dependent
+    sources: [tea, tga, openvtc-vti]
+    evidence: []
+    rationale: TEA controller boundaries and TGA governance patterns support mediated control; the exact ARA non-operative-media rule still requires Lab enforcement and negative tests.
+
+  - id: ARA-R03-role-record-state
+    requirement: append-only/end-verifiable persistent Role Record state with current-head and rollback/fork checks
+    classification: adapter-only
+    sources: [arpa, dtg-credentials]
+    evidence: [IC-ARPA-TRQP-HIST-001]
+    rationale: historical/lifecycle verification is adjacent and DID-method guidance identifies durable-history properties, but no pinned source supplies the complete ARA Role Record state engine.
+
+  - id: ARA-R04-historical-identity-control
+    requirement: distinguish current identity/control from historically applicable key/control state
+    classification: candidate
+    sources: [arpa, dtg-credentials]
+    evidence: [IC-ARPA-TRQP-HIST-001]
+    rationale: both sources materially support historical-state reasoning; exact binding of every ARA action to a historical Agent Role control event remains to be executed.
+
+  - id: ARA-R05-relationship-recognition
+    requirement: thin typed evidence of a recognized relationship edge
+    classification: direct
+    sources: [dtg-credentials]
+    evidence: []
+    rationale: VRC semantics directly address relationship-edge evidence; ARA must preserve the explicit non-authority boundary.
+
+  - id: ARA-R06-participant-description
+    requirement: participant-facing RCard description of role, supported protocols, evidence and limitations
+    classification: direct
+    sources: [dtg-credentials]
+    evidence: []
+    rationale: RCard semantics are owned by the DTG credentials source, while any fiduciary/ARA profile remains candidate work.
+
+  - id: ARA-R07-agreement-object
+    requirement: exact immutable/versioned agreement proposal, acceptance and activation semantics
+    classification: not-yet-evidenced
+    sources: []
+    evidence: []
+    rationale: no pinned source was found that directly owns the complete ARA Agreement Object lifecycle required by the minimum slice.
+
+  - id: ARA-R08-authority-provenance
+    requirement: attributable scoped authority/delegation evidence distinct from identity and relationship
+    classification: direct
+    sources: [arpa, tsmm, tga, tis]
+    evidence: [IC-ARPA-A2A-TT-001, IC-GOVOPS-EXEC-TRUST-001]
+    rationale: ARPA owns scoped authority/delegation protocol semantics locally; TSMM/TGA/TIS provide aligned semantic/governance/portable-contract support. None of these makes authority itself an allow decision.
+
+  - id: ARA-R09-multi-hop-delegation
+    requirement: bounded delegation lineage with monotonic scope and revocation handling
+    classification: direct
+    sources: [arpa, tsmm, tga, tis]
+    evidence: [IC-ARPA-A2A-TT-001]
+    rationale: existing project artifacts explicitly model and test delegation lineage and authority boundaries.
+
+  - id: ARA-R10-policy-gate
+    requirement: deterministic instance-governance allow/deny/escalate/indeterminate decision
+    classification: composition-dependent
+    sources: [tsmm, tga, tis, interop-lab]
+    evidence: [IC-GOVOPS-EXEC-TRUST-001]
+    rationale: the GovOps case proves capability/authority/policy/effect separation, and TSMM/TGA/TIS provide decision semantics/contracts; ARA-specific relationship-state conjunction remains to be implemented.
+
+  - id: ARA-R11-exact-trust-task
+    requirement: exact versioned bounded inter-party operation with lifecycle, freshness, correlation and error semantics
+    classification: direct
+    sources: [trust-tasks]
+    evidence: [IC-ARPA-A2A-TT-001, IC-TEA-MCP-TT-001, IC-TT-TSMM-TIS-001, IC-DTG-PROTECTED-ACCESS-001]
+    rationale: Trust Tasks directly owns the generic task framework; ARA-specific task profiles and agreement/state effects are composition-dependent rather than owned by the generic framework.
+
+  - id: ARA-R12-task-to-relationship-binding
+    requirement: bind task to exact relationship, agreement, authority, Role Record head, recipient and evidence requirements
+    classification: composition-dependent
+    sources: [trust-tasks, arpa, tis]
+    evidence: [IC-ARPA-A2A-TT-001, IC-TT-TSMM-TIS-001]
+    rationale: component contracts exist for task, authority and evidence, but the exact ARA conjunction is new composition work.
+
+  - id: ARA-R13-capability-derivation
+    requirement: derive narrow technical capability only after legitimate authorization and bind it to scope/expiry/revocation
+    classification: composition-dependent
+    sources: [tsmm, tga, tis, interop-lab]
+    evidence: [IC-GOVOPS-EXEC-TRUST-001]
+    rationale: capability != authority != authorization != execution has executable Lab evidence; ARA still needs concrete capability issuance/attenuation code.
+
+  - id: ARA-R14-protected-signing
+    requirement: authenticated Workflow-bound signing with no unrestricted Live Agent/arbitrary-byte signing path
+    classification: candidate
+    sources: [openvtc-vti, tea]
+    evidence: []
+    rationale: OpenVTC provides relevant VTA protected trust functions and TEA provides Controller boundaries, but the exact TEA-to-VTA ARA signed-action request and denial corpus are not yet evidenced.
+
+  - id: ARA-R15-cryptographic-use-receipt
+    requirement: evidence for accepted/refused consequential cryptographic operations
+    classification: candidate
+    sources: [openvtc-vti, tis]
+    evidence: []
+    rationale: relevant audit/evidence patterns exist, but the exact ARA receipt contract is not yet pinned as a direct source-owned artifact.
+
+  - id: ARA-R16-secure-transport
+    requirement: authenticated/privacy-protecting serialized endpoint exchange
+    classification: direct
+    sources: [tsp, tea]
+    evidence: [IC-TEA-MCP-TT-001]
+    rationale: TSP/TEA own transport/endpoint exchange semantics; transport success must remain distinct from relationship or task legitimacy.
+
+  - id: ARA-R17-independent-counterparty-verification
+    requirement: receiver independently verifies identity, authority, task, agreement/state, freshness and local policy without trusting sender internal reasoning
+    classification: composition-dependent
+    sources: [tea, trust-tasks, arpa, tsmm, tga, tis]
+    evidence: [IC-ARPA-A2A-TT-001, IC-GOVOPS-EXEC-TRUST-001]
+    rationale: each input surface is represented, but the complete receiver-side ARA conjunction has not yet been executed.
+
+  - id: ARA-R18-execution-effect-correlation
+    requirement: correlate observed actuator effect to exact authorization decision/task/capability
+    classification: direct
+    sources: [tsmm, tga, tis, interop-lab]
+    evidence: [IC-GOVOPS-EXEC-TRUST-001, IC-TT-TSMM-TIS-001]
+    rationale: existing artifacts explicitly preserve authority/decision/execution/evidence separation and effect correlation.
+
+  - id: ARA-R19-execution-evidence
+    requirement: portable attributable process/effect evidence that does not become authority
+    classification: direct
+    sources: [tis, tsmm]
+    evidence: [IC-TT-TSMM-TIS-001, IC-GOVOPS-EXEC-TRUST-001]
+    rationale: TIS owns portable contracts and TSMM owns semantics; Lab evidence already pressure-tests the authority boundary.
+
+  - id: ARA-R20-distributed-vrr
+    requirement: distributed Verifiable Relationship Record reconstructed from independent Role Records without central master state
+    classification: adapter-only
+    sources: []
+    evidence: []
+    rationale: this is a central ARA architectural contribution; no pinned source currently implements the complete distributed relationship intersection.
+
+  - id: ARA-R21-shared-object-inspection-receipts
+    requirement: distinguish sent/copied/decrypted/inspected/acknowledged/accepted/disputed states bound to exact content identifiers
+    classification: composition-dependent
+    sources: [trust-tasks, tis]
+    evidence: [IC-DTG-PROTECTED-ACCESS-001]
+    rationale: Trust Tasks 0.5.0 sharply distinguishes lifecycle states and transport silence; TIS supplies receipt contracts, but collective relationship inspection/disposition semantics remain ARA composition work.
+
+  - id: ARA-R22-collective-knowledge-checkpoint
+    requirement: compact cross-anchored evidence of exactly what applicable parties formally inspected, without implying truth/agreement
+    classification: not-yet-evidenced
+    sources: []
+    evidence: []
+    rationale: no pinned project directly owns the proposed ARA Collective Knowledge Certificate/Relationship Knowledge Checkpoint semantics.
+
+  - id: ARA-R23-private-pointer-commitment-boundaries
+    requirement: keep private evidence, visible pointer/attestation and opaque commitment distinct from shared exact data
+    classification: adapter-only
+    sources: [dpip]
+    evidence: [IC-DTG-PROTECTED-ACCESS-001]
+    rationale: privacy observation machinery helps test disclosure/correlation, but does not implement ARA relationship-evidence classes.
+
+  - id: ARA-R24-no-link-traversal-inference
+    requirement: relationship/record linkage does not grant traversal, disclosure, authority or capability
+    classification: composition-dependent
+    sources: [tsmm, tga, tis]
+    evidence: []
+    rationale: governance and authority separation patterns support the rule; ARA must implement and falsify it over real linked records.
+
+  - id: ARA-R25-continuity-across-live-agents
+    requirement: replacement Live Agent resumes solely from persisted authorized state
+    classification: adapter-only
+    sources: [tea, arpa]
+    evidence: []
+    rationale: durable agent/memory concepts exist, but no current evidence demonstrates ARA continuation after destroying the generative process and withholding prior conversation state.
+
+  - id: ARA-R26-challenge-remediation-redress
+    requirement: challenge, disagreement, correction, remediation and closure preserve historical evidence and current authority distinctions
+    classification: composition-dependent
+    sources: [tsmm, tga, tis, arpa]
+    evidence: [IC-ARPA-TRQP-HIST-001]
+    rationale: lifecycle/redress semantics exist, but the ARA relationship ceremony remains unexecuted.
+
+  - id: ARA-R27-relationship-view
+    requirement: privacy-bounded authorized human/machine view with source traceability, uncertainty and material dependencies
+    classification: adapter-only
+    sources: [tis]
+    evidence: []
+    rationale: TIS can package evidence, but the ARA Relationship View and comprehension requirements are not directly implemented.
+
+  - id: ARA-R28-vtc-governance-assurance
+    requirement: plural community governance/assurance evidence without community membership becoming universal authorization
+    classification: candidate
+    sources: [openvtc-vti, tsmm, tga, tis]
+    evidence: []
+    rationale: VTC implementation and governance/assurance models are relevant, but ARA has not yet exercised multiple communities or local sufficiency evaluation.
+
+  - id: ARA-R29-privacy-correlation
+    requirement: observe and bound correlation surfaces across identifiers, task metadata, status/resolution, endpoints and retained evidence
+    classification: direct
+    sources: [trust-tasks, dtg-credentials, dpip]
+    evidence: [IC-DTG-PROTECTED-ACCESS-001]
+    rationale: the pinned sources directly expose correlation/linkability requirements and executable observation machinery; ARA-specific transport/state surfaces still need measurement.
+
+  - id: ARA-R30-false-independence
+    requirement: apparent multiplicity of identities/issuers/communities/witnesses/evidence paths is not automatically independent support
+    classification: direct
+    sources: [rahp]
+    evidence: []
+    rationale: RAHP's completed false-independence corpus directly owns the assurance proposition and falsifiers; it does not become runtime authorization semantics.
+
+  - id: ARA-R31-indeterminate-evidence
+    requirement: missing required evidence remains indeterminate rather than becoming PASS
+    classification: direct
+    sources: [dpip, rahp, interop-lab]
+    evidence: [IC-DTG-PROTECTED-ACCESS-001]
+    rationale: existing assurance/evaluation machinery explicitly preserves evidence insufficiency.
+
+  - id: ARA-R32-standards-native-substitution
+    requirement: replace local adapters one boundary at a time and rerun invariant suite without semantic drift
+    classification: composition-dependent
+    sources: [interop-lab]
+    evidence: []
+    rationale: the Lab owns experimental substitution/evidence methodology; no standards-native coverage is claimed until each integration executes.
+
+summary:
+  direct: 11
+  composition-dependent: 10
+  adapter-only: 5
+  candidate: 4
+  not-yet-evidenced: 2
+
+judgment: >-
+  ARA is not a greenfield stack. Generic task semantics, transport, relationship-edge/card
+  semantics, authority/delegation, runtime decision/effect separation, portable evidence,
+  privacy observation and assurance falsifiers have strong reusable foundations. The genuinely
+  new implementation surface concentrates around durable ARA Role Record semantics, exact
+  Agreement Object lifecycle, the full relationship-specific authorization conjunction,
+  distributed VRR/collective-knowledge state, Live Agent replacement continuity, protected
+  TEA-to-VTA binding, and Relationship Views.
