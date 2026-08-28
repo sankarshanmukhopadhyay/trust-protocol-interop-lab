@@ -1,0 +1,186 @@
+version: 1
+case_id: IC-ARA-REL-001
+purpose: >-
+  Machine-readable crosswalk from principal Agent Relationship Architecture concepts
+  to the bounded Interop Lab implementation, executable evidence, and claim boundaries.
+source_architecture:
+  description: July 2026 revised Agent Relationship Architecture proposal
+  stored_in_repository: false
+final_maturity: interoperability-tested
+final_claim: >-
+  bounded executable semantic composition, adapter-backed at declared boundaries,
+  with adversarial evidence and explicit standards/conformance exclusions
+
+concepts:
+  - id: persistent-agent-role
+    architecture_concept: Persistent Agent Role independent of Live Agent lifetime
+    claim: Continuity derives from persisted authorized state, not model conversation memory.
+    implementation:
+      - experiments/ara-role-record/engine.py
+      - experiments/ara-lifecycle-continuity/lifecycle.py
+    runner: experiments/ara-role-record/run.py
+    evidence:
+      - cases/ara-minimum-executable-relationship/phase3-role-record-judgment.md
+      - cases/ara-minimum-executable-relationship/phase8-lifecycle-continuity-judgment.md
+    status: lab-executable
+    boundary: No production identity/control or durable-storage conformance is claimed.
+
+  - id: role-record
+    architecture_concept: Persistent relationship-local Role Record with current defensible head
+    claim: Stale, rollback, replay and conflicting state cannot authorize new transitions.
+    implementation:
+      - experiments/ara-role-record/engine.py
+    runner: experiments/ara-role-record/run.py
+    evidence:
+      - experiments/ara-role-record/README.md
+      - cases/ara-minimum-executable-relationship/phase3-role-record-judgment.md
+    status: lab-executable
+    boundary: Local hash-linked state semantics; no Byzantine consensus or hardware anti-rollback claim.
+
+  - id: agreement-object
+    architecture_concept: Exact versioned Agreement Object and lifecycle
+    claim: Agreement terms/lifecycle remain distinct from authority, policy and capability.
+    implementation:
+      - experiments/ara-policy-spine/authorization.py
+    runner: experiments/ara-policy-spine/run.py
+    evidence:
+      - experiments/ara-policy-spine/README.md
+      - cases/ara-minimum-executable-relationship/phase4-policy-spine-judgment.md
+    status: lab-executable
+    boundary: Synthetic agreement semantics; no legal enforceability claim.
+
+  - id: authority-and-policy
+    architecture_concept: Authority evidence plus deterministic relationship Workflow / Policy Gate
+    claim: Identity or delegation evidence alone cannot produce authorization.
+    implementation:
+      - experiments/ara-policy-spine/authorization.py
+    runner: experiments/ara-policy-spine/run.py
+    evidence:
+      - cases/ara-minimum-executable-relationship/phase4-policy-spine-judgment.md
+    status: lab-executable
+    boundary: Lab-local deterministic policy semantics; no jurisdictional authority-validity claim.
+
+  - id: scoped-capability
+    architecture_concept: Least-privilege relationship/agreement-scoped capability
+    claim: Capability is derived only after allow and remains subject to scope, expiry, suspension and revocation.
+    implementation:
+      - experiments/ara-policy-spine/authorization.py
+    runner: experiments/ara-policy-spine/run.py
+    evidence:
+      - experiments/ara-policy-spine/README.md
+    status: lab-executable
+    boundary: Capability implementation is a Lab model, not a production capability-security profile.
+
+  - id: exact-trust-task
+    architecture_concept: Exact Trust Task / action intent binding
+    claim: Exact task/version is bound to relationship, agreement, authority, decision, capability, recipient, purpose, payload, nonce and freshness.
+    implementation:
+      - experiments/ara-policy-spine/authorization.py
+    runner: experiments/ara-policy-spine/run.py
+    evidence:
+      - cases/ara-minimum-executable-relationship/phase11-standards-substitution-disposition.md
+    status: normative-semantic-binding-plus-local-profile
+    boundary: Generic Trust Tasks semantics are pinned; ara/research-query/0.1 is not claimed as a registered upstream profile.
+
+  - id: protected-signing
+    architecture_concept: Protected cryptographic-use boundary
+    claim: Cryptographic possession/reachability is not sufficient; exact admitted context must be rechecked before use.
+    implementation:
+      - experiments/ara-protected-signing/signer.py
+    runner: experiments/ara-protected-signing/run.py
+    evidence:
+      - experiments/ara-protected-signing/README.md
+      - cases/ara-minimum-executable-relationship/phase5-protected-signing-judgment.md
+    status: residual-adapter
+    boundary: HMAC is a Lab stand-in; no OpenVTC VTA, HSM, TEE or production key-protection conformance claim.
+
+  - id: independent-counterparty
+    architecture_concept: Independently controlled counterparty verification across transport boundary
+    claim: Sender authorization and transport success do not compel receiver acceptance.
+    implementation:
+      - experiments/ara-independent-counterparty/sender.py
+      - experiments/ara-independent-counterparty/receiver.py
+    runner: experiments/ara-independent-counterparty/run.py
+    evidence:
+      - experiments/ara-independent-counterparty/README.md
+      - cases/ara-minimum-executable-relationship/phase6-independent-counterparty-judgment.md
+    status: lab-executable-residual-transport-adapter
+    boundary: Separate subprocess/file exchange proves process/verification separation, not TSP conformance or production network security.
+
+  - id: distributed-vrr
+    architecture_concept: Distributed Verifiable Relationship Record / shared relationship intersection
+    claim: Shared relationship state is reconstructed from exact attributable evidence, not a jointly writable master dossier.
+    implementation:
+      - experiments/ara-distributed-vrr/vrr.py
+    runner: experiments/ara-distributed-vrr/run.py
+    evidence:
+      - experiments/ara-distributed-vrr/README.md
+      - cases/ara-minimum-executable-relationship/phase7-distributed-vrr-judgment.md
+    status: lab-executable
+    boundary: No normative VRC/RCard/VRR, CRDT, ledger or distributed-consensus conformance claim.
+
+  - id: lifecycle-continuity
+    architecture_concept: Replacement, challenge, correction, remediation, revocation, continuation and closure
+    claim: Current authority may change without rewriting historical truth; safe continuation requires current defensible state.
+    implementation:
+      - experiments/ara-lifecycle-continuity/lifecycle.py
+      - experiments/ara-role-record/engine.py
+      - experiments/ara-policy-spine/authorization.py
+      - experiments/ara-distributed-vrr/vrr.py
+    runner: experiments/ara-lifecycle-continuity/run.py
+    evidence:
+      - experiments/ara-lifecycle-continuity/README.md
+      - cases/ara-minimum-executable-relationship/phase8-lifecycle-continuity-judgment.md
+    status: lab-executable
+    boundary: No production recovery/revocation-distribution or legal closure semantics claimed.
+
+  - id: relationship-view
+    architecture_concept: Authorized Relationship View / legitimacy explanation
+    claim: A reviewer can inspect material evidence, uncertainty, dispute, restrictions and historical/current distinctions without the view becoming authority.
+    implementation:
+      - experiments/ara-relationship-view/view.py
+    runner: experiments/ara-relationship-view/run.py
+    evidence:
+      - experiments/ara-relationship-view/README.md
+      - cases/ara-minimum-executable-relationship/phase9-relationship-view-judgment.md
+    status: lab-executable
+    boundary: No legal disclosure, human-factors, accessibility or normative view-schema conformance claim.
+
+  - id: adversarial-assurance
+    architecture_concept: Assurance over relationship evidence and false-independence pressure
+    claim: Missing evidence remains indeterminate; assurance cannot create authority; multiplicity alone is not independent support.
+    implementation:
+      - experiments/ara-adversarial-assurance/assurance.py
+    runner: experiments/ara-adversarial-assurance/run.py
+    evidence:
+      - experiments/ara-adversarial-assurance/README.md
+      - cases/ara-minimum-executable-relationship/phase10-rahp-pressure-review.md
+      - cases/ara-minimum-executable-relationship/phase10-adversarial-assurance-judgment.md
+    status: lab-executable
+    boundary: No penetration-test, formal-verification, external-certification or complete organizational-independence claim.
+
+  - id: standards-boundary
+    architecture_concept: Standards-native substitution and semantic ownership
+    claim: Standards/native responsibility is transferred only when exact executable substitution evidence exists.
+    implementation:
+      - experiments/ara-standards-boundary/run.py
+    runner: experiments/ara-standards-boundary/run.py
+    evidence:
+      - experiments/ara-standards-boundary/README.md
+      - cases/ara-minimum-executable-relationship/phase11-standards-substitution-disposition.md
+      - cases/ara-minimum-executable-relationship/phase11-standards-boundary-judgment.md
+    status: mixed-semantic-binding-and-residual-adapters
+    boundary: Boundary review is satisfied; blanket TSP/VTA/RCard/VRC conformance is not claimed.
+
+  - id: programme-admission
+    architecture_concept: Evidence-gated final maturity and human acceptance
+    claim: Catalog admission requires all bounded gates plus an explicit human claim-boundary decision.
+    implementation:
+      - experiments/ara-program-admission/run.py
+    runner: experiments/ara-program-admission/run.py
+    evidence:
+      - cases/ara-minimum-executable-relationship/final-claim-boundary.md
+      - cases/ara-minimum-executable-relationship/promotion-gates.yaml
+      - evidence/ara-minimum-executable-relationship/evidence-manifest.json
+    status: admitted
+    boundary: Interoperability-tested applies only to the declared bounded semantic-composition claim.
