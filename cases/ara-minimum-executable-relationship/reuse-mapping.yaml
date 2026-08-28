@@ -235,8 +235,8 @@ requirements:
 
 summary:
   direct: 11
-  composition-dependent: 11
-  adapter-only: 6
+  composition-dependent: 10
+  adapter-only: 5
   candidate: 4
   not-yet-evidenced: 2
 
