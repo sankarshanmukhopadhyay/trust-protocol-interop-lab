@@ -1,5 +1,7 @@
 # ARA minimum executable relationship — implementation architecture
 
+> **Historical design snapshot.** This document records the implementation shape selected before runtime code was introduced. The programme is now complete and admitted at bounded `interoperability-tested` maturity. For the current experiment narrative and actual architecture→code mapping, start with [README.md](README.md), [FOLLOW-ALONG.md](FOLLOW-ALONG.md), and [architecture-to-code.yaml](architecture-to-code.yaml).
+
 This document records the implementation shape selected for `IC-ARA-REL-001` before runtime code is introduced.
 
 ## Architectural decision
