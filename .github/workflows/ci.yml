@@ -54,6 +54,9 @@ jobs:
       - name: Run ARA protected-signing evidence
         run: python experiments/ara-protected-signing/run.py --check
 
+      - name: Run ARA independent-counterparty evidence
+        run: python experiments/ara-independent-counterparty/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
