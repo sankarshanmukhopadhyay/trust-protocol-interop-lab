@@ -1,162 +1,116 @@
-version: 1
+version: 2
 case_id: IC-ARA-REL-001
-status: pre-admission
-promotion_ready: false
+status: interoperability-tested
+promotion_ready: true
+decision_date: 2026-08-28
 principles:
   - green repository assurance is necessary but not sufficient
   - documentation intent does not satisfy an executable evidence gate
-  - missing evidence remains indeterminate or not-started
+  - missing evidence remains indeterminate
   - adapter-backed evidence must not be relabeled as standards-native conformance
   - each gate is independently attributable
+  - human acceptance is required for admission
 
 summary:
-  satisfied: 4
+  satisfied: 12
   partially_satisfied: 0
   blocked: 0
-  not_started: 8
+  not_started: 0
 
 gates:
   - id: ARA-G1-SEMANTIC-OWNERSHIP
     mandatory: true
     status: satisfied
-    question: Are minimum ARA objects, boundaries, non-implication rules, and falsification vectors explicitly defined without silently claiming upstream ownership?
     evidence:
-      - cases/ara-minimum-executable-relationship/README.md
       - cases/ara-minimum-executable-relationship/ownership.yaml
       - cases/ara-minimum-executable-relationship/invariants.yaml
       - cases/ara-minimum-executable-relationship/vectors.yaml
-      - cases/ara-minimum-executable-relationship/judgment-log.md
-    resolved_gap: pre-code semantic boundaries and falsification contract established
-    next_action: preserve these boundaries while implementing the pinned reuse plan
-
   - id: ARA-G2-BASELINES-PINNED
     mandatory: true
     status: satisfied
-    question: Are all reused upstream/local experimental components pinned to immutable baselines with explicit semantic mapping status?
     evidence:
       - cases/ara-minimum-executable-relationship/baselines.yaml
       - cases/ara-minimum-executable-relationship/reuse-mapping.yaml
-      - cases/ara-minimum-executable-relationship/reuse-matrix.md
-      - cases/ara-minimum-executable-relationship/gap-register.yaml
       - cases/ara-minimum-executable-relationship/adapter-plan.md
-      - cases/ara-minimum-executable-relationship/judgment-log.md
-    resolved_gap: >-
-      phase 2 pins exact inspected baselines and classifies every minimum-slice requirement as
-      direct, composition-dependent, adapter-only, candidate, or not-yet-evidenced; unresolved
-      Agreement Object and collective-knowledge semantics remain explicit rather than assigned
-      to a nearby component
-    next_action: preserve exact source ownership while implementing local composition semantics
-
   - id: ARA-G3-ROLE-STATE-EXECUTABLE
     mandatory: true
     status: satisfied
-    question: Can persistent Agent Role/Role Record state advance, survive Live Agent replacement, and reject stale/rollback/fork transitions?
     evidence:
-      - experiments/ara-role-record/engine.py
       - experiments/ara-role-record/run.py
-      - experiments/ara-role-record/README.md
-      - .github/workflows/ci.yml
-    resolved_gap: >-
-      a deterministic Lab-local hash-linked Role Record engine now persists relationship-local
-      state across engine/Live Agent replacement, binds updates to the current head and an
-      authorized Workflow class, emits machine-readable receipts, preserves evidence visibility
-      classes, and rejects unauthorized, missing-head, stale/rollback, replay, fork, hidden-session,
-      mutation, deletion, and persisted-head rollback vectors
-    limitations: >-
-      evidence is bounded to Lab-local state semantics and does not establish KERI, BetterSign,
-      OpenVTC VTA, transparency-log, hardware anti-rollback, Byzantine consensus, or production
-      persistence/security conformance
-    next_action: preserve current-head binding through the authorization spine
-
+      - cases/ara-minimum-executable-relationship/phase3-role-record-judgment.md
   - id: ARA-G4-POLICY-TASK-CAPABILITY
     mandatory: true
     status: satisfied
-    question: Does an exact Agreement Object, deterministic Policy Gate, Trust Task binding, capability derivation, and execution admission remain separately observable and executable?
     evidence:
-      - experiments/ara-policy-spine/authorization.py
       - experiments/ara-policy-spine/run.py
-      - experiments/ara-policy-spine/README.md
       - cases/ara-minimum-executable-relationship/phase4-policy-spine-judgment.md
-      - .github/workflows/ci.yml
-    resolved_gap: >-
-      the Lab now executes a bounded authorization spine with immutable agreement terms plus
-      append-only lifecycle events, a closed allow/deny/escalate/indeterminate Policy Gate,
-      exact task/context binding, post-authorization least-privilege capability derivation,
-      capability attenuation/suspension/expiry/revocation, final execution admission, and
-      effect-correlation evidence. The runner imports the Phase 3 current Role Record head and
-      exercises semantic-substitution failures rather than treating one persuasive artifact as
-      sufficient authorization.
-    limitations: >-
-      this is Lab-local composition evidence. It does not establish normative Agreement Object
-      ownership, a registered ARA Trust Task profile, production capability security, TSP/TEA/VTA
-      conformance, jurisdiction-specific authority validity, or independent counterparty verification.
-    next_action: issue 37 — place protected cryptographic use behind the admitted exact context and prove direct Live Agent/arbitrary-byte signing paths fail
-
   - id: ARA-G5-PROTECTED-SIGNING
     mandatory: true
-    status: not-started
-    question: Does protected signing refuse direct/unsupported/stale/substituted/replayed requests and emit attributable cryptographic-use receipts?
-    evidence: []
-    gap: protected signer boundary not yet implemented
-    next_action: issue 37
-
+    status: satisfied
+    evidence:
+      - experiments/ara-protected-signing/run.py
+      - cases/ara-minimum-executable-relationship/phase5-protected-signing-judgment.md
   - id: ARA-G6-INDEPENDENT-COUNTERPARTY
     mandatory: true
-    status: not-started
-    question: Do two independently controlled Agent Roles exchange serialized artifacts across a real process/transport boundary and verify independently?
-    evidence: []
-    gap: current case remains single-Lab-runtime for relationship execution
-    next_action: issue 38
-
+    status: satisfied
+    evidence:
+      - experiments/ara-independent-counterparty/run.py
+      - cases/ara-minimum-executable-relationship/phase6-independent-counterparty-judgment.md
   - id: ARA-G7-DISTRIBUTED-RELATIONSHIP-STATE
     mandatory: true
-    status: not-started
-    question: Can the distributed relationship intersection be reconstructed from independent Role Records while preserving exact shared/private/receipt/disposition distinctions?
-    evidence: []
-    gap: VRR semantics not yet executable
-    next_action: issue 39
-
+    status: satisfied
+    evidence:
+      - experiments/ara-distributed-vrr/run.py
+      - cases/ara-minimum-executable-relationship/phase7-distributed-vrr-judgment.md
   - id: ARA-G8-CONTINUITY-REMEDIATION
     mandatory: true
-    status: not-started
-    question: Can replacement, challenge, correction, remediation, revocation, continuation, and closure execute without hidden model memory or history rewrite?
-    evidence: []
-    gap: Phase 3 proves state continuity and append-only correction only; complete relationship lifecycle is deferred
-    next_action: issue 40
-
+    status: satisfied
+    evidence:
+      - experiments/ara-lifecycle-continuity/run.py
+      - cases/ara-minimum-executable-relationship/phase8-lifecycle-continuity-judgment.md
   - id: ARA-G9-RELATIONSHIP-VIEW
     mandatory: true
-    status: not-started
-    question: Can an authorized reviewer receive a traceable, privacy-bounded view explaining action legitimacy, dispute, dependencies, and uncertainty?
-    evidence: []
-    gap: Relationship View not yet implemented
-    next_action: issue 41
-
+    status: satisfied
+    evidence:
+      - experiments/ara-relationship-view/run.py
+      - cases/ara-minimum-executable-relationship/phase9-relationship-view-judgment.md
   - id: ARA-G10-ADVERSARIAL-EVIDENCE
     mandatory: true
-    status: not-started
-    question: Have material ARA invariants survived systematic negative/adversarial pressure with reproducible evidence and RAHP review where warranted?
-    evidence: []
-    gap: Phases 3-4 contain local adversarial vectors, but the full cross-component assurance run has not yet been performed
-    next_action: issue 42
-
+    status: satisfied
+    evidence:
+      - experiments/ara-adversarial-assurance/run.py
+      - cases/ara-minimum-executable-relationship/phase10-rahp-pressure-review.md
+      - cases/ara-minimum-executable-relationship/phase10-adversarial-assurance-judgment.md
   - id: ARA-G11-STANDARDS-NATIVE-BOUNDARY
     mandatory: false
-    status: not-started
-    question: Which local adapters have been successfully substituted by pinned standards-native or independently implemented components without breaking ARA invariants?
-    evidence: []
-    gap: substitution deliberately deferred until walking skeleton is evidenced
-    next_action: issue 43
-
+    status: satisfied
+    evidence:
+      - experiments/ara-standards-boundary/run.py
+      - cases/ara-minimum-executable-relationship/phase11-standards-substitution-disposition.md
+      - cases/ara-minimum-executable-relationship/phase11-standards-boundary-judgment.md
+    interpretation: satisfied as a per-component standards-native boundary review, not blanket conformance
   - id: ARA-G12-CLAIM-BOUNDARY-REVIEW
     mandatory: true
-    status: not-started
-    question: Has a human-reviewed final claim boundary distinguished semantic execution, implementation evidence, standards-native coverage, production security, certification, and unresolved gaps?
-    evidence: []
-    gap: final evidence does not yet exist
-    next_action: complete after issues 34-43 and record maintainer decision
+    status: satisfied
+    evidence:
+      - cases/ara-minimum-executable-relationship/final-claim-boundary.md
+      - cases/ara-minimum-executable-relationship/program-completion-judgment.md
+      - evidence/ara-minimum-executable-relationship/evidence-manifest.json
 
-admission_rule: >-
-  Pre-admission construction may be admitted to the authoritative Interop Case catalog only
-  after the Lab has executable evidence sufficient for a bounded experimental claim and a
-  human maintainer explicitly accepts that claim. No catalog change is authorized by this file alone.
+admission:
+  decision: admitted
+  maturity: interoperability-tested
+  claim: bounded executable semantic composition
+  maintainer: sankarshanmukhopadhyay
+  exclusions:
+    - wire-protocol conformance
+    - production security certification
+    - external certification
+    - blanket TSP/VTA/RCard/VRC conformance
+    - legal authority validity
+    - arbitrary multi-party ARA semantics
+    - standards-native replacement of every adapter
+
+extraction:
+  decision: remain-in-interop-lab
+  reason: no observed independent reuse, distinct downstream consumer base, or separately justified release lifecycle
