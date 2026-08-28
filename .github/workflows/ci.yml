@@ -60,6 +60,9 @@ jobs:
       - name: Run ARA distributed-VRR evidence
         run: python experiments/ara-distributed-vrr/run.py --check
 
+      - name: Run ARA lifecycle-continuity evidence
+        run: python experiments/ara-lifecycle-continuity/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
