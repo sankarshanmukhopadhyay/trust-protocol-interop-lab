@@ -10,10 +10,10 @@ principles:
   - each gate is independently attributable
 
 summary:
-  satisfied: 3
+  satisfied: 4
   partially_satisfied: 0
   blocked: 0
-  not_started: 9
+  not_started: 8
 
 gates:
   - id: ARA-G1-SEMANTIC-OWNERSHIP
@@ -66,15 +66,31 @@ gates:
       evidence is bounded to Lab-local state semantics and does not establish KERI, BetterSign,
       OpenVTC VTA, transparency-log, hardware anti-rollback, Byzantine consensus, or production
       persistence/security conformance
-    next_action: issue 36 — build the Agreement Object, deterministic Policy Gate, Trust Task, capability and execution-admission spine on the proven current-head substrate
+    next_action: preserve current-head binding through the authorization spine
 
   - id: ARA-G4-POLICY-TASK-CAPABILITY
     mandatory: true
-    status: not-started
+    status: satisfied
     question: Does an exact Agreement Object, deterministic Policy Gate, Trust Task binding, capability derivation, and execution admission remain separately observable and executable?
-    evidence: []
-    gap: authorization spine not yet implemented
-    next_action: issue 36
+    evidence:
+      - experiments/ara-policy-spine/authorization.py
+      - experiments/ara-policy-spine/run.py
+      - experiments/ara-policy-spine/README.md
+      - cases/ara-minimum-executable-relationship/phase4-policy-spine-judgment.md
+      - .github/workflows/ci.yml
+    resolved_gap: >-
+      the Lab now executes a bounded authorization spine with immutable agreement terms plus
+      append-only lifecycle events, a closed allow/deny/escalate/indeterminate Policy Gate,
+      exact task/context binding, post-authorization least-privilege capability derivation,
+      capability attenuation/suspension/expiry/revocation, final execution admission, and
+      effect-correlation evidence. The runner imports the Phase 3 current Role Record head and
+      exercises semantic-substitution failures rather than treating one persuasive artifact as
+      sufficient authorization.
+    limitations: >-
+      this is Lab-local composition evidence. It does not establish normative Agreement Object
+      ownership, a registered ARA Trust Task profile, production capability security, TSP/TEA/VTA
+      conformance, jurisdiction-specific authority validity, or independent counterparty verification.
+    next_action: issue 37 — place protected cryptographic use behind the admitted exact context and prove direct Live Agent/arbitrary-byte signing paths fail
 
   - id: ARA-G5-PROTECTED-SIGNING
     mandatory: true
@@ -121,7 +137,7 @@ gates:
     status: not-started
     question: Have material ARA invariants survived systematic negative/adversarial pressure with reproducible evidence and RAHP review where warranted?
     evidence: []
-    gap: Phase 3 has local adversarial state vectors, but the full cross-component assurance run has not yet been performed
+    gap: Phases 3-4 contain local adversarial vectors, but the full cross-component assurance run has not yet been performed
     next_action: issue 42
 
   - id: ARA-G11-STANDARDS-NATIVE-BOUNDARY
