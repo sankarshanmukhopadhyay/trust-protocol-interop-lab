@@ -10,10 +10,10 @@ principles:
   - each gate is independently attributable
 
 summary:
-  satisfied: 2
+  satisfied: 3
   partially_satisfied: 0
   blocked: 0
-  not_started: 10
+  not_started: 9
 
 gates:
   - id: ARA-G1-SEMANTIC-OWNERSHIP
@@ -45,15 +45,28 @@ gates:
       direct, composition-dependent, adapter-only, candidate, or not-yet-evidenced; unresolved
       Agreement Object and collective-knowledge semantics remain explicit rather than assigned
       to a nearby component
-    next_action: issue 35 — implement the minimum persistent Role Record state engine without redesigning the mapped boundaries
+    next_action: preserve exact source ownership while implementing local composition semantics
 
   - id: ARA-G3-ROLE-STATE-EXECUTABLE
     mandatory: true
-    status: not-started
+    status: satisfied
     question: Can persistent Agent Role/Role Record state advance, survive Live Agent replacement, and reject stale/rollback/fork transitions?
-    evidence: []
-    gap: no executable Role Record engine yet
-    next_action: issue 35
+    evidence:
+      - experiments/ara-role-record/engine.py
+      - experiments/ara-role-record/run.py
+      - experiments/ara-role-record/README.md
+      - .github/workflows/ci.yml
+    resolved_gap: >-
+      a deterministic Lab-local hash-linked Role Record engine now persists relationship-local
+      state across engine/Live Agent replacement, binds updates to the current head and an
+      authorized Workflow class, emits machine-readable receipts, preserves evidence visibility
+      classes, and rejects unauthorized, missing-head, stale/rollback, replay, fork, hidden-session,
+      mutation, deletion, and persisted-head rollback vectors
+    limitations: >-
+      evidence is bounded to Lab-local state semantics and does not establish KERI, BetterSign,
+      OpenVTC VTA, transparency-log, hardware anti-rollback, Byzantine consensus, or production
+      persistence/security conformance
+    next_action: issue 36 — build the Agreement Object, deterministic Policy Gate, Trust Task, capability and execution-admission spine on the proven current-head substrate
 
   - id: ARA-G4-POLICY-TASK-CAPABILITY
     mandatory: true
@@ -76,7 +89,7 @@ gates:
     status: not-started
     question: Do two independently controlled Agent Roles exchange serialized artifacts across a real process/transport boundary and verify independently?
     evidence: []
-    gap: current case is design/baseline mapped but not yet a two-runtime execution
+    gap: current case remains single-Lab-runtime for relationship execution
     next_action: issue 38
 
   - id: ARA-G7-DISTRIBUTED-RELATIONSHIP-STATE
@@ -92,7 +105,7 @@ gates:
     status: not-started
     question: Can replacement, challenge, correction, remediation, revocation, continuation, and closure execute without hidden model memory or history rewrite?
     evidence: []
-    gap: lifecycle beyond initial action not yet executed
+    gap: Phase 3 proves state continuity and append-only correction only; complete relationship lifecycle is deferred
     next_action: issue 40
 
   - id: ARA-G9-RELATIONSHIP-VIEW
@@ -108,7 +121,7 @@ gates:
     status: not-started
     question: Have material ARA invariants survived systematic negative/adversarial pressure with reproducible evidence and RAHP review where warranted?
     evidence: []
-    gap: full assurance run not yet performed
+    gap: Phase 3 has local adversarial state vectors, but the full cross-component assurance run has not yet been performed
     next_action: issue 42
 
   - id: ARA-G11-STANDARDS-NATIVE-BOUNDARY
