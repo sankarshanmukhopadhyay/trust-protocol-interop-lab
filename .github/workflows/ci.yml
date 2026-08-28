@@ -51,6 +51,9 @@ jobs:
       - name: Run ARA policy-task-capability evidence
         run: python experiments/ara-policy-spine/run.py --check
 
+      - name: Run ARA protected-signing evidence
+        run: python experiments/ara-protected-signing/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
