@@ -63,6 +63,9 @@ jobs:
       - name: Run ARA lifecycle-continuity evidence
         run: python experiments/ara-lifecycle-continuity/run.py --check
 
+      - name: Run ARA relationship-view evidence
+        run: python experiments/ara-relationship-view/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
