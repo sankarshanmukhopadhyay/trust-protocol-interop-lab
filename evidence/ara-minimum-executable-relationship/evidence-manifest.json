@@ -1,11 +1,77 @@
 {
-  "version": 1,
   "case_id": "IC-ARA-REL-001",
-  "generated_for": "final catalog admission",
-  "decision_date": "2026-08-28",
-  "maturity_claim": "interoperability-tested",
+  "evidence_id": "ARA-EVIDENCE-FINAL-2026-08-28",
+  "executed_at": "2026-08-28",
+  "runner": "experiments/ara-program-admission/run.py --check",
   "claim_scope": "bounded executable semantic composition, adapter-backed at declared boundaries, with adversarial evidence and explicit standards/conformance exclusions",
-  "reproduce": "python experiments/ara-program-admission/run.py --check",
+  "result_summary": {
+    "status": "pass",
+    "maturity": "interoperability-tested",
+    "statement": "All 12 bounded evidence gates are satisfied for the executable semantic-composition claim; standards and production-security exclusions remain explicit."
+  },
+  "artifacts": [
+    {
+      "path": "../../cases/ara-minimum-executable-relationship/final-claim-boundary.md"
+    },
+    {
+      "path": "../../cases/ara-minimum-executable-relationship/promotion-gates.yaml"
+    },
+    {
+      "path": "../../cases/ara-minimum-executable-relationship/invariants.yaml"
+    },
+    {
+      "path": "../../cases/ara-minimum-executable-relationship/ownership.yaml"
+    },
+    {
+      "path": "../../cases/ara-minimum-executable-relationship/baselines.yaml"
+    },
+    {
+      "path": "../../cases/ara-minimum-executable-relationship/phase10-rahp-pressure-review.md"
+    },
+    {
+      "path": "../../cases/ara-minimum-executable-relationship/phase11-standards-substitution-disposition.md"
+    },
+    {
+      "path": "../../experiments/ara-role-record/run.py",
+      "git_blob_sha": "e6dbab70ba25ce13e40ed2963c82826d30707fbb"
+    },
+    {
+      "path": "../../experiments/ara-policy-spine/run.py",
+      "git_blob_sha": "b0d6dce0ed194108fa71226c38627cf75c928d70"
+    },
+    {
+      "path": "../../experiments/ara-protected-signing/run.py",
+      "git_blob_sha": "14c7877073d41caf3f5ba77cda4a30c1aa4ddafb"
+    },
+    {
+      "path": "../../experiments/ara-independent-counterparty/run.py",
+      "git_blob_sha": "bf800174402daba30c4025cabbdc8e12274b0f81"
+    },
+    {
+      "path": "../../experiments/ara-distributed-vrr/run.py",
+      "git_blob_sha": "4ec22d9a847ee5b9dacdb560bc41291cd60f2fb4"
+    },
+    {
+      "path": "../../experiments/ara-lifecycle-continuity/run.py",
+      "git_blob_sha": "40904939d6e4b92fa3bf974d429782128f87154e"
+    },
+    {
+      "path": "../../experiments/ara-relationship-view/run.py",
+      "git_blob_sha": "626c50bdcca19ba15eafb74884d77098fd23102f"
+    },
+    {
+      "path": "../../experiments/ara-adversarial-assurance/run.py",
+      "git_blob_sha": "aa50b31dbc5b8811e5d9766b742c1943bf394da2"
+    },
+    {
+      "path": "../../experiments/ara-standards-boundary/run.py",
+      "git_blob_sha": "1bb29da265fb907b513924980b7522a4180be20d"
+    },
+    {
+      "path": "../../experiments/ara-program-admission/run.py",
+      "git_blob_sha": "ac41957a1aa6456f0d85551d2c01f229235921b2"
+    }
+  ],
   "phase_merge_commits": {
     "phase3-role-state": "4e3444af4114066016f53713364117b0444de70f",
     "phase4-policy-task-capability": "c1722fdc2c4257eaba3e28b067d8e57448907828",
@@ -16,18 +82,6 @@
     "phase9-relationship-view": "654ebeb58f6b7d17276d1337ccae71da0b44392f",
     "phase10-adversarial-assurance": "34e0e6ba7c030bcc97e2a1e29d0ccedeb1fc09f9",
     "phase11-standards-boundary": "f5ced1dc83f934a8389733fcdc5b29564cc16c03"
-  },
-  "executable_runner_blobs": {
-    "experiments/ara-role-record/run.py": "e6dbab70ba25ce13e40ed2963c82826d30707fbb",
-    "experiments/ara-policy-spine/run.py": "b0d6dce0ed194108fa71226c38627cf75c928d70",
-    "experiments/ara-protected-signing/run.py": "14c7877073d41caf3f5ba77cda4a30c1aa4ddafb",
-    "experiments/ara-independent-counterparty/run.py": "bf800174402daba30c4025cabbdc8e12274b0f81",
-    "experiments/ara-distributed-vrr/run.py": "4ec22d9a847ee5b9dacdb560bc41291cd60f2fb4",
-    "experiments/ara-lifecycle-continuity/run.py": "40904939d6e4b92fa3bf974d429782128f87154e",
-    "experiments/ara-relationship-view/run.py": "626c50bdcca19ba15eafb74884d77098fd23102f",
-    "experiments/ara-adversarial-assurance/run.py": "aa50b31dbc5b8811e5d9766b742c1943bf394da2",
-    "experiments/ara-standards-boundary/run.py": "1bb29da265fb907b513924980b7522a4180be20d",
-    "experiments/ara-program-admission/run.py": "ac41957a1aa6456f0d85551d2c01f229235921b2"
   },
   "source_basis": {
     "baselines": "cases/ara-minimum-executable-relationship/baselines.yaml",
