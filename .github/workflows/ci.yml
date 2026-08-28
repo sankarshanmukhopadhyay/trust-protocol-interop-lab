@@ -48,6 +48,9 @@ jobs:
       - name: Run ARA Role Record state evidence
         run: python experiments/ara-role-record/run.py --check
 
+      - name: Run ARA policy-task-capability evidence
+        run: python experiments/ara-policy-spine/run.py --check
+
       - name: Set up Node for BBS evidence
         uses: actions/setup-node@v4
         with:
