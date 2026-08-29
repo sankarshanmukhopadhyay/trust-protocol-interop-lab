@@ -1,0 +1,51 @@
+# TEMPLATE ONLY — this file is not runtime evidence.
+# Replace every placeholder with attributable observations from two actual relying-context runs.
+provenance:
+  producer: trust-protocol-interop-lab
+  run_id: REPLACE_WITH_OBSERVATION_RUN_ID
+  observed_at: REPLACE_WITH_RFC3339_TIMESTAMP
+  implementation_repository: REPLACE_WITH_OWNER_REPOSITORY
+  implementation_revision: REPLACE_WITH_40_HEX_COMMIT_SHA
+  context_a_run: REPLACE_WITH_CONTEXT_A_RUN_ID
+  context_b_run: REPLACE_WITH_CONTEXT_B_RUN_ID
+
+requirements:
+  ER-REL-DID-AB:
+    # Cross-context relationship identifier observations
+    observation_summary: REPLACE_WITH_WHAT_WAS_OBSERVED_AND_WHAT_REMAINS_UNKNOWN
+    surfaces:
+      relationship_did: {classification: not-evidenced}
+      edge_identifier: {classification: not-evidenced}
+      equivalent_relationship_binder: {classification: not-evidenced}
+
+  ER-STATUS-AB:
+    # Cross-context status and policy-discovery observations
+    observation_summary: REPLACE_WITH_WHAT_WAS_OBSERVED_AND_WHAT_REMAINS_UNKNOWN
+    surfaces:
+      status_handle: {classification: not-evidenced}
+      status_endpoint: {classification: not-evidenced}
+      policy_discovery_handle: {classification: not-evidenced}
+      policy_endpoint: {classification: not-evidenced}
+
+  ER-TASK-AB:
+    # Cross-context retained Trust Task evidence observations
+    observation_summary: REPLACE_WITH_WHAT_WAS_OBSERVED_AND_WHAT_REMAINS_UNKNOWN
+    surfaces:
+      task_identifier: {classification: not-evidenced}
+      thread_identifier: {classification: not-evidenced}
+      retained_relationship_evidence: {classification: not-evidenced}
+      retained_outcome_evidence: {classification: not-evidenced}
+
+  ER-VERIFIER-AB:
+    # Verifier transcript and deliberate-correlation observations
+    observation_summary: REPLACE_WITH_WHAT_WAS_OBSERVED_AND_WHAT_REMAINS_UNKNOWN
+    surfaces:
+      verifier_transcript: {classification: not-evidenced}
+      challenge: {classification: not-evidenced}
+      purpose: {classification: not-evidenced}
+      transaction_context: {classification: not-evidenced}
+      deliberate_join_attempt: {classification: not-evidenced}
+
+# classification must be one of:
+# identical | derivably-related | fresh | absent | not-evidenced
+# For identical/derivably-related/fresh, include context_a and context_b observed values.

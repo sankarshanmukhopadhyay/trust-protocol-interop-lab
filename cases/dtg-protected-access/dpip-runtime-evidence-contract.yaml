@@ -1,0 +1,58 @@
+version: 1
+case: IC-DTG-PROTECTED-ACCESS-001
+purpose: >-
+  Define the provenance-bound A/B runtime evidence packages that the Interop Lab may
+  produce for DPIP. These IDs are shared with the DPIP evidence-requirement registry.
+  A package is satisfiable only by an attributable runtime observation; deterministic
+  case fixtures and specification intent are useful controls but do not satisfy it.
+
+contexts:
+  A:
+    title: Relying context A
+    summary: First independently observable relying context for the same underlying relationship.
+  B:
+    title: Relying context B
+    summary: Second independently observable relying context used to test whether surfaces can be joined across contexts.
+
+requirements:
+  ER-REL-DID-AB:
+    title: Cross-context relationship identifier observations
+    summary: Observe relationship DIDs, edge identifiers and equivalent relationship binders in A and B and classify whether they are identical, derivably related, fresh, absent or not evidenced.
+    source_issue: "RAHP #137"
+    surfaces: [relationship_did, edge_identifier, equivalent_relationship_binder]
+  ER-STATUS-AB:
+    title: Cross-context status and policy-discovery observations
+    summary: Observe status-query and policy-discovery handles and metadata in A and B and determine whether they create a stable join surface.
+    source_issue: "RAHP #138"
+    surfaces: [status_handle, status_endpoint, policy_discovery_handle, policy_endpoint]
+  ER-TASK-AB:
+    title: Cross-context retained Trust Task evidence observations
+    summary: Observe retained Trust Task and relationship evidence in A and B and determine whether retained identifiers or artifacts create a durable cross-context correlator.
+    source_issue: "RAHP #139"
+    surfaces: [task_identifier, thread_identifier, retained_relationship_evidence, retained_outcome_evidence]
+  ER-VERIFIER-AB:
+    title: Verifier transcript and deliberate-correlation observations
+    summary: Capture A/B verifier transcripts and a deliberate join attempt over observable fields to establish which surfaces join, which resist direct joining and which remain unknown.
+    source_issue: "RAHP #140"
+    surfaces: [verifier_transcript, challenge, purpose, transaction_context, deliberate_join_attempt]
+
+classification_values:
+  - identical
+  - derivably-related
+  - fresh
+  - absent
+  - not-evidenced
+
+required_provenance:
+  - producer
+  - run_id
+  - observed_at
+  - implementation_repository
+  - implementation_revision
+  - context_a_run
+  - context_b_run
+
+assurance_boundary: >-
+  A successful exporter validates provenance and completeness of an observation package.
+  It does not itself establish unlinkability or privacy PASS. DPIP owns interpretation of
+  supplied observations against the admitted proposition.
