@@ -110,9 +110,9 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
             a_exec, b_exec = surface_executed(a_doc, surface), surface_executed(b_doc, surface)
             derivation = derivations.get(surface)
             classification = classify(a_value, b_value, a_exec, b_exec, str(derivation) if derivation else None)
-            if classification in {"identical", "derivably-related"} and surface not in origins:
-                raise ValueError(f"correlator origin is required for join surface {surface}")
-            origin = str(origins.get(surface, "none"))
+            origin = str(origins.get(surface, "unknown" if classification in {"identical", "derivably-related"} else "none"))
+            if experiment["kind"] == "positive-control" and classification in {"identical", "derivably-related"} and origin == "unknown":
+                raise ValueError(f"positive-control join surface {surface} requires explicit correlator origin")
             if origin not in ORIGINS:
                 raise ValueError(f"invalid correlator origin for {surface}: {origin}")
             entry: dict[str, Any] = {
