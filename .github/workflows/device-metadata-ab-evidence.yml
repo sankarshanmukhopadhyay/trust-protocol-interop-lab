@@ -1,0 +1,50 @@
+name: Device metadata A-B privacy evidence
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/device-metadata-ab/**'
+      - '.github/workflows/device-metadata-ab-evidence.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/device-metadata-ab/**'
+      - '.github/workflows/device-metadata-ab-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-pinned-ab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: lab
+      - uses: actions/checkout@v4
+        with:
+          repository: OpenVTC/openvtc
+          ref: 2aa7ce3f8d1397048f13b85dffc3da6e10667a15
+          path: openvtc
+      - uses: actions/checkout@v4
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 8b8e1adeb97572b979f8a1e57e6bc37d1ee27129
+          path: vti
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install native build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev libpcsclite-dev pkg-config
+      - name: Execute source-pinned A/B pressure case
+        run: |
+          python lab/experiments/device-metadata-ab/run.py \
+            --openvtc "$GITHUB_WORKSPACE/openvtc" \
+            --vti "$GITHUB_WORKSPACE/vti" \
+            --output "$RUNNER_TEMP/device-metadata-ab" \
+            --run-id "$GITHUB_RUN_ID"
+      - name: Upload DPIP-ready evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: er-device-metadata-ab
+          path: ${{ runner.temp }}/device-metadata-ab/
+          if-no-files-found: error
