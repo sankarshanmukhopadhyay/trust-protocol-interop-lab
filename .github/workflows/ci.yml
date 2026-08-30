@@ -45,6 +45,27 @@ jobs:
           python experiments/arpa-a2a-anab/run.py
           python experiments/dtg-protected-access/run.py --check
 
+      - name: Exercise protected-access A/B evidence producer boundary
+        run: |
+          python experiments/dtg-protected-access/capture_ab_runtime.py --self-test
+          python experiments/dtg-protected-access/export_dpip_evidence.py --self-test
+          python experiments/dtg-protected-access/capture_ab_runtime.py \
+            cases/dtg-protected-access/runtime-ab-harness.selftest.yaml \
+            --output "${{ runner.temp }}/protected-access-ab-capture.yaml"
+          python experiments/dtg-protected-access/export_dpip_evidence.py \
+            "${{ runner.temp }}/protected-access-ab-capture.yaml" \
+            --output "${{ runner.temp }}/protected-access-provided-evidence.json"
+
+      - name: Upload protected-access A/B synthetic boundary evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: protected-access-ab-harness-selftest
+          path: |
+            ${{ runner.temp }}/protected-access-ab-capture.yaml
+            ${{ runner.temp }}/protected-access-provided-evidence.json
+          if-no-files-found: error
+
       - name: Run ARA Role Record state evidence
         run: python experiments/ara-role-record/run.py --check
 

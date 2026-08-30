@@ -19,6 +19,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = ROOT / "cases" / "dtg-protected-access" / "dpip-runtime-evidence-contract.yaml"
 SHA40 = re.compile(r"^[0-9a-f]{40}$", re.I)
+EVIDENCE_CLASSES = {"runtime-upstream-observation", "synthetic-fixture-self-test", "derived-analysis-artifact"}
 
 
 def load_contract() -> dict[str, Any]:
@@ -30,9 +31,12 @@ def load_contract() -> dict[str, Any]:
 
 def validate_capture(capture: dict[str, Any], contract: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    evidence_class = str(capture.get("evidence_class") or "")
+    if evidence_class not in EVIDENCE_CLASSES:
+        errors.append(f"evidence_class must be one of {sorted(EVIDENCE_CLASSES)}")
     provenance = capture.get("provenance")
     if not isinstance(provenance, dict):
-        return ["provenance must be a mapping"]
+        return errors + ["provenance must be a mapping"]
     for key in contract.get("required_provenance", []):
         if not str(provenance.get(key, "")).strip():
             errors.append(f"missing provenance.{key}")
@@ -74,6 +78,7 @@ def export_bindings(capture: dict[str, Any], contract: dict[str, Any]) -> dict[s
     if errors:
         raise ValueError("; ".join(errors))
     provenance = capture["provenance"]
+    evidence_class = capture["evidence_class"]
     bindings = []
     for rid, requirement in contract["requirements"].items():
         observed = capture["requirements"][rid]
@@ -81,6 +86,7 @@ def export_bindings(capture: dict[str, Any], contract: dict[str, Any]) -> dict[s
             "requirement_id": rid,
             "title": requirement.get("title"),
             "summary": requirement.get("summary"),
+            "evidence_class": evidence_class,
             "provenance": {
                 "producer": provenance["producer"],
                 "run_id": provenance["run_id"],
@@ -97,8 +103,8 @@ def export_bindings(capture: dict[str, Any], contract: dict[str, Any]) -> dict[s
         "provided_evidence": bindings,
         "human_summary": {
             "title": "Protected-access A/B runtime evidence package",
-            "explanation": "Each binding below corresponds to one named DPIP evidence requirement and carries immutable implementation provenance plus explicit observations from relying contexts A and B.",
-            "boundary": "Export validity proves evidence-package structure and provenance, not a privacy PASS or universal unlinkability claim.",
+            "explanation": "Each binding below corresponds to one named DPIP evidence requirement and carries an explicit evidence class, immutable implementation provenance, and A/B observations.",
+            "boundary": "Export validity proves evidence-package structure and provenance, not evidence sufficiency, privacy PASS, or universal unlinkability.",
         },
     }
 
@@ -108,6 +114,7 @@ def self_test() -> int:
     classifications = contract["classification_values"]
     assert "not-evidenced" in classifications
     capture: dict[str, Any] = {
+        "evidence_class": "synthetic-fixture-self-test",
         "provenance": {
             "producer": "trust-protocol-interop-lab",
             "run_id": "test-run-001",
@@ -128,9 +135,13 @@ def self_test() -> int:
     result = export_bindings(capture, contract)
     assert len(result["provided_evidence"]) == len(contract["requirements"])
     assert result["provided_evidence"][0]["title"]
+    assert result["provided_evidence"][0]["evidence_class"] == "synthetic-fixture-self-test"
     bad = json.loads(json.dumps(capture))
     del bad["provenance"]["context_b_run"]
     assert any("context_b_run" in e for e in validate_capture(bad, contract))
+    wrong_class = json.loads(json.dumps(capture))
+    wrong_class["evidence_class"] = "runtime"
+    assert any("evidence_class" in e for e in validate_capture(wrong_class, contract))
     print("PASS protected-access DPIP runtime evidence exporter self-test")
     return 0
 
