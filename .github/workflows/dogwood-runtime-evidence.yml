@@ -79,16 +79,18 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
-          import pathlib, yaml
+          import os, pathlib, yaml
           capture = yaml.safe_load(pathlib.Path('${{ runner.temp }}/dogwood-rc1-ab-capture.yaml').read_text())
-          print('## Dogwood RC-1 attributable A/B runtime observation', file=open('${GITHUB_STEP_SUMMARY}', 'a'))
-          print('', file=open('${GITHUB_STEP_SUMMARY}', 'a'))
-          print(f"- Evidence class: `{capture['evidence_class']}`", file=open('${GITHUB_STEP_SUMMARY}', 'a'))
-          print(f"- Implementation: `{capture['provenance']['implementation_repository']}@{capture['provenance']['implementation_revision']}`", file=open('${GITHUB_STEP_SUMMARY}', 'a'))
-          print('- Boundary: actual pinned Dogwood execution; no privacy PASS is manufactured.', file=open('${GITHUB_STEP_SUMMARY}', 'a'))
-          for rid, req in capture['requirements'].items():
-              classes = sorted({s['classification'] for s in req['surfaces'].values()})
-              print(f"- `{rid}` classifications: `{', '.join(classes)}`", file=open('${GITHUB_STEP_SUMMARY}', 'a'))
+          summary = pathlib.Path(os.environ['GITHUB_STEP_SUMMARY'])
+          with summary.open('a') as out:
+              print('## Dogwood RC-1 attributable A/B runtime observation', file=out)
+              print('', file=out)
+              print(f"- Evidence class: `{capture['evidence_class']}`", file=out)
+              print(f"- Implementation: `{capture['provenance']['implementation_repository']}@{capture['provenance']['implementation_revision']}`", file=out)
+              print('- Boundary: actual pinned Dogwood execution; no privacy PASS is manufactured.', file=out)
+              for rid, req in capture['requirements'].items():
+                  classes = sorted({s['classification'] for s in req['surfaces'].values()})
+                  print(f"- `{rid}` classifications: `{', '.join(classes)}`", file=out)
           PY
 
       - name: Upload attributable runtime evidence
