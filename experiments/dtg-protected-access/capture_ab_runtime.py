@@ -79,8 +79,10 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
     if not repository or not SHA40.fullmatch(revision):
         raise ValueError("implementation requires repository and immutable 40-hex revision")
 
-    experiment = manifest.get("experiment") or {"kind": "unlinkability-pressure-case", "expected_join": "must-not-emerge"}
-    if not isinstance(experiment, dict) or experiment.get("kind") not in EXPERIMENT_KINDS:
+    experiment = manifest.get("experiment")
+    if not isinstance(experiment, dict):
+        raise ValueError("experiment is required and must explicitly declare kind and expected_join")
+    if experiment.get("kind") not in EXPERIMENT_KINDS:
         raise ValueError(f"experiment.kind must be one of {sorted(EXPERIMENT_KINDS)}")
     expected = "must-detect" if experiment["kind"] == "positive-control" else "must-not-emerge"
     if experiment.get("expected_join", expected) != expected:
@@ -108,7 +110,9 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
             a_exec, b_exec = surface_executed(a_doc, surface), surface_executed(b_doc, surface)
             derivation = derivations.get(surface)
             classification = classify(a_value, b_value, a_exec, b_exec, str(derivation) if derivation else None)
-            origin = str(origins.get(surface, "unknown" if classification in {"identical", "derivably-related"} else "none"))
+            if classification in {"identical", "derivably-related"} and surface not in origins:
+                raise ValueError(f"correlator origin is required for join surface {surface}")
+            origin = str(origins.get(surface, "none"))
             if origin not in ORIGINS:
                 raise ValueError(f"invalid correlator origin for {surface}: {origin}")
             entry: dict[str, Any] = {
@@ -142,6 +146,9 @@ def self_test() -> int:
     assert capture["evidence_class"] == "synthetic-fixture-self-test"
     assert capture["requirements"]["ER-REL-DID-AB"]["surfaces"]["relationship_did"]["classification"] == "identical"
     assert capture["requirements"]["ER-VERIFIER-AB"]["surfaces"]["challenge"]["classification"] == "fresh"
+    assert capture["experiment"]["kind"] == "positive-control"
+    assert capture["experiment"]["expected_join"] == "must-detect"
+    assert capture["experiment"]["observed_join"] == "detected"
     print("PASS protected-access two-context capture harness self-test")
     return 0
 
