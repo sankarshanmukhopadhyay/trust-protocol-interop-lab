@@ -1,0 +1,41 @@
+evidence_class: runtime-upstream-observation
+implementation:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b
+contexts:
+  A:
+    verifier: dogwood-verifier-a
+    purpose: protected-access-context-a
+    challenge: dogwood-challenge-a
+    command:
+      - python
+      - experiments/dtg-protected-access/dogwood_rc1_context.py
+      - --context
+      - A
+      - --verifier
+      - dogwood-verifier-a
+      - --purpose
+      - protected-access-context-a
+      - --challenge
+      - dogwood-challenge-a
+  B:
+    verifier: dogwood-verifier-b
+    purpose: protected-access-context-b
+    challenge: dogwood-challenge-b
+    command:
+      - python
+      - experiments/dtg-protected-access/dogwood_rc1_context.py
+      - --context
+      - B
+      - --verifier
+      - dogwood-verifier-b
+      - --purpose
+      - protected-access-context-b
+      - --challenge
+      - dogwood-challenge-b
+assurance_boundary: >-
+  This manifest runs an additive observation probe against immutable Dogwood RC-1
+  production/test-support crates. The same deterministic client DID anchors the
+  bounded underlying relationship in both contexts. Status/policy and Trust Task
+  surfaces not exercised by this Dogwood-only path remain explicitly not-evidenced.
+  The output is runtime evidence, not a privacy conclusion.
