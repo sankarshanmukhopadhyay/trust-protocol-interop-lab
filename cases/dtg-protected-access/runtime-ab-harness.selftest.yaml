@@ -8,6 +8,8 @@ experiment:
 correlator_origins:
   relationship_did: fixture-supplied
   edge_identifier: fixture-supplied
+  status_endpoint: fixture-supplied
+  policy_endpoint: fixture-supplied
 implementation:
   repository: sankarshanmukhopadhyay/trust-protocol-interop-lab
   revision: ab2c4d2bbb4617c00f6067c3922ca46d8a65ff31
@@ -32,8 +34,9 @@ judgment:
   proposition: >-
     A cryptographically valid pair of executions can still expose a durable correlator.
   falsifier: >-
-    The self-test deliberately reuses relationship_did and edge_identifier across A/B;
-    the harness must classify them as identical rather than infer privacy from successful execution.
+    The self-test deliberately reuses relationship_did, edge_identifier, status_endpoint,
+    and policy_endpoint across A/B; the harness must classify them as identical rather
+    than infer privacy from successful execution.
   boundary: >-
     This manifest tests harness mechanics only. Its evidence_class prevents it from
     satisfying an upstream runtime evidence requirement.
