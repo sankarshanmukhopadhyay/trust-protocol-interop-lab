@@ -2,6 +2,11 @@ evidence_class: runtime-upstream-observation
 implementation:
   repository: OpenVTC/verifiable-trust-infrastructure
   revision: cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b
+experiment:
+  kind: positive-control
+  expected_join: must-detect
+correlator_origins:
+  equivalent_relationship_binder: fixture-supplied
 contexts:
   A:
     verifier: dogwood-verifier-a
@@ -36,6 +41,7 @@ contexts:
 assurance_boundary: >-
   This manifest runs an additive observation probe against immutable Dogwood RC-1
   production/test-support crates. The same deterministic client DID anchors the
-  bounded underlying relationship in both contexts. Status/policy and Trust Task
-  surfaces not exercised by this Dogwood-only path remain explicitly not-evidenced.
-  The output is runtime evidence, not a privacy conclusion.
+  bounded underlying relationship in both contexts and is therefore a deliberately
+  seeded positive-control correlator that MUST be detected. Status/policy and Trust
+  Task surfaces not exercised by this Dogwood-only path remain explicitly
+  not-evidenced. The output is runtime evidence, not a privacy conclusion.
