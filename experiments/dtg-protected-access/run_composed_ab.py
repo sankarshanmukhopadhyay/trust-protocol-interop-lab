@@ -97,7 +97,7 @@ def main() -> int:
         "positive_control": positive["experiment"],
         "unlinkability_pressure": pressure["experiment"],
         "falsification": falsification["experiment"],
-        "evidence_boundary": "Status/policy and Trust Task observations are produced by the executable Interop Lab composition. They are not attributed to Dogwood itself.",
+        "evidence_boundary": "Status/policy and Trust Task observations are produced by the executable Interop Lab composition. They are composition evidence and are not attributed to any target implementation unless that target actually produced those surfaces.",
         "requirements_materially_exercised": ["ER-STATUS-AB", "ER-TASK-AB"],
     }
     (output / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
