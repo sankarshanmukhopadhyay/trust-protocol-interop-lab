@@ -1,0 +1,42 @@
+name: Composed A-B privacy evidence
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/dtg-protected-access/**'
+      - 'cases/dtg-protected-access/**'
+      - '.github/workflows/composed-ab-evidence.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/dtg-protected-access/**'
+      - 'cases/dtg-protected-access/**'
+      - '.github/workflows/composed-ab-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paired-composition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install evidence dependencies
+        run: python -m pip install --disable-pip-version-check pyyaml
+      - name: Run paired A/B composition and regression cases
+        run: |
+          python experiments/dtg-protected-access/capture_ab_runtime.py --self-test
+          python experiments/dtg-protected-access/export_dpip_evidence.py --self-test
+          python experiments/dtg-protected-access/run_composed_ab.py \
+            --revision "${GITHUB_SHA}" \
+            --output-dir "${RUNNER_TEMP}/composed-ab"
+      - name: Upload attributable composed A/B evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: composed-status-task-ab-evidence
+          path: ${{ runner.temp }}/composed-ab/
+          if-no-files-found: error
