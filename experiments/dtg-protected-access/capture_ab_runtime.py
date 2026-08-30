@@ -1,18 +1,6 @@
 #!/usr/bin/env python3
-"""Run two relying contexts and emit a provenance-bound A/B capture document.
-
-The harness is deliberately an evidence producer, not a privacy evaluator. It executes
-one command per relying context, reads each command's JSON observation document,
-classifies named surfaces across A/B, and writes the capture contract consumed by
-export_dpip_evidence.py.
-
-A command succeeds only when it emits JSON with an `observations` mapping. The harness
-never converts absence of a correlator into privacy PASS; it records only observation
-classifications. Synthetic/self-test execution is explicitly marked and cannot be
-mistaken for upstream runtime evidence.
-"""
+"""Run two contexts and emit provenance-bound A/B evidence without making a privacy judgment."""
 from __future__ import annotations
-
 import argparse
 from datetime import datetime, timezone
 import json
@@ -22,12 +10,13 @@ import subprocess
 import sys
 from typing import Any
 import uuid
-
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = ROOT / "cases" / "dtg-protected-access" / "dpip-runtime-evidence-contract.yaml"
 ALLOWED_CLASSES = {"runtime-upstream-observation", "synthetic-fixture-self-test"}
+EXPERIMENT_KINDS = {"positive-control", "unlinkability-pressure-case"}
+ORIGINS = {"fixture-supplied", "target-derived", "composition-derived", "retained", "observer-derived", "none", "unknown"}
 SHA40 = re.compile(r"^[0-9a-f]{40}$", re.I)
 
 
@@ -44,19 +33,29 @@ def run_context(name: str, config: dict[str, Any]) -> dict[str, Any]:
         raise ValueError(f"context {name}.command must be a non-empty string array")
     completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
     if completed.returncode != 0:
-        raise RuntimeError(
-            f"context {name} command failed ({completed.returncode}): {completed.stderr.strip()}"
-        )
+        raise RuntimeError(f"context {name} command failed ({completed.returncode}): {completed.stderr.strip()}")
     try:
         doc = json.loads(completed.stdout)
     except json.JSONDecodeError as exc:
         raise ValueError(f"context {name} did not emit JSON: {exc}") from exc
     if not isinstance(doc, dict) or not isinstance(doc.get("observations"), dict):
         raise ValueError(f"context {name} output must contain an observations mapping")
+    executed = doc.get("executed_surfaces", [])
+    if executed is not None and (not isinstance(executed, list) or not all(isinstance(x, str) for x in executed)):
+        raise ValueError(f"context {name}.executed_surfaces must be a string array")
     return doc
 
 
-def classify(a: Any, b: Any, derivation: str | None = None) -> str:
+def surface_executed(doc: dict[str, Any], surface: str) -> bool:
+    explicit = doc.get("executed_surfaces")
+    if isinstance(explicit, list):
+        return surface in explicit
+    return surface in doc.get("observations", {})
+
+
+def classify(a: Any, b: Any, a_executed: bool, b_executed: bool, derivation: str | None = None) -> str:
+    if not a_executed or not b_executed:
+        return "not-evidenced"
     if a is None and b is None:
         return "absent"
     if a is None or b is None:
@@ -72,81 +71,68 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
     evidence_class = str(manifest.get("evidence_class") or "")
     if evidence_class not in ALLOWED_CLASSES:
         raise ValueError(f"evidence_class must be one of {sorted(ALLOWED_CLASSES)}")
-
     implementation = manifest.get("implementation")
     if not isinstance(implementation, dict):
         raise ValueError("implementation must be a mapping")
     repository = str(implementation.get("repository") or "").strip()
     revision = str(implementation.get("revision") or "").strip()
-    if not repository:
-        raise ValueError("implementation.repository is required")
-    if not SHA40.fullmatch(revision):
-        raise ValueError("implementation.revision must be an immutable 40-hex commit SHA")
+    if not repository or not SHA40.fullmatch(revision):
+        raise ValueError("implementation requires repository and immutable 40-hex revision")
+
+    experiment = manifest.get("experiment") or {"kind": "unlinkability-pressure-case", "expected_join": "must-not-emerge"}
+    if not isinstance(experiment, dict) or experiment.get("kind") not in EXPERIMENT_KINDS:
+        raise ValueError(f"experiment.kind must be one of {sorted(EXPERIMENT_KINDS)}")
+    expected = "must-detect" if experiment["kind"] == "positive-control" else "must-not-emerge"
+    if experiment.get("expected_join", expected) != expected:
+        raise ValueError(f"{experiment['kind']} requires expected_join={expected}")
 
     contexts = manifest.get("contexts")
     if not isinstance(contexts, dict) or not isinstance(contexts.get("A"), dict) or not isinstance(contexts.get("B"), dict):
         raise ValueError("contexts.A and contexts.B are required")
-    if contexts["A"].get("verifier") == contexts["B"].get("verifier"):
-        raise ValueError("contexts A/B must use distinct verifier identifiers")
-    if contexts["A"].get("purpose") == contexts["B"].get("purpose"):
-        raise ValueError("contexts A/B must use distinct purpose values")
-    if contexts["A"].get("challenge") == contexts["B"].get("challenge"):
-        raise ValueError("contexts A/B must use distinct challenge values")
+    for key in ("verifier", "purpose", "challenge"):
+        if contexts["A"].get(key) == contexts["B"].get(key):
+            raise ValueError(f"contexts A/B must use distinct {key} values")
 
-    a_doc = run_context("A", contexts["A"])
-    b_doc = run_context("B", contexts["B"])
+    a_doc, b_doc = run_context("A", contexts["A"]), run_context("B", contexts["B"])
     contract = load_yaml(CONTRACT)
     requirements: dict[str, Any] = {}
-    derivations = manifest.get("derivations", {})
-    if not isinstance(derivations, dict):
-        derivations = {}
+    derivations = manifest.get("derivations", {}) if isinstance(manifest.get("derivations", {}), dict) else {}
+    origins = manifest.get("correlator_origins", {}) if isinstance(manifest.get("correlator_origins", {}), dict) else {}
+    producers = manifest.get("surface_producers", {}) if isinstance(manifest.get("surface_producers", {}), dict) else {}
+    join_surfaces: list[str] = []
 
     for rid, requirement in contract["requirements"].items():
         surfaces: dict[str, Any] = {}
         for surface in requirement.get("surfaces", []):
-            a_value = a_doc["observations"].get(surface)
-            b_value = b_doc["observations"].get(surface)
+            a_value, b_value = a_doc["observations"].get(surface), b_doc["observations"].get(surface)
+            a_exec, b_exec = surface_executed(a_doc, surface), surface_executed(b_doc, surface)
             derivation = derivations.get(surface)
+            classification = classify(a_value, b_value, a_exec, b_exec, str(derivation) if derivation else None)
+            origin = str(origins.get(surface, "unknown" if classification in {"identical", "derivably-related"} else "none"))
+            if origin not in ORIGINS:
+                raise ValueError(f"invalid correlator origin for {surface}: {origin}")
             entry: dict[str, Any] = {
-                "classification": classify(a_value, b_value, str(derivation) if derivation else None)
+                "classification": classification,
+                "execution": {"context_a": "executed" if a_exec else "not-executed", "context_b": "executed" if b_exec else "not-executed"},
+                "correlator_origin": origin,
+                "producer_component": str(producers.get(surface, a_doc.get("producer_component") or b_doc.get("producer_component") or repository)),
             }
-            if a_value is not None:
-                entry["context_a"] = a_value
-            if b_value is not None:
-                entry["context_b"] = b_value
-            if derivation:
-                entry["derivation_basis"] = derivation
+            if a_value is not None: entry["context_a"] = a_value
+            if b_value is not None: entry["context_b"] = b_value
+            if derivation: entry["derivation_basis"] = derivation
+            if classification in {"identical", "derivably-related"}: join_surfaces.append(surface)
             surfaces[surface] = entry
-        requirements[rid] = {
-            "observation_summary": (
-                f"A/B capture for {rid}; classifications describe observed join surfaces only "
-                "and are not a DPIP privacy conclusion."
-            ),
-            "surfaces": surfaces,
-        }
+        requirements[rid] = {"observation_summary": f"A/B capture for {rid}; execution and correlator attribution are evidence, not a privacy conclusion.", "surfaces": surfaces}
 
     run_id = str(manifest.get("run_id") or f"ab-{uuid.uuid4()}")
     observed_at = str(manifest.get("observed_at") or datetime.now(timezone.utc).isoformat())
     return {
         "evidence_class": evidence_class,
-        "provenance": {
-            "producer": "trust-protocol-interop-lab",
-            "run_id": run_id,
-            "observed_at": observed_at,
-            "implementation_repository": repository,
-            "implementation_revision": revision,
-            "context_a_run": str(a_doc.get("run_id") or f"{run_id}-A"),
-            "context_b_run": str(b_doc.get("run_id") or f"{run_id}-B"),
-        },
-        "context_descriptors": {
-            "A": {k: contexts["A"].get(k) for k in ("verifier", "purpose", "challenge")},
-            "B": {k: contexts["B"].get(k) for k in ("verifier", "purpose", "challenge")},
-        },
+        "experiment": {"kind": experiment["kind"], "expected_join": expected, "observed_join": "detected" if join_surfaces else "not-detected", "join_surfaces": sorted(set(join_surfaces))},
+        "provenance": {"producer": "trust-protocol-interop-lab", "run_id": run_id, "observed_at": observed_at, "implementation_repository": repository, "implementation_revision": revision, "context_a_run": str(a_doc.get("run_id") or f"{run_id}-A"), "context_b_run": str(b_doc.get("run_id") or f"{run_id}-B")},
+        "context_descriptors": {"A": {k: contexts["A"].get(k) for k in ("verifier", "purpose", "challenge")}, "B": {k: contexts["B"].get(k) for k in ("verifier", "purpose", "challenge")}},
         "requirements": requirements,
-        "assurance_boundary": (
-            "This capture records runtime observations. It does not establish privacy PASS, "
-            "unlinkability, or DPIP evidence sufficiency."
-        ),
+        "assurance_boundary": "This capture records runtime observations and attribution. Positive-control joins are expected. It does not establish privacy PASS, unlinkability, or target-level fault.",
     }
 
 
@@ -154,10 +140,8 @@ def self_test() -> int:
     fixture = ROOT / "cases" / "dtg-protected-access" / "runtime-ab-harness.selftest.yaml"
     capture = build_capture(load_yaml(fixture))
     assert capture["evidence_class"] == "synthetic-fixture-self-test"
-    rel = capture["requirements"]["ER-REL-DID-AB"]["surfaces"]["relationship_did"]
-    assert rel["classification"] == "identical"
-    verifier = capture["requirements"]["ER-VERIFIER-AB"]["surfaces"]["challenge"]
-    assert verifier["classification"] == "fresh"
+    assert capture["requirements"]["ER-REL-DID-AB"]["surfaces"]["relationship_did"]["classification"] == "identical"
+    assert capture["requirements"]["ER-VERIFIER-AB"]["surfaces"]["challenge"]["classification"] == "fresh"
     print("PASS protected-access two-context capture harness self-test")
     return 0
 
@@ -168,23 +152,15 @@ def main() -> int:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
-    if args.self_test:
-        return self_test()
-    if not args.manifest:
-        parser.error("manifest is required unless --self-test is used")
-    capture = build_capture(load_yaml(args.manifest))
-    rendered = yaml.safe_dump(capture, sort_keys=False)
+    if args.self_test: return self_test()
+    if not args.manifest: parser.error("manifest is required unless --self-test is used")
+    rendered = yaml.safe_dump(build_capture(load_yaml(args.manifest)), sort_keys=False)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(rendered, encoding="utf-8")
-    else:
-        print(rendered, end="")
+        args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(rendered, encoding="utf-8")
+    else: print(rendered, end="")
     return 0
 
-
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
+    try: raise SystemExit(main())
     except (ValueError, RuntimeError) as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        raise SystemExit(2)
+        print(f"ERROR: {exc}", file=sys.stderr); raise SystemExit(2)
