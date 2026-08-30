@@ -67,7 +67,9 @@ def main() -> int:
     output = args.output_dir or Path(tempfile.mkdtemp(prefix="composed-ab-"))
 
     positive = execute_case(output, revision, "positive-control", "positive-control", "positive-control", {
-        "relationship_did": "fixture-supplied", "equivalent_relationship_binder": "fixture-supplied"
+        "relationship_did": "fixture-supplied",
+        "equivalent_relationship_binder": "fixture-supplied",
+        "deliberate_join_attempt": "fixture-supplied",
     })
     assert positive["experiment"]["observed_join"] == "detected"
     assert "relationship_did" in positive["experiment"]["join_surfaces"]
