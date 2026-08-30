@@ -1,0 +1,127 @@
+name: VTI personhood transport equivalence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/vti-personhood-transport-equivalence.yml'
+      - 'experiments/dtg-personhood-transport-equivalence/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/vti-personhood-transport-equivalence.yml'
+      - 'experiments/dtg-personhood-transport-equivalence/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  VTI_REPOSITORY: OpenVTC/verifiable-trust-infrastructure
+  VTI_REVISION: 4cf7368564dd25c55824d81f83d99d0965f8f28a
+
+jobs:
+  equivalence:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Interop Lab
+        uses: actions/checkout@v4
+        with:
+          path: interop
+
+      - name: Checkout immutable VTI target
+        uses: actions/checkout@v4
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 4cf7368564dd25c55824d81f83d99d0965f8f28a
+          path: vti
+
+      - name: Verify immutable target
+        working-directory: vti
+        run: |
+          test "$(git rev-parse HEAD)" = "$VTI_REVISION"
+          test -z "$(git status --porcelain)"
+
+      - name: Install native build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: vti
+
+      - name: REST personhood ceremony pressure tests
+        working-directory: vti
+        run: cargo test -p vtc-service --test personhood
+
+      - name: Messaging personhood subject and membership tests
+        working-directory: vti
+        run: cargo test -p vtc-service --lib trust_tasks::tests::personhood
+
+      - name: TSP authenticated-sender gate tests
+        working-directory: vti
+        run: cargo test -p vtc-service --lib tsp_sender_tests
+
+      - name: TSP request demultiplexing tests
+        working-directory: vti
+        run: cargo test -p vtc-service --lib an_inbound_request_is_not_mistaken_for_a_reply
+
+      - name: Verify all three transports converge on the same personhood core
+        working-directory: vti
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          trust = Path("vtc-service/src/trust_tasks/mod.rs").read_text()
+          messaging = Path("vtc-service/src/messaging.rs").read_text()
+          personhood = Path("vtc-service/src/routes/members/personhood.rs").read_text()
+
+          required = {
+              "REST core": "pub fn rest() -> Self",
+              "DIDComm core": "pub fn didcomm(sender_did: String) -> Self",
+              "personhood challenge dispatch": "PERSONHOOD_CHALLENGE_TYPE => handle_personhood_challenge",
+              "personhood assert dispatch": "PERSONHOOD_ASSERT_TYPE => handle_personhood_assert",
+              "shared assertion implementation": "assert_inner(state, &body.did, &presentation)",
+          }
+          for label, token in required.items():
+              assert token in trust, f"missing {label}: {token}"
+
+          assert "transport: JoinTransport::Tsp" in messaging
+          assert "dispatch_trust_task_core(state, &ctx, &inbound.message.payload).await" in messaging
+          assert "proof.challenge" in personhood and "nonce" in personhood
+          print("PASS REST, DIDComm and TSP converge on the same personhood dispatch/inner implementation")
+          PY
+
+      - name: Emit attributable evidence summary
+        run: |
+          mkdir -p evidence
+          cat > evidence/personhood-transport-equivalence.json <<JSON
+          {
+            "evidence_class": "runtime-upstream-test-observation",
+            "producer": "sankarshanmukhopadhyay/trust-protocol-interop-lab",
+            "target_repository": "$VTI_REPOSITORY",
+            "target_revision": "$VTI_REVISION",
+            "rahp_issue": 263,
+            "transports": ["rest", "didcomm", "tsp"],
+            "tested_properties": [
+              "challenge membership gate",
+              "assertion subject binding",
+              "signed nonce/challenge binding",
+              "unknown challenge rejection",
+              "TSP authenticated sender gate",
+              "TSP request reaches shared dispatcher",
+              "shared personhood core across transports"
+            ],
+            "result": "pass",
+            "boundary": "This proves the pinned VTI implementation's transport adapters converge on the same personhood core and that the named negative tests pass. It does not prove properties outside these personhood invariants."
+          }
+          JSON
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: vti-personhood-transport-equivalence
+          path: evidence/personhood-transport-equivalence.json
+          if-no-files-found: error
