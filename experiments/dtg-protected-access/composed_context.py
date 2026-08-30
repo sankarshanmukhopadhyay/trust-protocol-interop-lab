@@ -3,7 +3,8 @@
 
 This is Interop Lab composition-runtime evidence. It deliberately models the observable
 status/policy and Trust Task/retention stages needed to exercise the DPIP A/B contract;
-it must not be represented as evidence that Dogwood itself implements those stages.
+it must not be represented as evidence that a target implementation itself implements
+those stages unless that target actually produced the observed surfaces.
 """
 from __future__ import annotations
 import argparse
