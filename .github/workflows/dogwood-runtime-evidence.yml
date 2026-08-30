@@ -1,0 +1,108 @@
+name: Dogwood RC-1 runtime evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/dogwood-runtime-evidence.yml'
+      - 'experiments/dtg-protected-access/dogwood_rc1_context.py'
+      - 'experiments/dtg-protected-access/capture_ab_runtime.py'
+      - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/dogwood-rc1-runtime-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dogwood-runtime-evidence.yml'
+      - 'experiments/dtg-protected-access/dogwood_rc1_context.py'
+      - 'experiments/dtg-protected-access/capture_ab_runtime.py'
+      - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/dogwood-rc1-runtime-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      DOGWOOD_CHECKOUT: ${{ github.workspace }}/build/dogwood-rc1
+    steps:
+      - name: Checkout Interop Lab producer
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install evidence dependencies
+        run: python -m pip install --disable-pip-version-check pyyaml
+
+      - name: Install Dogwood native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev pkg-config
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Checkout immutable Dogwood RC-1 target
+        uses: actions/checkout@v4
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b
+          path: build/dogwood-rc1
+          fetch-depth: 1
+
+      - name: Verify immutable upstream pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C "$DOGWOOD_CHECKOUT" rev-parse HEAD)" = "cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b"
+          test -z "$(git -C "$DOGWOOD_CHECKOUT" status --porcelain)"
+
+      - name: Execute Dogwood A/B runtime observations
+        run: |
+          python experiments/dtg-protected-access/capture_ab_runtime.py \
+            cases/dtg-protected-access/dogwood-rc1-runtime-ab.yaml \
+            --output "${{ runner.temp }}/dogwood-rc1-ab-capture.yaml"
+
+      - name: Verify producer did not leave upstream modifications
+        shell: bash
+        run: test -z "$(git -C "$DOGWOOD_CHECKOUT" status --porcelain)"
+
+      - name: Export DPIP provided_evidence bindings
+        run: |
+          python experiments/dtg-protected-access/export_dpip_evidence.py \
+            "${{ runner.temp }}/dogwood-rc1-ab-capture.yaml" \
+            --output "${{ runner.temp }}/dogwood-rc1-provided-evidence.json"
+
+      - name: Summarize bounded observation result
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os, pathlib, yaml
+          capture = yaml.safe_load(pathlib.Path('${{ runner.temp }}/dogwood-rc1-ab-capture.yaml').read_text())
+          summary = pathlib.Path(os.environ['GITHUB_STEP_SUMMARY'])
+          with summary.open('a') as out:
+              print('## Dogwood RC-1 attributable A/B runtime observation', file=out)
+              print('', file=out)
+              print(f"- Evidence class: `{capture['evidence_class']}`", file=out)
+              print(f"- Implementation: `{capture['provenance']['implementation_repository']}@{capture['provenance']['implementation_revision']}`", file=out)
+              print('- Boundary: actual pinned Dogwood execution; no privacy PASS is manufactured.', file=out)
+              for rid, req in capture['requirements'].items():
+                  classes = sorted({s['classification'] for s in req['surfaces'].values()})
+                  print(f"- `{rid}` classifications: `{', '.join(classes)}`", file=out)
+          PY
+
+      - name: Upload attributable runtime evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: dogwood-rc1-runtime-upstream-observation
+          path: |
+            ${{ runner.temp }}/dogwood-rc1-ab-capture.yaml
+            ${{ runner.temp }}/dogwood-rc1-provided-evidence.json
+          if-no-files-found: error
