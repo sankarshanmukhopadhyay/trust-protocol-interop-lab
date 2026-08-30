@@ -8,9 +8,9 @@ test-support surface, captures the explicit runtime observation marker, and then
 removes the probe source.
 
 The adapter does not modify Dogwood production code and does not make a privacy
-judgment. Surfaces not exercised by this bounded DIDComm execution are emitted with
-an explicit ``not-evidenced`` state so downstream tooling cannot confuse unknown
-with observed absence.
+judgment. A null surface means that surface is absent from this deliberately bounded
+Dogwood execution path; it is not a claim that the surface can never exist elsewhere
+in VTI or in a wider composition.
 """
 from __future__ import annotations
 
@@ -99,48 +99,39 @@ async fn rahp_runtime_observation() {
             // Dogwood does not expose a named relationship-DID/edge-ID in this
             // bounded path, but its protocol-visible client DID is an equivalent
             // durable relationship binder and is therefore intentionally retained.
-            "relationship_did": {"state": "not-evidenced"},
-            "edge_identifier": {"state": "not-evidenced"},
-            "equivalent_relationship_binder": {
-                "state": "observed",
-                "value": client_did
-            },
+            "relationship_did": null,
+            "edge_identifier": null,
+            "equivalent_relationship_binder": client_did,
 
-            // This DIDComm list-keys path does not execute a status or policy
-            // discovery operation. Unknown is preserved as unknown.
-            "status_handle": {"state": "not-evidenced"},
-            "status_endpoint": {"state": "not-evidenced"},
-            "policy_discovery_handle": {"state": "not-evidenced"},
-            "policy_endpoint": {"state": "not-evidenced"},
+            // This selected Dogwood DIDComm list-keys execution performs no
+            // status or policy-discovery operation. These are bounded execution
+            // absences, not global VTI claims.
+            "status_handle": null,
+            "status_endpoint": null,
+            "policy_discovery_handle": null,
+            "policy_endpoint": null,
 
-            // Dogwood's bounded DIDComm path is not a Trust Task execution.
-            "task_identifier": {"state": "not-evidenced"},
-            "thread_identifier": {"state": "not-evidenced"},
-            "retained_relationship_evidence": {"state": "not-evidenced"},
-            "retained_outcome_evidence": {"state": "not-evidenced"},
+            // The selected Dogwood path is not a Trust Task execution. Again,
+            // absence is scoped to this execution rather than the wider DTG composition.
+            "task_identifier": null,
+            "thread_identifier": null,
+            "retained_relationship_evidence": null,
+            "retained_outcome_evidence": null,
 
-            // These are direct runtime/context observations from the executed
-            // probe. The transcript summary deliberately contains only public,
-            // test-only values needed to test cross-context joinability.
-            "verifier_transcript": {
-                "state": "observed",
-                "value": format!(
-                    "client={};responder={};mediator={};type={};response={};total={}",
-                    client_did,
-                    responder.did(),
-                    mediator.did(),
-                    message_type,
-                    response_type,
-                    resp["total"]
-                )
-            },
-            "challenge": {"state": "observed", "value": challenge},
-            "purpose": {"state": "observed", "value": purpose},
-            "transaction_context": {"state": "observed", "value": verifier},
-            "deliberate_join_attempt": {
-                "state": "observed",
-                "value": format!("{}|{}|{}", client_did, responder.did(), message_type)
-            }
+            // Direct runtime/context observations from the executed upstream path.
+            "verifier_transcript": format!(
+                "client={};responder={};mediator={};type={};response={};total={}",
+                client_did,
+                responder.did(),
+                mediator.did(),
+                message_type,
+                response_type,
+                resp["total"]
+            ),
+            "challenge": challenge,
+            "purpose": purpose,
+            "transaction_context": verifier,
+            "deliberate_join_attempt": format!("{}|{}|{}", client_did, responder.did(), message_type)
         }
     });
 
@@ -239,8 +230,9 @@ def execute_context(
         "observations": observations,
         "assurance_boundary": (
             "Actual pinned Dogwood crates/test support executed. The additive probe is an "
-            "observer, not a production-code modification. Unknown surfaces remain "
-            "not-evidenced and no privacy conclusion is made."
+            "observer, not a production-code modification. Null surfaces are bounded "
+            "absences from this selected execution, not global VTI claims, and no privacy "
+            "conclusion is made."
         ),
     }
 
