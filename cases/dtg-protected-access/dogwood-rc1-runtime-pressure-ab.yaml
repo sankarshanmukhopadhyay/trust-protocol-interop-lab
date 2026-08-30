@@ -1,0 +1,50 @@
+evidence_class: runtime-upstream-observation
+implementation:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b
+experiment:
+  kind: unlinkability-pressure-case
+  expected_join: must-not-emerge
+contexts:
+  A:
+    verifier: dogwood-pressure-verifier-a
+    purpose: protected-access-pressure-a
+    challenge: dogwood-pressure-challenge-a
+    command:
+      - python
+      - experiments/dtg-protected-access/dogwood_rc1_pressure_context.py
+      - --context
+      - A
+      - --verifier
+      - dogwood-pressure-verifier-a
+      - --purpose
+      - protected-access-pressure-a
+      - --challenge
+      - dogwood-pressure-challenge-a
+      - --client-seed
+      - '0x21'
+  B:
+    verifier: dogwood-pressure-verifier-b
+    purpose: protected-access-pressure-b
+    challenge: dogwood-pressure-challenge-b
+    command:
+      - python
+      - experiments/dtg-protected-access/dogwood_rc1_pressure_context.py
+      - --context
+      - B
+      - --verifier
+      - dogwood-pressure-verifier-b
+      - --purpose
+      - protected-access-pressure-b
+      - --challenge
+      - dogwood-pressure-challenge-b
+      - --client-seed
+      - '0x42'
+assurance_boundary: >-
+  This target-native pressure fixture executes immutable Dogwood RC-1 with distinct
+  deterministic client identities in A and B and no seeded shared relationship/client
+  identifier. A non-detected join is bounded favourable evidence for this executed
+  path only; it is not a global privacy or unlinkability PASS. Any stable join that
+  emerges remains evidence requiring explicit correlator-origin classification.
+  Status/policy and Trust Task surfaces not exercised by this target-native path
+  remain explicitly not-evidenced.

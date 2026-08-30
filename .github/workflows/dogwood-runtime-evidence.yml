@@ -5,18 +5,22 @@ on:
     paths:
       - '.github/workflows/dogwood-runtime-evidence.yml'
       - 'experiments/dtg-protected-access/dogwood_rc1_context.py'
+      - 'experiments/dtg-protected-access/dogwood_rc1_pressure_context.py'
       - 'experiments/dtg-protected-access/capture_ab_runtime.py'
       - 'experiments/dtg-protected-access/export_dpip_evidence.py'
       - 'cases/dtg-protected-access/dogwood-rc1-runtime-ab.yaml'
+      - 'cases/dtg-protected-access/dogwood-rc1-runtime-pressure-ab.yaml'
       - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
   push:
     branches: [main]
     paths:
       - '.github/workflows/dogwood-runtime-evidence.yml'
       - 'experiments/dtg-protected-access/dogwood_rc1_context.py'
+      - 'experiments/dtg-protected-access/dogwood_rc1_pressure_context.py'
       - 'experiments/dtg-protected-access/capture_ab_runtime.py'
       - 'experiments/dtg-protected-access/export_dpip_evidence.py'
       - 'cases/dtg-protected-access/dogwood-rc1-runtime-ab.yaml'
+      - 'cases/dtg-protected-access/dogwood-rc1-runtime-pressure-ab.yaml'
       - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
   workflow_dispatch:
 
@@ -64,11 +68,40 @@ jobs:
           test "$(git -C "$DOGWOOD_CHECKOUT" rev-parse HEAD)" = "cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b"
           test -z "$(git -C "$DOGWOOD_CHECKOUT" status --porcelain)"
 
-      - name: Execute Dogwood A/B runtime observations
+      - name: Execute Dogwood positive-control observations
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py \
             cases/dtg-protected-access/dogwood-rc1-runtime-ab.yaml \
-            --output "${{ runner.temp }}/dogwood-rc1-ab-capture.yaml"
+            --output "${{ runner.temp }}/dogwood-rc1-positive-control.yaml"
+
+      - name: Execute Dogwood context-distinct pressure observations
+        run: |
+          python experiments/dtg-protected-access/capture_ab_runtime.py \
+            cases/dtg-protected-access/dogwood-rc1-runtime-pressure-ab.yaml \
+            --output "${{ runner.temp }}/dogwood-rc1-pressure.yaml"
+
+      - name: Verify experiment roles and attribution boundary
+        run: |
+          python - <<'PY'
+          import pathlib, yaml
+          positive = yaml.safe_load(pathlib.Path('${{ runner.temp }}/dogwood-rc1-positive-control.yaml').read_text())
+          pressure = yaml.safe_load(pathlib.Path('${{ runner.temp }}/dogwood-rc1-pressure.yaml').read_text())
+
+          assert positive['experiment']['kind'] == 'positive-control'
+          assert positive['experiment']['expected_join'] == 'must-detect'
+          assert positive['experiment']['observed_join'] == 'detected'
+          binder = positive['requirements']['ER-REL-DID-AB']['surfaces']['equivalent_relationship_binder']
+          assert binder['classification'] == 'identical'
+          assert binder['correlator_origin'] == 'fixture-supplied'
+
+          assert pressure['experiment']['kind'] == 'unlinkability-pressure-case'
+          assert pressure['experiment']['expected_join'] == 'must-not-emerge'
+          assert pressure['experiment']['observed_join'] == 'not-detected', pressure['experiment']
+          pressure_binder = pressure['requirements']['ER-REL-DID-AB']['surfaces']['equivalent_relationship_binder']
+          assert pressure_binder['classification'] == 'fresh'
+          assert pressure_binder['context_a'] != pressure_binder['context_b']
+          assert pressure_binder['producer_component'] == 'OpenVTC/verifiable-trust-infrastructure'
+          PY
 
       - name: Verify producer did not leave upstream modifications
         shell: bash
@@ -77,25 +110,27 @@ jobs:
       - name: Export DPIP provided_evidence bindings
         run: |
           python experiments/dtg-protected-access/export_dpip_evidence.py \
-            "${{ runner.temp }}/dogwood-rc1-ab-capture.yaml" \
-            --output "${{ runner.temp }}/dogwood-rc1-provided-evidence.json"
+            "${{ runner.temp }}/dogwood-rc1-positive-control.yaml" \
+            --output "${{ runner.temp }}/dogwood-rc1-positive-control-provided-evidence.json"
+          python experiments/dtg-protected-access/export_dpip_evidence.py \
+            "${{ runner.temp }}/dogwood-rc1-pressure.yaml" \
+            --output "${{ runner.temp }}/dogwood-rc1-pressure-provided-evidence.json"
 
       - name: Summarize bounded observation result
         shell: bash
         run: |
           python - <<'PY'
           import os, pathlib, yaml
-          capture = yaml.safe_load(pathlib.Path('${{ runner.temp }}/dogwood-rc1-ab-capture.yaml').read_text())
+          positive = yaml.safe_load(pathlib.Path('${{ runner.temp }}/dogwood-rc1-positive-control.yaml').read_text())
+          pressure = yaml.safe_load(pathlib.Path('${{ runner.temp }}/dogwood-rc1-pressure.yaml').read_text())
           summary = pathlib.Path(os.environ['GITHUB_STEP_SUMMARY'])
           with summary.open('a') as out:
-              print('## Dogwood RC-1 attributable A/B runtime observation', file=out)
+              print('## Dogwood RC-1 attributable target-native A/B runtime observations', file=out)
               print('', file=out)
-              print(f"- Evidence class: `{capture['evidence_class']}`", file=out)
-              print(f"- Implementation: `{capture['provenance']['implementation_repository']}@{capture['provenance']['implementation_revision']}`", file=out)
-              print('- Boundary: actual pinned Dogwood execution; no privacy PASS is manufactured.', file=out)
-              for rid, req in capture['requirements'].items():
-                  classes = sorted({s['classification'] for s in req['surfaces'].values()})
-                  print(f"- `{rid}` classifications: `{', '.join(classes)}`", file=out)
+              print(f"- Positive control: `{positive['experiment']['expected_join']}` / `{positive['experiment']['observed_join']}`", file=out)
+              print(f"- Context-distinct pressure: `{pressure['experiment']['expected_join']}` / `{pressure['experiment']['observed_join']}`", file=out)
+              print('- Attribution: target-native Dogwood execution through immutable pinned crates/test support.', file=out)
+              print('- Boundary: favourable pressure evidence is bounded to this path; no global privacy PASS is manufactured.', file=out)
           PY
 
       - name: Upload attributable runtime evidence
@@ -103,6 +138,8 @@ jobs:
         with:
           name: dogwood-rc1-runtime-upstream-observation
           path: |
-            ${{ runner.temp }}/dogwood-rc1-ab-capture.yaml
-            ${{ runner.temp }}/dogwood-rc1-provided-evidence.json
+            ${{ runner.temp }}/dogwood-rc1-positive-control.yaml
+            ${{ runner.temp }}/dogwood-rc1-pressure.yaml
+            ${{ runner.temp }}/dogwood-rc1-positive-control-provided-evidence.json
+            ${{ runner.temp }}/dogwood-rc1-pressure-provided-evidence.json
           if-no-files-found: error
