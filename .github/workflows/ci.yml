@@ -56,6 +56,31 @@ jobs:
             "${{ runner.temp }}/protected-access-ab-capture.yaml" \
             --output "${{ runner.temp }}/protected-access-provided-evidence.json"
 
+      - name: Guard A/B evidence producer target portability
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          generic_paths = [
+              Path("experiments/dtg-protected-access/capture_ab_runtime.py"),
+              Path("experiments/dtg-protected-access/export_dpip_evidence.py"),
+              Path("experiments/dtg-protected-access/composed_context.py"),
+              Path("experiments/dtg-protected-access/run_composed_ab.py"),
+              Path("cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml"),
+              Path("cases/dtg-protected-access/runtime-ab-harness.selftest.yaml"),
+          ]
+          forbidden = ("dogwood", "openvtc", "verifiable-trust-infrastructure")
+          violations = []
+          for path in generic_paths:
+              text = path.read_text(encoding="utf-8").lower()
+              for token in forbidden:
+                  if token in text:
+                      violations.append(f"{path}: contains target-specific token {token}")
+          if violations:
+              raise SystemExit("Target portability guard failed:\n" + "\n".join(violations))
+          print("PASS A/B evidence machinery contains no Dogwood/OpenVTC target coupling")
+          PY
+
       - name: Upload protected-access A/B synthetic boundary evidence
         uses: actions/upload-artifact@v4
         if: always()
