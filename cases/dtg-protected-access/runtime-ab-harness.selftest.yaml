@@ -1,0 +1,33 @@
+version: 1
+evidence_class: synthetic-fixture-self-test
+run_id: protected-access-ab-selftest
+observed_at: '2026-08-30T00:00:00Z'
+implementation:
+  repository: sankarshanmukhopadhyay/trust-protocol-interop-lab
+  revision: ab2c4d2bbb4617c00f6067c3922ca46d8a65ff31
+contexts:
+  A:
+    verifier: synthetic-verifier-a
+    purpose: eligibility-a
+    challenge: challenge-a
+    command:
+      - python3
+      - experiments/dtg-protected-access/selftest_context.py
+      - A
+  B:
+    verifier: synthetic-verifier-b
+    purpose: eligibility-b
+    challenge: challenge-b
+    command:
+      - python3
+      - experiments/dtg-protected-access/selftest_context.py
+      - B
+judgment:
+  proposition: >-
+    A cryptographically valid pair of executions can still expose a durable correlator.
+  falsifier: >-
+    The self-test deliberately reuses relationship_did and edge_identifier across A/B;
+    the harness must classify them as identical rather than infer privacy from successful execution.
+  boundary: >-
+    This manifest tests harness mechanics only. Its evidence_class prevents it from
+    satisfying an upstream runtime evidence requirement.
