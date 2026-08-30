@@ -1,0 +1,50 @@
+name: Install admin-DID binding evidence
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/install-admin-did-binding/**'
+      - '.github/workflows/install-admin-did-binding.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/install-admin-did-binding/**'
+      - '.github/workflows/install-admin-did-binding.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-pinned:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: lab
+      - uses: actions/checkout@v4
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 96304b3b6ae76995e094e575560d74a43ee95e51
+          path: vti
+      - uses: actions/checkout@v4
+        with:
+          repository: trustoverip/dtgwg-trust-tasks-tf
+          ref: 134733ff934775db522522dc26cb79836da29256
+          path: trust-tasks
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install native build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
+      - name: Execute semantic alignment falsifier
+        run: |
+          python lab/experiments/install-admin-did-binding/run.py \
+            --vti "$GITHUB_WORKSPACE/vti" \
+            --trust-tasks "$GITHUB_WORKSPACE/trust-tasks" \
+            --output "$RUNNER_TEMP/install-admin-did-binding/result.json" \
+            --run-id "$GITHUB_RUN_ID"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-admin-did-binding-evidence
+          path: ${{ runner.temp }}/install-admin-did-binding/result.json
+          if-no-files-found: error
