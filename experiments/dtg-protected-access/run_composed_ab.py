@@ -76,10 +76,10 @@ def main() -> int:
     assert positive["requirements"]["ER-REL-DID-AB"]["surfaces"]["relationship_did"]["correlator_origin"] == "fixture-supplied"
 
     pressure = execute_case(output, revision, "unlinkability-pressure", "unlinkability-pressure-case", "unlinkability", {})
-    assert_all_executed(pressure, "ER-STATUS-AB")
-    assert_all_executed(pressure, "ER-TASK-AB")
-    for rid in ("ER-STATUS-AB", "ER-TASK-AB"):
-        for entry in pressure["requirements"][rid]["surfaces"].values(): assert entry["classification"] == "fresh", entry
+    for rid in ("ER-REL-DID-AB", "ER-STATUS-AB", "ER-TASK-AB", "ER-VERIFIER-AB"):
+        assert_all_executed(pressure, rid)
+        for entry in pressure["requirements"][rid]["surfaces"].values():
+            assert entry["classification"] == "fresh", (rid, entry)
 
     falsification = execute_case(output, revision, "status-falsification", "unlinkability-pressure-case", "status-falsification", {"status_handle": "composition-derived"})
     status = falsification["requirements"]["ER-STATUS-AB"]["surfaces"]["status_handle"]
@@ -98,10 +98,12 @@ def main() -> int:
         "unlinkability_pressure": pressure["experiment"],
         "falsification": falsification["experiment"],
         "evidence_boundary": "Status/policy and Trust Task observations are produced by the executable Interop Lab composition. They are composition evidence and are not attributed to any target implementation unless that target actually produced those surfaces.",
-        "requirements_materially_exercised": ["ER-STATUS-AB", "ER-TASK-AB"],
+        "requirements_materially_exercised": [
+            "ER-REL-DID-AB", "ER-STATUS-AB", "ER-TASK-AB", "ER-VERIFIER-AB"
+        ],
     }
     (output / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print("PASS paired A/B composition: positive control, distinct-context pressure case, falsification vector, and execution-state regression")
+    print("PASS paired A/B composition: all four privacy evidence requirements, positive control, distinct-context pressure case, falsification vector, and execution-state regression")
     print(json.dumps(summary, sort_keys=True))
     return 0
 
