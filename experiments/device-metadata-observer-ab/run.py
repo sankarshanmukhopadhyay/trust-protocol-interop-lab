@@ -256,6 +256,7 @@ def main() -> int:
         "openvtc_revision": OPENVTC_PIN,
         "vti_revision": VTI_PIN,
     }, indent=2, sort_keys=True) + "\n")
+    print("RAHP_EVIDENCE_JSON=" + json.dumps(evidence, sort_keys=True))
     print(json.dumps(evidence["bounded_findings"], sort_keys=True))
     return 0
 
