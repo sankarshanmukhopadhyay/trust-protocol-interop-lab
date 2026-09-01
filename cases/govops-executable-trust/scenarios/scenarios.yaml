@@ -4,7 +4,7 @@
   "scenarios": [
     {
       "id": "GOVOPS-SC-001",
-      "title": "Valid authority and policy Allow admit a correlated effect",
+      "title": "Valid authority and policy Allow admit a correlated enforced effect",
       "purpose": "Exercise the complete positive state path without collapsing authority into authorization.",
       "inputs": {
         "capability_id": "govops:capability:loan-approve",
@@ -13,29 +13,35 @@
         "authority_state": "valid",
         "delegation_within_source": true,
         "policy_decision": "allow",
+        "decision_enforced": true,
         "effect_decision_match": true,
-        "effect_capability_match": true
+        "effect_capability_match": true,
+        "policy_store_id": "loan-policy-store",
+        "policy_store_version": "17"
       },
       "expected": {
         "execution_state": "admitted",
+        "enforcement_state": "enforced",
         "effect_state": "observed",
         "evidence_state": "complete",
         "assurance_state": "not_evaluated"
       },
-      "invariants": ["INV-GOVOPS-001", "INV-GOVOPS-002", "INV-GOVOPS-003", "INV-GOVOPS-005", "INV-GOVOPS-006", "INV-GOVOPS-007"]
+      "invariants": ["INV-GOVOPS-001", "INV-GOVOPS-002", "INV-GOVOPS-003", "INV-GOVOPS-005", "INV-GOVOPS-006", "INV-GOVOPS-007", "INV-GOVOPS-011", "INV-GOVOPS-012"]
     },
     {
       "id": "GOVOPS-SC-002",
       "title": "Valid authority does not override policy Deny",
-      "purpose": "Prove that admissible authority evidence is only a policy input and cannot manufacture Allow.",
+      "purpose": "Prove that admissible authority evidence is only an authorization input and cannot manufacture Allow.",
       "inputs": {
         "capability_id": "govops:capability:loan-approve",
         "authority_state": "valid",
         "delegation_within_source": true,
-        "policy_decision": "deny"
+        "policy_decision": "deny",
+        "decision_enforced": true
       },
       "expected": {
         "execution_state": "blocked",
+        "enforcement_state": "enforced",
         "effect_state": "absent",
         "evidence_state": "complete"
       },
@@ -44,17 +50,19 @@
     {
       "id": "GOVOPS-SC-003",
       "title": "Over-broad delegation is represented as inadmissible authority input",
-      "purpose": "Exercise monotonic narrowing and keep the resulting runtime decision under GovOps/PDP authority.",
+      "purpose": "Exercise monotonic narrowing and keep the resulting runtime decision under the policy-engine-neutral authorization runtime.",
       "inputs": {
         "capability_id": "govops:capability:loan-approve",
         "source_monetary_limit": 100000,
         "delegated_monetary_limit": 250000,
         "delegation_within_source": false,
         "authority_state": "insufficient",
-        "policy_decision": "deny"
+        "policy_decision": "deny",
+        "decision_enforced": true
       },
       "expected": {
         "execution_state": "blocked",
+        "enforcement_state": "enforced",
         "effect_state": "absent",
         "evidence_state": "complete"
       },
@@ -68,10 +76,12 @@
         "capability_id": "govops:capability:loan-approve",
         "authority_revoked_before_decision": true,
         "authority_state": "revoked",
-        "policy_decision": "deny"
+        "policy_decision": "deny",
+        "decision_enforced": true
       },
       "expected": {
         "execution_state": "blocked",
+        "enforcement_state": "enforced",
         "effect_state": "absent",
         "evidence_state": "complete"
       },
@@ -80,11 +90,12 @@
     {
       "id": "GOVOPS-SC-005",
       "title": "Post-execution revocation preserves historical truth",
-      "purpose": "Keep current authority validity separate from immutable evidence of a previously authorized effect.",
+      "purpose": "Keep current authority validity separate from immutable evidence of a previously authorized and enforced effect.",
       "inputs": {
         "capability_id": "govops:capability:loan-approve",
         "authority_state_at_decision": "valid",
         "policy_decision": "allow",
+        "decision_enforced": true,
         "effect_decision_match": true,
         "effect_capability_match": true,
         "authority_revoked_after_effect": true,
@@ -92,6 +103,7 @@
       },
       "expected": {
         "execution_state": "admitted",
+        "enforcement_state": "enforced",
         "effect_state": "observed",
         "historical_evidence_preserved": true,
         "current_authority_valid": false
@@ -105,6 +117,7 @@
       "inputs": {
         "capability_id": "govops:capability:loan-approve",
         "policy_decision": "allow",
+        "decision_enforced": true,
         "effect_decision_match": false,
         "effect_capability_match": true
       },
@@ -113,7 +126,7 @@
         "evidence_state": "inconsistent",
         "assurance_state": "fail"
       },
-      "invariants": ["INV-GOVOPS-006", "INV-GOVOPS-007"]
+      "invariants": ["INV-GOVOPS-006", "INV-GOVOPS-007", "INV-GOVOPS-012"]
     },
     {
       "id": "GOVOPS-SC-007",
@@ -122,6 +135,7 @@
       "inputs": {
         "capability_id": "govops:capability:loan-approve",
         "historical_policy_decision": "deny",
+        "decision_enforced": true,
         "evidence_state": "complete",
         "later_assurance_state": "pass"
       },
@@ -131,6 +145,66 @@
         "execution_state": "blocked"
       },
       "invariants": ["INV-GOVOPS-005", "INV-GOVOPS-009", "INV-GOVOPS-010"]
+    },
+    {
+      "id": "GOVOPS-SC-008",
+      "title": "Allow without observable enforcement does not establish successful authorization execution",
+      "purpose": "Prove that a policy Allow is distinct from enforcement and cannot by itself establish that an operation was admitted or executed.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "decision_id": "dec:LN-2026-004217:08",
+        "policy_decision": "allow",
+        "decision_enforced": false,
+        "effect_observed": false
+      },
+      "expected": {
+        "enforcement_state": "not_established",
+        "execution_state": "not_established",
+        "effect_state": "absent",
+        "assurance_state": "indeterminate"
+      },
+      "invariants": ["INV-GOVOPS-005", "INV-GOVOPS-006", "INV-GOVOPS-011", "INV-GOVOPS-012"]
+    },
+    {
+      "id": "GOVOPS-SC-009",
+      "title": "Decision identifier substitution fails correlation",
+      "purpose": "Reject a valid decision identifier that belongs to a different request, capability, or effect lineage.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "request_id": "req:LN-2026-004217:approve:09",
+        "decision_id": "dec:OTHER-REQUEST:01",
+        "decision_request_match": false,
+        "decision_capability_match": false,
+        "policy_decision": "allow",
+        "decision_enforced": true
+      },
+      "expected": {
+        "correlation_state": "invalid",
+        "evidence_state": "inconsistent",
+        "assurance_state": "fail"
+      },
+      "invariants": ["INV-GOVOPS-006", "INV-GOVOPS-007", "INV-GOVOPS-011", "INV-GOVOPS-012"]
+    },
+    {
+      "id": "GOVOPS-SC-010",
+      "title": "Missing policy store version leaves policy provenance indeterminate",
+      "purpose": "Prevent an observable decision with ambiguous policy provenance from being silently accepted as assurance-complete.",
+      "inputs": {
+        "capability_id": "govops:capability:loan-approve",
+        "decision_id": "dec:LN-2026-004217:10",
+        "policy_store_id": "loan-policy-store",
+        "policy_store_version": null,
+        "policy_decision": "allow",
+        "decision_enforced": true,
+        "effect_decision_match": true,
+        "effect_capability_match": true
+      },
+      "expected": {
+        "policy_provenance_state": "indeterminate",
+        "evidence_state": "incomplete",
+        "assurance_state": "indeterminate"
+      },
+      "invariants": ["INV-GOVOPS-006", "INV-GOVOPS-011"]
     }
   ]
 }
