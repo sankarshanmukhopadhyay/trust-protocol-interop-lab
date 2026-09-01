@@ -1,14 +1,15 @@
 # IC-GOVOPS-EXEC-TRUST-001 — GovOps capability governance and executable trust composition
 
-**Status:** Experimental  
+**Status:** Candidate  
 **Admission / judgment anchor:** [Discussion #6](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/discussions/6)  
-**Boundary-alignment issue:** [#82](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/82)
+**Boundary-alignment issue:** [#82](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/82)  
+**Candidate-promotion issue:** [#85](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/85)
 
 Tests whether a GovOps capability can participate in a portable authority, delegation, authorization, enforcement, execution, evidence, and assurance flow without changing GovOps capability semantics, transferring semantic ownership, or collapsing distinct governance states.
 
 ## Current architectural conclusion
 
-The experiment remains valid, but Discussion #6 produced an important correction and several boundary clarifications that now govern this case:
+Discussion #6 produced an important correction and several boundary clarifications that now govern this case:
 
 - GovOps is **policy-engine-neutral**. This case does not model a normative “GovOps/PDP layer”.
 - portable authority/delegation evidence is an **input to authorization**, alongside identity, credentials, attestations, and other contextual evidence; it is not authorization itself;
@@ -17,7 +18,7 @@ The experiment remains valid, but Discussion #6 produced an important correction
 - runtime governance correlation is intentionally multi-identifier: `capability_id`, `decision_id`, `policy_store_id`, `policy_store_version`, relevant artifact identifiers, and local request/effect/evidence identifiers remain separate;
 - current authority validity and historical execution truth remain distinct: later revocation does not rewrite truthful historical evidence.
 
-These clarifications tighten the experiment; they do not promote its maturity. The case remains **Experimental** until revised executable vectors are run and produce evidence.
+These clarifications are now represented by ten explicit positive/negative vectors across twelve invariants. The deterministic evaluator verifies that the vectors remain mechanically equivalent to the scenario contracts. That evidence is sufficient for **Candidate** maturity under the repository's evidence gate, but not for an `interoperability-tested` claim.
 
 ## Why this case exists
 
@@ -281,16 +282,16 @@ Revocation changes whether authority may be exercised now or in the future. It d
 
 ## Machine-readable invariants
 
-[`invariants.yaml`](invariants.yaml) now contains twelve invariants. Two new invariants make the upstream observability clarification executable:
+[`invariants.yaml`](invariants.yaml) contains twelve invariants. Two invariants make the upstream observability clarification executable:
 
 - **INV-GOVOPS-011 — authorization observability:** the decision and enforcement path must expose enough stable identifiers to correlate capability, decision, applicable policy state, and relevant runtime artifacts without collapsing ownership;
 - **INV-GOVOPS-012 — correlation is not authority:** correlation identifiers and observability artifacts do not constitute authority, entitlement, authorization, successful enforcement, or proof of the intended runtime effect.
 
 The earlier authority, delegation, revocation, evidence, and assurance invariants remain in force.
 
-## Scenario estate
+## Scenario and vector estate
 
-[`scenarios/scenarios.yaml`](scenarios/scenarios.yaml) defines ten machine-readable scenario contracts:
+[`scenarios/scenarios.yaml`](scenarios/scenarios.yaml) defines ten machine-readable scenario contracts. [`vectors/`](vectors/) materializes each contract as an explicit Candidate vector:
 
 1. valid authority + `Allow` + observable enforcement + correlated effect;
 2. valid authority does not override `Deny`;
@@ -303,7 +304,7 @@ The earlier authority, delegation, revocation, evidence, and assurance invariant
 9. **decision identifier substitution fails correlation**; and
 10. **missing `policy_store_version` leaves policy provenance and assurance indeterminate**.
 
-The last three scenarios directly convert the Discussion #6 clarification into falsifiable claims rather than descriptive prose.
+The evaluator checks one-to-one scenario coverage and rejects drift between scenario inputs/expected outcomes and their vector representation.
 
 ## Failure semantics
 
@@ -339,13 +340,13 @@ capability
 
 The lab owns this composition only. It does not redefine GovOps, TSMM, GAAM, TIS, or PARC.
 
-## What the experiment is intended to prove
+## What the Candidate evidence establishes
 
-At later maturity, deterministic execution should be able to produce evidence that:
+The deterministic evaluator and explicit vector estate establish, within this repository-owned semantic reference model, that:
 
 - the same GovOps capability can be invoked under different authority and policy outcomes;
 - valid authority is authorization input but is not sufficient to produce `Allow`;
-- delegated limits are enforced rather than merely recorded;
+- delegated limits are constraints rather than merely recorded metadata;
 - revocation is evaluated relative to decision time;
 - `Allow` alone does not prove enforcement;
 - enforcement alone does not prove the intended effect occurred;
@@ -355,18 +356,18 @@ At later maturity, deterministic execution should be able to produce evidence th
 - evidence records governance state without becoming authority; and
 - assurance evaluates historical evidence without rewriting historical authorization state.
 
+These are semantic-composition claims only. The limitations are recorded in [`known-limitations.md`](known-limitations.md).
+
 ## Maturity gate
 
-This change does **not** promote the case.
+The case is now **Candidate** because it has explicit positive and negative vectors, deterministic expected behavior, recorded limitations, and a deterministic evaluator that rejects vector/scenario drift.
 
-**Experimental → Candidate** requires executable positive and negative vectors derived from these ten scenario contracts, deterministic expected behavior, and recorded limitations.
+**Candidate → Interoperability Tested** still requires the stronger evidence defined in `GOVERNANCE.md`, including reproducible execution evidence and a hash-bound evidence manifest with an appropriately narrow claim boundary.
 
-**Candidate → Interoperability Tested** requires deterministic execution, reproducible results, and a hash-bound evidence manifest.
-
-Until those gates are met, this case makes no GovOps conformance, endorsement, production interoperability, or normative-alignment claim.
+Candidate maturity does not establish GovOps conformance, endorsement, production integration, wire-level interoperability, external certification, or normative alignment.
 
 ## Explicit exclusions
 
 This iteration does not add PolicyMesh, ARPA, ANAB, TRQP, RAHP, DTG conformance/assurance, agent-specific workflows, credential protocols, portfolio-monitor integration, changes to GovOps/Gemara/AuthZEN/PARC, or a new policy/entitlement language.
 
-The purpose of the current wave is narrower: preserve the upstream GovOps boundary accurately and make the clarified observability and enforcement properties executable.
+The purpose of this wave is narrow: preserve the upstream GovOps boundary accurately and make the clarified observability and enforcement properties executable and reviewable.
