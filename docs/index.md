@@ -2,40 +2,53 @@
 layout: default
 title: Trust Protocol Interop Lab
 nav_order: 1
+nav_exclude: false
 permalink: /
 ---
 # Trust Protocol Interop Lab
 
-A governed workbench for testing whether independently authoritative trust protocols and artifacts compose **without semantic loss or authority inflation**.
+A governed workbench for testing whether independently authoritative trust protocols and artifacts compose **without semantic loss, authority inflation, or evidence ambiguity**.
 
-## Start with the outcome you need
+The lab is organised around **Interop Cases**. Each case states a bounded composition question, pins the relevant baselines, identifies semantic ownership, defines claims and invariants, executes positive and negative scenarios where maturity permits, and preserves evidence for independent review.
 
-| Goal | Start here |
-|---|---|
-| See executed interoperability evidence | [Assessments](assessments.md) |
-| Explore external standards and mappings | [Standards Intelligence](standards-intelligence.md) |
-| Understand what a result proves | [Evidence & Assurance](evidence-and-assurance.md) |
-| Understand the lab model | [Methods & Architecture](methods.md) |
-| See all case maturity | [Interoperability Readiness](interoperability-readiness.md) |
+## Choose your path
 
-## Newly completed cross-spec assessments
+| You want to… | Start here | What you should get |
+|---|---|---|
+| Understand what has actually been tested | [Cases & Assessments](assessments.md) | Complete case estate, maturity, bounded claims and direct case entry points |
+| Inspect evidence or reproduce a result | [Evidence & Reproduction](evidence-and-assurance.md) | Evidence model, manifests, review records and reproduction paths |
+| Understand external standards used by the lab | [Standards Intelligence](standards-intelligence.md) | Verified baselines, authority metadata, mappings and assessment candidates |
+| Understand how the lab reasons about interoperability | [Methods & Architecture](methods.md) | Semantic ownership, interoperability model, maturity gates and boundary taxonomy |
+| Understand authority, status and contribution rules | [Governance & Status](governance-status.md) | Governance boundaries, current repository state and contribution path |
 
-### XSP-001 — credential reliance chain
+## The lab in one flow
 
-Tests W3C VC Data Model + Data Integrity + OpenID4VCI + OpenID4VP. The executed result shows that proof validity, credential lifecycle, issuer authority, presentation transaction binding, and relying-party policy must remain independently evaluable.
+```text
+external specifications / portfolio artifacts
+                    ↓
+          governed Interop Case
+                    ↓
+     semantic ownership + invariants
+                    ↓
+      positive / negative scenarios
+                    ↓
+       executable or review evidence
+                    ↓
+       bounded maturity / assurance claim
+                    ↓
+      upstream proposal when warranted
+```
 
-[Open XSP-001](../cases/xsp-001/README.md)
+The important separation is intentional: **discovery is not authority; mapping is not interoperability; execution is not certification; and a local result cannot enlarge the normative scope of an upstream specification**.
 
-### XSP-002 — DID/federation authority chain
+## Current evidence-bearing estate
 
-Tests DID Core + DID Resolution + OpenID Federation. The executed result keeps identifier control, federation membership, organizational authority, action scope, and final policy decision as separate evidence layers.
+The current case estate includes credential-reliance, DID/federation authority, governed agent discovery, agent relationship architecture, Trust Tasks/MCP composition, historical resolution, protected-access privacy, agentic provenance and GovOps executable-trust work. Several cases are now locally **Interoperability Tested** for their explicitly bounded semantic-composition claims; others remain Candidate or Experimental pending further evidence.
 
-[Open XSP-002](../cases/xsp-002/README.md)
+[Browse all current cases and their status](assessments.md).
 
-## Standards discovery acknowledgement
+## What is intentionally *not* in the sidebar
 
-The standards-intelligence programme is seeded from the **Global Standards Mapping Initiative (GSMI)**, an initiative of the **Global Blockchain Business Council (GBBC)**. GSMI is credited as a discovery source. Referenced standards publishers remain authoritative, and the lab owns its local mappings, assessments, and evidence claims.
+Experiment phases, scenarios, vectors, generated matrices, mappings, raw evidence, implementation notes and historical baselines are still published and searchable. They are reached through the case or method that gives them meaning rather than being exposed as independent top-level destinations.
 
-## Assurance posture
-
-The lab distinguishes discovery, mapping, candidate assessment, executed evidence, and upstream outcomes. A successful local test does not create external certification or expand the normative scope of an upstream specification.
+This keeps the site useful as the repository grows without weakening traceability or evidence preservation.
