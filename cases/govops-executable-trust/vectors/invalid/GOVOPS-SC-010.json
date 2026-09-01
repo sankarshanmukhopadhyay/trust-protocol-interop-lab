@@ -1,0 +1,7 @@
+{
+  "id": "GOVOPS-VEC-010",
+  "scenario_id": "GOVOPS-SC-010",
+  "class": "invalid",
+  "inputs": {"capability_id":"govops:capability:loan-approve","decision_id":"dec:LN-2026-004217:10","policy_store_id":"loan-policy-store","policy_store_version":null,"policy_decision":"allow","decision_enforced":true,"effect_decision_match":true,"effect_capability_match":true},
+  "expected": {"policy_provenance_state":"indeterminate","evidence_state":"incomplete","assurance_state":"indeterminate"}
+}

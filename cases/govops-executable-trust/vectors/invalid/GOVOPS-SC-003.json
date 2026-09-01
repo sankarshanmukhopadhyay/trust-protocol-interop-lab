@@ -1,0 +1,7 @@
+{
+  "id": "GOVOPS-VEC-003",
+  "scenario_id": "GOVOPS-SC-003",
+  "class": "invalid",
+  "inputs": {"capability_id":"govops:capability:loan-approve","source_monetary_limit":100000,"delegated_monetary_limit":250000,"delegation_within_source":false,"authority_state":"insufficient","policy_decision":"deny","decision_enforced":true},
+  "expected": {"execution_state":"blocked","enforcement_state":"enforced","effect_state":"absent","evidence_state":"complete"}
+}
