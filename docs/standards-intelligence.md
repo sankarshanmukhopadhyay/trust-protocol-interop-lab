@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Standards Intelligence
-nav_order: 3
-has_children: true
+nav_order: 4
+nav_exclude: false
 permalink: /standards-intelligence/
 ---
 # Standards Intelligence
@@ -35,4 +35,4 @@ Every shard entry records its artifact type, canonical publisher baseline, lifec
 
 ## Validation contract
 
-Pull requests and pushes to `main` now run repository assurance CI. The standards layer is validated both by the existing core validator and `scripts/validate_standards_v2.py`, which checks the combined ID space across the seed register and corpus shards, source references, standards-body references, HTTPS canonical baselines and pinned lifecycle monitoring metadata.
+Pull requests and pushes to `main` run repository assurance CI. The standards layer is validated by both the core validator and `scripts/validate_standards_v2.py`, which checks the combined ID space across the seed register and corpus shards, source references, standards-body references, HTTPS canonical baselines and pinned lifecycle monitoring metadata.
