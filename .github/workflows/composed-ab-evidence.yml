@@ -1,18 +1,36 @@
 name: Composed A-B privacy evidence
+run-name: >-
+  Composed A-B privacy evidence${{ inputs.correlation_key && format(' [{0}]', inputs.correlation_key) || '' }}
 
 on:
   pull_request:
     paths:
       - 'experiments/dtg-protected-access/**'
       - 'cases/dtg-protected-access/**'
+      - 'catalog/evidence-producers.yaml'
+      - 'schemas/interop-evidence-package-v1.schema.json'
+      - 'scripts/validate_evidence_producers.py'
       - '.github/workflows/composed-ab-evidence.yml'
   push:
     branches: [main]
     paths:
       - 'experiments/dtg-protected-access/**'
       - 'cases/dtg-protected-access/**'
+      - 'catalog/evidence-producers.yaml'
+      - 'schemas/interop-evidence-package-v1.schema.json'
+      - 'scripts/validate_evidence_producers.py'
       - '.github/workflows/composed-ab-evidence.yml'
   workflow_dispatch:
+    inputs:
+      correlation_key:
+        description: Stable controller dispatch key; used only for outbox correlation.
+        required: false
+        type: string
+      evidence_requirement_ids:
+        description: JSON array of requested requirement IDs. The executable regression still exercises the complete registered contract.
+        required: false
+        default: '[]'
+        type: string
 
 permissions:
   contents: read
@@ -27,6 +45,8 @@ jobs:
           python-version: '3.13'
       - name: Install evidence dependencies
         run: python -m pip install --disable-pip-version-check pyyaml
+      - name: Validate registered producer contract
+        run: python scripts/validate_evidence_producers.py
       - name: Run paired A/B composition and regression cases
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py --self-test
@@ -34,9 +54,12 @@ jobs:
           python experiments/dtg-protected-access/run_composed_ab.py \
             --revision "${GITHUB_SHA}" \
             --output-dir "${RUNNER_TEMP}/composed-ab"
-      - name: Upload attributable composed A/B evidence
+          printf '%s\n' '${{ inputs.evidence_requirement_ids || '[]' }}' > "${RUNNER_TEMP}/composed-ab/requested-requirements.json"
+          printf '%s\n' '${{ inputs.correlation_key || '' }}' > "${RUNNER_TEMP}/composed-ab/correlation-key.txt"
+      - name: Upload durable evidence outbox
         uses: actions/upload-artifact@v4
         with:
-          name: composed-status-task-ab-evidence
+          name: assurance-evidence-${{ inputs.correlation_key || github.run_id }}
           path: ${{ runner.temp }}/composed-ab/
           if-no-files-found: error
+          retention-days: 30

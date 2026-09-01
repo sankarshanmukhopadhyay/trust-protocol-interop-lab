@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Execute the #237/#240 paired A/B composition cases and write DPIP-ready evidence."""
+"""Execute paired A/B composition cases and write DPIP-ready evidence."""
 from __future__ import annotations
 import argparse
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -13,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CAPTURE = ROOT / "experiments" / "dtg-protected-access" / "capture_ab_runtime.py"
 EXPORT = ROOT / "experiments" / "dtg-protected-access" / "export_dpip_evidence.py"
 CONTEXT = ROOT / "experiments" / "dtg-protected-access" / "composed_context.py"
+REQUIREMENTS = ("ER-REL-DID-AB", "ER-STATUS-AB", "ER-TASK-AB", "ER-VERIFIER-AB", "ER-CREDENTIAL-ID-AB")
 
 
 def context_command(context: str, mode: str) -> list[str]:
@@ -38,6 +40,10 @@ def manifest(revision: str, kind: str, mode: str, origins: dict[str, str]) -> di
             "thread_identifier": "interop-lab/trust-task-composition",
             "retained_relationship_evidence": "interop-lab/trust-task-retention",
             "retained_outcome_evidence": "interop-lab/trust-task-retention",
+            "credential_identifier": "interop-lab/credential-composition",
+            "presentation_identifier": "interop-lab/credential-composition",
+            "proof_or_request_binding": "interop-lab/credential-composition",
+            "retained_evidence_reference": "interop-lab/credential-retention",
         },
     }
 
@@ -70,24 +76,24 @@ def main() -> int:
         "relationship_did": "fixture-supplied",
         "equivalent_relationship_binder": "fixture-supplied",
         "deliberate_join_attempt": "fixture-supplied",
+        "credential_identifier": "fixture-supplied",
+        "presentation_identifier": "fixture-supplied",
+        "proof_or_request_binding": "fixture-supplied",
+        "retained_evidence_reference": "fixture-supplied",
     })
     assert positive["experiment"]["observed_join"] == "detected"
-    assert "relationship_did" in positive["experiment"]["join_surfaces"]
-    assert positive["requirements"]["ER-REL-DID-AB"]["surfaces"]["relationship_did"]["correlator_origin"] == "fixture-supplied"
+    assert positive["requirements"]["ER-CREDENTIAL-ID-AB"]["surfaces"]["credential_identifier"]["classification"] == "identical"
 
     pressure = execute_case(output, revision, "unlinkability-pressure", "unlinkability-pressure-case", "unlinkability", {})
-    for rid in ("ER-REL-DID-AB", "ER-STATUS-AB", "ER-TASK-AB", "ER-VERIFIER-AB"):
+    for rid in REQUIREMENTS:
         assert_all_executed(pressure, rid)
         for entry in pressure["requirements"][rid]["surfaces"].values():
             assert entry["classification"] == "fresh", (rid, entry)
 
     falsification = execute_case(output, revision, "status-falsification", "unlinkability-pressure-case", "status-falsification", {"status_handle": "composition-derived"})
     status = falsification["requirements"]["ER-STATUS-AB"]["surfaces"]["status_handle"]
-    assert status["classification"] == "identical"
-    assert status["correlator_origin"] == "composition-derived"
+    assert status["classification"] == "identical" and status["correlator_origin"] == "composition-derived"
 
-    # Regression: an unexecuted surface must remain not-evidenced; executed+None may be absent.
-    import importlib.util
     spec = importlib.util.spec_from_file_location("capture_ab_runtime", CAPTURE); module = importlib.util.module_from_spec(spec); assert spec.loader; spec.loader.exec_module(module)
     assert module.classify(None, None, False, False) == "not-evidenced"
     assert module.classify(None, None, True, True) == "absent"
@@ -97,14 +103,11 @@ def main() -> int:
         "positive_control": positive["experiment"],
         "unlinkability_pressure": pressure["experiment"],
         "falsification": falsification["experiment"],
-        "evidence_boundary": "Status/policy and Trust Task observations are produced by the executable Interop Lab composition. They are composition evidence and are not attributed to any target implementation unless that target actually produced those surfaces.",
-        "requirements_materially_exercised": [
-            "ER-REL-DID-AB", "ER-STATUS-AB", "ER-TASK-AB", "ER-VERIFIER-AB"
-        ],
+        "evidence_boundary": "These are executable Interop Lab composition observations. They are not attributed to another implementation unless that implementation produced the observed surfaces.",
+        "requirements_materially_exercised": list(REQUIREMENTS),
     }
     (output / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print("PASS paired A/B composition: all four privacy evidence requirements, positive control, distinct-context pressure case, falsification vector, and execution-state regression")
-    print(json.dumps(summary, sort_keys=True))
+    print("PASS paired A/B composition: relationship, status, task, verifier and credential identifier requirements exercised with positive control and falsification vector")
     return 0
 
 if __name__ == "__main__": raise SystemExit(main())

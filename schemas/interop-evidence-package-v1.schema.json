@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "interop-evidence-package/v1",
+  "title": "Interop Evidence Package v1",
+  "type": "object",
+  "required": [
+    "schema","requirement_id","evidence_class","experiment","observer","provenance","surfaces","source_pins"
+  ],
+  "properties": {
+    "schema": {"const":"interop-evidence-package/v1"},
+    "requirement_id": {"type":"string","minLength":1},
+    "evidence_class": {"type":"string","minLength":1},
+    "experiment": {
+      "type":"object",
+      "required":["kind","expected_join","observed_join"],
+      "properties":{
+        "kind":{"type":"string"},
+        "expected_join":{"type":"string"},
+        "observed_join":{"enum":["detected","not-detected","not-evidenced"]},
+        "join_surfaces":{"type":"array","items":{"type":"string"}}
+      },
+      "additionalProperties":true
+    },
+    "observer": {
+      "type":"object",
+      "required":["model","contexts"],
+      "properties":{
+        "model":{"type":"string"},
+        "contexts":{"type":"array","minItems":2,"items":{"type":"object"}}
+      },
+      "additionalProperties":true
+    },
+    "provenance":{"type":"object"},
+    "surfaces":{"type":"object","minProperties":1},
+    "source_pins":{
+      "type":"array","minItems":1,
+      "items":{
+        "type":"object",
+        "required":["repository","revision"],
+        "properties":{
+          "repository":{"type":"string"},
+          "revision":{"type":"string","pattern":"^[0-9a-f]{40}$"}
+        }
+      }
+    }
+  },
+  "additionalProperties":true
+}

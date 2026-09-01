@@ -1,0 +1,28 @@
+schema: interop-evidence-producer-registry/v1
+version: 2
+producers:
+  - id: composed-unlinkability-v1
+    repository: sankarshanmukhopadhyay/trust-protocol-interop-lab
+    mode: registered-executable
+    evidence_classes: [runtime-upstream-observation]
+    requirement_ids:
+      - ER-REL-DID-AB
+      - ER-STATUS-AB
+      - ER-TASK-AB
+      - ER-VERIFIER-AB
+      - ER-CREDENTIAL-ID-AB
+      - ER-DEVICE-METADATA-AB
+    experiment_kind: unlinkability-pressure-case
+    observer_model_required: true
+    source_pins_required: true
+    output_schema: interop-evidence-package/v1
+    entrypoints:
+      relationship-and-credential-composed-unlinkability:
+        capability_status: executable
+        path: experiments/dtg-protected-access/run_composed_ab.py
+        workflow: composed-ab-evidence.yml
+        satisfies: [ER-REL-DID-AB, ER-STATUS-AB, ER-TASK-AB, ER-VERIFIER-AB, ER-CREDENTIAL-ID-AB]
+      device-metadata-observer:
+        capability_status: executable
+        path: experiments/device-metadata-observer-ab/run.py
+        satisfies: [ER-DEVICE-METADATA-AB]

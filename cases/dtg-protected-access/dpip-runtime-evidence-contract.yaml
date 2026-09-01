@@ -1,35 +1,21 @@
-version: 2
+version: 3
 case: IC-DTG-PROTECTED-ACCESS-001
 purpose: >-
   Define provenance-bound A/B runtime evidence packages that the Interop Lab may
-  produce for DPIP. Runtime evidence must distinguish deliberately seeded correlation
-  controls from context-distinct unlinkability pressure cases, and must distinguish an
-  executed surface with no value from a subsystem that was not executed.
+  produce for DPIP. Runtime evidence distinguishes deliberately seeded correlation
+  controls from context-distinct pressure cases and executed absence from non-execution.
 
 experiment_kinds:
   positive-control:
     expected_join: must-detect
-    meaning: A deliberately seeded correlator validates detector sensitivity and is not by itself a target privacy failure.
   unlinkability-pressure-case:
     expected_join: must-not-emerge
-    meaning: A and B start context-distinct; any newly observed stable join requires origin/attribution before interpretation.
 
-correlator_origins:
-  - fixture-supplied
-  - target-derived
-  - composition-derived
-  - retained
-  - observer-derived
-  - none
-  - unknown
+correlator_origins: [fixture-supplied, target-derived, composition-derived, retained, observer-derived, none, unknown]
 
 contexts:
-  A:
-    title: Relying context A
-    summary: First independently observable relying context.
-  B:
-    title: Relying context B
-    summary: Second independently observable relying context used for A/B comparison.
+  A: {title: Relying context A, summary: First independently observable relying context.}
+  B: {title: Relying context B, summary: Second independently observable relying context used for A/B comparison.}
 
 requirements:
   ER-REL-DID-AB:
@@ -52,28 +38,18 @@ requirements:
     summary: Capture A/B verifier transcripts and join attempts while preserving whether correlation was seeded or discovered.
     source_issue: "RAHP #140"
     surfaces: [verifier_transcript, challenge, purpose, transaction_context, deliberate_join_attempt]
+  ER-CREDENTIAL-ID-AB:
+    title: Cross-context credential identifier observations
+    summary: Observe credential/presentation/request binding and retained evidence identifiers across independent verifier contexts.
+    source_issue: "RAHP #310"
+    surfaces: [credential_identifier, presentation_identifier, proof_or_request_binding, status_handle, verifier_transcript, retained_evidence_reference]
 
-classification_values:
-  - identical
-  - derivably-related
-  - fresh
-  - absent
-  - not-evidenced
-
+classification_values: [identical, derivably-related, fresh, absent, not-evidenced]
 execution_states:
   executed: The producing subsystem ran for this context.
   not-executed: No runtime conclusion may be drawn for this surface.
-
-required_provenance:
-  - producer
-  - run_id
-  - observed_at
-  - implementation_repository
-  - implementation_revision
-  - context_a_run
-  - context_b_run
-
+required_provenance: [producer, run_id, observed_at, implementation_repository, implementation_revision, context_a_run, context_b_run]
 assurance_boundary: >-
   Export validity proves evidence-package structure, execution state and attribution.
   It does not establish privacy PASS or universal unlinkability. A positive-control join
-  is expected evidence about detector sensitivity. DPIP owns scoped interpretation.
+  is expected detector evidence. DPIP owns scoped interpretation.
