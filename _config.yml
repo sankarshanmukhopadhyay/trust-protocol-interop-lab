@@ -9,3 +9,38 @@ aux_links:
 
 search_enabled: true
 heading_anchors: true
+
+# Information architecture policy:
+# repository artifacts remain published and searchable, but they do not enter the
+# primary navigation unless a reader-facing landing page explicitly opts in with
+# `nav_exclude: false`. This prevents experiment/evidence growth from silently
+# recreating a filesystem-shaped sidebar.
+defaults:
+  - scope:
+      path: ""
+    values:
+      nav_exclude: true
+  - scope:
+      path: "docs/index.md"
+    values:
+      nav_exclude: false
+  - scope:
+      path: "docs/assessments.md"
+    values:
+      nav_exclude: false
+  - scope:
+      path: "docs/evidence-and-assurance.md"
+    values:
+      nav_exclude: false
+  - scope:
+      path: "docs/standards-intelligence.md"
+    values:
+      nav_exclude: false
+  - scope:
+      path: "docs/methods.md"
+    values:
+      nav_exclude: false
+  - scope:
+      path: "docs/governance-status.md"
+    values:
+      nav_exclude: false
