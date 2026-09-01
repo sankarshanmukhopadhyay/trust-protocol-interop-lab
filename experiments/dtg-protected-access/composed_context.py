@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Executable composition producer for RAHP #237.
+"""Executable composition producer for observer-bound DPIP A/B evidence.
 
-This is Interop Lab composition-runtime evidence. It deliberately models the observable
-status/policy and Trust Task/retention stages needed to exercise the DPIP A/B contract;
-it must not be represented as evidence that a target implementation itself implements
-those stages unless that target actually produced the observed surfaces.
+This producer exercises Interop Lab composition surfaces. Its observations are evidence
+about this executed composition; they are not attributed to a target implementation
+unless that target actually produced the surface.
 """
 from __future__ import annotations
 import argparse
@@ -16,6 +15,7 @@ SURFACES = [
     "status_handle", "status_endpoint", "policy_discovery_handle", "policy_endpoint",
     "task_identifier", "thread_identifier", "retained_relationship_evidence", "retained_outcome_evidence",
     "verifier_transcript", "challenge", "purpose", "transaction_context", "deliberate_join_attempt",
+    "credential_identifier", "presentation_identifier", "proof_or_request_binding", "retained_evidence_reference",
 ]
 
 
@@ -24,18 +24,22 @@ def token(prefix: str, value: str) -> str:
 
 
 def build(context: str, mode: str, seeded: str | None) -> dict:
-    if context not in {"A", "B"}: raise ValueError("context must be A or B")
+    if context not in {"A", "B"}:
+        raise ValueError("context must be A or B")
     ctx = context.lower()
     if mode == "positive-control":
         binder = seeded or "relationship-control-001"
+        credential_seed = seeded or "credential-control-001"
         status_seed = f"{binder}:status:{ctx}"
         task_seed = f"{binder}:task:{ctx}"
     elif mode == "unlinkability":
         binder = f"relationship-{ctx}-distinct"
+        credential_seed = f"credential-{ctx}-distinct"
         status_seed = f"status-{ctx}-distinct"
         task_seed = f"task-{ctx}-distinct"
     elif mode == "status-falsification":
         binder = f"relationship-{ctx}-distinct"
+        credential_seed = f"credential-{ctx}-distinct"
         status_seed = seeded or "deliberately-shared-status-handle"
         task_seed = f"task-{ctx}-distinct"
     else:
@@ -58,10 +62,14 @@ def build(context: str, mode: str, seeded: str | None) -> dict:
         "purpose": f"purpose-{ctx}",
         "transaction_context": f"transaction-{ctx}",
         "deliberate_join_attempt": token("join-attempt", binder if mode == "positive-control" else f"{binder}:{ctx}"),
+        "credential_identifier": token("credential", credential_seed),
+        "presentation_identifier": token("presentation", credential_seed if mode == "positive-control" else f"{credential_seed}:{ctx}"),
+        "proof_or_request_binding": token("proof-binding", credential_seed if mode == "positive-control" else f"{credential_seed}:request:{ctx}"),
+        "retained_evidence_reference": token("retained-evidence", credential_seed if mode == "positive-control" else f"{credential_seed}:retained:{ctx}"),
     }
     return {
         "run_id": f"composed-{mode}-{ctx}",
-        "producer_component": "trust-protocol-interop-lab/composed-status-task",
+        "producer_component": "trust-protocol-interop-lab/composed-unlinkability-v1",
         "executed_surfaces": SURFACES,
         "observations": observations,
     }
@@ -76,4 +84,5 @@ def main() -> int:
     print(json.dumps(build(args.context, args.mode, args.seeded_correlator), sort_keys=True))
     return 0
 
-if __name__ == "__main__": raise SystemExit(main())
+if __name__ == "__main__":
+    raise SystemExit(main())
