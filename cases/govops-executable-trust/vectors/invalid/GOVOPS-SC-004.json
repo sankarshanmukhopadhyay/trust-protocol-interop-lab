@@ -1,0 +1,7 @@
+{
+  "id": "GOVOPS-VEC-004",
+  "scenario_id": "GOVOPS-SC-004",
+  "class": "invalid",
+  "inputs": {"capability_id":"govops:capability:loan-approve","authority_revoked_before_decision":true,"authority_state":"revoked","policy_decision":"deny","decision_enforced":true},
+  "expected": {"execution_state":"blocked","enforcement_state":"enforced","effect_state":"absent","evidence_state":"complete"}
+}

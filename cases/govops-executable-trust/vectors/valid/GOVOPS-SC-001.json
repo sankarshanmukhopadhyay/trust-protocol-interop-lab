@@ -1,0 +1,25 @@
+{
+  "id": "GOVOPS-VEC-001",
+  "scenario_id": "GOVOPS-SC-001",
+  "class": "valid",
+  "inputs": {
+    "capability_id": "govops:capability:loan-approve",
+    "action": "approve",
+    "resource": "loan",
+    "authority_state": "valid",
+    "delegation_within_source": true,
+    "policy_decision": "allow",
+    "decision_enforced": true,
+    "effect_decision_match": true,
+    "effect_capability_match": true,
+    "policy_store_id": "loan-policy-store",
+    "policy_store_version": "17"
+  },
+  "expected": {
+    "execution_state": "admitted",
+    "enforcement_state": "enforced",
+    "effect_state": "observed",
+    "evidence_state": "complete",
+    "assurance_state": "not_evaluated"
+  }
+}
