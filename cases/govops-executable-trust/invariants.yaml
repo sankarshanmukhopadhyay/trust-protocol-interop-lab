@@ -6,7 +6,7 @@
     },
     {
       "id": "INV-GOVOPS-002",
-      "statement": "The GovOps capability_id MUST remain the identifier of the governed capability across the experiment; no TSMM, GAAM, or TIS identifier may replace it."
+      "statement": "The GovOps capability_id MUST remain the identifier of the governed capability across the experiment; no TSMM, GAAM, TIS, or local correlation identifier may replace it."
     },
     {
       "id": "INV-GOVOPS-003",
@@ -18,15 +18,15 @@
     },
     {
       "id": "INV-GOVOPS-005",
-      "statement": "The GovOps/PDP policy layer remains authoritative for runtime Allow, Deny, or Challenge; no TSMM, GAAM, or TIS artifact may independently convert Deny to Allow."
+      "statement": "The policy-engine-neutral authorization runtime remains authoritative for evaluating applicable policy and enforcing the resulting Allow, Deny, or Challenge outcome; no TSMM, GAAM, TIS, authority, delegation, identity, credential, attestation, evidence, or assurance artifact may independently manufacture or override that runtime authorization outcome."
     },
     {
       "id": "INV-GOVOPS-006",
-      "statement": "A portable authorization-decision artifact MUST be able to identify, directly or by immutable reference, the capability, request or principal context, policy version, evaluated evidence, authorization result, decision time, and decision point."
+      "statement": "A portable authorization-decision artifact MUST be able to identify, directly or by immutable reference, the capability, request or principal context, decision_id, policy_store_id, policy_store_version, evaluated evidence, authorization result, decision time, decision point, and enforcement state."
     },
     {
       "id": "INV-GOVOPS-007",
-      "statement": "An observed runtime effect MUST be correlatable to the authorization decision that admitted it; an unrelated effect MUST NOT be treated as evidence of successful governed execution."
+      "statement": "An observed runtime effect MUST be correlatable to the authorization decision and enforcement event that admitted it; an unrelated effect MUST NOT be treated as evidence of successful governed execution."
     },
     {
       "id": "INV-GOVOPS-008",
@@ -39,6 +39,14 @@
     {
       "id": "INV-GOVOPS-010",
       "statement": "A later positive assurance evaluation MUST NOT retroactively authorize an action or runtime effect."
+    },
+    {
+      "id": "INV-GOVOPS-011",
+      "statement": "A runtime authorization decision and its enforcement MUST expose sufficient stable identifiers to correlate the governed capability, decision, applicable policy store and version, and relevant runtime artifacts without requiring those identifiers to share semantic ownership."
+    },
+    {
+      "id": "INV-GOVOPS-012",
+      "statement": "Correlation identifiers and observability artifacts MUST NOT themselves constitute authority, entitlement, authorization, successful enforcement, or proof that the intended runtime effect occurred."
     }
   ]
 }

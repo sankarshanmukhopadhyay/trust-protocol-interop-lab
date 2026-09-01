@@ -1,12 +1,16 @@
 {
   "capability_definition": "govops",
   "capability_identifier": "govops",
-  "runtime_authorization_policy": "govops/pdp",
+  "authorization_governance_boundary": "govops",
+  "runtime_authorization_evaluation": "policy-engine-neutral runtime",
+  "runtime_authorization_enforcement": "policy-engine-neutral runtime",
+  "request_shape_direction": "parc-aligned projection; non-normative dependency",
   "semantic_projection": "tsmm",
   "authority_and_delegation": "gaam",
   "revocation_semantics": "gaam",
   "portable_artifact_contracts": "tis",
   "decision_and_runtime_evidence": "tis",
+  "experimental_correlation_profile": "trust-protocol-interop-lab",
   "experimental_composition": "trust-protocol-interop-lab",
   "maturity_and_findings": "trust-protocol-interop-lab"
 }
