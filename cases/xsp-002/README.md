@@ -60,3 +60,9 @@ See the [result](../../evidence/xsp-002/result.json), [reproduction instructions
 ## Assurance conclusion
 
 A production composition should expose four different assertions: current identifier/controller evidence; federation membership and resolved metadata; organizational/role authority from an identified governance source; and action-specific scope at the decision time. Local or federation policy may constrain authority, but a trust-chain success must never widen authority beyond the source that granted it.
+
+## Upstream / next disposition
+
+No upstream defect is asserted by this case. The result should instead be used as a profile/composition requirement: implementations that combine DID resolution and OpenID Federation should preserve an independently attributable organizational-authority source and action-specific scope at the relying decision boundary.
+
+A future promotion beyond this semantic reference model would require implementation-level or wire-level evidence against pinned DID method, DID Resolution, and OpenID Federation implementations. Until then, the current `interoperability-tested` claim remains bounded to the executed semantic composition documented here.
