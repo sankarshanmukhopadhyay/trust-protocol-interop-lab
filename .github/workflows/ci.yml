@@ -29,6 +29,9 @@ jobs:
       - name: Validate interoperability cases
         run: python scripts/validate_cases.py
 
+      - name: Validate mature case documentation
+        run: python scripts/validate_case_docs.py
+
       - name: Validate evidence
         run: python scripts/validate_evidence.py
 
