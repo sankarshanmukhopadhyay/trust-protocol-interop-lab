@@ -260,8 +260,8 @@
     {
       "id": "IC-GOVOPS-EXEC-TRUST-001",
       "title": "GovOps capability governance and executable trust composition",
-      "status": "experimental",
-      "question": "Can a GovOps authorization capability be projected through portable semantic, authority, delegation, decision, and evidence artifacts without changing GovOps capability semantics, transferring authorization authority, or collapsing capability, authority, entitlement, evidence, and assurance boundaries?",
+      "status": "candidate",
+      "question": "Can a GovOps authorization capability be projected through portable semantic, authority, delegation, decision, enforcement, execution, and evidence artifacts without changing GovOps capability semantics, transferring authorization authority, or collapsing capability, authority, entitlement, evidence, and assurance boundaries?",
       "components": [
         "govops",
         "tsmm",
@@ -280,13 +280,18 @@
         "decision": "admitted",
         "date": "2026-08-21",
         "discussion": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/discussions/6",
-        "scope": "bounded experimental composition; no upstream conformance, endorsement, integration, or normative relationship claimed",
-        "upstream_clarification": "capability_id correlation semantics remain open and attributable to GovOpsWG"
+        "boundary_alignment_issue": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/82",
+        "candidate_promotion_issue": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/85",
+        "scope": "bounded repository-owned semantic composition; no upstream conformance, endorsement, production integration, wire-level interoperability, or normative relationship claimed",
+        "maturity_basis": "10 explicit positive/negative vectors remain mechanically equivalent to 10 scenario contracts across 12 invariants; deterministic evaluator validates policy-engine neutrality, enforcement observability, correlation, policy provenance, revocation semantics, and fail-closed/indeterminate outcomes"
       },
       "paths": {
         "readme": "cases/govops-executable-trust/README.md",
         "mapping": "mappings/govops-executable-trust.md",
-        "scenarios": "cases/govops-executable-trust/scenarios/scenarios.yaml"
+        "scenarios": "cases/govops-executable-trust/scenarios/scenarios.yaml",
+        "vectors": "cases/govops-executable-trust/vectors",
+        "limitations": "cases/govops-executable-trust/known-limitations.md",
+        "experiment": "experiments/govops-executable-trust/run.py"
       }
     },
     {
