@@ -48,6 +48,9 @@ jobs:
           python experiments/arpa-a2a-anab/run.py
           python experiments/dtg-protected-access/run.py --check
 
+      - name: Run DTG VDC × VAC non-substitution evidence
+        run: python experiments/dtg-vdc-vac-composition/run.py --check
+
       - name: Run GovOps executable-trust boundary evidence
         run: python experiments/govops-executable-trust/run.py --check
 
