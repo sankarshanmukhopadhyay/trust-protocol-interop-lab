@@ -1,0 +1,61 @@
+case: IC-DTG-HIDDEN-SUBJECT-BINDING-EXP
+status: pre-admission-experimental
+source_pins:
+  vac: {repository: trustoverip/dtgwg-cred-spec, pull_request: 29, head_sha: 84650749afd48798e1c8919a95be359c0367a1c9, authority_status: proposed-upstream}
+  vdc: {repository: trustoverip/dtgwg-cred-spec, pull_request: 19, head_sha: ad5876f1b96e2149adec84d37d6595b4a212db9c, authority_status: proposed-upstream}
+propositions: [DTG-371-P10, DTG-371-P13]
+vectors:
+  - id: HSB-POS-001
+    class: positive
+    relation: VMC-plus-VAC
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: true
+    context_binding_valid: true
+    durable_correlator_exported: false
+    expected: allow
+  - id: HSB-NEG-001
+    class: negative
+    relation: VMC-plus-VAC-different-hidden-subjects
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: false
+    context_binding_valid: true
+    durable_correlator_exported: false
+    expected: deny
+  - id: HSB-NEG-002
+    class: negative
+    relation: VDC-plus-VAC-different-delegates
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: false
+    context_binding_valid: true
+    durable_correlator_exported: false
+    expected: deny
+  - id: HSB-NEG-003
+    class: negative
+    relation: common-control-two-pairwise-identifiers-different-controllers
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: false
+    context_binding_valid: true
+    durable_correlator_exported: false
+    expected: deny
+  - id: HSB-NEG-004
+    class: negative
+    relation: valid-binding-proof-replayed-to-different-context
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: true
+    context_binding_valid: false
+    durable_correlator_exported: false
+    expected: deny
+  - id: HSB-NEG-005
+    class: negative
+    relation: deliberate-reconnection-exports-durable-correlator
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: true
+    context_binding_valid: true
+    durable_correlator_exported: true
+    expected: deny
