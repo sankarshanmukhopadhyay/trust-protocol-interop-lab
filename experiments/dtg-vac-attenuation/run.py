@@ -63,7 +63,7 @@ def main() -> int:
         RESULT.parent.mkdir(parents=True, exist_ok=True)
         RESULT.write_text(text, encoding="utf-8")
     if args.check:
-        if not RESULT.exists() or RESULT.read_text(encoding="utf-8") != text:
+        if not RESULT.exists() or json.loads(RESULT.read_text(encoding="utf-8")) != result:
             print("VAC attenuation result fixture is stale", file=sys.stderr)
             return 1
     if not args.write and not args.check:
