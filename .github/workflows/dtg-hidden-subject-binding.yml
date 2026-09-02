@@ -1,0 +1,29 @@
+name: DTG hidden-subject binding evidence
+
+on:
+  pull_request:
+    paths:
+      - 'cases/dtg-hidden-subject-binding/**'
+      - 'experiments/dtg-hidden-subject-binding/**'
+      - 'results/dtg-hidden-subject-binding/**'
+      - '.github/workflows/dtg-hidden-subject-binding.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cases/dtg-hidden-subject-binding/**'
+      - 'experiments/dtg-hidden-subject-binding/**'
+      - 'results/dtg-hidden-subject-binding/**'
+      - '.github/workflows/dtg-hidden-subject-binding.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: python -m pip install --disable-pip-version-check pyyaml
+      - run: python experiments/dtg-hidden-subject-binding/run.py --check
