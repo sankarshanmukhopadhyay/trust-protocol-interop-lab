@@ -1,0 +1,115 @@
+case: IC-DTG-VDC-VAC-COMPOSITION-EXP
+status: pre-admission-experimental
+source_pins:
+  vdc:
+    repository: trustoverip/dtgwg-cred-spec
+    pull_request: 19
+    head_sha: ad5876f1b96e2149adec84d37d6595b4a212db9c
+    authority_status: proposed-upstream
+  vac:
+    repository: trustoverip/dtgwg-cred-spec
+    pull_request: 29
+    head_sha: 84650749afd48798e1c8919a95be359c0367a1c9
+    authority_status: proposed-upstream
+propositions: [DTG-371-P06, DTG-371-P07, DTG-371-P09, DTG-371-P14]
+rule: >-
+  A represented action is admitted only when delegation for the requested act is valid,
+  the represented principal has current authority for that act, any independently required
+  delegate eligibility holds, and task/invocation binding is valid. No predicate substitutes for another.
+vectors:
+  - id: VDV-POS-001
+    class: positive
+    description: valid delegation and current principal authority with eligible delegate and matching invocation
+    delegation_valid: true
+    principal_authority_current: true
+    delegate_eligibility_required: true
+    delegate_eligible: true
+    invocation_binding_valid: true
+    requested_action: read
+    delegation_actions: [read]
+    principal_authority_actions: [read, write]
+    expected: allow
+  - id: VDV-NEG-001
+    class: negative
+    description: valid VDC but principal lacks current authority
+    delegation_valid: true
+    principal_authority_current: false
+    delegate_eligibility_required: false
+    delegate_eligible: true
+    invocation_binding_valid: true
+    requested_action: read
+    delegation_actions: [read]
+    principal_authority_actions: [read]
+    expected: deny
+  - id: VDV-NEG-002
+    class: negative
+    description: current VAC-like authority exists but actor lacks representation to act in principal name
+    delegation_valid: false
+    principal_authority_current: true
+    delegate_eligibility_required: false
+    delegate_eligible: true
+    invocation_binding_valid: true
+    requested_action: read
+    delegation_actions: [read]
+    principal_authority_actions: [read]
+    expected: deny
+  - id: VDV-NEG-003
+    class: negative
+    description: delegate appointment is narrower than principal authority and requested action exceeds appointment
+    delegation_valid: true
+    principal_authority_current: true
+    delegate_eligibility_required: false
+    delegate_eligible: true
+    invocation_binding_valid: true
+    requested_action: write
+    delegation_actions: [read]
+    principal_authority_actions: [read, write]
+    expected: deny
+  - id: VDV-NEG-004
+    class: negative
+    description: principal authority withdrawn while VDC remains valid
+    delegation_valid: true
+    principal_authority_current: false
+    delegate_eligibility_required: false
+    delegate_eligible: true
+    invocation_binding_valid: true
+    requested_action: write
+    delegation_actions: [read, write]
+    principal_authority_actions: [read, write]
+    expected: deny
+  - id: VDV-NEG-005
+    class: negative
+    description: delegation revoked while principal authority remains valid
+    delegation_valid: false
+    principal_authority_current: true
+    delegate_eligibility_required: false
+    delegate_eligible: true
+    invocation_binding_valid: true
+    requested_action: write
+    delegation_actions: [read, write]
+    principal_authority_actions: [read, write]
+    expected: deny
+  - id: VDV-NEG-006
+    class: negative
+    description: governance requires independent delegate eligibility and delegate fails it
+    delegation_valid: true
+    principal_authority_current: true
+    delegate_eligibility_required: true
+    delegate_eligible: false
+    invocation_binding_valid: true
+    requested_action: read
+    delegation_actions: [read]
+    principal_authority_actions: [read]
+    expected: deny
+  - id: VDV-NEG-007
+    class: negative
+    description: all standing artifacts are valid but task or invocation binding mismatches
+    delegation_valid: true
+    principal_authority_current: true
+    delegate_eligibility_required: false
+    delegate_eligible: true
+    invocation_binding_valid: false
+    requested_action: read
+    delegation_actions: [read]
+    principal_authority_actions: [read]
+    expected: deny

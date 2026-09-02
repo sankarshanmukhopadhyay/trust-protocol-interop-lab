@@ -1,0 +1,166 @@
+{
+  "all_expected_outcomes_matched": true,
+  "case": "IC-DTG-VDC-VAC-COMPOSITION-EXP",
+  "claim_boundary": "semantic composition evidence only; proposed upstream VDC/VAC semantics are not represented as adopted DTG behavior",
+  "evaluator_version": "0.1",
+  "propositions": [
+    "DTG-371-P06",
+    "DTG-371-P07",
+    "DTG-371-P09",
+    "DTG-371-P14"
+  ],
+  "semantic_rule": "A represented action is admitted only when delegation for the requested act is valid, the represented principal has current authority for that act, any independently required delegate eligibility holds, and task/invocation binding is valid. No predicate substitutes for another.",
+  "source_pins": {
+    "vac": {
+      "authority_status": "proposed-upstream",
+      "head_sha": "84650749afd48798e1c8919a95be359c0367a1c9",
+      "pull_request": 29,
+      "repository": "trustoverip/dtgwg-cred-spec"
+    },
+    "vdc": {
+      "authority_status": "proposed-upstream",
+      "head_sha": "ad5876f1b96e2149adec84d37d6595b4a212db9c",
+      "pull_request": 19,
+      "repository": "trustoverip/dtgwg-cred-spec"
+    }
+  },
+  "status": "pre-admission-experimental",
+  "vectors": [
+    {
+      "checks": {
+        "delegate_eligibility": true,
+        "delegation_current": true,
+        "delegation_scope": true,
+        "invocation_binding": true,
+        "principal_authority_current": true,
+        "principal_authority_scope": true
+      },
+      "class": "positive",
+      "decision": "allow",
+      "description": "valid delegation and current principal authority with eligible delegate and matching invocation",
+      "expected": "allow",
+      "id": "VDV-POS-001",
+      "matches_expected": true,
+      "requested_action": "read"
+    },
+    {
+      "checks": {
+        "delegate_eligibility": true,
+        "delegation_current": true,
+        "delegation_scope": true,
+        "invocation_binding": true,
+        "principal_authority_current": false,
+        "principal_authority_scope": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "description": "valid VDC but principal lacks current authority",
+      "expected": "deny",
+      "id": "VDV-NEG-001",
+      "matches_expected": true,
+      "requested_action": "read"
+    },
+    {
+      "checks": {
+        "delegate_eligibility": true,
+        "delegation_current": false,
+        "delegation_scope": true,
+        "invocation_binding": true,
+        "principal_authority_current": true,
+        "principal_authority_scope": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "description": "current VAC-like authority exists but actor lacks representation to act in principal name",
+      "expected": "deny",
+      "id": "VDV-NEG-002",
+      "matches_expected": true,
+      "requested_action": "read"
+    },
+    {
+      "checks": {
+        "delegate_eligibility": true,
+        "delegation_current": true,
+        "delegation_scope": false,
+        "invocation_binding": true,
+        "principal_authority_current": true,
+        "principal_authority_scope": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "description": "delegate appointment is narrower than principal authority and requested action exceeds appointment",
+      "expected": "deny",
+      "id": "VDV-NEG-003",
+      "matches_expected": true,
+      "requested_action": "write"
+    },
+    {
+      "checks": {
+        "delegate_eligibility": true,
+        "delegation_current": true,
+        "delegation_scope": true,
+        "invocation_binding": true,
+        "principal_authority_current": false,
+        "principal_authority_scope": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "description": "principal authority withdrawn while VDC remains valid",
+      "expected": "deny",
+      "id": "VDV-NEG-004",
+      "matches_expected": true,
+      "requested_action": "write"
+    },
+    {
+      "checks": {
+        "delegate_eligibility": true,
+        "delegation_current": false,
+        "delegation_scope": true,
+        "invocation_binding": true,
+        "principal_authority_current": true,
+        "principal_authority_scope": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "description": "delegation revoked while principal authority remains valid",
+      "expected": "deny",
+      "id": "VDV-NEG-005",
+      "matches_expected": true,
+      "requested_action": "write"
+    },
+    {
+      "checks": {
+        "delegate_eligibility": false,
+        "delegation_current": true,
+        "delegation_scope": true,
+        "invocation_binding": true,
+        "principal_authority_current": true,
+        "principal_authority_scope": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "description": "governance requires independent delegate eligibility and delegate fails it",
+      "expected": "deny",
+      "id": "VDV-NEG-006",
+      "matches_expected": true,
+      "requested_action": "read"
+    },
+    {
+      "checks": {
+        "delegate_eligibility": true,
+        "delegation_current": true,
+        "delegation_scope": true,
+        "invocation_binding": false,
+        "principal_authority_current": true,
+        "principal_authority_scope": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "description": "all standing artifacts are valid but task or invocation binding mismatches",
+      "expected": "deny",
+      "id": "VDV-NEG-007",
+      "matches_expected": true,
+      "requested_action": "read"
+    }
+  ]
+}
