@@ -1,0 +1,29 @@
+{
+  "all_expected_outcomes_matched": true,
+  "case": "IC-DTG-VAC-ATTENUATION-EXP",
+  "claim_boundary": "semantic attenuation evidence only; proposed VAC semantics are not represented as adopted DTG behavior",
+  "evaluator_version": "0.1",
+  "propositions": [
+    "DTG-371-P08",
+    "DTG-371-P09"
+  ],
+  "source_pin": {
+    "authority_status": "proposed-upstream",
+    "head_sha": "84650749afd48798e1c8919a95be359c0367a1c9",
+    "pull_request": 29,
+    "repository": "trustoverip/dtgwg-cred-spec"
+  },
+  "status": "pre-admission-experimental",
+  "vectors": [
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":true,"root_current":true,"scope_not_widened":true},"class":"positive","decision":"allow","expected":"allow","id":"VAC-POS-001","matches_expected":true},
+    {"checks":{"actions_narrowed":false,"audience_binding":true,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":true,"root_current":true,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-001","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":true,"root_current":true,"scope_not_widened":false},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-002","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":false,"intermediate_current":true,"root_current":true,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-003","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":false,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":true,"root_current":true,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-004","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":false,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":true,"root_current":true,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-005","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":false,"expiry_not_later":true,"intermediate_current":true,"root_current":true,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-006","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":true,"root_current":false,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-007","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":true,"current_state_fresh":true,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":false,"root_current":true,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-008","matches_expected":true},
+    {"checks":{"actions_narrowed":true,"audience_binding":true,"chain_complete":true,"current_state_fresh":false,"depth_within_limit":true,"expiry_not_later":true,"intermediate_current":true,"root_current":true,"scope_not_widened":true},"class":"negative","decision":"deny","expected":"deny","id":"VAC-NEG-009","matches_expected":true}
+  ]
+}
