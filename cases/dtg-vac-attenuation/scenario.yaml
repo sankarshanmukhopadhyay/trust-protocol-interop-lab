@@ -1,0 +1,106 @@
+case: IC-DTG-VAC-ATTENUATION-EXP
+status: pre-admission-experimental
+source_pin:
+  repository: trustoverip/dtgwg-cred-spec
+  pull_request: 29
+  head_sha: 84650749afd48798e1c8919a95be359c0367a1c9
+  authority_status: proposed-upstream
+propositions: [DTG-371-P08, DTG-371-P09]
+parent:
+  actions: [read, write, curate]
+  scope: room-a
+  expires_at: 200
+  audience: null
+  chain_depth: 0
+  max_depth: 3
+vectors:
+  - id: VAC-POS-001
+    class: positive
+    child: {actions: [read], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 1}
+    presenter: agent-a
+    chain_complete: true
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: true
+    expected: allow
+  - id: VAC-NEG-001
+    class: negative
+    child: {actions: [read, delete], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 1}
+    presenter: agent-a
+    chain_complete: true
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-002
+    class: negative
+    child: {actions: [read], scope: room-all, expires_at: 150, audience: agent-a, chain_depth: 1}
+    presenter: agent-a
+    chain_complete: true
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-003
+    class: negative
+    child: {actions: [read], scope: room-a, expires_at: 250, audience: agent-a, chain_depth: 1}
+    presenter: agent-a
+    chain_complete: true
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-004
+    class: negative
+    child: {actions: [read], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 1}
+    presenter: agent-b
+    chain_complete: true
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-005
+    class: negative
+    child: {actions: [read], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 1}
+    presenter: agent-a
+    chain_complete: false
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-006
+    class: negative
+    child: {actions: [read], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 4}
+    presenter: agent-a
+    chain_complete: true
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-007
+    class: negative
+    child: {actions: [read], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 1}
+    presenter: agent-a
+    chain_complete: true
+    root_current: false
+    intermediate_current: true
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-008
+    class: negative
+    child: {actions: [read], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 2}
+    presenter: agent-a
+    chain_complete: true
+    root_current: true
+    intermediate_current: false
+    current_state_fresh: true
+    expected: deny
+  - id: VAC-NEG-009
+    class: negative
+    child: {actions: [read], scope: room-a, expires_at: 150, audience: agent-a, chain_depth: 1}
+    presenter: agent-a
+    chain_complete: true
+    root_current: true
+    intermediate_current: true
+    current_state_fresh: false
+    expected: deny
