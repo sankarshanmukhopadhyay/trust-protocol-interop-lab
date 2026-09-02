@@ -1,0 +1,11 @@
+case: IC-DTG-ACTION-VOCABULARY-EXP
+status: pre-admission-experimental
+source_pin: {repository: trustoverip/dtgwg-cred-spec, pull_request: 29, head_sha: 84650749afd48798e1c8919a95be359c0367a1c9, authority_status: proposed-upstream}
+propositions: [DTG-371-P11]
+vectors:
+  - {id: AV-POS-001, class: positive, issuer_action: write, verifier_operation: write-object, same_governance: true, explicit_mapping: true, hierarchy_declared: false, expected: allow}
+  - {id: AV-NEG-001, class: negative, issuer_action: write, verifier_operation: write-object, same_governance: false, explicit_mapping: false, hierarchy_declared: false, expected: deny}
+  - {id: AV-NEG-002, class: negative, issuer_action: admin, verifier_operation: write-object, same_governance: true, explicit_mapping: false, hierarchy_declared: false, expected: deny}
+  - {id: AV-NEG-003, class: negative, issuer_action: write, verifier_operation: delete-object, same_governance: false, explicit_mapping: false, hierarchy_declared: false, expected: deny}
+  - {id: AV-POS-002, class: positive, issuer_action: acme:write, verifier_operation: write-object, same_governance: false, explicit_mapping: true, hierarchy_declared: false, expected: allow}
+  - {id: AV-POS-003, class: positive, issuer_action: admin, verifier_operation: write-object, same_governance: true, explicit_mapping: false, hierarchy_declared: true, expected: allow}
