@@ -57,6 +57,9 @@ jobs:
       - name: Run DPAC non-collapsibility and concurrence evidence
         run: python experiments/dpac-actuation/run.py
 
+      - name: Run DPAC × GovOps delegated-loan pressure evidence
+        run: python experiments/dpac-govops-loan/run.py --check
+
       - name: Exercise protected-access A/B evidence producer boundary
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py --self-test
