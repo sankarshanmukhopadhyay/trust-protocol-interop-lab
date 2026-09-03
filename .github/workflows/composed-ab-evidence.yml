@@ -57,7 +57,7 @@ jobs:
           printf '%s\n' '${{ inputs.evidence_requirement_ids || '[]' }}' > "${RUNNER_TEMP}/composed-ab/requested-requirements.json"
           printf '%s\n' '${{ inputs.correlation_key || '' }}' > "${RUNNER_TEMP}/composed-ab/correlation-key.txt"
       - name: Upload durable evidence outbox
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: assurance-evidence-${{ inputs.correlation_key || github.run_id }}
           path: ${{ runner.temp }}/composed-ab/
