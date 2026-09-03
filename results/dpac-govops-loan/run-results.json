@@ -1,0 +1,17 @@
+{
+  "case_id": "IC-DPAC-ACTUATION-001",
+  "composition": "IC-GOVOPS-EXEC-TRUST-001 delegated-loan pressure test",
+  "claim": "bounded deterministic composition evidence; no production isolation claim",
+  "results": [
+    {"scenario_id":"DPAC-GOVOPS-001","actual":{"actuated":true,"reason":"concurrence","effect_count":1,"evidence_state":"complete"},"pass":true},
+    {"scenario_id":"DPAC-GOVOPS-002","actual":{"actuated":false,"reason":"authority_scope_exceeded","effect_count":0,"evidence_state":"complete"},"pass":true},
+    {"scenario_id":"DPAC-GOVOPS-003","actual":{"actuated":false,"reason":"capability_scope_exceeded","effect_count":0,"evidence_state":"complete"},"pass":true},
+    {"scenario_id":"DPAC-GOVOPS-004","actual":{"actuated":false,"reason":"authority_not_current","effect_count":0,"evidence_state":"complete"},"pass":true},
+    {"scenario_id":"DPAC-GOVOPS-005","actual":{"actuated":false,"reason":"capability_state_changed","effect_count":0,"evidence_state":"complete"},"pass":true},
+    {"scenario_id":"DPAC-GOVOPS-006","actual":{"actuated":false,"reason":"authority_binding_mismatch","effect_count":0,"evidence_state":"complete"},"pass":true},
+    {"scenario_id":"DPAC-GOVOPS-007","actual":{"actuated":false,"reason":"authority_binding_mismatch","effect_count":0,"evidence_state":"complete"},"pass":true},
+    {"scenario_id":"DPAC-GOVOPS-008","actual":{"actuated":false,"reason":"duplicate_actuation","effect_count":0,"evidence_state":"complete"},"pass":true}
+  ],
+  "summary": {"total":8,"passed":8,"failed":0},
+  "failures": []
+}
