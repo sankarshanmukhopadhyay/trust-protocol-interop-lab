@@ -43,7 +43,7 @@ jobs:
             --trust-tasks "$GITHUB_WORKSPACE/trust-tasks" \
             --output "$RUNNER_TEMP/install-admin-did-binding/result.json" \
             --run-id "$GITHUB_RUN_ID"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: install-admin-did-binding-evidence
           path: ${{ runner.temp }}/install-admin-did-binding/result.json

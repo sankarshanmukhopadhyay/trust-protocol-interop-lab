@@ -97,7 +97,7 @@ jobs:
           PY
 
       - name: Upload protected-access A/B synthetic boundary evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: protected-access-ab-harness-selftest
@@ -152,7 +152,7 @@ jobs:
         run: node experiments/dtg-protected-access-bbs/run.mjs --output-dir "${{ runner.temp }}/protected-access-bbs"
 
       - name: Upload protected-access BBS evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: protected-access-bbs-evidence
@@ -168,7 +168,7 @@ jobs:
           python scripts/generate_readiness.py
 
       - name: Upload regenerated standards views
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: regenerated-standards
