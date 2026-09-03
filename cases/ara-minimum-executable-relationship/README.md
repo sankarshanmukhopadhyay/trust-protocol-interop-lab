@@ -12,6 +12,38 @@ Architecture-to-code map: [architecture-to-code.yaml](architecture-to-code.yaml)
 Final claim boundary: [final-claim-boundary.md](final-claim-boundary.md)  
 Evidence manifest: [../../evidence/ara-minimum-executable-relationship/evidence-manifest.json](../../evidence/ara-minimum-executable-relationship/evidence-manifest.json)
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Interoperability Tested |
+| **Purpose** | Determine whether a persistent agent relationship can support one consequential action only when identity, authority, agreement, policy, capability, exact task semantics, protected cryptographic use, counterparty decision, relationship state, and effect evidence all align. |
+| **Current conclusion** | The bounded architecture survived the complete staged programme and adversarial pressure. It is executable and evidence-backed at the declared semantic boundaries, while several runtime integrations remain adapter-backed rather than standards-native. |
+| **Evidence today** | Ten executable programme phases, lifecycle and counterparty evidence, adversarial assurance, standards-boundary review, a final evidence manifest, and an explicit claim boundary. |
+
+## Why this matters to a new reader
+
+Most agent systems are good at proving one fact at a time: an agent authenticated, a signature verified, a capability existed, a task completed, or a receipt was produced. This case asks the harder systems question: **can a persistent relationship remain legitimate when all of those facts must agree and when the relationship changes over time?**
+
+It also tests whether an ephemeral Live Agent can be replaced without losing the durable authority and relationship state required to explain what happened later.
+
+## Concrete scenario
+
+Two persistent Agent Roles participate in one tightly bounded research-data interaction. The data-owner role controls a protected dataset; the research role requests one query-only operation. A temporary Live Agent may propose the action, but it cannot directly sign or actuate.
+
+Execution occurs only after agreement, current authority, deterministic policy, scoped capability, exact Trust Task semantics, protected signing, receiver-side verification, and current relationship state all concur. The resulting evidence must remain defensible through disagreement, replacement, challenge, correction, remediation, continuation, and closure.
+
+## Where it resolved
+
+This case completed its programme and was admitted as **Interoperability Tested** for a bounded executable semantic composition. The most important result is not a single happy-path transaction; it is the demonstrated preservation of non-substitution boundaries such as identity ≠ authority, capability ≠ legitimate authority, sender allow ≠ receiver allow, execution success ≠ legitimate effect, and assurance ≠ retroactive authorization.
+
+The remaining boundary is explicit: this does not claim TSP wire-protocol conformance, OpenVTC VTA production security, legal effect, external certification, or standards-native replacement of every local adapter.
+
+
+## What remains unresolved
+
+The admitted claim remains bounded. TSP wire-protocol substitution, OpenVTC VTA production key protection, legal effect, external certification, arbitrary multi-party/quorum relationships, and standards-native replacement of every residual adapter remain outside the current evidence.
+
 ## What was tested
 
 The experiment asks whether two independently controlled persistent Agent Roles can perform one consequential bounded action **only when** all of the following align:

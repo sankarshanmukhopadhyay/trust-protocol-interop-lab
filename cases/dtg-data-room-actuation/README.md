@@ -1,9 +1,37 @@
 # DTG Data Room actuation — experimental umbrella composition
 
-This pre-admission case supports RAHP Discussion #371 and Track G issue #379. It uses the public Verifiable Data Rooms concept at https://docs.fpp.storm.ws/data-rooms-concept.html as an **informative pressure test**, not as normative DTG architecture.
+## At a glance
+- **Status:** Pre-admission experimental evidence
+- **Purpose:** Combine multiple DTG propositions at one consequential actuation boundary and test whether any one credential or proof can substitute for another.
+- **Current conclusion:** The semantic umbrella fails closed unless every applicable predicate is current and compatible.
+- **External concept:** the public Verifiable Data Rooms concept is informative pressure-test material, not normative DTG architecture.
 
-The experiment asks the umbrella question: **should this consequential operation execute now?** It composes the semantic evidence developed by Tracks A–F without allowing any single credential, proof or relationship fact to substitute for another.
+## Why this matters
+Individually sound credentials can compose unsafely. A valid membership credential, delegation, authority credential, and task request may still be insufficient if one predicate is stale, mismatched, over-broad, outside privacy scope, or already consumed.
 
-A Data Room operation is admitted only when all applicable predicates remain current and compatible at the actuation boundary: actor/relationship, membership where required, delegation where acting in another's name, authority/action scope, hidden-subject binding, governance policy, task/invocation binding, privacy boundary, and one-effect/replay state. Proposed upstream VAC/VDC/correlation semantics remain source-pinned and experimental.
+## Composition in plain language
+At the final "should this operation execute now?" boundary, the model separately checks actor/relationship state, membership, delegation, current authority/action scope, hidden-subject binding, governance policy, Trust Task/invocation binding, privacy limits, one-effect/replay state, and freshness of source pins.
 
-The case includes positive, negative, adversarial and stale-source vectors. Its purpose is to test composition logic and evidence separation. It does not establish production DTG interoperability, MLS correctness, storage-host security, or runtime unlinkability where those remain evidence-required in RAHP/DPIP.
+No one item can manufacture another.
+
+## Concrete scenario
+A delegate asks to read or write a protected Data Room. The request is rejected if authority was withdrawn, delegation revoked, subject binding is missing, the task no longer matches, policy changed, privacy exceeds scope, or the operation was already consumed.
+
+## What was tested
+Positive, negative, adversarial, and stale-source vectors were executed. The committed result records that all expected outcomes matched.
+
+Run:
+```bash
+python experiments/dtg-data-room-actuation/run.py --check
+```
+
+Inspect [scenario.yaml](scenario.yaml) and [run-results.json](../../results/dtg-data-room-actuation/run-results.json).
+
+## Where it resolved
+Consequential DTG actuation should be treated as a **conjunction of independently owned predicates evaluated at the actuation boundary**. Component validity alone does not create an overall PASS.
+
+## What this status means
+This is a pre-admission umbrella pressure test, not an admitted DTG profile.
+
+## What remains unresolved
+The experiment does not establish MLS correctness, Data Room storage security, native proof interoperability, production unlinkability, or final upstream DTG semantics.

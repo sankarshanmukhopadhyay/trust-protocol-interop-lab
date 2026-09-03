@@ -7,6 +7,38 @@
 
 This case tests one architectural/security proposition: a consequential operation executes only when the requested operation is simultaneously within **current, action-specific authority** and an **independently administered capability envelope** at the actuation boundary. Neither path may enlarge, substitute for, synthesize, or directly/transitively capture the other.
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Experimental |
+| **Purpose** | Test whether a consequential action can occur only when current action-specific authority and an independently administered technical capability both permit it at the actuation boundary. |
+| **Current conclusion** | The proposition survived three increasingly strong tranches: a semantic model, a GovOps delegated-loan composition, and a container-enforced Workspace boundary with disjoint networks, separate principals, read-only policy, and an actuator-owned effect journal. |
+| **Evidence today** | Deterministic semantic scenarios, GovOps pressure tests, and a ten-scenario container-enforcement experiment. The evidence is self-authored and bounded to the tested topology. |
+
+## Why this matters to a new reader
+
+Most systems have an authorization check somewhere before a tool call. DPAC asks a stricter question: **what prevents the authority-producing path itself from expanding or bypassing the technical capability that makes the action possible?**
+
+The security property is not "two modules" or "two approvals". It is **non-collapsibility of control**: authority cannot manufacture capability, capability cannot manufacture authority, and the Workflow cannot directly or transitively take control of the mechanism that constrains its own capability envelope.
+
+## Concrete scenario
+
+A delegated loan officer is authorized for a particular approval. The Workflow may produce action-specific authority evidence, but only a separately administered Workspace possesses the route and credential required to cause the actual effect.
+
+The Workspace rechecks request binding, current authority, capability scope, capability revision, replay state, and then calls the actuator. The Workflow cannot directly reach the actuator or write the Workspace capability policy.
+
+## Where it resolved
+
+The Lab now has bounded evidence that DPAC can be realized as a runtime-enforced property rather than only a semantic distinction. The enforced-boundary experiment demonstrated policy-mutation denial, direct-actuator isolation, capability overreach rejection, revocation handling, request-substitution rejection, capability-revision TOCTOU protection, replay resistance, helper-path denial, and fail-closed indeterminate state.
+
+It remains **Experimental** because the Docker host/daemon, kernel, supply chain, independent administration beyond the test topology, and cryptographic upstream authority resolution are outside the claim.
+
+
+## What remains unresolved
+
+The enforced boundary is still one self-authored Docker topology. Host/daemon or kernel compromise, supply-chain compromise, unknown transitive administrative paths, independently operated capability administration, and cryptographic resolution of upstream authority/delegation remain outside the claim.
+
 ## Claim boundary
 
 DPAC is treated here as an experimental property, not a prescribed token, credential, process boundary, harness topology, upstream specification, or certification scheme. The Lab owns only this composition, reference implementation, vectors, and evidence.

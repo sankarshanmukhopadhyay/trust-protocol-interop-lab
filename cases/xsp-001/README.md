@@ -11,6 +11,34 @@ nav_order: 10
 **Status:** `interoperability-tested`  
 **Evidence scope:** executed semantic-composition interoperability; **not** wire-protocol conformance, certification, or a claim that any upstream specification is defective.
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Interoperability Tested |
+| **Purpose** | Test the complete credential-reliance chain from issuance and proof verification through presentation binding to the relying party's final authorization/effect decision. |
+| **Current conclusion** | The composition is viable only when issuer authority, credential lifecycle, proof validity/purpose, presentation audience/freshness, and relying-party policy remain separate control planes. |
+| **Evidence today** | 4/4 positive and 6/6 negative vectors passed in the semantic evaluator, with eight invariants and a governed evidence manifest. |
+
+## Why this matters to a new reader
+
+A cryptographically valid verifiable credential does not answer every trust question. It can prove that data was issued and secured as specified, but the verifier still has to decide whether the issuer was authoritative for this claim, whether the credential is current, whether the presentation is fresh and intended for this verifier, and whether local policy permits the consequential effect.
+
+## Concrete scenario
+
+A holder presents a credential to a relying party using OpenID4VP. The proof verifies and the presentation is bound to the verifier and nonce. The relying party must still determine whether it trusts the issuer for the relevant claim/purpose and whether current policy permits the requested effect.
+
+## Where it resolved
+
+The case reached **Interoperability Tested** for the bounded semantic composition. Negative vectors demonstrate that collapsing proof validity into issuer trust, ignoring lifecycle/status, or skipping presentation/reliance policy fails closed.
+
+The result is not wire-protocol certification and does not assert a defect in any upstream standard.
+
+
+## What remains unresolved
+
+The current Tested claim is semantic-composition interoperability only. Wire-level testing against independent VC, Data Integrity, OpenID4VCI, and OpenID4VP implementations, production issuer-authority governance, and external certification remain outside the evidence.
+
 ## Question
 
 Can a verifier preserve issuer authority, credential lifecycle, proof purpose, presentation audience/freshness, and relying-party policy as separately testable semantics across issuance, securing, presentation, and reliance?

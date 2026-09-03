@@ -4,6 +4,36 @@
 **Admitted claim:** bounded executed semantic composition of ARPA v0.9.5, ANAB v0.10.0 assurance inputs, A2A v1.0 interaction metadata, and Trust Tasks.  
 **Evidence scope:** local semantic evaluator only; excludes live-network interoperability, cryptographic interoperability, upstream conformance, certification, or any claim that attribution metadata creates authority.
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Interoperability Tested |
+| **Purpose** | Test whether agent discovery and attribution metadata can lead into governed Trust Task execution without identity, name assurance, registry state, or reported actor lineage being mistaken for delegated authority. |
+| **Current conclusion** | The bounded semantic evaluator can keep ARPA authority, ANAB assurance, A2A metadata, and Trust Task effect admission separate and fail closed when any required boundary is invalid. |
+| **Evidence today** | Deterministic executed vectors and an evidence manifest support the declared semantic-composition claim. Live-network and cryptographic interoperability remain outside scope. |
+
+## Why this matters to a new reader
+
+An agent can be discoverable, have a verified name/operator, advertise capabilities, and report an actor chain while still lacking authority for the requested action. Agent-to-agent metadata is descriptive and useful, but it is dangerous if a relying system treats lineage or discovery as if it were a grant.
+
+## Concrete scenario
+
+A client discovers an agent over A2A and receives name/operator assurance plus reported actor-chain metadata. Before a Trust Task can create a consequential effect, the system separately resolves current ARPA authority, checks scope and revocation, validates the assurance inputs, and verifies that the task itself is admissible.
+
+A syntactically neat actor chain is rejected if it contains a fabricated grant, stale authority, scope escalation, or rewritten history.
+
+## Where it resolved
+
+The case reached **Interoperability Tested** for its local semantic evaluator. The result establishes that attribution lineage can be processed without becoming authority and that the composition fails closed on invalid name assurance, revoked authority, scope expansion, or task/effect conditions.
+
+It does not establish production A2A interoperability, cryptographic actor-chain verification, upstream conformance, or normative status for the case-local lineage model.
+
+
+## What remains unresolved
+
+Live-network A2A interoperability, cryptographic verification of actor-chain claims, independent implementation evidence, and any normative upstream actor-lineage model remain outside the current claim.
+
 ## Question
 
 Can ARPA authority state, ANAB name/operator assurance, A2A discovery and interaction metadata, and Trust Task work semantics compose without treating identity, assurance, registry state, or reported actor lineage as delegated authority—and without losing revocation, scope, or evidence boundaries before a consequential effect?

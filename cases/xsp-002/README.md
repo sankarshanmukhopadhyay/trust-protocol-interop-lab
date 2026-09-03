@@ -11,6 +11,34 @@ nav_order: 11
 **Status:** `interoperability-tested`  
 **Evidence scope:** executed semantic-composition interoperability; **not** DID-method conformance, OpenID Federation conformance, organizational certification, or legal-authority determination.
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Interoperability Tested |
+| **Purpose** | Test whether DID resolution and OpenID Federation membership/metadata can contribute trust evidence without being mistaken for organizational authority or permission for a consequential action. |
+| **Current conclusion** | Identifier control, federation membership, organizational authority, and action-specific scope are four different assertions and must remain independently attributable. |
+| **Evidence today** | 4/4 positive and 7/7 negative vectors passed in the semantic evaluator, with eight invariants and a governed evidence manifest. |
+
+## Why this matters to a new reader
+
+A DID that resolves successfully proves something about identifier/controller material. A valid federation trust chain proves membership in a federation rooted at a selected trust anchor and yields metadata under federation policy. Neither fact automatically proves that the entity has a particular organizational role or may perform the requested action.
+
+## Concrete scenario
+
+A service resolves a DID and validates an OpenID Federation chain for the same entity. Before allowing a consequential operation, it still needs an independently governed source of organizational/role authority plus the action scope applicable at that decision time.
+
+## Where it resolved
+
+The case reached **Interoperability Tested** for the bounded semantic composition. The evaluator demonstrates that resolution evidence and federation evidence may inform authority evaluation but cannot widen or manufacture the authority source itself.
+
+No upstream defect is asserted; the result is best understood as a composition/profile requirement.
+
+
+## What remains unresolved
+
+The current Tested claim is semantic-composition interoperability only. DID-method-specific resolution behavior, live OpenID Federation interoperability, independently operated organizational-authority sources, and external certification remain outside the evidence.
+
 ## Question
 
 When a DID resolves successfully and an entity has a valid OpenID Federation trust chain, which layer proves identifier control, federation membership, organizational authority, and action scope?

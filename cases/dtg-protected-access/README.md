@@ -2,6 +2,38 @@
 
 > **Status: Candidate.** This admitted Interop Case has pinned baselines, declared ownership/invariants, executable scenarios, positive/negative/adversarial vectors, expected outcomes and explicit limitations. It does not claim production interoperability, upstream conformance, external DPIP certification, endorsement, or a normative vertical profile.
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Candidate |
+| **Purpose** | Test whether a protected person can prove a narrow entitlement while keeping the provider, relationship, location, case, and durable correlators hidden across the entire verifier-visible interaction. |
+| **Current conclusion** | The semantic/privacy design is structured, executable, and pressure-tested enough for Candidate maturity, but runtime unlinkability and independent evidence remain incomplete. |
+| **Evidence today** | Pinned baselines, ownership/invariants, positive/negative/adversarial vectors, deterministic evaluation, observation surfaces, DPIP binding, and runtime-evidence contracts. |
+
+## Why this matters to a new reader
+
+Selective disclosure is not enough if another part of the interaction leaks the protected relationship. A credential can hide a provider name while a status lookup, endpoint, task identifier, proof metadata, or durable subject handle reveals the same fact indirectly.
+
+This case therefore treats privacy as a **composition property across the whole observable interaction**, not as a property of one credential format.
+
+## Concrete scenario
+
+A protected person needs to prove that they are eligible for a service from an authorized provider. The verifier needs only the decision predicate and sufficient assurance context.
+
+The successful path should not require disclosure of the provider identity, provider location, relationship type, case identifier, durable subject identifier, or durable provider identifier. Replay into another verifier/context must also fail.
+
+## Where it resolved
+
+The case reached **Candidate** because the privacy and authority boundaries are explicit and mechanically testable. The current result supports minimum disclosure, non-discoverability, correlation-resistance, replay-resistance, and attributable authority provenance within the modeled observation surface.
+
+The remaining gate is stronger governed execution evidence, especially runtime A/B evidence capable of supporting claims about correlation and unlinkability without relying solely on the semantic evaluator.
+
+
+## What remains unresolved
+
+The largest remaining gap is runtime privacy evidence strong enough to support unlinkability and non-discoverability claims across real observation surfaces. Independent implementation evidence and a governed Tested evidence manifest are also still required.
+
 ## Question
 
 Can a protected person establish a narrowly scoped entitlement from an authorised provider without exposing the protected provider, relationship, location, case identifier, or durable cross-context correlator?
