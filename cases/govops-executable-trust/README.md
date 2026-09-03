@@ -7,6 +7,49 @@
 
 Tests whether a GovOps capability can participate in a portable authority, delegation, authorization, enforcement, execution, evidence, and assurance flow without changing GovOps capability semantics, transferring semantic ownership, or collapsing distinct governance states.
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Candidate |
+| **Purpose** | Show how a governed capability moves through authority, policy decision, enforcement, runtime effect, evidence, and later assurance without those governance states becoming interchangeable. |
+| **Concrete scenario** | A delegated credit officer attempts a bounded loan approval under GovOps policy. |
+| **Current conclusion** | The composition is semantically stable and executable: capability, authority, authorization, enforcement, effect, evidence, and assurance remain distinct and observable. |
+| **Evidence today** | Ten scenario/vector contracts across twelve invariants and a deterministic evaluator. A stronger hash-bound evidence manifest is still required for Interoperability Tested. |
+
+## Why this matters to a new reader
+
+A great many governance systems stop at "policy returned Allow". This case asks what must still be true after that point. Did the decision actually get enforced? Did the intended effect occur? Can the effect be correlated to the decision? Was the authority current at decision time? Can later assurance explain the history without rewriting it?
+
+## The composition in plain language
+
+**GovOps** identifies and governs the capability/policy boundary. **GAAM** supplies authority/delegation semantics. **TSMM** supplies canonical trust-system concepts. **TIS** supplies portable evidence contracts. A policy-engine-neutral runtime evaluates and enforces the decision.
+
+The Lab intentionally preserves:
+
+```text
+capability -> authority input -> policy decision -> enforcement -> effect -> evidence -> assurance
+```
+
+as separate stages.
+
+## Concrete scenario
+
+A Regional Credit Manager delegates approval authority up to INR 5,000,000 to Credit Officer A. The officer requests approval of an INR 3,500,000 loan.
+
+The capability `govops:loan:approve` only identifies the governed operation. The system separately evaluates delegation scope, policy, enforcement, and the resulting runtime effect, then packages evidence for later assurance.
+
+## Where it resolved
+
+The Candidate evidence establishes that valid authority is necessary input but does not itself create `Allow`; `Allow` does not prove enforcement; enforcement does not prove the intended effect; correlation identifiers are not authority; policy provenance must remain inspectable; revocation is time-relative; and later assurance cannot retroactively authorize a denied action.
+
+The remaining gate is the repository's stronger `Interoperability Tested` evidence package, not another semantic rewrite.
+
+
+## What remains unresolved
+
+Candidate evidence is strong at the semantic/evaluator level, but the stronger Tested gate still requires reproducible execution evidence and a hash-bound evidence manifest. Wire-level interoperability, production enforcement integrations, and external certification remain outside the claim.
+
 ## Current architectural conclusion
 
 Discussion #6 produced an important correction and several boundary clarifications that now govern this case:

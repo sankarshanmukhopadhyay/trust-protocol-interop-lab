@@ -3,6 +3,46 @@
 **Status:** Candidate  
 **Claim boundary:** Design-time interoperability candidate. No executed cross-implementation interoperability claim is made.
 
+## At a glance
+
+| Item | Current state |
+|---|---|
+| **Status** | Candidate |
+| **Purpose** | Test whether agent identity, delegated authority, content provenance, registry verification, and later assurance can compose without any of those facts silently becoming decision authority. |
+| **Current conclusion** | The design-time composition is coherent only when identity, authority, provenance, verification, decision, and effect remain independently attributable. |
+| **Evidence today** | Scenarios, vectors, semantic ownership, a test plan, and a RAHP pressure review exist. Executed cross-implementation evidence does not. |
+
+## Why this matters to a new reader
+
+The easiest way to misunderstand this case is to treat a strong-looking piece of evidence as permission. A known agent, a valid provenance proof, a successful registry query, or even a high assurance result may all be useful — but none of them, alone, proves that the agent was authorized to perform the consequential action.
+
+The case therefore asks whether an agentic system can keep the full chain visible from principal and delegation through verification, local decision authority, effect, and later assurance.
+
+## Concrete scenario
+
+A principal delegates a bounded action to an AI agent. The agent produces or submits content carrying provenance evidence. A verifier checks registry state and provenance, then a local policy authority decides whether an operational effect is permitted.
+
+The system must still be able to answer separately:
+
+- who the agent is;
+- who delegated what authority;
+- whether that authority is current and in scope;
+- whether the content provenance is valid;
+- what the verifier learned;
+- who made the final decision;
+- what effect actually occurred.
+
+## Where it resolved
+
+The current Candidate result is a **design-time interoperability proposition**, not an implementation claim. The case has enough structure to say what an executed experiment must prove, and the RAHP review identifies the main failure modes: authority laundering, provenance-to-truth inference, stale delegation, scope expansion, opaque agent chains, and unreviewable automated effects.
+
+The next material step is execution against pinned implementations with a portable evidence bundle linking agent, principal, delegation, provenance, verification, decision, and effect.
+
+
+## What remains unresolved
+
+The case still lacks executed cross-implementation evidence. The next proof point is a reproducible run against pinned implementations that resolves current authority/delegation state, keeps provenance verification separate from truth/authorization, and emits a portable evidence bundle linking agent, principal, delegation, verification, decision, and effect.
+
 ## Question
 
 Can agent identity, delegated authority, content provenance, trust-registry verification, and assurance evidence compose without turning capability, provenance, or verification into unauthorized decision authority?
