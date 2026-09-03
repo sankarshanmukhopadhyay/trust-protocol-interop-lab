@@ -6,10 +6,7 @@
       "title": "Trust Tasks over MCP",
       "status": "candidate",
       "question": "Can MCP provide execution mechanics while Trust Tasks retain semantic work identity, correlation, and response semantics?",
-      "components": [
-        "trust-tasks",
-        "mcp"
-      ],
+      "components": ["trust-tasks", "mcp"],
       "baselines": {
         "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)",
         "mcp": "2026-07-28"
@@ -29,11 +26,7 @@
       "title": "TEA TSP, MCP, and Trust Tasks composition",
       "status": "experimental",
       "question": "Can authenticated agent exchange, MCP execution, and verifiable Trust Task semantics compose without collapsing agreement, authority, execution, or correlation state?",
-      "components": [
-        "tea-tsp",
-        "mcp",
-        "trust-tasks"
-      ],
+      "components": ["tea-tsp", "mcp", "trust-tasks"],
       "baselines": {
         "tea-tsp": "v1.0 Draft reviewed 2026-08-10",
         "mcp": "2026-07-28",
@@ -52,12 +45,7 @@
       "title": "Governed agent discovery to Trust Task execution",
       "status": "interoperability-tested",
       "question": "Can ARPA authority state, ANAB name assurance, proposed A2A actor-chain attribution, A2A discovery/interaction, and Trust Task work semantics compose without treating identity, assurance, or lineage metadata as authority or losing revocation and evidence boundaries?",
-      "components": [
-        "arpa",
-        "anab",
-        "a2a",
-        "trust-tasks"
-      ],
+      "components": ["arpa", "anab", "a2a", "trust-tasks"],
       "baselines": {
         "arpa": "v0.9.5",
         "anab": "v0.10.0 experimental A2A assurance gate",
@@ -79,13 +67,9 @@
     {
       "id": "IC-TT-TSMM-TIS-001",
       "title": "Trust Task runtime assurance composition",
-      "status": "experimental",
+      "status": "candidate",
       "question": "Can a Trust Task be projected into TSMM runtime semantics and packaged as TIS evidence without changing task, decision, or effect-admission ownership?",
-      "components": [
-        "trust-tasks",
-        "tsmm",
-        "tis"
-      ],
+      "components": ["trust-tasks", "tsmm", "tis"],
       "baselines": {
         "trust-tasks": "Editor Draft 0.3 @ 7e0d755 (2026-08-16)",
         "tsmm": "v0.23.0",
@@ -96,18 +80,16 @@
       "paths": {
         "readme": "cases/trust-tasks-tsmm-tis/README.md",
         "scenarios": "cases/trust-tasks-tsmm-tis/scenarios",
-        "vectors": "cases/trust-tasks-tsmm-tis/vectors"
+        "vectors": "cases/trust-tasks-tsmm-tis/vectors",
+        "limitations": "cases/trust-tasks-tsmm-tis/known-limitations.md"
       }
     },
     {
       "id": "IC-ARPA-TRQP-HIST-001",
       "title": "ARPA to TRQP lifecycle and historical resolution",
-      "status": "experimental",
+      "status": "candidate",
       "question": "Can a read-only TRQP projection of ARPA state support current and historical verification without conflating projection state, authoritative state, or present consequence?",
-      "components": [
-        "arpa",
-        "trqp"
-      ],
+      "components": ["arpa", "trqp"],
       "baselines": {
         "arpa": "v0.9.4",
         "trqp": "upstream main baseline reviewed 2026-08-12"
@@ -117,7 +99,8 @@
       "paths": {
         "readme": "cases/arpa-trqp-lifecycle/README.md",
         "scenarios": "cases/arpa-trqp-lifecycle/scenarios",
-        "vectors": "cases/arpa-trqp-lifecycle/vectors"
+        "vectors": "cases/arpa-trqp-lifecycle/vectors",
+        "limitations": "cases/arpa-trqp-lifecycle/known-limitations.md"
       }
     },
     {
@@ -125,17 +108,7 @@
       "title": "Agentic provenance and delegated verification",
       "status": "candidate",
       "question": "Can agent identity, delegated authority, content provenance, trust-registry verification, and assurance evidence compose without turning capability, provenance, or verification into unauthorized decision authority?",
-      "components": [
-        "gaam",
-        "tsmm",
-        "tis",
-        "anab",
-        "arpa",
-        "a2a",
-        "cawg-c2pa",
-        "trqp",
-        "dcas"
-      ],
+      "components": ["gaam", "tsmm", "tis", "anab", "arpa", "a2a", "cawg-c2pa", "trqp", "dcas"],
       "baselines": {
         "gaam": "v0.9.0 Candidate Specification",
         "tsmm": "v0.23.0",
@@ -164,12 +137,7 @@
       "title": "Verifiable credential issuance to reliance",
       "status": "interoperability-tested",
       "question": "Can issuer authority, credential lifecycle, proof purpose, presentation binding and relying-party policy remain separately testable across VC issuance, proof, presentation and reliance?",
-      "components": [
-        "vc-data-model",
-        "vc-data-integrity",
-        "oid4vci",
-        "oid4vp"
-      ],
+      "components": ["vc-data-model", "vc-data-integrity", "oid4vci", "oid4vp"],
       "baselines": {
         "vc-data-model": "W3C Recommendation 2.0 2025-05-15",
         "vc-data-integrity": "W3C Recommendation 1.0 2025-05-15",
@@ -194,11 +162,7 @@
       "title": "DID resolution and federation authority composition",
       "status": "interoperability-tested",
       "question": "Can DID resolution, federation trust-chain evidence, organizational authority and action scope compose without resolution or membership becoming unauthorized decision authority?",
-      "components": [
-        "did-core",
-        "did-resolution",
-        "openid-federation"
-      ],
+      "components": ["did-core", "did-resolution", "openid-federation"],
       "baselines": {
         "did-core": "W3C Recommendation 1.0 2022-07-19",
         "did-resolution": "W3C Candidate Recommendation Snapshot 2026-08-06",
@@ -220,14 +184,9 @@
     {
       "id": "IC-DTG-PROTECTED-ACCESS-001",
       "title": "Protected-person confidential service access",
-      "status": "experimental",
+      "status": "candidate",
       "question": "Can a protected person establish a narrowly scoped entitlement from an authorised provider without exposing the protected provider, relationship, location, case identifier, or durable cross-context correlator?",
-      "components": [
-        "dtg-credentials",
-        "trust-tasks",
-        "dtg-zkp-experimental",
-        "dpip"
-      ],
+      "components": ["dtg-credentials", "trust-tasks", "dtg-zkp-experimental", "dpip"],
       "baselines": {
         "dtg-credentials": "trustoverip/dtgwg-cred-spec @ b89f389abbdae77ba60b673c0836c781c2b54169",
         "trust-tasks": "trustoverip/dtgwg-trust-tasks-spec @ cfcb72aaaeca4478c470b0f571c760626b7177a9",
@@ -242,8 +201,8 @@
         "discussion_set": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/discussions",
         "evidence_issue": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/20",
         "evidence_pr": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/pull/21",
-        "scope": "bounded experimental semantic-composition execution; no external DPIP certification, wire-protocol conformance, upstream defect finding, endorsement, or normative vertical profile claimed",
-        "maturity_basis": "all three deterministic vectors matched expected outcomes; execution evidence is sufficient for experimental catalog admission but not interoperability-tested maturity"
+        "scope": "bounded candidate semantic-composition review; no external DPIP certification, wire-protocol conformance, upstream defect finding, endorsement, or normative vertical profile claimed",
+        "maturity_basis": "pinned baselines, declared ownership and invariants, positive/negative/adversarial vectors with expected outcomes, known limitations, deterministic evaluator and recorded results support structured review; Tested maturity remains gated on a governed evidence manifest"
       },
       "paths": {
         "readme": "cases/dtg-protected-access/README.md",
@@ -262,12 +221,7 @@
       "title": "GovOps capability governance and executable trust composition",
       "status": "candidate",
       "question": "Can a GovOps authorization capability be projected through portable semantic, authority, delegation, decision, enforcement, execution, and evidence artifacts without changing GovOps capability semantics, transferring authorization authority, or collapsing capability, authority, entitlement, evidence, and assurance boundaries?",
-      "components": [
-        "govops",
-        "tsmm",
-        "gaam",
-        "tis"
-      ],
+      "components": ["govops", "tsmm", "gaam", "tis"],
       "baselines": {
         "govops": "main @ 319124840565e3ccf82fcf6b8dc45c9582a0186f (2026-08-12)",
         "tsmm": "v0.23.0",
@@ -299,14 +253,7 @@
       "title": "Minimum executable Agent Relationship",
       "status": "interoperability-tested",
       "question": "Can two independently controlled persistent Agent Roles perform one consequential bounded action only when identity, authority, agreement, policy, capability, exact task semantics, protected cryptographic-use context, and current relationship state permit it, while preserving independently verifiable relationship evidence through disagreement, Live Agent replacement, remediation, continuation, and closure?",
-      "components": [
-        "trust-tasks",
-        "tea-tsp",
-        "arpa",
-        "dtg-credentials",
-        "tsmm",
-        "tis"
-      ],
+      "components": ["trust-tasks", "tea-tsp", "arpa", "dtg-credentials", "tsmm", "tis"],
       "baselines": {
         "trust-tasks": "Trust Tasks Framework 0.5.0 @ 6425a74136c1d2dfa7115889abe0b3521700e887",
         "tea-tsp": "TEA @ 5539ef542494ff43fed61791179f08dc5b6da186; TSP semantic baseline @ ea01152425d281da944f40e8da799d7fa7a79f51",
