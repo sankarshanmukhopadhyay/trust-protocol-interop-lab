@@ -1,0 +1,32 @@
+name: ANAB DCAS assurance
+
+on:
+  pull_request:
+    paths:
+      - 'cases/anab-dcas-assurance/**'
+      - 'experiments/anab-dcas-assurance/**'
+      - 'results/anab-dcas-assurance/**'
+      - '.github/workflows/anab-dcas-assurance.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cases/anab-dcas-assurance/**'
+      - 'experiments/anab-dcas-assurance/**'
+      - 'results/anab-dcas-assurance/**'
+      - '.github/workflows/anab-dcas-assurance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Reproduce ANAB DCAS decision evidence
+        run: python experiments/anab-dcas-assurance/run.py --check
