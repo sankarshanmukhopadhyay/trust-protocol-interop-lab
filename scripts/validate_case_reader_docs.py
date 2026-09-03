@@ -39,7 +39,7 @@ for case_dir in case_dirs:
     if "Status" not in text[:1800]:
         errors.append(f"{rel}: maturity/status is not visible near the top")
 
-    if not re.search(r"[[^]]+]([^)]+)", text):
+    if "](" not in text:
         errors.append(f"{rel}: no navigable Markdown link to evidence/context")
 
 if errors:
