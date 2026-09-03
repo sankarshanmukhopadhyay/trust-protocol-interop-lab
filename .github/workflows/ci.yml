@@ -54,6 +54,9 @@ jobs:
       - name: Run GovOps executable-trust boundary evidence
         run: python experiments/govops-executable-trust/run.py --check
 
+      - name: Run DPAC non-collapsibility and concurrence evidence
+        run: python experiments/dpac-actuation/run.py
+
       - name: Exercise protected-access A/B evidence producer boundary
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py --self-test
