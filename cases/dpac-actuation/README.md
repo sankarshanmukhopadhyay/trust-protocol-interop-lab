@@ -1,7 +1,8 @@
 # IC-DPAC-ACTUATION-001 — Minimum executable Dual-Path Actuation Control
 
 **Status:** Experimental  
-**Tracking issue:** [#106](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/106)
+**Initial tracking issue:** [#106](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/106)  
+**GovOps pressure-test issue:** [#108](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/108)
 
 This case tests one architectural/security proposition: a consequential operation executes only when the requested operation is simultaneously within **current, action-specific authority** and an **independently administered capability envelope** at the actuation boundary. Neither path may enlarge, substitute for, synthesize, or directly/transitively capture the other.
 
@@ -53,9 +54,9 @@ WORKFLOW !-> directly_or_transitively control its own capability controller
 | evidence | Interop Lab reference evidence | normative TIS profile or certification |
 | assurance interpretation | downstream consumer | retroactive authority |
 
-## Falsification scenarios
+## Initial falsification scenarios
 
-The case is deliberately small and pressure-tests five propositions:
+The first tranche pressure-tests five propositions:
 
 1. **DPAC-001 — absent/revoked authority:** valid capability + absent or revoked authority → no actuation.
 2. **DPAC-002 — capability overreach:** valid authority + requested operation outside the Workspace capability envelope → no actuation.
@@ -65,14 +66,33 @@ The case is deliberately small and pressure-tests five propositions:
 
 The machine-readable contracts are in [`scenarios/scenarios.yaml`](scenarios/scenarios.yaml). The deterministic reference implementation is [`../../experiments/dpac-actuation/run.py`](../../experiments/dpac-actuation/run.py).
 
+## GovOps delegated-loan pressure test
+
+The second tranche reuses `IC-GOVOPS-EXEC-TRUST-001` rather than inventing a new domain. It asks whether DPAC still holds when delegated monetary authority, GovOps policy evaluation/enforcement, Workspace capability state, runtime effect, and evidence are separately observable.
+
+The composed experiment is [`../../experiments/dpac-govops-loan/`](../../experiments/dpac-govops-loan/). It adds eight scenarios:
+
+1. valid delegated authority + enforced `Allow` + matching capability → exactly one correlated effect;
+2. delegated-authority monetary overreach → blocked even when capability permits the amount;
+3. Workspace capability monetary overreach → blocked despite otherwise-valid authority;
+4. revocation between authorization and actuation → blocked by authority re-evaluation;
+5. capability revision change between authorization and actuation → stale concurrence rejected;
+6. loan-target substitution after authorization → rejected;
+7. amount widening after authorization → rejected; and
+8. duplicate/retry of an already consumed actuation authorization → no second effect.
+
+This tranche makes the time-of-check/time-of-use boundary explicit: authority bindings and current capability revision are re-evaluated at actuation. It also makes retry semantics explicit by treating the bounded actuation authorization as single-use.
+
 ## Failure semantics
 
-The experiment fails closed. Missing, expired, revoked, replayed, mismatched, or non-current authority does not become authorization. A valid authority record cannot enlarge Workspace capability. Technical capability does not imply permission. Missing evidence does not become a pass.
+The experiments fail closed. Missing, expired, revoked, replayed, mismatched, stale, or non-current authority does not become authorization. A valid authority record cannot enlarge Workspace capability. Technical capability does not imply permission. A changed capability revision requires fresh concurrence. Missing evidence does not become a pass.
 
 ## What success establishes
 
-A successful deterministic run establishes only that this repository-owned reference model preserves the declared DPAC invariants for the five recorded vectors. It does **not** establish upstream TEA conformance, production security, independent implementation, independent certification, or resistance to attack classes outside these scenarios.
+A successful deterministic run establishes only that the repository-owned reference models preserve the declared DPAC boundaries for the recorded scenarios. The GovOps pressure test additionally demonstrates those boundaries across a concrete delegated-loan composition with separately observable authority, authorization/enforcement, capability, and effect state.
+
+It does **not** establish upstream TEA or GovOps conformance, production security, independently enforced Workspace isolation, independent implementation, independent certification, or resistance to attack classes outside these scenarios.
 
 ## Why this remains Experimental
 
-The implementation and vectors are self-contained and self-authored. Promotion requires stronger execution evidence and, for any interoperability-tested claim, an appropriately bounded evidence package under the repository maturity rules. External adversarial tooling is intentionally deferred from this wave.
+The implementation and evidence are self-contained and self-authored. The Workspace capability administrator is logically separate and revisioned, but not yet demonstrated as an independently enforced OS/container/cloud/hardware boundary. Promotion requires stronger execution evidence and, for any interoperability-tested claim, an appropriately bounded evidence package under the repository maturity rules. External adversarial tooling remains intentionally deferred.
