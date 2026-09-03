@@ -1,0 +1,5 @@
+FROM python:3.13-alpine
+WORKDIR /app
+COPY actuator.py /app/actuator.py
+USER 10003:10003
+CMD ["python", "/app/actuator.py", "serve"]

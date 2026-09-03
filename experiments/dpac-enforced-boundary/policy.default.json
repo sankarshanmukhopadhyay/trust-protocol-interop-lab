@@ -1,0 +1,9 @@
+{
+  "revision": "policy-v1",
+  "capabilities": {
+    "loan-approve": {
+      "action": "approve",
+      "max_amount_inr": 5000000
+    }
+  }
+}

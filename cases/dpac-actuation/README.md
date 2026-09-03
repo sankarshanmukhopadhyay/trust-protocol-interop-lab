@@ -2,7 +2,8 @@
 
 **Status:** Experimental  
 **Initial tracking issue:** [#106](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/106)  
-**GovOps pressure-test issue:** [#108](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/108)
+**GovOps pressure-test issue:** [#108](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/108)  
+**Enforced-boundary issue:** [#111](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/111)
 
 This case tests one architectural/security proposition: a consequential operation executes only when the requested operation is simultaneously within **current, action-specific authority** and an **independently administered capability envelope** at the actuation boundary. Neither path may enlarge, substitute for, synthesize, or directly/transitively capture the other.
 
@@ -70,29 +71,38 @@ The machine-readable contracts are in [`scenarios/scenarios.yaml`](scenarios/sce
 
 The second tranche reuses `IC-GOVOPS-EXEC-TRUST-001` rather than inventing a new domain. It asks whether DPAC still holds when delegated monetary authority, GovOps policy evaluation/enforcement, Workspace capability state, runtime effect, and evidence are separately observable.
 
-The composed experiment is [`../../experiments/dpac-govops-loan/`](../../experiments/dpac-govops-loan/). It adds eight scenarios:
-
-1. valid delegated authority + enforced `Allow` + matching capability → exactly one correlated effect;
-2. delegated-authority monetary overreach → blocked even when capability permits the amount;
-3. Workspace capability monetary overreach → blocked despite otherwise-valid authority;
-4. revocation between authorization and actuation → blocked by authority re-evaluation;
-5. capability revision change between authorization and actuation → stale concurrence rejected;
-6. loan-target substitution after authorization → rejected;
-7. amount widening after authorization → rejected; and
-8. duplicate/retry of an already consumed actuation authorization → no second effect.
+The composed experiment is [`../../experiments/dpac-govops-loan/`](../../experiments/dpac-govops-loan/). It adds eight scenarios covering valid concurrence, authority/capability scope divergence, revocation, capability-state TOCTOU, target substitution, amount widening, and duplicate execution.
 
 This tranche makes the time-of-check/time-of-use boundary explicit: authority bindings and current capability revision are re-evaluated at actuation. It also makes retry semantics explicit by treating the bounded actuation authorization as single-use.
 
+## Enforced Workspace boundary
+
+The third tranche is [`../../experiments/dpac-enforced-boundary/`](../../experiments/dpac-enforced-boundary/). It moves from a self-asserted `capability_controller_separate` state to a concrete container-enforced topology:
+
+```text
+workflow/helper -- request_net --> workspace -- actuator_net --> actuator
+                                      |
+                                      +-- read-only capability policy
+                                      +-- actuator credential
+                                      +-- replay state
+```
+
+Workflow/helper and actuator share no Docker network. Only Workspace joins both networks. The actuator credential and capability-policy mount are absent from Workflow/helper containers. Workspace enforces current authority binding, current capability policy, request binding, and replay state before invoking the authenticated actuator. The actuator owns the effect journal, so negative tests confirm no effect by observing journal count rather than trusting a denial response.
+
+Ten falsification scenarios exercise valid concurrence, direct actuator bypass, policy mutation/admin attempts, capability overreach, revocation, request substitution, capability-revision TOCTOU, replay, a Workflow-controlled helper as a bounded transitive path, and indeterminate capability state.
+
+This establishes a stronger bounded proposition: for the tested container principals, compromise of Workflow/helper alone does not provide a tested path to capability-policy mutation or direct actuation.
+
 ## Failure semantics
 
-The experiments fail closed. Missing, expired, revoked, replayed, mismatched, stale, or non-current authority does not become authorization. A valid authority record cannot enlarge Workspace capability. Technical capability does not imply permission. A changed capability revision requires fresh concurrence. Missing evidence does not become a pass.
+The experiments fail closed. Missing, expired, revoked, replayed, mismatched, stale, or non-current authority does not become authorization. A valid authority record cannot enlarge Workspace capability. Technical capability does not imply permission. A changed capability revision requires fresh concurrence. Missing or unresolvable evidence does not become a pass.
 
 ## What success establishes
 
-A successful deterministic run establishes only that the repository-owned reference models preserve the declared DPAC boundaries for the recorded scenarios. The GovOps pressure test additionally demonstrates those boundaries across a concrete delegated-loan composition with separately observable authority, authorization/enforcement, capability, and effect state.
+Passing deterministic semantic/composition runs establish that the repository-owned reference models preserve their declared DPAC boundaries for recorded scenarios. A passing enforced-boundary run additionally establishes, for the tested Docker topology, that Workflow/helper lack the tested policy mount, actuator credential and actuator network route, while Workspace remains the only bridge to the authenticated actuator and negative cases leave the actuator-owned effect journal unchanged.
 
-It does **not** establish upstream TEA or GovOps conformance, production security, independently enforced Workspace isolation, independent implementation, independent certification, or resistance to attack classes outside these scenarios.
+It does **not** establish upstream TEA or GovOps conformance, production security, host/Docker-daemon compromise resistance, exhaustive transitive-control analysis, independent implementation, independent certification, or resistance to attack classes outside these scenarios.
 
 ## Why this remains Experimental
 
-The implementation and evidence are self-contained and self-authored. The Workspace capability administrator is logically separate and revisioned, but not yet demonstrated as an independently enforced OS/container/cloud/hardware boundary. Promotion requires stronger execution evidence and, for any interoperability-tested claim, an appropriately bounded evidence package under the repository maturity rules. External adversarial tooling remains intentionally deferred.
+The new boundary evidence is materially stronger than logical separation, but it remains self-authored and bounded to one container topology. The Docker host/daemon is outside the modeled adversary boundary, and authority authenticity remains abstracted rather than cryptographically resolved from an upstream authority system. Promotion therefore remains a separate maturity judgment requiring the repository's normal evidence gate. External adversarial tooling remains intentionally deferred.
