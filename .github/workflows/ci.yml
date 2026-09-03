@@ -60,6 +60,19 @@ jobs:
       - name: Run DPAC × GovOps delegated-loan pressure evidence
         run: python experiments/dpac-govops-loan/run.py --check
 
+      - name: Run DPAC enforced Workspace boundary evidence
+        run: >-
+          python experiments/dpac-enforced-boundary/run.py --check
+          --output "${{ runner.temp }}/dpac-enforced-boundary.json"
+
+      - name: Upload DPAC enforced-boundary evidence
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: dpac-enforced-boundary
+          path: ${{ runner.temp }}/dpac-enforced-boundary.json
+          if-no-files-found: error
+
       - name: Exercise protected-access A/B evidence producer boundary
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py --self-test

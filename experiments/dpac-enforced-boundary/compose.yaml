@@ -1,0 +1,64 @@
+services:
+  workflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.workflow
+    command: ["python", "/app/workflow.py", "idle"]
+    networks: [request_net]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  helper:
+    build:
+      context: .
+      dockerfile: Dockerfile.workflow
+    command: ["python", "/app/workflow.py", "idle"]
+    networks: [request_net]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile.workspace
+    environment:
+      CAPABILITY_POLICY: /policy/policy.json
+      ACTUATOR_TOKEN_FILE: /run/secrets/actuator-token
+      ACTUATOR_URL: http://actuator:8081/effect
+    volumes:
+      - ./runtime/policy.json:/policy/policy.json:ro
+    secrets:
+      - actuator-token
+    tmpfs:
+      - /state:uid=10002,gid=10002,mode=0700
+    networks: [request_net, actuator_net]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    depends_on: [actuator]
+
+  actuator:
+    build:
+      context: .
+      dockerfile: Dockerfile.actuator
+    environment:
+      ACTUATOR_TOKEN_FILE: /run/secrets/actuator-token
+    secrets:
+      - actuator-token
+    tmpfs:
+      - /journal:uid=10003,gid=10003,mode=0700
+    networks: [actuator_net]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+secrets:
+  actuator-token:
+    file: ./runtime/actuator-token.txt
+
+networks:
+  request_net: {}
+  actuator_net:
+    internal: true
