@@ -15,9 +15,19 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      bundler-minor-and-patch:
+        update-types:
+          - minor
+          - patch
 
   - package-ecosystem: npm
     directory: "/experiments/dtg-protected-access-bbs"
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - minor
+          - patch
