@@ -1,0 +1,28 @@
+{
+  "invariants": [
+    {
+      "id": "INV-ANAB-DCAS-001",
+      "statement": "Missing, stale, revoked and unverifiable evidence states MUST remain distinguishable and MUST NOT be silently treated as PASS."
+    },
+    {
+      "id": "INV-ANAB-DCAS-002",
+      "statement": "DCAS evaluation MUST reference ANAB source requirements without acquiring authority to redefine them."
+    },
+    {
+      "id": "INV-ANAB-DCAS-003",
+      "statement": "A successful ANAB identity or name-assurance evaluation MUST NOT establish delegated or action-specific authority."
+    },
+    {
+      "id": "INV-ANAB-DCAS-004",
+      "statement": "The same normalized input and relying-party policy MUST produce a materially equivalent overall decision under conforming evaluator implementations."
+    },
+    {
+      "id": "INV-ANAB-DCAS-005",
+      "statement": "The evaluation result MUST retain enough evidence classification and source-requirement findings to explain the decision."
+    },
+    {
+      "id": "INV-ANAB-DCAS-006",
+      "statement": "Interop Lab workflow success MUST NOT by itself promote an assurance or interoperability maturity claim."
+    }
+  ]
+}
