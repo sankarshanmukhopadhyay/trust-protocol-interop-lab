@@ -1,0 +1,126 @@
+{
+  "case_id": "IC-DPAC-ACTUATION-001",
+  "composition": "IC-GOVOPS-EXEC-TRUST-001 delegated-loan profile",
+  "scenarios": [
+    {
+      "id": "DPAC-GOVOPS-001",
+      "title": "Valid delegated authority, enforced Allow, and matching capability actuate once",
+      "inputs": {
+        "action": "approve",
+        "loan_id": "LN-2026-004217",
+        "amount_inr": 3500000,
+        "authority_limit_inr": 5000000,
+        "authority_current_at_actuation": true,
+        "authority_bound_loan_id": "LN-2026-004217",
+        "authority_bound_amount_inr": 3500000,
+        "policy_decision": "allow",
+        "decision_enforced": true,
+        "capability_action": "approve",
+        "capability_max_amount_inr": 5000000,
+        "capability_revision_at_authorization": "cap-17",
+        "capability_revision_at_actuation": "cap-17",
+        "capability_controller_separate": true,
+        "actuation_authorization_consumed": false
+      },
+      "expected": {"actuated": true, "reason": "concurrence", "effect_count": 1, "evidence_state": "complete"}
+    },
+    {
+      "id": "DPAC-GOVOPS-002",
+      "title": "Delegated authority limit blocks over-limit approval even when capability allows",
+      "inputs": {
+        "action": "approve", "loan_id": "LN-2026-004218", "amount_inr": 7500000,
+        "authority_limit_inr": 5000000, "authority_current_at_actuation": true,
+        "authority_bound_loan_id": "LN-2026-004218", "authority_bound_amount_inr": 7500000,
+        "policy_decision": "allow", "decision_enforced": true,
+        "capability_action": "approve", "capability_max_amount_inr": 10000000,
+        "capability_revision_at_authorization": "cap-17", "capability_revision_at_actuation": "cap-17",
+        "capability_controller_separate": true, "actuation_authorization_consumed": false
+      },
+      "expected": {"actuated": false, "reason": "authority_scope_exceeded", "effect_count": 0, "evidence_state": "complete"}
+    },
+    {
+      "id": "DPAC-GOVOPS-003",
+      "title": "Workspace capability ceiling blocks otherwise-valid authority",
+      "inputs": {
+        "action": "approve", "loan_id": "LN-2026-004219", "amount_inr": 4500000,
+        "authority_limit_inr": 5000000, "authority_current_at_actuation": true,
+        "authority_bound_loan_id": "LN-2026-004219", "authority_bound_amount_inr": 4500000,
+        "policy_decision": "allow", "decision_enforced": true,
+        "capability_action": "approve", "capability_max_amount_inr": 4000000,
+        "capability_revision_at_authorization": "cap-17", "capability_revision_at_actuation": "cap-17",
+        "capability_controller_separate": true, "actuation_authorization_consumed": false
+      },
+      "expected": {"actuated": false, "reason": "capability_scope_exceeded", "effect_count": 0, "evidence_state": "complete"}
+    },
+    {
+      "id": "DPAC-GOVOPS-004",
+      "title": "Revocation between authorization and actuation invalidates concurrence",
+      "inputs": {
+        "action": "approve", "loan_id": "LN-2026-004220", "amount_inr": 3000000,
+        "authority_limit_inr": 5000000, "authority_current_at_actuation": false,
+        "authority_bound_loan_id": "LN-2026-004220", "authority_bound_amount_inr": 3000000,
+        "policy_decision": "allow", "decision_enforced": true,
+        "capability_action": "approve", "capability_max_amount_inr": 5000000,
+        "capability_revision_at_authorization": "cap-17", "capability_revision_at_actuation": "cap-17",
+        "capability_controller_separate": true, "actuation_authorization_consumed": false
+      },
+      "expected": {"actuated": false, "reason": "authority_not_current", "effect_count": 0, "evidence_state": "complete"}
+    },
+    {
+      "id": "DPAC-GOVOPS-005",
+      "title": "Capability revision change between authorization and actuation blocks stale concurrence",
+      "inputs": {
+        "action": "approve", "loan_id": "LN-2026-004221", "amount_inr": 3000000,
+        "authority_limit_inr": 5000000, "authority_current_at_actuation": true,
+        "authority_bound_loan_id": "LN-2026-004221", "authority_bound_amount_inr": 3000000,
+        "policy_decision": "allow", "decision_enforced": true,
+        "capability_action": "approve", "capability_max_amount_inr": 5000000,
+        "capability_revision_at_authorization": "cap-17", "capability_revision_at_actuation": "cap-18",
+        "capability_controller_separate": true, "actuation_authorization_consumed": false
+      },
+      "expected": {"actuated": false, "reason": "capability_state_changed", "effect_count": 0, "evidence_state": "complete"}
+    },
+    {
+      "id": "DPAC-GOVOPS-006",
+      "title": "Loan target substitution after authorization is rejected",
+      "inputs": {
+        "action": "approve", "loan_id": "LN-ATTACK-SUBSTITUTED", "amount_inr": 3500000,
+        "authority_limit_inr": 5000000, "authority_current_at_actuation": true,
+        "authority_bound_loan_id": "LN-2026-004222", "authority_bound_amount_inr": 3500000,
+        "policy_decision": "allow", "decision_enforced": true,
+        "capability_action": "approve", "capability_max_amount_inr": 5000000,
+        "capability_revision_at_authorization": "cap-17", "capability_revision_at_actuation": "cap-17",
+        "capability_controller_separate": true, "actuation_authorization_consumed": false
+      },
+      "expected": {"actuated": false, "reason": "authority_binding_mismatch", "effect_count": 0, "evidence_state": "complete"}
+    },
+    {
+      "id": "DPAC-GOVOPS-007",
+      "title": "Amount widening after authorization is rejected",
+      "inputs": {
+        "action": "approve", "loan_id": "LN-2026-004223", "amount_inr": 4900000,
+        "authority_limit_inr": 5000000, "authority_current_at_actuation": true,
+        "authority_bound_loan_id": "LN-2026-004223", "authority_bound_amount_inr": 3500000,
+        "policy_decision": "allow", "decision_enforced": true,
+        "capability_action": "approve", "capability_max_amount_inr": 5000000,
+        "capability_revision_at_authorization": "cap-17", "capability_revision_at_actuation": "cap-17",
+        "capability_controller_separate": true, "actuation_authorization_consumed": false
+      },
+      "expected": {"actuated": false, "reason": "authority_binding_mismatch", "effect_count": 0, "evidence_state": "complete"}
+    },
+    {
+      "id": "DPAC-GOVOPS-008",
+      "title": "Consumed actuation authorization cannot produce a duplicate effect",
+      "inputs": {
+        "action": "approve", "loan_id": "LN-2026-004224", "amount_inr": 3500000,
+        "authority_limit_inr": 5000000, "authority_current_at_actuation": true,
+        "authority_bound_loan_id": "LN-2026-004224", "authority_bound_amount_inr": 3500000,
+        "policy_decision": "allow", "decision_enforced": true,
+        "capability_action": "approve", "capability_max_amount_inr": 5000000,
+        "capability_revision_at_authorization": "cap-17", "capability_revision_at_actuation": "cap-17",
+        "capability_controller_separate": true, "actuation_authorization_consumed": true
+      },
+      "expected": {"actuated": false, "reason": "duplicate_actuation", "effect_count": 0, "evidence_state": "complete"}
+    }
+  ]
+}
