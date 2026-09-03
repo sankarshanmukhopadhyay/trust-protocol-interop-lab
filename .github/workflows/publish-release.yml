@@ -1,0 +1,109 @@
+name: Publish GitHub release
+
+on:
+  workflow_run:
+    workflows: ["Repository assurance"]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout validated main commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Locate pending release publication
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t pending < <(find docs/releases -maxdepth 1 -name '*-publication.json' -print | sort | while read -r file; do
+            python - "$file" <<'PY'
+          import json, sys
+          p = sys.argv[1]
+          data = json.load(open(p, encoding='utf-8'))
+          if data.get('status') == 'pending-publication':
+              print(p)
+          PY
+          done)
+
+          if [ "${#pending[@]}" -eq 0 ]; then
+            echo "No pending release publication."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "${#pending[@]}" -ne 1 ]; then
+            echo "Expected exactly one pending release publication; found ${#pending[@]}." >&2
+            printf '%s\n' "${pending[@]}" >&2
+            exit 1
+          fi
+
+          python - "${pending[0]}" "$GITHUB_OUTPUT" <<'PY'
+          import json, pathlib, sys
+          publication_path, output_path = sys.argv[1:]
+          data = json.load(open(publication_path, encoding='utf-8'))
+          required = ['tag', 'title', 'notes_file', 'status']
+          missing = [key for key in required if not data.get(key)]
+          if missing:
+              raise SystemExit(f"publication record missing: {', '.join(missing)}")
+          if data['status'] != 'pending-publication':
+              raise SystemExit('publication record is not pending-publication')
+          notes = pathlib.Path(data['notes_file'])
+          if not notes.is_file():
+              raise SystemExit(f"release notes do not exist: {notes}")
+          with open(output_path, 'a', encoding='utf-8') as out:
+              out.write('publish=true\n')
+              out.write(f"tag={data['tag']}\n")
+              out.write(f"title={data['title']}\n")
+              out.write(f"notes_file={data['notes_file']}\n")
+          PY
+
+      - name: Publish immutable release
+        if: steps.release.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.release.outputs.tag }}"
+          title="${{ steps.release.outputs.title }}"
+          notes_file="${{ steps.release.outputs.notes_file }}"
+          validated_sha="${{ github.event.workflow_run.head_sha }}"
+
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            existing_target="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" --jq '.object.sha')"
+            if [ "$existing_target" != "$validated_sha" ]; then
+              echo "Release $tag already exists at $existing_target, not validated SHA $validated_sha." >&2
+              exit 1
+            fi
+            echo "Release $tag already exists at the validated SHA; preserving immutable publication."
+            exit 0
+          fi
+
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" >/dev/null 2>&1; then
+            echo "Tag $tag already exists without a GitHub Release; refusing ambiguous publication." >&2
+            exit 1
+          fi
+
+          gh release create "$tag" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$validated_sha" \
+            --title "$title" \
+            --notes-file "$notes_file" \
+            --latest
+
+          release_target="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" --jq '.object.sha')"
+          if [ "$release_target" != "$validated_sha" ]; then
+            echo "Published tag points to $release_target, expected $validated_sha." >&2
+            exit 1
+          fi
+          echo "Published $tag at validated main SHA $validated_sha."
