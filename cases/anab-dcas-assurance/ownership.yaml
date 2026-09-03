@@ -1,0 +1,11 @@
+{
+  "named_agent_requirements": "anab",
+  "named_agent_evidence_expectations": "anab",
+  "evaluation_contract": "dcas",
+  "decision_receipt_semantics": "dcas",
+  "relying_party_policy": "local relying-party policy",
+  "experiment_execution": "trust-protocol-interop-lab",
+  "experiment_evidence": "trust-protocol-interop-lab",
+  "maturity_judgment": "trust-protocol-interop-lab",
+  "action_specific_authority": "external authority source; MUST NOT be inferred from ANAB identity assurance"
+}
