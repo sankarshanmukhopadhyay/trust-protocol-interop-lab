@@ -1,0 +1,15 @@
+{
+  "case_id": "IC-DPAC-ACTUATION-001",
+  "claim": "bounded semantic reference-model execution only",
+  "runner": "python experiments/dpac-actuation/run.py",
+  "results": [
+    {"scenario_id": "DPAC-001", "expected": {"actuated": false, "reason": "authority_invalid"}, "actual": {"actuated": false, "reason": "authority_invalid", "concurrence_recorded": false}, "pass": true},
+    {"scenario_id": "DPAC-002", "expected": {"actuated": false, "reason": "capability_denied"}, "actual": {"actuated": false, "reason": "capability_denied", "concurrence_recorded": false}, "pass": true},
+    {"scenario_id": "DPAC-003", "expected": {"actuated": false, "reason": "authority_invalid"}, "actual": {"actuated": false, "reason": "authority_invalid", "concurrence_recorded": false}, "pass": true},
+    {"scenario_id": "DPAC-004", "expected": {"actuated": true, "reason": "concurrence", "concurrence_recorded": true}, "actual": {"actuated": true, "reason": "concurrence", "concurrence_recorded": true}, "pass": true},
+    {"scenario_id": "DPAC-005", "expected": {"actuated": false, "reason": "capability_control_capture"}, "actual": {"actuated": false, "reason": "capability_control_capture", "concurrence_recorded": false}, "pass": true}
+  ],
+  "summary": {"total": 5, "passed": 5, "failed": 0},
+  "failures": [],
+  "evidence_boundary": "Self-authored deterministic semantic-reference evidence; not independent implementation, certification, production-security, or interoperability-tested evidence."
+}
