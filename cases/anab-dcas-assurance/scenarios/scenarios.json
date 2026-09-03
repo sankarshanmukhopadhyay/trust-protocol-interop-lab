@@ -1,0 +1,103 @@
+{
+  "case_id": "IC-ANAB-DCAS-001",
+  "contract_version": "0.1",
+  "vectors": [
+    {
+      "id": "PASS-CURRENT",
+      "fixture_id": "ANAB-FX-001",
+      "requirements": ["ANAGB-RES-01", "ANAGB-RES-02", "ANAGB-A2A-07", "ANAGB-A2A-09", "ANAGB-IR-03"],
+      "input": {
+        "contract_version": "0.1",
+        "evaluation_id": "IC-ANAB-DCAS-001-PASS-CURRENT",
+        "target": {"baseline": "ANAB", "version": "0.10.0", "profile": "Enterprise"},
+        "claim": {"fixture_id": "ANAB-FX-001", "assurance_overclaim": false, "requires_action_authority": false},
+        "evidence": [
+          {"id": "binding", "uri": "urn:fixture:binding", "status": "available"},
+          {"id": "freshness", "uri": "urn:fixture:freshness", "status": "available"},
+          {"id": "revocation", "uri": "urn:fixture:revocation", "status": "available"}
+        ],
+        "policy": {"missing_evidence": "INDETERMINATE", "stale_evidence": "FAIL", "revoked_evidence": "FAIL", "assurance_overclaim": "FAIL", "authority_absent": "INDETERMINATE"},
+        "evaluation_time": "2026-09-03T06:00:00Z"
+      },
+      "expected": "PASS"
+    },
+    {
+      "id": "FAIL-STALE",
+      "fixture_id": "ANAB-FX-002",
+      "requirements": ["ANAGB-RES-02", "ANAGB-A2A-09", "ANAGB-A2A-10"],
+      "input": {
+        "contract_version": "0.1",
+        "evaluation_id": "IC-ANAB-DCAS-001-FAIL-STALE",
+        "target": {"baseline": "ANAB", "version": "0.10.0", "profile": "Enterprise"},
+        "claim": {"fixture_id": "ANAB-FX-002", "assurance_overclaim": false, "requires_action_authority": false},
+        "evidence": [{"id": "freshness", "uri": "urn:fixture:freshness", "status": "stale"}],
+        "policy": {"missing_evidence": "INDETERMINATE", "stale_evidence": "FAIL", "revoked_evidence": "FAIL", "assurance_overclaim": "FAIL", "authority_absent": "INDETERMINATE"},
+        "evaluation_time": "2026-09-03T06:00:00Z"
+      },
+      "expected": "FAIL"
+    },
+    {
+      "id": "FAIL-REVOKED",
+      "fixture_id": "ANAB-FX-003",
+      "requirements": ["ANAGB-A2A-09", "ANAGB-A2A-10", "ANAGB-IR-03", "ANAGB-IR-04"],
+      "input": {
+        "contract_version": "0.1",
+        "evaluation_id": "IC-ANAB-DCAS-001-FAIL-REVOKED",
+        "target": {"baseline": "ANAB", "version": "0.10.0", "profile": "Enterprise"},
+        "claim": {"fixture_id": "ANAB-FX-003", "assurance_overclaim": false, "requires_action_authority": false},
+        "evidence": [{"id": "revocation", "uri": "urn:fixture:revocation", "status": "revoked"}],
+        "policy": {"missing_evidence": "INDETERMINATE", "stale_evidence": "FAIL", "revoked_evidence": "FAIL", "assurance_overclaim": "FAIL", "authority_absent": "INDETERMINATE"},
+        "evaluation_time": "2026-09-03T06:00:00Z"
+      },
+      "expected": "FAIL"
+    },
+    {
+      "id": "INDETERMINATE-MISSING",
+      "fixture_id": "ANAB-FX-004",
+      "requirements": ["ANAGB-A2A-09", "ANAGB-A2A-10", "ANAGB-IR-03"],
+      "input": {
+        "contract_version": "0.1",
+        "evaluation_id": "IC-ANAB-DCAS-001-INDETERMINATE-MISSING",
+        "target": {"baseline": "ANAB", "version": "0.10.0", "profile": "Enterprise"},
+        "claim": {"fixture_id": "ANAB-FX-004", "assurance_overclaim": false, "requires_action_authority": false},
+        "evidence": [{"id": "freshness", "uri": "urn:fixture:freshness", "status": "missing"}],
+        "policy": {"missing_evidence": "INDETERMINATE", "stale_evidence": "FAIL", "revoked_evidence": "FAIL", "assurance_overclaim": "FAIL", "authority_absent": "INDETERMINATE"},
+        "evaluation_time": "2026-09-03T06:00:00Z"
+      },
+      "expected": "INDETERMINATE"
+    },
+    {
+      "id": "FAIL-OVERCLAIM",
+      "fixture_id": "ANAB-FX-005",
+      "requirements": ["ANAGB-UI-01", "ANAGB-UI-02", "ANAGB-RES-06"],
+      "input": {
+        "contract_version": "0.1",
+        "evaluation_id": "IC-ANAB-DCAS-001-FAIL-OVERCLAIM",
+        "target": {"baseline": "ANAB", "version": "0.10.0", "profile": "Enterprise"},
+        "claim": {"fixture_id": "ANAB-FX-005", "assurance_overclaim": true, "requires_action_authority": false},
+        "evidence": [{"id": "binding", "uri": "urn:fixture:binding", "status": "available"}],
+        "policy": {"missing_evidence": "INDETERMINATE", "stale_evidence": "FAIL", "revoked_evidence": "FAIL", "assurance_overclaim": "FAIL", "authority_absent": "INDETERMINATE"},
+        "evaluation_time": "2026-09-03T06:00:00Z"
+      },
+      "expected": "FAIL"
+    },
+    {
+      "id": "INDETERMINATE-AUTHORITY",
+      "fixture_id": "ANAB-FX-006",
+      "requirements": ["ANAGB-UI-02", "ANAGB-UI-03", "ANAGB-AI-05", "ANAGB-AI-06"],
+      "input": {
+        "contract_version": "0.1",
+        "evaluation_id": "IC-ANAB-DCAS-001-INDETERMINATE-AUTHORITY",
+        "target": {"baseline": "ANAB", "version": "0.10.0", "profile": "Enterprise"},
+        "claim": {"fixture_id": "ANAB-FX-006", "assurance_overclaim": false, "requires_action_authority": true},
+        "evidence": [
+          {"id": "identity-binding", "uri": "urn:fixture:identity-binding", "status": "available"},
+          {"id": "action-authority", "uri": "urn:fixture:action-authority", "status": "missing"}
+        ],
+        "policy": {"missing_evidence": "INDETERMINATE", "stale_evidence": "FAIL", "revoked_evidence": "FAIL", "assurance_overclaim": "FAIL", "authority_absent": "INDETERMINATE"},
+        "evaluation_time": "2026-09-03T06:00:00Z"
+      },
+      "expected": "INDETERMINATE"
+    }
+  ]
+}
