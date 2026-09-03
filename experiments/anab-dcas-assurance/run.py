@@ -2,9 +2,9 @@
 """Deterministic evaluator for IC-ANAB-DCAS-001.
 
 This is an Interop Lab experiment implementation, not the authoritative DCAS
-reference implementation and not an ANAB requirements source. It consumes the
-portable DCAS input shape plus explicit relying-party policy and preserves the
-source requirement IDs carried by each vector.
+reference implementation and not an ANAB requirements source. Canonical
+normalized inputs remain in the scenario file; generated results bind to them
+by evaluation ID and SHA-256 digest.
 """
 
 from __future__ import annotations
@@ -33,25 +33,24 @@ def evaluate(vector: dict) -> dict:
     missing = [eid for eid, status in statuses.items() if status == "missing"]
     consumed = [eid for eid, status in statuses.items() if status == "available"]
 
-    reasons = []
     if "revoked" in statuses.values():
         decision = policy["revoked_evidence"]
-        reasons.append("revoked evidence contradicts current reliance")
+        reason = "revoked evidence contradicts current reliance"
     elif "stale" in statuses.values():
         decision = policy["stale_evidence"]
-        reasons.append("stale evidence cannot establish current reliance")
+        reason = "stale evidence cannot establish current reliance"
     elif claim.get("assurance_overclaim"):
         decision = policy["assurance_overclaim"]
-        reasons.append("claimed assurance exceeds evidence demonstrated by the fixture")
+        reason = "claimed assurance exceeds evidence demonstrated by the fixture"
     elif claim.get("requires_action_authority") and statuses.get("action-authority") != "available":
         decision = policy["authority_absent"]
-        reasons.append("identity assurance is present but action-specific authority is not established")
+        reason = "identity assurance is present but action-specific authority is not established"
     elif any(status in {"missing", "unverifiable"} for status in statuses.values()):
         decision = policy["missing_evidence"]
-        reasons.append("required evidence is missing or unverifiable")
+        reason = "required evidence is missing or unverifiable"
     else:
         decision = "PASS"
-        reasons.append("declared evidence is current and available for this bounded fixture")
+        reason = "declared evidence is current and available for this bounded fixture"
 
     finding_result = decision if decision in {"PASS", "FAIL", "INDETERMINATE"} else "INDETERMINATE"
     result = {
@@ -63,7 +62,7 @@ def evaluate(vector: dict) -> dict:
             {
                 "requirement": requirement,
                 "result": finding_result,
-                "reason": "; ".join(reasons),
+                "reason": reason,
                 "evidence_ids": sorted(statuses),
             }
             for requirement in vector["requirements"]
@@ -84,7 +83,6 @@ def evaluate(vector: dict) -> dict:
         "expected": vector["expected"],
         "observed": decision,
         "matches_expected": decision == vector["expected"],
-        "normalized_input": source_input,
         "result": result,
     }
 
@@ -95,6 +93,7 @@ def main() -> int:
     output = {
         "case_id": scenario_set["case_id"],
         "evaluator": "interop-lab-anab-dcas-evaluator@0.1.0",
+        "scenario_source": "cases/anab-dcas-assurance/scenarios/scenarios.json",
         "executions": executions,
         "summary": {
             "total": len(executions),
