@@ -1,0 +1,27 @@
+case_id: IC-DPAC-ACTUATION-001
+scenarios:
+  - id: DPAC-001
+    authority: {present: false, current: false, replayed: false}
+    capability: {allows: true}
+    modification_path_to_capability_controller: false
+    expected: {actuated: false, reason: authority_invalid}
+  - id: DPAC-002
+    authority: {present: true, current: true, replayed: false}
+    capability: {allows: false}
+    modification_path_to_capability_controller: false
+    expected: {actuated: false, reason: capability_denied}
+  - id: DPAC-003
+    authority: {present: true, current: false, replayed: true}
+    capability: {allows: true}
+    modification_path_to_capability_controller: false
+    expected: {actuated: false, reason: authority_invalid}
+  - id: DPAC-004
+    authority: {present: true, current: true, replayed: false}
+    capability: {allows: true}
+    modification_path_to_capability_controller: false
+    expected: {actuated: true, reason: concurrence}
+  - id: DPAC-005
+    authority: {present: true, current: true, replayed: false}
+    capability: {allows: true}
+    modification_path_to_capability_controller: true
+    expected: {actuated: false, reason: capability_control_capture}
