@@ -1,0 +1,86 @@
+{
+  "case_id": "IC-ANAB-DCAS-001",
+  "evaluator": "interop-lab-anab-dcas-evaluator@0.1.0",
+  "scenario_source": "cases/anab-dcas-assurance/scenarios/scenarios.json",
+  "executions": [
+    {
+      "vector": "PASS-CURRENT",
+      "fixture_id": "ANAB-FX-001",
+      "evaluation_id": "IC-ANAB-DCAS-001-PASS-CURRENT",
+      "input_digest": "sha256:9bb2eb7bfbaae7fc905e54df62fb52d6257fcf66bb096d61cba924ecf96e23a1",
+      "requirements": ["ANAGB-RES-01", "ANAGB-RES-02", "ANAGB-A2A-07", "ANAGB-A2A-09", "ANAGB-IR-03"],
+      "finding_result": "PASS",
+      "reason": "declared evidence is current and available for this bounded fixture",
+      "evidence_summary": {"consumed": ["binding", "freshness", "revocation"], "missing": [], "rejected": []},
+      "expected": "PASS",
+      "observed": "PASS",
+      "matches_expected": true
+    },
+    {
+      "vector": "FAIL-STALE",
+      "fixture_id": "ANAB-FX-002",
+      "evaluation_id": "IC-ANAB-DCAS-001-FAIL-STALE",
+      "input_digest": "sha256:4a95e1fa82f1a7f22a8e7264be9a0a81c164a95a5caf30c30783ace65a864a2c",
+      "requirements": ["ANAGB-RES-02", "ANAGB-A2A-09", "ANAGB-A2A-10"],
+      "finding_result": "FAIL",
+      "reason": "stale evidence cannot establish current reliance",
+      "evidence_summary": {"consumed": [], "missing": [], "rejected": ["freshness"]},
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matches_expected": true
+    },
+    {
+      "vector": "FAIL-REVOKED",
+      "fixture_id": "ANAB-FX-003",
+      "evaluation_id": "IC-ANAB-DCAS-001-FAIL-REVOKED",
+      "input_digest": "sha256:c84f1daa6b80495f35fc51a9091dbe501786e22e298d4ed005c27bb23af6f0fb",
+      "requirements": ["ANAGB-A2A-09", "ANAGB-A2A-10", "ANAGB-IR-03", "ANAGB-IR-04"],
+      "finding_result": "FAIL",
+      "reason": "revoked evidence contradicts current reliance",
+      "evidence_summary": {"consumed": [], "missing": [], "rejected": ["revocation"]},
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matches_expected": true
+    },
+    {
+      "vector": "INDETERMINATE-MISSING",
+      "fixture_id": "ANAB-FX-004",
+      "evaluation_id": "IC-ANAB-DCAS-001-INDETERMINATE-MISSING",
+      "input_digest": "sha256:15d3494902a5042f596f89078653dac2c7613db4bb57c1fe218e97d932f24105",
+      "requirements": ["ANAGB-A2A-09", "ANAGB-A2A-10", "ANAGB-IR-03"],
+      "finding_result": "INDETERMINATE",
+      "reason": "required evidence is missing or unverifiable",
+      "evidence_summary": {"consumed": [], "missing": ["freshness"], "rejected": []},
+      "expected": "INDETERMINATE",
+      "observed": "INDETERMINATE",
+      "matches_expected": true
+    },
+    {
+      "vector": "FAIL-OVERCLAIM",
+      "fixture_id": "ANAB-FX-005",
+      "evaluation_id": "IC-ANAB-DCAS-001-FAIL-OVERCLAIM",
+      "input_digest": "sha256:4700ac4671fe0b09b9a083dc15382a5e7a46f0a7da3ef6bee54dadd964cf911f",
+      "requirements": ["ANAGB-UI-01", "ANAGB-UI-02", "ANAGB-RES-06"],
+      "finding_result": "FAIL",
+      "reason": "claimed assurance exceeds evidence demonstrated by the fixture",
+      "evidence_summary": {"consumed": ["binding"], "missing": [], "rejected": []},
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matches_expected": true
+    },
+    {
+      "vector": "INDETERMINATE-AUTHORITY",
+      "fixture_id": "ANAB-FX-006",
+      "evaluation_id": "IC-ANAB-DCAS-001-INDETERMINATE-AUTHORITY",
+      "input_digest": "sha256:e77f198b5655afb133f3bfc6770ece530747b5bb5656d8d107915a000991c49d",
+      "requirements": ["ANAGB-UI-02", "ANAGB-UI-03", "ANAGB-AI-05", "ANAGB-AI-06"],
+      "finding_result": "INDETERMINATE",
+      "reason": "identity assurance is present but action-specific authority is not established",
+      "evidence_summary": {"consumed": ["identity-binding"], "missing": ["action-authority"], "rejected": []},
+      "expected": "INDETERMINATE",
+      "observed": "INDETERMINATE",
+      "matches_expected": true
+    }
+  ],
+  "summary": {"total": 6, "matched": 6, "mismatched": 0}
+}
