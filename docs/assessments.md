@@ -18,19 +18,15 @@ permalink: /assessments/
 | [IC-ARPA-A2A-TT-001](../cases/arpa-a2a-trust-tasks/README.md) | **Interoperability Tested** | Governed agent discovery, name assurance, A2A and Trust Task execution |
 | [IC-ARA-REL-001](../cases/ara-minimum-executable-relationship/README.md) | **Interoperability Tested** | Minimum executable agent relationship, lifecycle and adversarial assurance |
 | [IC-TT-MCP-001](../cases/trust-tasks-mcp/README.md) | Candidate | Trust Tasks carried over MCP |
+| [IC-TT-TSMM-TIS-001](../cases/trust-tasks-tsmm-tis/README.md) | Candidate | Runtime assurance composition across Trust Tasks, TSMM and TIS |
+| [IC-ARPA-TRQP-HIST-001](../cases/arpa-trqp-lifecycle/README.md) | Candidate | ARPA/TRQP lifecycle and historical resolution |
 | [IC-AGENT-PROVENANCE-AUTH-001](../cases/agentic-provenance-authority/README.md) | Candidate | Provenance, delegated verification and authority composition |
+| [IC-DTG-PROTECTED-ACCESS-001](../cases/dtg-protected-access/README.md) | Candidate | Protected-person confidential-service access with bounded disclosure |
+| [IC-GOVOPS-EXEC-TRUST-001](../cases/govops-executable-trust/README.md) | Candidate | GovOps capability, authority, decision, enforcement and evidence composition |
 | [IC-TEA-MCP-TT-001](../cases/tea-mcp-trust-tasks/README.md) | Experimental | TSP-enabled agents, MCP and Trust Tasks |
-| [IC-TT-TSMM-TIS-001](../cases/trust-tasks-tsmm-tis/README.md) | Experimental | Runtime assurance composition across Trust Tasks, TSMM and TIS |
-| [IC-ARPA-TRQP-HIST-001](../cases/arpa-trqp-lifecycle/README.md) | Experimental | ARPA/TRQP lifecycle and historical resolution |
-| [IC-GOVOPS-EXEC-TRUST-001](../cases/govops-executable-trust/README.md) | Experimental | GovOps capability, authority, decision, enforcement and evidence composition |
+| [IC-DPAC-ACTUATION-001](../cases/dpac-actuation/README.md) | Experimental | Non-collapsible authority and Workspace-capability concurrence at the actuation boundary |
 
 The machine-readable source of truth for admitted cases is [`catalog/interoperability-cases.yaml`](../catalog/interoperability-cases.yaml).
-
-## Pre-admission work
-
-[IC-DTG-PROTECTED-ACCESS-001](../cases/dtg-protected-access/README.md) is currently **pre-admission construction**, not an admitted Interop Case. It is an executable-ready protected-person confidential-service boundary slice and intentionally makes no upstream conformance or implementation claim.
-
-Keeping pre-admission work separate prevents a directory or executable fixture from being mistaken for a governed maturity claim.
 
 ## How to read a case
 

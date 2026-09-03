@@ -283,6 +283,34 @@
         "rahp_review": "cases/ara-minimum-executable-relationship/phase10-rahp-pressure-review.md",
         "claim_boundary": "cases/ara-minimum-executable-relationship/final-claim-boundary.md"
       }
+    },
+    {
+      "id": "IC-DPAC-ACTUATION-001",
+      "title": "Minimum executable Dual-Path Actuation Control",
+      "status": "experimental",
+      "question": "Can a consequential operation execute only when current action-specific authority and an independently administered capability envelope concur at the actuation boundary, while preventing either path from enlarging, substituting for, synthesizing, or transitively capturing the other?",
+      "components": ["tea-tsp", "govops", "gaam"],
+      "baselines": {
+        "tea-tsp": "TEA @ 5539ef542494ff43fed61791179f08dc5b6da186; TSP semantic baseline @ ea01152425d281da944f40e8da799d7fa7a79f51",
+        "govops": "main @ 319124840565e3ccf82fcf6b8dc45c9582a0186f (2026-08-12)",
+        "gaam": "v0.9.0 Candidate Specification"
+      },
+      "ownership": "cases/dpac-actuation/ownership.yaml",
+      "invariants": "cases/dpac-actuation/invariants.yaml",
+      "admission": {
+        "decision": "admitted",
+        "date": "2026-09-03",
+        "issue": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/106",
+        "scope": "bounded semantic reference model for the DPAC non-collapsibility and concurrence properties; no upstream conformance, prescribed token or process topology, production-security, external certification, or interoperability-tested claim",
+        "maturity_basis": "seven explicit invariants, five falsifiable scenarios, a deterministic evaluator, fail-closed/indeterminate handling, recorded self-authored execution results, and explicit limitations support Experimental maturity only"
+      },
+      "paths": {
+        "readme": "cases/dpac-actuation/README.md",
+        "scenarios": "cases/dpac-actuation/scenarios/scenarios.yaml",
+        "limitations": "cases/dpac-actuation/known-limitations.md",
+        "experiment": "experiments/dpac-actuation/run.py",
+        "result": "results/dpac-actuation/run-results.json"
+      }
     }
   ]
 }

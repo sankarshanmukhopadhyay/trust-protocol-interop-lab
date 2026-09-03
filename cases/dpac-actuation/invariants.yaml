@@ -1,0 +1,13 @@
+{
+  "case_id": "IC-DPAC-ACTUATION-001",
+  "version": 1,
+  "invariants": [
+    {"id": "INV-DPAC-001", "title": "Concurrent authority and capability required", "statement": "A consequential operation executes only when the exact requested operation is within current action-specific authority and the independently administered Workspace capability envelope at the actuation boundary."},
+    {"id": "INV-DPAC-002", "title": "Authority cannot enlarge capability", "statement": "Authority evaluation or an authority object MUST NOT create, widen, replace, or modify the Workspace capability envelope."},
+    {"id": "INV-DPAC-003", "title": "Capability cannot synthesize authority", "statement": "Possession or reachability of a technical capability MUST NOT create, substitute for, or refresh action-specific authority."},
+    {"id": "INV-DPAC-004", "title": "Authority is current and request-bound", "statement": "Accepted authority is unexpired, unrevoked, non-replayed, and bound to the requesting Workflow, operation, target, and material parameters."},
+    {"id": "INV-DPAC-005", "title": "Workflow cannot capture its capability controller", "statement": "A Workflow MUST NOT directly or transitively acquire control over the mechanism constraining its own Workspace capability envelope."},
+    {"id": "INV-DPAC-006", "title": "Concurrence is observable", "statement": "Successful actuation records which authority evaluation and Workspace capability jointly admitted the exact operation."},
+    {"id": "INV-DPAC-007", "title": "Missing evidence is not success", "statement": "Missing, malformed, indeterminate, or unverifiable authority or capability evidence MUST NOT be interpreted as successful concurrence."}
+  ]
+}

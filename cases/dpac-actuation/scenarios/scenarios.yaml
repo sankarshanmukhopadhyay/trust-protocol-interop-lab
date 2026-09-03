@@ -1,0 +1,35 @@
+{
+  "case_id": "IC-DPAC-ACTUATION-001",
+  "scenarios": [
+    {
+      "id": "DPAC-001",
+      "invariants": ["INV-DPAC-001", "INV-DPAC-003", "INV-DPAC-004", "INV-DPAC-007"],
+      "inputs": {"authority_present": false, "authority_current": false, "authority_replayed": false, "capability_allows": true, "capability_control_capture": false},
+      "expected": {"actuated": false, "reason": "authority_invalid"}
+    },
+    {
+      "id": "DPAC-002",
+      "invariants": ["INV-DPAC-001", "INV-DPAC-002", "INV-DPAC-007"],
+      "inputs": {"authority_present": true, "authority_current": true, "authority_replayed": false, "capability_allows": false, "capability_control_capture": false},
+      "expected": {"actuated": false, "reason": "capability_denied"}
+    },
+    {
+      "id": "DPAC-003",
+      "invariants": ["INV-DPAC-001", "INV-DPAC-003", "INV-DPAC-004", "INV-DPAC-007"],
+      "inputs": {"authority_present": true, "authority_current": false, "authority_replayed": true, "capability_allows": true, "capability_control_capture": false},
+      "expected": {"actuated": false, "reason": "authority_invalid"}
+    },
+    {
+      "id": "DPAC-004",
+      "invariants": ["INV-DPAC-001", "INV-DPAC-004", "INV-DPAC-006"],
+      "inputs": {"authority_present": true, "authority_current": true, "authority_replayed": false, "capability_allows": true, "capability_control_capture": false},
+      "expected": {"actuated": true, "reason": "concurrence", "concurrence_recorded": true}
+    },
+    {
+      "id": "DPAC-005",
+      "invariants": ["INV-DPAC-002", "INV-DPAC-005"],
+      "inputs": {"authority_present": true, "authority_current": true, "authority_replayed": false, "capability_allows": true, "capability_control_capture": true},
+      "expected": {"actuated": false, "reason": "capability_control_capture"}
+    }
+  ]
+}

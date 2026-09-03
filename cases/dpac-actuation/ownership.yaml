@@ -1,0 +1,20 @@
+case_id: IC-DPAC-ACTUATION-001
+ownership:
+  authority_sources:
+    owner: upstream_or_domain_governance
+    includes: [principal, relationship, delegation, policy, duty]
+  workflow_authorization:
+    owner: workflow_authority_evaluation
+  capability_envelope:
+    owner: independently_administered_workspace
+  actuation_concurrence:
+    owner: actuator_boundary
+  runtime_effect:
+    owner: runtime
+  evidence_profile:
+    owner: trust_protocol_interop_lab
+  assurance:
+    owner: downstream_assurance_consumer
+lab_boundary: >-
+  The Lab owns only the experimental composition, reference evaluator, scenarios,
+  vectors, evidence, and maturity claim. It does not redefine upstream semantics.

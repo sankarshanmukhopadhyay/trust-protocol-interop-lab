@@ -30,12 +30,14 @@ The working model is:
 | `IC-TT-MCP-001` | Trust Tasks ↔ MCP | Candidate |
 | `IC-TEA-MCP-TT-001` | TEA/TSP ↔ MCP ↔ Trust Tasks | Experimental |
 | `IC-ARPA-A2A-TT-001` | ARPA ↔ ANAB ↔ A2A ↔ Trust Tasks | **Interoperability Tested (semantic scope)** |
-| `IC-TT-TSMM-TIS-001` | Trust Tasks ↔ TSMM ↔ TIS | Experimental |
-| `IC-ARPA-TRQP-HIST-001` | ARPA ↔ TRQP lifecycle/historical resolution | Experimental |
+| `IC-TT-TSMM-TIS-001` | Trust Tasks ↔ TSMM ↔ TIS | Candidate |
+| `IC-ARPA-TRQP-HIST-001` | ARPA ↔ TRQP lifecycle/historical resolution | Candidate |
 | `IC-AGENT-PROVENANCE-AUTH-001` | Agent identity ↔ authority ↔ provenance ↔ TRQP ↔ assurance | Candidate |
 | `IC-XSP-001` | VC Data Model ↔ Data Integrity ↔ OpenID4VCI ↔ OpenID4VP ↔ relying policy | **Interoperability Tested (semantic scope)** |
 | `IC-XSP-002` | DID Core ↔ DID Resolution ↔ OpenID Federation ↔ authority | **Interoperability Tested (semantic scope)** |
-| [`IC-GOVOPS-EXEC-TRUST-001`](cases/govops-executable-trust/README.md) | GovOps capability ↔ TSMM ↔ GAAM ↔ TIS | Experimental |
+| [`IC-GOVOPS-EXEC-TRUST-001`](cases/govops-executable-trust/README.md) | GovOps capability ↔ TSMM ↔ GAAM ↔ TIS | Candidate |
+| [`IC-ARA-REL-001`](cases/ara-minimum-executable-relationship/README.md) | Trust Tasks ↔ TEA/TSP ↔ ARPA ↔ DTG Credentials ↔ TSMM ↔ TIS | **Interoperability Tested (bounded semantic scope)** |
+| [`IC-DPAC-ACTUATION-001`](cases/dpac-actuation/README.md) | TEA/TSP ↔ GovOps ↔ GAAM actuation boundary | Experimental |
 
 The authoritative registry is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
 
@@ -118,6 +120,7 @@ scripts/       Deterministic repository validation and readiness generation
 ```bash
 python scripts/validate_catalog.py
 python scripts/validate_cases.py
+python experiments/dpac-actuation/run.py
 python experiments/xsp-001/run.py
 python experiments/xsp-002/run.py
 python experiments/arpa-a2a-anab/run.py
