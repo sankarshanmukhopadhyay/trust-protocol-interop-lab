@@ -1,0 +1,33 @@
+name: Governed change or interoperability finding
+description: Track a bounded repository change, experiment, evidence gap, or interoperability finding.
+title: ""
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or question
+      description: State the bounded problem, interoperability question, or governance gap.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Authority and scope
+      description: Identify what this repository owns, relevant upstream authority, and any pinned baseline.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence / acceptance criteria
+      description: State what can be tested and what evidence will prove completion or falsification.
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks, revocation, and residual limits
+      description: Identify negative cases, rollback/supersession behaviour, and known residual risk.
+    validations:
+      required: true
