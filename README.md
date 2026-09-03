@@ -27,14 +27,14 @@ The working model is:
 
 | Case | Composition | Status |
 |---|---|---|
-| `IC-TT-MCP-001` | Trust Tasks ↔ MCP | Candidate |
-| `IC-TEA-MCP-TT-001` | TEA/TSP ↔ MCP ↔ Trust Tasks | Experimental |
-| `IC-ARPA-A2A-TT-001` | ARPA ↔ ANAB ↔ A2A ↔ Trust Tasks | **Interoperability Tested (semantic scope)** |
-| `IC-TT-TSMM-TIS-001` | Trust Tasks ↔ TSMM ↔ TIS | Candidate |
-| `IC-ARPA-TRQP-HIST-001` | ARPA ↔ TRQP lifecycle/historical resolution | Candidate |
-| `IC-AGENT-PROVENANCE-AUTH-001` | Agent identity ↔ authority ↔ provenance ↔ TRQP ↔ assurance | Candidate |
-| `IC-XSP-001` | VC Data Model ↔ Data Integrity ↔ OpenID4VCI ↔ OpenID4VP ↔ relying policy | **Interoperability Tested (semantic scope)** |
-| `IC-XSP-002` | DID Core ↔ DID Resolution ↔ OpenID Federation ↔ authority | **Interoperability Tested (semantic scope)** |
+| [`IC-TT-MCP-001`](cases/trust-tasks-mcp/README.md) | Trust Tasks ↔ MCP | Candidate |
+| [`IC-TEA-MCP-TT-001`](cases/tea-mcp-trust-tasks/README.md) | TEA/TSP ↔ MCP ↔ Trust Tasks | Experimental |
+| [`IC-ARPA-A2A-TT-001`](cases/arpa-a2a-trust-tasks/README.md) | ARPA ↔ ANAB ↔ A2A ↔ Trust Tasks | **Interoperability Tested (semantic scope)** |
+| [`IC-TT-TSMM-TIS-001`](cases/trust-tasks-tsmm-tis/README.md) | Trust Tasks ↔ TSMM ↔ TIS | Candidate |
+| [`IC-ARPA-TRQP-HIST-001`](cases/arpa-trqp-lifecycle/README.md) | ARPA ↔ TRQP lifecycle/historical resolution | Candidate |
+| [`IC-AGENT-PROVENANCE-AUTH-001`](cases/agentic-provenance-authority/README.md) | Agent identity ↔ authority ↔ provenance ↔ TRQP ↔ assurance | Candidate |
+| [`IC-XSP-001`](cases/xsp-001/README.md) | VC Data Model ↔ Data Integrity ↔ OpenID4VCI ↔ OpenID4VP ↔ relying policy | **Interoperability Tested (semantic scope)** |
+| [`IC-XSP-002`](cases/xsp-002/README.md) | DID Core ↔ DID Resolution ↔ OpenID Federation ↔ authority | **Interoperability Tested (semantic scope)** |
 | [`IC-GOVOPS-EXEC-TRUST-001`](cases/govops-executable-trust/README.md) | GovOps capability ↔ TSMM ↔ GAAM ↔ TIS | Candidate |
 | [`IC-ARA-REL-001`](cases/ara-minimum-executable-relationship/README.md) | Trust Tasks ↔ TEA/TSP ↔ ARPA ↔ DTG Credentials ↔ TSMM ↔ TIS | **Interoperability Tested (bounded semantic scope)** |
 | [`IC-DPAC-ACTUATION-001`](cases/dpac-actuation/README.md) | TEA/TSP ↔ GovOps ↔ GAAM actuation boundary | Experimental |
