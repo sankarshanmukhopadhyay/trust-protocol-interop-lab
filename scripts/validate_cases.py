@@ -25,13 +25,49 @@ vector_ids = set()
 invariant_ids = set()
 
 
+def load_candidate_vectors(case_id, vector_root):
+    """Return positive and negative/adversarial candidate vectors.
+
+    The lab has two governed vector layouts in active use:
+    1. `valid/*.json` and `invalid/*.json` catalogue vectors; and
+    2. flat YAML experiment vectors carrying `vector.class`.
+
+    Both must expose a stable id and expected behaviour. Supporting both keeps
+    maturity validation coupled to evidence semantics rather than one storage
+    representation.
+    """
+    valid_dir = vector_root / 'valid'
+    invalid_dir = vector_root / 'invalid'
+    if valid_dir.is_dir() or invalid_dir.is_dir():
+        positive = []
+        negative = []
+        for path in sorted(valid_dir.glob('*.json')):
+            positive.append((path, json.loads(path.read_text())))
+        for path in sorted(invalid_dir.glob('*.json')):
+            negative.append((path, json.loads(path.read_text())))
+        return positive, negative
+
+    positive = []
+    negative = []
+    for path in sorted(list(vector_root.glob('*.yaml')) + list(vector_root.glob('*.yml'))):
+        doc = yaml.safe_load(path.read_text())
+        vector = doc.get('vector', doc) if isinstance(doc, dict) else {}
+        vector_class = vector.get('class')
+        if vector_class == 'positive':
+            positive.append((path, vector))
+        elif vector_class in {'negative', 'adversarial'}:
+            negative.append((path, vector))
+
+    return positive, negative
+
+
 def validate_tested_evidence(case, evidence_path):
     """Validate the minimum machine-verifiable contract for a Tested claim.
 
-    This is repository evidence discipline, not external certification.  It
+    This is repository evidence discipline, not external certification. It
     verifies that a Tested claim is bound to an executable command, a passing
     result, a bounded claim scope, existing evidence artifacts and at least one
-    integrity reference.  Existing packages may use SHA-256 content hashes or
+    integrity reference. Existing packages may use SHA-256 content hashes or
     Git blob SHAs; future packages can use either without weakening the gate.
     """
     manifest_path = ROOT / evidence_path
@@ -107,8 +143,6 @@ for c in cases:
     case_ids.add(c['id'])
     r = rank[c['status']]
 
-    # Every declared component must have a stated baseline so experiments are
-    # reproducible against an explicit, bounded input set.
     missing_baselines = set(c['components']) - set(c['baselines'])
     assert not missing_baselines, f"{c['id']}: missing baselines for {sorted(missing_baselines)}"
 
@@ -130,13 +164,11 @@ for c in cases:
     if r >= 3:
         vp = c['paths'].get('vectors')
         assert vp, f"{c['id']}: candidate requires vectors"
-        v = ROOT / vp
-        positive = sorted((v / 'valid').glob('*.json'))
-        negative = sorted((v / 'invalid').glob('*.json'))
+        vector_root = ROOT / vp
+        positive, negative = load_candidate_vectors(c['id'], vector_root)
         assert positive, f"{c['id']}: candidate requires positive vector"
-        assert negative, f"{c['id']}: candidate requires negative vector"
-        for path in positive + negative:
-            vector = json.loads(path.read_text())
+        assert negative, f"{c['id']}: candidate requires negative/adversarial vector"
+        for path, vector in positive + negative:
             assert vector.get('id'), f"{c['id']}: {path} missing vector id"
             assert vector['id'] not in vector_ids, f"duplicate vector id: {vector['id']}"
             vector_ids.add(vector['id'])
