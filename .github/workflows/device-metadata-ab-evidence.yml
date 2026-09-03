@@ -19,15 +19,15 @@ jobs:
   source-pinned-ab:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: lab
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: OpenVTC/openvtc
           ref: 2aa7ce3f8d1397048f13b85dffc3da6e10667a15
           path: openvtc
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: OpenVTC/verifiable-trust-infrastructure
           ref: 8b8e1adeb97572b979f8a1e57e6bc37d1ee27129
