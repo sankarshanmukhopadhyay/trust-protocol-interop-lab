@@ -29,9 +29,9 @@ def evaluate(vector: dict) -> dict:
     claim = source_input["claim"]
     statuses = {item["id"]: item["status"] for item in source_input["evidence"]}
 
-    rejected = [eid for eid, status in statuses.items() if status in {"stale", "revoked", "unverifiable"}]
-    missing = [eid for eid, status in statuses.items() if status == "missing"]
-    consumed = [eid for eid, status in statuses.items() if status == "available"]
+    rejected = sorted(eid for eid, status in statuses.items() if status in {"stale", "revoked", "unverifiable"})
+    missing = sorted(eid for eid, status in statuses.items() if status == "missing")
+    consumed = sorted(eid for eid, status in statuses.items() if status == "available")
 
     if "revoked" in statuses.values():
         decision = policy["revoked_evidence"]
@@ -52,38 +52,18 @@ def evaluate(vector: dict) -> dict:
         decision = "PASS"
         reason = "declared evidence is current and available for this bounded fixture"
 
-    finding_result = decision if decision in {"PASS", "FAIL", "INDETERMINATE"} else "INDETERMINATE"
-    result = {
-        "contract_version": source_input["contract_version"],
-        "evaluation_id": source_input["evaluation_id"],
-        "decision": decision,
-        "evaluator": {"name": "interop-lab-anab-dcas-evaluator", "version": "0.1.0"},
-        "findings": [
-            {
-                "requirement": requirement,
-                "result": finding_result,
-                "reason": reason,
-                "evidence_ids": sorted(statuses),
-            }
-            for requirement in vector["requirements"]
-        ],
-        "evidence_summary": {
-            "consumed": sorted(consumed),
-            "missing": sorted(missing),
-            "rejected": sorted(rejected),
-        },
-        "receipt_material": {
-            "input_digest": normalized_digest(source_input),
-            "result_digest_algorithm": "sha256",
-        },
-    }
     return {
         "vector": vector["id"],
         "fixture_id": vector["fixture_id"],
+        "evaluation_id": source_input["evaluation_id"],
+        "input_digest": normalized_digest(source_input),
+        "requirements": vector["requirements"],
+        "finding_result": decision,
+        "reason": reason,
+        "evidence_summary": {"consumed": consumed, "missing": missing, "rejected": rejected},
         "expected": vector["expected"],
         "observed": decision,
         "matches_expected": decision == vector["expected"],
-        "result": result,
     }
 
 
