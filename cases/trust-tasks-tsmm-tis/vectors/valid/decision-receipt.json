@@ -3,5 +3,6 @@
   "task_proof": "valid",
   "authority": "sufficient",
   "decision": "allow",
-  "effect": "separately-recorded"
+  "effect": "separately-recorded",
+  "expected": "preserve-task-decision-and-effect-separation"
 }
