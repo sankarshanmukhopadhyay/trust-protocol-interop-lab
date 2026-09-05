@@ -1,0 +1,57 @@
+case_id: IC-PDC-MED-001
+purpose: >-
+  Record expected trust-stack consumption without converting case-local application
+  semantics into upstream normative claims.
+reference_baselines:
+  trust_tasks: "Trust Tasks Framework 0.5.0 @ 6425a74136c1d2dfa7115889abe0b3521700e887 (existing Lab reference baseline)"
+  dtg_credentials: "DTG Core Credentials @ 344a66af868c192f15b511e7116ccab2039221de (existing Lab reference baseline)"
+  vtc_runtime: "not yet pinned for this case; integration deferred to Tranche 4"
+mappings:
+  - requirement: identify principal and delegate without treating identity as authority
+    expected_surface: dtg_credentials
+    status: candidate
+    evidence_needed: exact credential/proof objects and verification trace
+
+  - requirement: represent care relationship separately from delegated action authority
+    expected_surface: dtg_relationship_and_credential_semantics
+    status: unresolved
+    evidence_needed: pin exact current relationship representation and prove non-collapse with delegation
+
+  - requirement: bind requester, principal, action, resource, context and expiry into a consequential request
+    expected_surface: trust_tasks
+    status: candidate
+    evidence_needed: exact Trust Task profile or adapter contract used by deterministic core
+
+  - requirement: re-evaluate current authority at execution time
+    expected_surface: vtc_authorization_lifecycle
+    status: adapter_seam
+    evidence_needed: pin actual VTC/OpenVTC implementation surface and execute revoked-task race
+
+  - requirement: propagate delegation revocation into later action denial
+    expected_surface: dtg_vtc_lifecycle
+    status: unresolved
+    evidence_needed: observed revocation/status semantics across the chosen implementation path
+
+  - requirement: enforce minimum disclosure at caregiver and channel boundaries
+    expected_surface: application_profile_plus_dpip
+    status: application_profile
+    evidence_needed: disclosure-policy execution trace; later DPIP observation fixtures
+
+  - requirement: pharmacy refill selective disclosure or unlinkable proof
+    expected_surface: dtg_zkp_or_selective_disclosure
+    status: deferred
+    evidence_needed: separate follow-on case IC-PDC-REFILL-001 or equivalent
+
+classification_values:
+  direct: existing implementation surface used without case-local semantic substitution
+  candidate: plausible mapping requiring executable evidence before claim
+  application_profile: intentionally owned by PDC rather than upstream
+  adapter_seam: explicit temporary boundary standing in for an unintegrated implementation surface
+  unresolved: required semantic mapping has not yet been established
+  deferred: outside IC-PDC-MED-001 initial claim boundary
+
+rules:
+  - A candidate or adapter mapping MUST NOT be reported as upstream conformance.
+  - An unresolved mapping MUST remain visible and MUST NOT be converted into PASS.
+  - A case-local workaround MUST be recorded in gaps.yaml before use.
+  - Protocol changes MUST NOT be proposed merely to make the case pass; first classify the observed mismatch.
