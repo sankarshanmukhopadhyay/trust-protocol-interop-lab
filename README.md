@@ -37,6 +37,7 @@ The working model is:
 | [`IC-XSP-002`](cases/xsp-002/README.md) | DID Core ↔ DID Resolution ↔ OpenID Federation ↔ authority | **Interoperability Tested (semantic scope)** |
 | [`IC-GOVOPS-EXEC-TRUST-001`](cases/govops-executable-trust/README.md) | GovOps capability ↔ TSMM ↔ GAAM ↔ TIS | Candidate |
 | [`IC-ARA-REL-001`](cases/ara-minimum-executable-relationship/README.md) | Trust Tasks ↔ TEA/TSP ↔ ARPA ↔ DTG Credentials ↔ TSMM ↔ TIS | **Interoperability Tested (bounded semantic scope)** |
+| [`IC-PDC-MED-001`](cases/protected-delegated-care/README.md) | DTG Credentials ↔ Trust Tasks ↔ VTC runtime ↔ DPIP application boundary | Experimental |
 | [`IC-DPAC-ACTUATION-001`](cases/dpac-actuation/README.md) | TEA/TSP ↔ GovOps ↔ GAAM actuation boundary | Experimental |
 
 The authoritative registry is [`catalog/interoperability-cases.yaml`](catalog/interoperability-cases.yaml).
