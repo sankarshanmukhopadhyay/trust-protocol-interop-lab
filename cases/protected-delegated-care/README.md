@@ -13,6 +13,12 @@ The first bounded scenario is medication assistance: a principal establishes a c
 
 The case is intentionally **application-level**. It is not a medication-reminder product claim and it is not a healthcare conformance profile.
 
+## Why this matters
+
+A familiar care application can look simple while quietly collapsing several consequential trust decisions into one application role: a family member knows about a medication plan, has access to the messaging channel, and is therefore treated as entitled to inspect, alter, or act on care state. That shortcut makes disclosure, revocation, stale authority, and coercive control difficult to reason about or test.
+
+PDC exists to pressure-test the opposite architecture. The principal remains the source of bounded assistance authority; relationship, delegation, task authorization, execution, disclosure, and evidence remain independently observable; probabilistic extraction never becomes authoritative care state; and a revoked caregiver must lose the delegated action even if they still possess old information or a previously authorized task.
+
 ## Governing proposition
 
 A consequential care action may execute only when the current relationship, bounded delegation, applicable policy, requested action, resource, lifecycle state, and available evidence all permit it. Information possession, identity, relationship, channel access, or technical capability is never sufficient on its own.
@@ -80,7 +86,7 @@ state mutation + evidence
 
 No channel webhook receives a privileged bypass around the same controller used by other consequential actions.
 
-## Canonical journey
+## Concrete scenario
 
 1. Create synthetic principal and caregiver.
 2. Establish care relationship.
@@ -154,6 +160,18 @@ The case MUST NOT silently invent DTG semantics to make itself pass. Any mismatc
 ## Synthetic fixtures
 
 [`fixtures/canonical.yaml`](fixtures/canonical.yaml) contains only synthetic identifiers and non-clinical placeholders. No real prescription, health record, phone number, patient identity, or medication detail is required for this case foundation.
+
+## Where it resolved
+
+The case is admitted only at **Experimental** maturity. This tranche resolves the proposition, ownership, lifecycle contracts, P0 disclosure boundary, synthetic fixture set, falsification scenarios, and the rule for recording DTG/VTC gaps. It does **not** resolve the runtime integration questions.
+
+The repository should therefore treat the current outcome as: **model and acceptance contract established; execution evidence pending**. A green validation run proves internal repository consistency of that claim, not that the delegated-care properties have been demonstrated at runtime.
+
+## What remains unresolved
+
+The exact DTG/VTC realization remains intentionally open. In particular, the case still needs to prove the care-relationship/delegation separation, bind the caregiver request to an exact Trust Task representation, and exercise execution-time revocation against a concrete VTC runtime. The catalog registers the VTC runtime boundary against OpenVTC, but the case has not yet claimed or exercised that integration.
+
+Also unresolved are measured retention properties, real messaging-provider behaviour, DPIP runtime observations, and any selective-disclosure/ZKP benefit. The latter belongs to a later refill-entitlement case rather than being smuggled into this first prototype.
 
 ## What this case does not establish
 
