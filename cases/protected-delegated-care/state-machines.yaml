@@ -1,0 +1,59 @@
+case_id: IC-PDC-MED-001
+state_machines:
+  medication_plan:
+    states: [captured, extracted, review_required, rejected, approved, active, paused, superseded, completed]
+    initial: captured
+    transitions:
+      - {from: captured, event: extraction_completed, to: extracted}
+      - {from: extracted, event: validation_requires_review, to: review_required}
+      - {from: review_required, event: human_reject, to: rejected}
+      - {from: review_required, event: human_approve, to: approved}
+      - {from: approved, event: activate, to: active}
+      - {from: active, event: pause, to: paused}
+      - {from: paused, event: resume, to: active}
+      - {from: active, event: supersede, to: superseded}
+      - {from: active, event: complete, to: completed}
+    guards:
+      - id: MP-G1
+        statement: Only approved plans may transition to active.
+      - id: MP-G2
+        statement: Extraction never transitions directly to approved or active.
+      - id: MP-G3
+        statement: Superseded plans cannot generate new reminders.
+      - id: MP-G4
+        statement: Activating a successor must atomically or equivalently prevent the prior version from continuing reminder generation.
+
+  reminder:
+    states: [scheduled, dispatched, acknowledged, deferred, unacknowledged, escalation_pending, escalated]
+    initial: scheduled
+    transitions:
+      - {from: scheduled, event: dispatch, to: dispatched}
+      - {from: dispatched, event: acknowledge, to: acknowledged}
+      - {from: dispatched, event: defer, to: deferred}
+      - {from: deferred, event: reschedule, to: scheduled}
+      - {from: dispatched, event: timeout, to: unacknowledged}
+      - {from: unacknowledged, event: evaluate_escalation, to: escalation_pending}
+      - {from: escalation_pending, event: authorized_exception_notice, to: escalated}
+    guards:
+      - id: RM-G1
+        statement: Dispatch does not imply delivery, view, acknowledgement, or ingestion.
+      - id: RM-G2
+        statement: Acknowledged means user-reported acknowledgement only.
+      - id: RM-G3
+        statement: Late acknowledgement after escalation must reconcile deterministically without rewriting prior evidence.
+
+  delegation:
+    states: [proposed, accepted, active, expired, revoked]
+    initial: proposed
+    transitions:
+      - {from: proposed, event: accept, to: accepted}
+      - {from: accepted, event: activate, to: active}
+      - {from: active, event: expire, to: expired}
+      - {from: active, event: revoke, to: revoked}
+    guards:
+      - id: DG-G1
+        statement: Only active delegation can authorize delegated caregiver action.
+      - id: DG-G2
+        statement: Current state is evaluated at consequential execution time.
+      - id: DG-G3
+        statement: A task created while delegation was active is denied if delegation is revoked before execution unless an explicit governing semantic says otherwise.
