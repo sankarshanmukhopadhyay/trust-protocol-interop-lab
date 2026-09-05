@@ -1,0 +1,58 @@
+fixture_version: 1
+case_id: IC-PDC-MED-001
+synthetic_only: true
+persons:
+  principal:
+    id: person:p001
+    preferred_language: en
+    interaction_endpoint: channel:sim:p001
+  caregiver:
+    id: person:c001
+    interaction_endpoint: channel:sim:c001
+relationship:
+  id: relationship:r001
+  principal: person:p001
+  delegate: person:c001
+  status: active
+delegation:
+  id: delegation:d001
+  relationship: relationship:r001
+  capabilities:
+    - care.exception.receive
+    - care.exception.respond
+  constraints:
+    reveal_medication: false
+  valid_from: "2026-09-05T00:00:00Z"
+  valid_until: "2026-12-05T00:00:00Z"
+  status: active
+medication_plan:
+  id: medication-plan:mp001
+  subject: person:p001
+  version: 1
+  status: review_required
+  items:
+    - id: medication:m001
+      display_label: synthetic-medicine-placeholder
+      schedule: ["08:00"]
+  source_evidence: prescription:synthetic:p001
+  approved_by: null
+  approved_at: null
+reminder:
+  id: reminder:rm001
+  plan: medication-plan:mp001
+  item: medication:m001
+  scheduled_at: "2026-09-05T08:00:00Z"
+  status: scheduled
+exception_task:
+  id: task:t001
+  type: care.exception.respond
+  requester: person:c001
+  principal: person:p001
+  relationship: relationship:r001
+  delegation: delegation:d001
+  resource: reminder:rm001
+  state: proposed
+  expires_at: "2026-09-05T08:30:00Z"
+notes:
+  - No real patient, medication, prescription, phone number, diagnosis, or clinical record is represented.
+  - display_label is intentionally non-clinical and MUST NOT be used to infer healthcare validity.
