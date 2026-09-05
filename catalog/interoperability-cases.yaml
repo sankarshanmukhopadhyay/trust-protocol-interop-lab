@@ -285,6 +285,39 @@
       }
     },
     {
+      "id": "IC-PDC-MED-001",
+      "title": "Protected Delegated Care — medication assistance",
+      "status": "experimental",
+      "question": "Can a privacy-sensitive delegated-care application preserve bounded, revocable authority, current execution-time authorization, minimum disclosure, lifecycle separation, deterministic state, and auditable evidence while consuming DTG/VTC through explicit mappings rather than application-specific semantic substitution?",
+      "components": ["dtg-credentials", "trust-tasks", "vtc-runtime", "dpip"],
+      "baselines": {
+        "trust-tasks": "Trust Tasks Framework 0.5.0 @ 6425a74136c1d2dfa7115889abe0b3521700e887 (existing Lab reference baseline; case mapping not yet executed)",
+        "dtg-credentials": "DTG Core Credentials @ 344a66af868c192f15b511e7116ccab2039221de (existing Lab reference baseline; case mapping not yet executed)",
+        "vtc-runtime": "not yet pinned; Tranche 4 integration dependency",
+        "dpip": "deferred until runtime observations exist"
+      },
+      "ownership": "cases/protected-delegated-care/ownership.yaml",
+      "invariants": "cases/protected-delegated-care/invariants.yaml",
+      "admission": {
+        "decision": "admitted",
+        "date": "2026-09-05",
+        "discussion": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/discussions/127",
+        "issue": "https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/128",
+        "scope": "application-level experimental model and falsification contract for delegated medication assistance; no medical-device, clinical, production privacy/security, WhatsApp-provider, ZKP, pharmacy, certification, Candidate, or Interoperability Tested claim",
+        "maturity_basis": "explicit ownership, ten invariants, lifecycle state contracts, P0 disclosure boundaries, synthetic fixtures, T1-T12 acceptance propositions, visible DTG/VTC mapping statuses, and explicit unresolved gaps support Experimental admission; runtime evidence is intentionally pending"
+      },
+      "paths": {
+        "readme": "cases/protected-delegated-care/README.md",
+        "mapping": "cases/protected-delegated-care/dtg-vtc-mapping.yaml",
+        "scenarios": "cases/protected-delegated-care/scenarios/acceptance.yaml",
+        "limitations": "cases/protected-delegated-care/known-limitations.md",
+        "fixtures": "cases/protected-delegated-care/fixtures/canonical.yaml",
+        "gaps": "cases/protected-delegated-care/gaps.yaml",
+        "disclosure": "cases/protected-delegated-care/disclosure-matrix.yaml",
+        "state_machines": "cases/protected-delegated-care/state-machines.yaml"
+      }
+    },
+    {
       "id": "IC-DPAC-ACTUATION-001",
       "title": "Minimum executable Dual-Path Actuation Control",
       "status": "experimental",

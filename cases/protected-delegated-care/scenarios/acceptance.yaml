@@ -1,0 +1,107 @@
+case_id: IC-PDC-MED-001
+contract_version: 1
+purpose: >-
+  Machine-readable expected outcomes for the deterministic implementation tranche.
+  These scenarios are acceptance propositions, not evidence that execution exists yet.
+scenarios:
+  - id: PDC-POS-001
+    class: positive
+    claim: bounded caregiver exception response succeeds while current delegation is active
+    preconditions:
+      relationship: active
+      delegation: active
+      requested_action: care.exception.respond
+      delegated_capabilities: [care.exception.receive, care.exception.respond]
+      medication_plan: active
+      reminder: escalation_pending
+    expected:
+      authorization: permit
+      state_mutation: true
+      caregiver_disclosure: minimum
+      evidence: required
+
+  - id: PDC-NEG-001
+    threat: T1-over-broad-caregiver-authority
+    claim: adjacent capability outside delegation is denied
+    mutation: requested_action=care.schedule.modify
+    expected: {authorization: deny, state_mutation: false, reason: ACTION_OUTSIDE_DELEGATION}
+
+  - id: PDC-NEG-002
+    threat: T2-stale-delegation
+    claim: previously valid delegation is denied after revocation
+    mutation: delegation.status=revoked
+    expected: {authorization: deny, state_mutation: false, reason: AUTHORITY_REVOKED}
+
+  - id: PDC-NEG-003
+    threat: T3-stale-medication-plan
+    claim: superseded plan cannot produce active reminder execution
+    mutation: medication_plan.status=superseded
+    expected: {authorization: deny_or_suppress, state_mutation: false, reason: PLAN_NOT_ACTIVE}
+
+  - id: PDC-NEG-004
+    threat: T4-unauthorized-prescription-access
+    claim: exception authority does not imply prescription visibility
+    mutation: requested_action=care.prescription.view
+    expected: {authorization: deny, state_mutation: false, reason: ACTION_OUTSIDE_DELEGATION}
+
+  - id: PDC-NEG-005
+    threat: T5-disclosure-expansion
+    claim: exception notification cannot disclose medication or diagnosis outside scope
+    mutation: message_fixture=prohibited_message_fixture
+    expected: {authorization: policy_failure, state_mutation: false, reason: MESSAGE_EXCEEDS_DISCLOSURE_SCOPE}
+
+  - id: PDC-NEG-006
+    threat: T6-replay
+    claim: previously consumed consequential task cannot create a second effect
+    mutation: replay_task=task:t001
+    expected: {authorization: deny_or_idempotent, duplicate_effect: false}
+
+  - id: PDC-NEG-007
+    threat: T7-duplicate-webhook
+    claim: duplicate acknowledgement webhook produces at most one authoritative acknowledgement event
+    mutation: duplicate_channel_event=true
+    expected: {authoritative_event_count: 1, duplicate_effect: false}
+
+  - id: PDC-BOUND-001
+    threat: T8-late-acknowledgement
+    claim: acknowledgement arriving after escalation reconciles without rewriting history
+    mutation: acknowledgement_after=escalated
+    expected: {history_rewritten: false, deterministic_reconciliation: true, evidence: required}
+
+  - id: PDC-NEG-008
+    threat: T9-extraction-ambiguity
+    claim: ambiguous extraction never activates medication plan
+    mutation: extraction_confidence=ambiguous
+    expected: {medication_plan_state: review_required, activation: false}
+
+  - id: PDC-NEG-009
+    threat: T10-fabricated-extraction
+    claim: extracted value absent from source cannot autonomously enter active plan
+    mutation: extracted_claim_present_in_source=false
+    expected: {medication_plan_state: review_required, activation: false, evidence_comparison_required: true}
+
+  - id: PDC-PRIV-001
+    threat: T11-caregiver-correlation
+    claim: unrelated relying context is not given a stable caregiver or relationship correlator by default
+    mutation: cross_context_verifier=true
+    expected: {durable_cross_context_identifier_disclosed: false}
+
+  - id: PDC-NEG-010
+    threat: T12-revoked-task-race
+    claim: authority revoked after task creation but before execution is denied by current-state evaluation
+    preconditions: {task_created_while_delegation_active: true}
+    mutation: delegation.status=revoked_before_execute
+    expected: {authorization: deny, state_mutation: false, reason: AUTHORITY_REVOKED}
+
+  - id: PDC-NEG-011
+    threat: missing-authority-evidence
+    claim: missing delegation evidence does not become permission
+    mutation: delegation_evidence=missing
+    expected: {authorization: deny_or_indeterminate, permit: false}
+
+  - id: PDC-PRIV-002
+    class: privacy-positive
+    claim: normal acknowledged reminder does not disclose routine care state to caregiver without explicit authority
+    preconditions: {reminder: dispatched, caregiver_routine_visibility: false}
+    mutation: principal_acknowledges=true
+    expected: {caregiver_notification_count: 0, medication_disclosure_to_caregiver: false}

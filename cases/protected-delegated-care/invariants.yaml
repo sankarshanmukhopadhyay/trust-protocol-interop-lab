@@ -1,0 +1,59 @@
+case_id: IC-PDC-MED-001
+invariants:
+  - id: PDC-I1-AUTHORITY-NONIMPLICATION
+    statement: >-
+      Possession of information, identity, relationship evidence, technical capability,
+      or channel access MUST NOT by itself establish authority for a consequential action.
+    failure_outcome: deny
+
+  - id: PDC-I2-MINIMUM-DISCLOSURE
+    statement: >-
+      Exercising or proving authority SHOULD disclose no information beyond the data
+      required for the permitted action and recipient purpose.
+    failure_outcome: policy_failure
+
+  - id: PDC-I3-CURRENT-AUTHORITY
+    statement: >-
+      A consequential action MUST re-evaluate current relationship/delegation state at
+      execution time and MUST NOT execute on revoked, expired, or superseded authority.
+    failure_outcome: deny
+
+  - id: PDC-I4-HUMAN-ACTIVATION
+    statement: >-
+      Probabilistic extraction or natural-language interpretation MUST NOT directly
+      activate or modify authoritative medication-plan state.
+    failure_outcome: review_required
+
+  - id: PDC-I5-PLAN-SINGLE-ACTIVE-VERSION
+    statement: >-
+      A superseded medication-plan version MUST NOT continue generating active reminders.
+    failure_outcome: suppress
+
+  - id: PDC-I6-CHANNEL-NONAUTHORITY
+    statement: >-
+      A channel webhook or adapter MUST NOT bypass the same authorization and state
+      transition controller used by other consequential actions.
+    failure_outcome: deny
+
+  - id: PDC-I7-EVIDENCE-FAIL-CLOSED
+    statement: Missing authority or decision evidence MUST NOT become PASS or PERMIT.
+    failure_outcome: indeterminate_or_deny
+
+  - id: PDC-I8-OBSERVATION-SEPARATION
+    statement: >-
+      reminder_sent, reminder_delivered, reminder_seen, reminder_acknowledged, and
+      medicine_taken MUST remain semantically distinct. The prototype may only record
+      self-reported acknowledgement, never verified ingestion.
+    failure_outcome: semantic_failure
+
+  - id: PDC-I9-IDEMPOTENCY
+    statement: >-
+      Duplicate or replayed channel/task inputs MUST NOT create duplicate authoritative
+      effects; they are denied or converge on a deterministic idempotent result.
+    failure_outcome: deny_or_idempotent
+
+  - id: PDC-I10-EVIDENCE-MINIMIZATION
+    statement: >-
+      Auditability MUST NOT be implemented by retaining unnecessary clinical,
+      relationship, or interaction data.
+    failure_outcome: privacy_failure
