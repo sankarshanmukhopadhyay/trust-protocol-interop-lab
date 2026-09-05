@@ -3,9 +3,9 @@ purpose: >-
   Record expected trust-stack consumption without converting case-local application
   semantics into upstream normative claims.
 reference_baselines:
-  trust_tasks: "Trust Tasks Framework 0.5.0 @ 6425a74136c1d2dfa7115889abe0b3521700e887 (existing Lab reference baseline)"
+  trust_tasks: "trustoverip/dtgwg-trust-tasks-spec @ 7c6e1bd4e1585cbf1a6363bd3cbf9059e90a335c"
   dtg_credentials: "DTG Core Credentials @ 344a66af868c192f15b511e7116ccab2039221de (existing Lab reference baseline)"
-  vtc_runtime: "not yet pinned for this case; integration deferred to Tranche 4"
+  vtc_runtime: "OpenVTC/openvtc @ f93bc7e58f2766f3064e2b23ef877563069609ac"
 mappings:
   - requirement: identify principal and delegate without treating identity as authority
     expected_surface: dtg_credentials
@@ -19,13 +19,19 @@ mappings:
 
   - requirement: bind requester, principal, action, resource, context and expiry into a consequential request
     expected_surface: trust_tasks
-    status: candidate
-    evidence_needed: exact Trust Task profile or adapter contract used by deterministic core
+    status: adapter_seam
+    evidence_available:
+      - cases/protected-delegated-care/trust-task-profile.yaml
+      - experiments/protected-delegated-care/run_trust_task_binding.py
+    evidence_needed: >-
+      Exercise the profile against an actual VTC dispatcher and resolve the current
+      document-proof versus authenticated-transport boundary before any generic
+      Trust Tasks conformance claim.
 
   - requirement: re-evaluate current authority at execution time
     expected_surface: vtc_authorization_lifecycle
     status: adapter_seam
-    evidence_needed: pin actual VTC/OpenVTC implementation surface and execute revoked-task race
+    evidence_needed: identify and exercise an actual VTC/OpenVTC current-authority evaluation surface and execute revoked-task race
 
   - requirement: propagate delegation revocation into later action denial
     expected_surface: dtg_vtc_lifecycle
@@ -42,11 +48,26 @@ mappings:
     status: deferred
     evidence_needed: separate follow-on case IC-PDC-REFILL-001 or equivalent
 
+observed_integration_boundaries:
+  - id: PDC-DTG-BND-001
+    topic: Trust Task document proof vs OpenVTC authenticated transport
+    observation: >-
+      The pinned Trust Tasks specification models proof as a framework member and
+      its current examples verify proof against issuer. The pinned OpenVTC code
+      constructs the same Trust Task document for DIDComm/TSP and documents
+      DIDComm flows where authcrypt sender authentication replaces a separate
+      document-level holder proof.
+    classification: unresolved
+    rule: >-
+      A PDC document without proof may be described only as an
+      OpenVTC-transport-bound candidate until this boundary is reconciled and
+      exercised. It MUST NOT be described as generic Trust Tasks conformance.
+
 classification_values:
   direct: existing implementation surface used without case-local semantic substitution
   candidate: plausible mapping requiring executable evidence before claim
   application_profile: intentionally owned by PDC rather than upstream
-  adapter_seam: explicit temporary boundary standing in for an unintegrated implementation surface
+  adapter_seam: explicit temporary boundary standing in for an incomplete or unexercised implementation surface
   unresolved: required semantic mapping has not yet been established
   deferred: outside IC-PDC-MED-001 initial claim boundary
 
