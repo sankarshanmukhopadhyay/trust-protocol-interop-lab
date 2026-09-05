@@ -60,6 +60,9 @@ jobs:
       - name: Run DPAC non-collapsibility and concurrence evidence
         run: python experiments/dpac-actuation/run.py
 
+      - name: Run PDC deterministic delegated-care evidence
+        run: python experiments/protected-delegated-care/run.py
+
       - name: Run DPAC × GovOps delegated-loan pressure evidence
         run: python experiments/dpac-govops-loan/run.py --check
 
