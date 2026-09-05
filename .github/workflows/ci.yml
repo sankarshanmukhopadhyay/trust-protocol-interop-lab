@@ -63,6 +63,19 @@ jobs:
       - name: Run PDC deterministic delegated-care evidence
         run: python experiments/protected-delegated-care/run.py
 
+      - name: Run PDC Trust Task binding evidence
+        run: >-
+          python experiments/protected-delegated-care/run_trust_task_binding.py --check
+          --output "${{ runner.temp }}/pdc-trust-task-binding.json"
+
+      - name: Upload PDC Trust Task binding evidence
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: pdc-trust-task-binding
+          path: ${{ runner.temp }}/pdc-trust-task-binding.json
+          if-no-files-found: error
+
       - name: Run DPAC × GovOps delegated-loan pressure evidence
         run: python experiments/dpac-govops-loan/run.py --check
 
