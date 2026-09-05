@@ -1,0 +1,70 @@
+case_id: IC-PDC-MED-001
+profile_id: pdc-exception-response-trust-task-v1
+purpose: >-
+  Bind a consequential PDC caregiver exception-response request into the current
+  DTG Trust Task outer document without promoting care-domain semantics into
+  framework semantics.
+
+upstream_baselines:
+  trust_tasks_spec:
+    repository: trustoverip/dtgwg-trust-tasks-spec
+    commit: 7c6e1bd4e1585cbf1a6363bd3cbf9059e90a335c
+    observation: >-
+      Framework-defined outer members include id, threadId, parentThreadId,
+      type, issuer, recipient, issuedAt, expiresAt, payload and proof, using
+      lowerCamelCase.
+  openvtc:
+    repository: OpenVTC/openvtc
+    commit: f93bc7e58f2766f3064e2b23ef877563069609ac
+    observation: >-
+      OpenVTC constructs trust_tasks_rs::TrustTask documents with id, type,
+      issuer, recipient, issued_at and payload, and transports the same document
+      over DIDComm or TSP. Some DIDComm flows deliberately rely on authcrypt
+      sender authentication rather than attaching a document-level proof.
+
+framework_binding:
+  type: https://trustoverip.org/dtg/pdc/care-exception-response/0.1
+  issuer: requester DID or relationship-scoped requester identifier
+  recipient: VTC/VTA endpoint DID that evaluates the task
+  expiresAt: bounded by the application task validity window
+  payload_owner: IC-PDC-MED-001 application profile
+
+payload_members:
+  principal: subject on whose behalf the action is requested
+  requester: actor requesting the consequential operation
+  relationshipRef: contextual relationship reference
+  delegationRef: application authority-evidence reference; not itself proof of authority
+  action: exact requested application operation
+  resource: exact affected application resource
+  context: application execution context
+  policyVersion: policy version the application expects to be evaluated
+  authorityEvidenceState: present | missing | revoked | stale
+
+required_invariants:
+  - Identity or relationship MUST NOT be interpreted as delegated action authority.
+  - Action and resource MUST be bound independently; no wildcard expansion is permitted.
+  - The Trust Task document is a request envelope, not an authorization result.
+  - Current authority MUST be re-evaluated at the actuation boundary.
+  - Missing authority evidence MUST remain INDETERMINATE and MUST NOT become PERMIT.
+  - Care-domain semantics MUST remain inside payload.
+
+proof_transport_boundary:
+  generic_framework_observation: >-
+    The pinned Trust Tasks specification describes proof as a framework member
+    and current examples require proof verification against issuer.
+  openvtc_observation: >-
+    The pinned OpenVTC DIDComm implementation documents flows where authcrypt
+    transport authenticates the sender and no document-level proof is attached.
+  classification: unresolved-interoperability-boundary
+  rule: >-
+    An unsigned document exercised only through an authenticated OpenVTC
+    transport MUST NOT be reported as generic Trust Tasks conformance.
+
+claim_boundary:
+  established: evidence-backed PDC-to-Trust-Task document binding profile
+  not_established:
+    - generic Trust Tasks conformance
+    - VTC authorization semantics
+    - execution-time revocation enforcement by OpenVTC
+    - production DIDComm or TSP interoperability
+    - Candidate maturity
