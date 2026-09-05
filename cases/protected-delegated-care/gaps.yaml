@@ -1,0 +1,38 @@
+case_id: IC-PDC-MED-001
+gaps:
+  - id: PDC-GAP-001
+    application_requirement: represent a care relationship without implying delegated action authority
+    expected_capability: relationship semantics distinct from delegation and authorization
+    observed_capability: not yet established for the case's pinned DTG/VTC baseline
+    classification: unresolved
+    workaround: none
+    normative_change_proposed: false
+
+  - id: PDC-GAP-002
+    application_requirement: evaluate current delegation state at consequential execution time
+    expected_capability: runtime authorization path observes revocation/expiry after task creation
+    observed_capability: VTC/OpenVTC application surface not yet pinned for this case
+    classification: implementation_gap
+    workaround: deterministic case-local controller may model the invariant in Tranche 2, but MUST be labelled adapter-backed until replaced
+    normative_change_proposed: false
+
+  - id: PDC-GAP-003
+    application_requirement: bind principal, delegate/requester, exact action, resource and expiry for caregiver exception response
+    expected_capability: Trust Task profile sufficient for the bound request
+    observed_capability: plausible mapping; exact profile/object shape not yet exercised
+    classification: unresolved
+    workaround: none
+    normative_change_proposed: false
+
+  - id: PDC-GAP-004
+    application_requirement: measure privacy gain from selective disclosure / unlinkable proof at refill boundary
+    expected_capability: privacy-enhanced external verification
+    observed_capability: intentionally outside first medication-reminder case
+    classification: application_profile_gap
+    workaround: defer to follow-on refill case
+    normative_change_proposed: false
+
+rules:
+  - No gap may be silently converted into an upstream semantic assumption.
+  - A workaround must identify whether it is application-owned, adapter-backed, or implementation-specific.
+  - Normative change is proposed only after observed evidence distinguishes application profile, implementation, specification, and unresolved causes.
