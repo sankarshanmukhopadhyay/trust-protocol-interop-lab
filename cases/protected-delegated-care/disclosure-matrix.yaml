@@ -1,0 +1,53 @@
+case_id: IC-PDC-MED-001
+privacy_profile: P0-bounded-conventional-disclosure
+boundaries:
+  - id: core_to_channel
+    sender: care_coordination_core
+    receiver: channel_adapter
+    purpose: deliver reminder or bounded interaction message
+    required: [destination_ref, safe_message_payload]
+    prohibited_by_default: [prescription_image, diagnosis, medication_history, caregiver_graph]
+    correlation: contextual_channel_reference
+    retention: minimum_required_for_delivery_and_reconciliation
+
+  - id: core_to_caregiver
+    sender: care_coordination_core
+    receiver: caregiver
+    purpose: notify authorized exception and expose permitted response actions
+    required: [exception_ref, reminder_time, permitted_actions]
+    prohibited_by_default: [medication_name, diagnosis, prescription_image, broader_adherence_history, unrelated_relationships]
+    correlation: relationship_context_reference
+    authority: current_active_delegation_required
+
+  - id: core_to_scheduler
+    sender: care_coordination_core
+    receiver: scheduler
+    purpose: generate due reminder event
+    required: [opaque_plan_ref, opaque_action_ref, due_at, template_ref]
+    prohibited_by_default: [person_name, diagnosis, prescription_image, caregiver_identity]
+    correlation: case_local_opaque_refs
+
+  - id: caregiver_to_controller
+    sender: caregiver
+    receiver: authorization_controller
+    purpose: request bounded exception response
+    required: [task_ref, action, resource_ref, authority_evidence_ref]
+    prohibited_by_default: [unrelated_medication_data, unrelated_relationship_data]
+    authority: current_active_delegation_required
+
+  - id: evidence_writer
+    sender: authorization_controller
+    receiver: evidence_store
+    purpose: reconstruct consequential decision without creating a longitudinal clinical dossier
+    required: [event_type, actor_ref, action, resource_ref, decision, reason, policy_version, evaluated_at]
+    prohibited_by_default: [full_message_body, prescription_image, diagnosis, unnecessary_medication_details]
+    retention: bounded_and_explicit
+
+prohibited_message_fixture:
+  text: "You missed your hypertension medication ExampleDrug 40mg prescribed by Dr Example."
+  expected: POLICY_FAILURE
+  reason: MESSAGE_EXCEEDS_DISCLOSURE_SCOPE
+
+safe_exception_fixture:
+  text: "The 08:00 care reminder has not been acknowledged."
+  allowed_actions: [check_in, remind_again]
