@@ -55,6 +55,7 @@ The authoritative maturity and component registry remains [`catalog/interoperabi
 |---|---|
 | [TEA/TSP × MCP × Trust Tasks](tea-mcp-trust-tasks/) | Whether authenticated agent exchange, execution mechanics, delegated authority, and portable Trust Task semantics can coexist without one layer taking ownership of another. |
 | [Dual-Path Actuation Control](dpac-actuation/) | Whether a consequential action can occur only when current action-specific authority and an independently administered capability envelope concur at the actuation boundary. |
+| [Protected Delegated Care](protected-delegated-care/) | Whether a privacy-sensitive delegated-care application can keep relationship, bounded authority, current authorization, minimum disclosure, lifecycle state, channel interaction, and evidence distinct while consuming DTG/VTC through explicit mappings and adapter seams. |
 
 ## Pre-admission DTG pressure-test evidence
 
