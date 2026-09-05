@@ -117,7 +117,7 @@
       "role": "capability-and-operational-governance-architecture"
     },
     {
-      "id": "openvtc",
+      "id": "vtc-runtime",
       "authority": "OpenVTC/openvtc",
       "role": "dtg-vtc-runtime-and-application-integration-surface"
     }
