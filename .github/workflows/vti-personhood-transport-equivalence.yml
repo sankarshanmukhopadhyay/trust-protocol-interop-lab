@@ -24,12 +24,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Interop Lab
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: interop
 
       - name: Checkout immutable VTI target
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: OpenVTC/verifiable-trust-infrastructure
           ref: 4cf7368564dd25c55824d81f83d99d0965f8f28a

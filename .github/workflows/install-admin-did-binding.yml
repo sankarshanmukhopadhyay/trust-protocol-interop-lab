@@ -20,15 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: lab
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: OpenVTC/verifiable-trust-infrastructure
           ref: 96304b3b6ae76995e094e575560d74a43ee95e51
           path: vti
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: trustoverip/dtgwg-trust-tasks-tf
           ref: 134733ff934775db522522dc26cb79836da29256
