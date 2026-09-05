@@ -115,6 +115,11 @@
       "id": "govops",
       "authority": "GovOpsWG/GovOps",
       "role": "capability-and-operational-governance-architecture"
+    },
+    {
+      "id": "openvtc",
+      "authority": "OpenVTC/openvtc",
+      "role": "dtg-vtc-runtime-and-application-integration-surface"
     }
   ]
 }
