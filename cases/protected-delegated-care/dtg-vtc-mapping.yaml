@@ -5,7 +5,8 @@ purpose: >-
 reference_baselines:
   trust_tasks: "trustoverip/dtgwg-trust-tasks-spec @ 7c6e1bd4e1585cbf1a6363bd3cbf9059e90a335c"
   dtg_credentials: "DTG Core Credentials @ 344a66af868c192f15b511e7116ccab2039221de (existing Lab reference baseline)"
-  vtc_runtime: "OpenVTC/openvtc @ f93bc7e58f2766f3064e2b23ef877563069609ac"
+  openvtc_client: "OpenVTC/openvtc @ f93bc7e58f2766f3064e2b23ef877563069609ac"
+  vti_runtime: "OpenVTC/verifiable-trust-infrastructure @ 1e50665c5313bbb75df80a96602f35a4355c8154"
 mappings:
   - requirement: identify principal and delegate without treating identity as authority
     expected_surface: dtg_credentials
@@ -15,7 +16,9 @@ mappings:
   - requirement: represent care relationship separately from delegated action authority
     expected_surface: dtg_relationship_and_credential_semantics
     status: unresolved
-    evidence_needed: pin exact current relationship representation and prove non-collapse with delegation
+    evidence_available:
+      - cases/protected-delegated-care/authority-surface-observations.yaml
+    evidence_needed: normative mapping that preserves non-collapse between VRC relationship state and action delegation
 
   - requirement: bind requester, principal, action, resource, context and expiry into a consequential request
     expected_surface: trust_tasks
@@ -30,23 +33,36 @@ mappings:
 
   - requirement: re-evaluate current authority at execution time
     expected_surface: vtc_authorization_lifecycle
-    status: adapter_seam
-    evidence_needed: identify and exercise an actual VTC/OpenVTC current-authority evaluation surface and execute revoked-task race
+    status: unresolved
+    evidence_available:
+      - cases/protected-delegated-care/authority-surface-observations.yaml
+      - experiments/protected-delegated-care/run_authority_boundary.py
+    observed_result: >-
+      No exact generic delegated-action authority evaluator was found in the pinned
+      VTI/OpenVTC surfaces. The integration therefore fails closed as
+      INDETERMINATE/BLOCKED immediately before PDC actuation.
+    evidence_needed: an upstream or profile-defined evaluator that binds current delegated authority to the exact action/resource at execution time
 
   - requirement: propagate delegation revocation into later action denial
     expected_surface: dtg_vtc_lifecycle
     status: unresolved
-    evidence_needed: observed revocation/status semantics across the chosen implementation path
+    evidence_available:
+      - experiments/protected-delegated-care/run_authority_boundary.py
+    observed_result: >-
+      The case-local controller denies revoked delegation, but current VRC relationship
+      revocation and membership-currentness surfaces are not semantically sufficient to
+      claim upstream delegated-action revocation. No substitution is made.
+    evidence_needed: observed delegated-authority revocation/status semantics across an exact upstream execution path
 
   - requirement: enforce minimum disclosure at caregiver and channel boundaries
     expected_surface: application_profile_plus_dpip
     status: application_profile
-    evidence_needed: disclosure-policy execution trace; later DPIP observation fixtures
+    evidence_needed: runtime disclosure-policy traces and DPIP observation fixtures tracked by issue 136
 
   - requirement: pharmacy refill selective disclosure or unlinkable proof
     expected_surface: dtg_zkp_or_selective_disclosure
     status: deferred
-    evidence_needed: separate follow-on case IC-PDC-REFILL-001 or equivalent
+    evidence_needed: follow-on refill work tracked by issue 137
 
 observed_integration_boundaries:
   - id: PDC-DTG-BND-001
@@ -63,16 +79,29 @@ observed_integration_boundaries:
       OpenVTC-transport-bound candidate until this boundary is reconciled and
       exercised. It MUST NOT be described as generic Trust Tasks conformance.
 
+  - id: PDC-DTG-BND-002
+    topic: current relationship/member state vs delegated action authority
+    observation: >-
+      The pinned VTI implementation contains live current-membership checks for VRC
+      publication, VRC relationship revocation, and room-specific authority-chain
+      evaluation, but none of those observed surfaces is a generic evaluator of the
+      PDC caregiver's current delegated authority for an exact action/resource.
+    classification: implementation_gap
+    rule: >-
+      PDC MUST fail closed as INDETERMINATE/BLOCKED rather than substituting any
+      weaker or domain-specific surface for delegated-action authority.
+
 classification_values:
   direct: existing implementation surface used without case-local semantic substitution
   candidate: plausible mapping requiring executable evidence before claim
   application_profile: intentionally owned by PDC rather than upstream
   adapter_seam: explicit temporary boundary standing in for an incomplete or unexercised implementation surface
   unresolved: required semantic mapping has not yet been established
+  implementation_gap: current implementation does not expose the required exact surface at the pinned baseline
   deferred: outside IC-PDC-MED-001 initial claim boundary
 
 rules:
   - A candidate or adapter mapping MUST NOT be reported as upstream conformance.
-  - An unresolved mapping MUST remain visible and MUST NOT be converted into PASS.
+  - An unresolved or implementation-gap mapping MUST remain visible and MUST NOT be converted into PASS.
   - A case-local workaround MUST be recorded in gaps.yaml before use.
   - Protocol changes MUST NOT be proposed merely to make the case pass; first classify the observed mismatch.
