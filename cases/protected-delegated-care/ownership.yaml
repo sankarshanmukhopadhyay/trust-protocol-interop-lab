@@ -1,0 +1,29 @@
+case_id: IC-PDC-MED-001
+ownership:
+  principal_identity:
+    owner: application_profile
+    note: Synthetic case identity only; identity does not create authority.
+  care_relationship:
+    owner: dtg_vtc_mapping
+    note: Relationship semantics must remain distinct from delegation and authority.
+  delegated_authority:
+    owner: principal_or_governing_authority
+  task_authorization:
+    owner: deterministic_policy_controller
+  medication_plan_state:
+    owner: care_coordination_core
+  reminder_state:
+    owner: care_coordination_core
+  channel_transport:
+    owner: external_adapter
+  disclosure_policy:
+    owner: application_profile
+  evidence_profile:
+    owner: trust_protocol_interop_lab
+  assurance:
+    owner: downstream_assurance_consumer
+lab_boundary: >-
+  The Lab owns this experimental application profile, mappings, fixtures,
+  acceptance contracts, implementation seams, evidence, and maturity claim.
+  It does not redefine DTG/VTC normative semantics, establish clinical authority,
+  or make channel-provider privacy claims that have not been observed.
