@@ -3,7 +3,7 @@ gaps:
   - id: PDC-GAP-001
     application_requirement: represent a care relationship without implying delegated action authority
     expected_capability: relationship semantics distinct from delegation and authorization
-    observed_capability: not yet established for the case's pinned DTG/VTC baseline
+    observed_capability: current VRC relationship surfaces are observable, but no evidence supports treating relationship state as delegated action authority
     classification: unresolved
     workaround: none
     normative_change_proposed: false
@@ -11,17 +11,30 @@ gaps:
   - id: PDC-GAP-002
     application_requirement: evaluate current delegation state at consequential execution time
     expected_capability: runtime authorization path observes revocation/expiry after task creation
-    observed_capability: VTC/OpenVTC application surface not yet pinned for this case
+    observed_capability: >-
+      At OpenVTC/verifiable-trust-infrastructure@1e50665c5313bbb75df80a96602f35a4355c8154,
+      the observed Trust Task dispatcher, live membership checks, VRC relationship lifecycle,
+      and room-specific authority chain do not expose an exact generic delegated-action
+      authority evaluator for the PDC action/resource pair.
     classification: implementation_gap
-    workaround: deterministic case-local controller may model the invariant in Tranche 2, but MUST be labelled adapter-backed until replaced
+    workaround: >-
+      Fail closed at the PDC actuation boundary with INDETERMINATE/BLOCKED. The
+      deterministic case-local controller remains comparison evidence only and MUST NOT
+      be reported as upstream VTC authorization.
+    evidence:
+      - cases/protected-delegated-care/authority-surface-observations.yaml
+      - experiments/protected-delegated-care/run_authority_boundary.py
     normative_change_proposed: false
 
   - id: PDC-GAP-003
     application_requirement: bind principal, delegate/requester, exact action, resource and expiry for caregiver exception response
     expected_capability: Trust Task profile sufficient for the bound request
-    observed_capability: plausible mapping; exact profile/object shape not yet exercised
-    classification: unresolved
-    workaround: none
+    observed_capability: PDC application profile and executable Trust Task-shaped binding are implemented; generic conformance remains limited by the proof/transport boundary
+    classification: adapter_backed
+    workaround: retain explicit application profile and claim boundary
+    evidence:
+      - cases/protected-delegated-care/trust-task-profile.yaml
+      - experiments/protected-delegated-care/run_trust_task_binding.py
     normative_change_proposed: false
 
   - id: PDC-GAP-004
@@ -29,7 +42,7 @@ gaps:
     expected_capability: privacy-enhanced external verification
     observed_capability: intentionally outside first medication-reminder case
     classification: application_profile_gap
-    workaround: defer to follow-on refill case
+    workaround: defer to follow-on refill case tracked by issue 137
     normative_change_proposed: false
 
 rules:
