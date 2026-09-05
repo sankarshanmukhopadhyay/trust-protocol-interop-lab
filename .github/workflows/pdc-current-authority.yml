@@ -1,0 +1,42 @@
+name: PDC current-authority evidence
+
+on:
+  pull_request:
+    paths:
+      - 'cases/protected-delegated-care/**'
+      - 'experiments/protected-delegated-care/**'
+      - '.github/workflows/pdc-current-authority.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cases/protected-delegated-care/**'
+      - 'experiments/protected-delegated-care/**'
+      - '.github/workflows/pdc-current-authority.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  current-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Run PDC current-authority actuation-boundary evidence
+        run: >-
+          python experiments/protected-delegated-care/run_authority_boundary.py --check
+          --output "${{ runner.temp }}/pdc-current-authority.json"
+
+      - name: Upload PDC current-authority evidence
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: pdc-current-authority
+          path: ${{ runner.temp }}/pdc-current-authority.json
+          if-no-files-found: error
