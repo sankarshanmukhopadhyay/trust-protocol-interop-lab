@@ -1,0 +1,28 @@
+track: DTG-371-Track-A
+current_target: e393e38da4941202143e293b555413d8c86ef3b3
+propositions:
+  DTG-371-P02:
+    evidence_requirements:
+      - ER-REL-DID-AB
+      - ER-STATUS-AB
+      - ER-TASK-AB
+      - ER-VERIFIER-AB
+    expected_after_this_bounded_run: indeterminate-residual
+  DTG-371-P13:
+    evidence_requirements:
+      - ER-REL-DID-AB
+      - ER-STATUS-AB
+      - ER-TASK-AB
+      - ER-VERIFIER-AB
+    expected_after_this_bounded_run: indeterminate-residual
+  DTG-371-P04:
+    evidence_requirements:
+      - ER-REL-DID-AB
+      - ER-VERIFIER-AB
+    pressure: >-
+      Observe fresh context-specific relationship-equivalent binders without inferring
+      that identifier durability determines declared correlation scope.
+    expected_after_this_bounded_run: evidence-for-dpip-review
+boundary: >-
+  These are routing expectations, not precomputed assurance judgments. DPIP judges
+  the evidence package and RAHP reconciles the returned result.
