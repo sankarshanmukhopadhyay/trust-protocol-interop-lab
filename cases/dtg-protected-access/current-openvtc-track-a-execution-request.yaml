@@ -1,0 +1,7 @@
+execution_request:
+  issue: 153
+  workflow: .github/workflows/current-openvtc-track-a-evidence.yml
+  target: OpenVTC/verifiable-trust-infrastructure@e393e38da4941202143e293b555413d8c86ef3b3
+  trigger: pull_request
+  expected_artifact: current-openvtc-track-a-runtime-upstream-observation
+  inspect_before_merge: true
