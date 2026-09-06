@@ -1,0 +1,1 @@
+Open PR -> observe Current OpenVTC Track A evidence workflow -> inspect artifact -> merge/close #153 if producer obligation satisfied.
