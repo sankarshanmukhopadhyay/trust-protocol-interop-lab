@@ -1,0 +1,14 @@
+producer_terminal_states:
+  success_with_complete_requirements:
+    issue_153: close-completed
+    dpip: examine
+  success_with_not_evidenced_residuals:
+    issue_153: close-completed-with-bounded-residuals
+    dpip: examine-and-retain-evidence-gaps
+  workflow_failure:
+    issue_153: remain-open
+    dpip: do-not-consume
+  target_surface_changed:
+    issue_153: remain-open-and-review-adapter
+    dpip: do-not-consume-stale-artifact
+current_expected_path: success_with_not_evidenced_residuals
