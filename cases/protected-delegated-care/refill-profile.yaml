@@ -1,6 +1,10 @@
 case_id: IC-PDC-REFILL-001
 parent_case: IC-PDC-MED-001
 maturity: experimental
+tracking:
+  issue: 137
+  prescription_lifecycle_follow_up: 150
+  assurance_follow_up: 138
 purpose: >-
   Test whether a verifier can establish a narrowly scoped refill-eligibility proposition
   without receiving prescription image, diagnosis, medication history, caregiver data,
