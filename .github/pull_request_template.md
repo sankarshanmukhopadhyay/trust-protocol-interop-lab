@@ -8,6 +8,14 @@ Describe the bounded change and the Interop Case, artifact, workflow, or governa
 - Which upstream baselines or authorities remain external?
 - Does this change alter a maturity, interoperability, conformance, security, or certification claim?
 
+## Durable artifact placement
+
+For every new durable file, identify its role as **executable contract**, **implementation**, **runtime evidence**, **assurance/interoperability judgment**, **historical record**, or **canonical case/reader documentation**. Cases, vectors, manifests and evidence packages are product surfaces rather than duplicate docs. Prefer stable case/evidence IDs and Issue/PR links over repeating cross-repository explanatory prose.
+
+- New durable file(s), if any:
+- Role / canonical owner:
+- Existing case/evidence artifact considered before adding explanatory prose:
+
 ## Evidence
 
 - [ ] Relevant positive path exercised
