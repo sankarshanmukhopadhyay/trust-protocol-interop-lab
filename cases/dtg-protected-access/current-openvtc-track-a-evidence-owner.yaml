@@ -1,0 +1,9 @@
+ownership:
+  runtime_observation:
+    owner: trust-protocol-interop-lab
+  privacy_evaluation:
+    owner: dtg-privacy-implementation-profile
+  assurance_reconciliation:
+    owner: rahp-toolkit
+  normative_baseline:
+    owner: upstream-read-only
