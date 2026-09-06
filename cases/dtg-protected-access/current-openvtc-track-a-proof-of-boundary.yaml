@@ -1,0 +1,13 @@
+invariants:
+  - id: current-target-only
+    statement: runtime artifact target revision equals the declared immutable current pin
+  - id: positive-control-visible
+    statement: seeded relationship-equivalent binder is detected across A/B
+  - id: pressure-not-seeded
+    statement: pressure contexts use distinct deterministic client identities
+  - id: no-unexecuted-absence
+    statement: unexecuted status/policy and Trust Task surfaces classify not-evidenced
+  - id: upstream-clean
+    statement: target checkout is clean after temporary observer removal
+  - id: no-assurance-collapse
+    statement: producer output is evidence and cannot itself establish DPIP PASS or RAHP GREEN
