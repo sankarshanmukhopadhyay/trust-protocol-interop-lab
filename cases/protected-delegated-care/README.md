@@ -13,6 +13,12 @@ The first bounded scenario is medication assistance: a principal establishes a c
 
 The case is intentionally **application-level**. It is not a medication-reminder product claim, clinical system, prescribing system, pharmacy network, or healthcare conformance profile.
 
+## Why this matters
+
+A familiar care application can look simple while quietly collapsing consequential trust decisions into one role: someone knows about a medication plan, can reach the care recipient, and is therefore treated as entitled to inspect or act on care state. PDC pressure-tests the opposite architecture. Relationship, delegation, current authority, task authorization, execution, disclosure, and evidence remain independently observable, while stale or missing authority fails closed.
+
+The medical-prescription extension adds another important separation: a prescription or medication order can exist and be possessed without thereby proving current refill eligibility or legal dispensing authority. That distinction lets the Discussion be tested as trust architecture rather than smuggled into application convenience.
+
 ## Governing proposition
 
 A consequential care action may execute only when the current relationship, bounded delegation, applicable policy, requested action, resource, lifecycle state, and available evidence all permit it. Information possession, identity, relationship, channel access, or technical capability is never sufficient on its own.
@@ -54,6 +60,12 @@ bounded state mutation + evidence
 ```
 
 No channel webhook receives a privileged bypass around the same controller used by other consequential actions. Missing evidence never becomes `PASS` or `PERMIT`.
+
+## Concrete scenario
+
+The base executable path creates synthetic principal and caregiver identities, establishes a care relationship, delegates only bounded exception-handling capabilities, activates a human-approved synthetic medication plan, dispatches a reminder, records a timeout, sends a minimum-disclosure caregiver exception, and evaluates a bounded re-reminder request against current authority immediately before actuation. The same class of request is exercised after revocation and must fail without authoritative state mutation.
+
+The bounded refill extension then evaluates a synthetic medication order with one remaining refill. The verifier receives only the proposition needed for the refill decision; expired, revoked, superseded, exhausted, context-mismatched, stale-challenge, or replayed requests fail closed or are idempotent. Prescription existence, holder possession, refill eligibility, and any later dispensing authority remain distinct states.
 
 ## Executed implementation chain
 
@@ -102,6 +114,12 @@ Promotion is blocked by four material boundaries:
 4. relationship/current-membership state must not be substituted for delegated consequential-action authority without an explicit semantic mapping.
 
 These blockers are recorded in [`assurance-decision.yaml`](assurance-decision.yaml) and the RAHP review register. `INDETERMINATE` remains non-green by design.
+
+## Where it resolved
+
+The implementation programme resolved the application-owned portions of the original Discussion into executable contracts and evidence: deterministic care-state transitions, bounded caregiver action, Trust Task-shaped request binding, application-level disclosure enforcement, replay/idempotency behavior, selective-disclosure comparison, and prescription-to-refill lifecycle checks are all now reproducible.
+
+It also resolved the maturity question for this tranche: the correct current disposition is **Experimental**, not Candidate. That is an assurance result rather than an incomplete implementation state. The remaining blockers are explicitly upstream/runtime evidence questions and are retained as such instead of being hidden behind case-local substitutions.
 
 ## What the work established
 
