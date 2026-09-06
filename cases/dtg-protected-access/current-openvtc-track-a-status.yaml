@@ -1,0 +1,16 @@
+tracking_issue: 153
+state: implementation-ready-awaiting-ci
+implemented:
+  - current-target adapter
+  - immutable current OpenVTC pin
+  - positive control
+  - context-distinct pressure case
+  - evidence boundary assertions
+  - DPIP export
+  - artifact upload
+  - Dogwood historical quarantine
+runtime_evidence:
+  state: pending-workflow-execution
+closure_rule: >-
+  Do not close #153 until the GitHub Actions workflow succeeds and its uploaded
+  source-pinned evidence artifact is inspected as suitable for DPIP consumption.
