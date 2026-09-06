@@ -1,0 +1,7 @@
+evidence_tranche: current-openvtc-track-a
+version: 1
+created: '2026-09-06'
+source_decision:
+  rahp_pr: 439
+  rahp_merge: feb84899a4d28d65099bfa9817ab0d23b78d8dea
+interop_tracking_issue: 153
