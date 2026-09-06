@@ -1,0 +1,10 @@
+artifact:
+  workflow: Current OpenVTC Track A evidence
+  name: current-openvtc-track-a-runtime-upstream-observation
+  contents:
+    - current-openvtc-positive-control.yaml
+    - current-openvtc-track-a.yaml
+    - current-openvtc-positive-control-provided-evidence.json
+    - current-openvtc-track-a-provided-evidence.json
+  evidence_class: runtime-upstream-observation
+  target_revision: e393e38da4941202143e293b555413d8c86ef3b3
