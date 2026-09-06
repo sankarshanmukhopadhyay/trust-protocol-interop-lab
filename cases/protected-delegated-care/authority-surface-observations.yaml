@@ -1,0 +1,48 @@
+case_id: IC-PDC-MED-001
+issue: 135
+baseline:
+  vti: OpenVTC/verifiable-trust-infrastructure@1e50665c5313bbb75df80a96602f35a4355c8154
+  openvtc_client: OpenVTC/openvtc@f93bc7e58f2766f3064e2b23ef877563069609ac
+purpose: >-
+  Record only the upstream implementation surfaces actually observed while
+  testing execution-time current authority for PDC. These observations are
+  evidence inputs, not claims that the surfaces are semantically equivalent.
+surfaces:
+  - id: vtc_trust_task_dispatch
+    observed_behavior:
+      - parses Trust Task documents
+      - validates expiry and recipient binding
+      - resolves holder identity per transport/verb
+      - dispatches by task type
+    delegated_action_authority: false
+    pdc_use: transport_and_framework_validation_only
+
+  - id: vrc_publish_current_membership
+    observed_behavior:
+      - verifies document proof on the relationship publication route
+      - checks current community membership live
+      - separates credential issuance from authorization to publish
+    delegated_action_authority: false
+    pdc_use: architectural_analogue_only
+
+  - id: vrc_relationship_revoke
+    observed_behavior:
+      - retracts a published VRC relationship edge
+      - treats revocation as relationship-row deletion for this surface
+    delegated_action_authority: false
+    pdc_use: relationship_lifecycle_only
+
+  - id: room_authority_chain
+    observed_behavior:
+      - room operations are authorized by the room-specific authority chain
+      - room authority deliberately does not use the service ACL/session as authority
+    delegated_action_authority: false
+    pdc_use: domain_specific_analogue_only
+
+conclusion:
+  exact_current_delegated_action_surface: not_found
+  integration_result: indeterminate_blocked
+  fallback_policy: >-
+    The PDC actuation boundary MUST NOT substitute relationship currentness,
+    membership currentness, VRC revocation, room authority, or the application-local
+    delegation model for an unobserved upstream delegated-action evaluator.
