@@ -1,0 +1,10 @@
+ci_contract:
+  target_sha: e393e38da4941202143e293b555413d8c86ef3b3
+  must_detect_seeded_join: true
+  pressure_contexts_distinct: true
+  must_preserve_not_evidenced:
+    - ER-STATUS-AB
+    - ER-TASK-AB
+  must_export_dpip_binding: true
+  must_leave_target_checkout_clean: true
+  must_upload_artifact: true
