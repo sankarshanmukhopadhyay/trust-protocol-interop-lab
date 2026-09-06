@@ -19,7 +19,8 @@ on:
 permissions:
   contents: read
 jobs:
-  validate:
+  hidden-subject-binding:
+    name: hidden-subject-binding
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
