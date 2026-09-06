@@ -1,0 +1,62 @@
+case_id: IC-PDC-REFILL-001
+parent_case: IC-PDC-MED-001
+tracking:
+  issue: 150
+purpose: >-
+  Make the prescription/order-to-refill trust boundary explicit without implementing prescribing,
+  pharmacy dispensing, or clinical decision support.
+entities:
+  medication_order:
+    fields: [order_ref, subject_ref, issued_at, expires_at, status, refill_limit, refills_used]
+    statuses: [active, expired, revoked, superseded]
+  refill_request:
+    fields: [request_ref, order_ref, verifier_context, challenge, requested_scope]
+  refill_effect:
+    fields: [effect_ref, request_ref, outcome]
+invariants:
+  - id: RX-INV-001
+    statement: Prescription/order existence does not itself authorize dispensing.
+  - id: RX-INV-002
+    statement: Holder possession does not itself establish refill eligibility.
+  - id: RX-INV-003
+    statement: Refill eligibility must be evaluated against current order status, expiry and remaining refill allowance.
+  - id: RX-INV-004
+    statement: A refill proof must be bound to an exact verifier context and freshness challenge.
+  - id: RX-INV-005
+    statement: Expired, revoked, superseded or exhausted orders must fail closed and cause no refill effect.
+  - id: RX-INV-006
+    statement: Replay or context mismatch must not create a second refill effect.
+  - id: RX-INV-007
+    statement: Prescription image, diagnosis, broader medication history and unrelated care data remain outside the verifier proof boundary.
+scenarios:
+  positive:
+    - id: RX-POS-001
+      description: active unexpired order with one remaining refill, correct context and fresh challenge
+      expected: PERMIT
+  negative:
+    - id: RX-NEG-001
+      description: expired order
+      expected: DENY
+    - id: RX-NEG-002
+      description: revoked order
+      expected: DENY
+    - id: RX-NEG-003
+      description: superseded order
+      expected: DENY
+    - id: RX-NEG-004
+      description: refill allowance exhausted
+      expected: DENY
+    - id: RX-NEG-005
+      description: verifier context mismatch
+      expected: DENY
+    - id: RX-NEG-006
+      description: stale or mismatched challenge
+      expected: DENY
+    - id: RX-NEG-007
+      description: replay after successful refill effect
+      expected: IDEMPOTENT_OR_DENY
+claim_boundary:
+  - No prescribing or clinical recommendation semantics are implemented.
+  - No legal pharmacy dispensing authority is established.
+  - No production e-prescription interoperability is claimed.
+  - The lifecycle is a synthetic trust-boundary model for assurance pressure testing.
