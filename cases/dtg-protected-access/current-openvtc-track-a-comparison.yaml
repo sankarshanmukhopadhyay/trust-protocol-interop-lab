@@ -1,0 +1,12 @@
+comparison:
+  historical:
+    label: Dogwood RC-1
+    target_revision: cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b
+    notable_pressure: identical relationship-equivalent binder was observable in the bounded historical path
+  current:
+    target_revision: e393e38da4941202143e293b555413d8c86ef3b3
+    question: >-
+      Does a context-distinct execution with distinct client identities expose an
+      unintended stable join, while the positive control still proves the observer
+      can detect a deliberately shared binder?
+comparison_is_assurance_judgment: false
