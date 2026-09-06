@@ -1,0 +1,16 @@
+states:
+  planned:
+    next: implemented
+  implemented:
+    next: executed
+  executed:
+    next: inspected
+  inspected:
+    next: handed-to-dpip
+  handed-to-dpip:
+    terminal_for_interop_lab: true
+current: implemented
+transition_guard:
+  implemented_to_executed: GitHub Actions workflow succeeds
+  executed_to_inspected: uploaded artifact provenance and classifications verified
+  inspected_to_handed-to-dpip: source-pinned provided_evidence package is suitable for new DPIP examination
