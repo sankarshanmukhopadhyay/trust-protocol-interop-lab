@@ -1,0 +1,4 @@
+implementation_ready: true
+runtime_evidence_ready: false
+reason: runtime evidence becomes ready only after PR-triggered workflow success and artifact inspection
+tracking_issue: 153
