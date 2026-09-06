@@ -1,0 +1,15 @@
+issue: 153
+acceptance:
+  current_openvtc_revision_pinned: true
+  dogwood_used_as_current_target: false
+  existing_producer_reused: true
+  new_framework_created: false
+  positive_control_defined: true
+  pressure_case_defined: true
+  dpip_export_defined: true
+  source_checkout_cleanliness_asserted: true
+pending_until_ci:
+  - positive_control_detected
+  - pressure_case_executed
+  - evidence_artifact_uploaded
+  - artifact_inspected_for_dpip_handoff
