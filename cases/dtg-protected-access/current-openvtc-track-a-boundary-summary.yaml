@@ -1,0 +1,9 @@
+summary:
+  current_target: e393e38da4941202143e293b555413d8c86ef3b3
+  dogwood_current: false
+  producer: composed-unlinkability-v1
+  new_framework: false
+  current_rel_verifier_evidence: to-be-executed-in-ci
+  current_status_task_evidence: expected-not-evidenced-on-selected-path
+  downstream_privacy_judgment: DPIP
+  downstream_assurance_judgment: RAHP
