@@ -1,0 +1,51 @@
+evidence_class: runtime-upstream-observation
+implementation:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: e393e38da4941202143e293b555413d8c86ef3b3
+experiment:
+  kind: positive-control
+  expected_join: must-detect
+contexts:
+  A:
+    verifier: current-openvtc-control-verifier-a
+    purpose: dtg-track-a-positive-control-a
+    challenge: current-openvtc-control-challenge-a
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_context.py
+      - --context
+      - A
+      - --verifier
+      - current-openvtc-control-verifier-a
+      - --purpose
+      - dtg-track-a-positive-control-a
+      - --challenge
+      - current-openvtc-control-challenge-a
+      - --client-seed
+      - '0x11'
+  B:
+    verifier: current-openvtc-control-verifier-b
+    purpose: dtg-track-a-positive-control-b
+    challenge: current-openvtc-control-challenge-b
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_context.py
+      - --context
+      - B
+      - --verifier
+      - current-openvtc-control-verifier-b
+      - --purpose
+      - dtg-track-a-positive-control-b
+      - --challenge
+      - current-openvtc-control-challenge-b
+      - --client-seed
+      - '0x11'
+correlator_origins:
+  equivalent_relationship_binder: fixture-supplied
+surface_producers:
+  equivalent_relationship_binder: OpenVTC/verifiable-trust-infrastructure
+assurance_boundary: >-
+  Positive control deliberately reuses the same deterministic client identity across
+  A and B. The capture must detect that seeded join. This validates the observation
+  path's ability to see a known correlator; it is not evidence of an unintended
+  current OpenVTC privacy defect.
