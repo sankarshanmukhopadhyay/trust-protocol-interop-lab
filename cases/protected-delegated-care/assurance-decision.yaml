@@ -1,0 +1,80 @@
+case_id: IC-PDC-MED-001
+decision_id: PDC-ASSURANCE-2026-09-06
+issue: 138
+decision: remain_experimental
+promotion_to_candidate: false
+workflow_green: true
+assurance_green: false
+reason: >-
+  The executable case, Trust Task binding, current-authority boundary, runtime privacy evidence,
+  selective-disclosure refill comparison, and prescription-to-refill lifecycle are reproducible,
+  but material assurance questions remain unresolved or INDETERMINATE at upstream/runtime boundaries.
+evidence:
+  deterministic_core:
+    status: pass
+    refs:
+      - experiments/protected-delegated-care/core.py
+      - experiments/protected-delegated-care/run.py
+  trust_task_binding:
+    status: bounded_pass
+    refs:
+      - cases/protected-delegated-care/trust-task-profile.yaml
+      - experiments/protected-delegated-care/run_trust_task_binding.py
+    limitation: generic Trust Tasks proof vs authenticated transport boundary remains unresolved
+  current_authority:
+    status: indeterminate_blocked
+    refs:
+      - cases/protected-delegated-care/authority-surface-observations.yaml
+      - experiments/protected-delegated-care/run_authority_boundary.py
+    blocker: no exact upstream generic delegated-action authority evaluator observed at pinned VTI/OpenVTC baselines
+  runtime_privacy:
+    status: mixed
+    refs:
+      - cases/protected-delegated-care/dpip-runtime-evidence-profile.yaml
+      - experiments/protected-delegated-care/run_runtime_privacy.py
+    application_boundary: pass
+    provider_network_boundary: indeterminate
+  refill_disclosure:
+    status: bounded_pass
+    refs:
+      - cases/protected-delegated-care/refill-profile.yaml
+      - experiments/protected-delegated-care/run_refill_disclosure.py
+    decision: selective_disclosure_preferred_at_current_evidence_level
+    zkp_required: false
+    zkp_status: indeterminate_until_real_crypto_exercised
+  prescription_refill_lifecycle:
+    status: bounded_pass
+    refs:
+      - cases/protected-delegated-care/prescription-refill-lifecycle.yaml
+      - experiments/protected-delegated-care/run_prescription_refill_lifecycle.py
+blockers:
+  - id: PDC-BLOCK-001
+    state: INDETERMINATE
+    topic: current delegated-action authority at actuation
+    consequence: promotion_blocked
+  - id: PDC-BLOCK-002
+    state: INDETERMINATE
+    topic: provider/network/device confidentiality and cross-service correlation
+    consequence: promotion_blocked
+  - id: PDC-BLOCK-003
+    state: unresolved
+    topic: Trust Task document proof versus OpenVTC authenticated-transport semantics
+    consequence: generic conformance claim_blocked
+  - id: PDC-BLOCK-004
+    state: unresolved
+    topic: relationship/current-membership state versus delegated action authority
+    consequence: upstream semantic substitution_forbidden
+promotion_requirements:
+  - exercise an exact upstream/profile-defined current delegated-action authority evaluator for the exact action/resource at actuation time
+  - obtain or deliberately scope out provider/network privacy evidence with a justified DPIP disposition
+  - reconcile Trust Task proof/authenticated-transport semantics sufficiently for the intended interoperability claim
+  - preserve relationship and delegation as non-collapsible concepts across the exercised path
+  - rerun bounded assurance after the above evidence exists
+assurance_rules:
+  - Missing evidence MUST NOT become PASS.
+  - INDETERMINATE is non-green.
+  - CI success is not an assurance disposition.
+  - A useful Experimental result is preferable to premature maturity promotion.
+claim_boundary:
+  - This decision does not certify clinical, pharmacy, prescribing, dispensing, healthcare-security, or production-readiness properties.
+  - IC-PDC-REFILL-001 remains a bounded experimental extension and does not make ZKP mandatory for IC-PDC-MED-001.
