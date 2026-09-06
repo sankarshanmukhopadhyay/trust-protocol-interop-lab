@@ -1,0 +1,51 @@
+case_id: IC-PDC-REFILL-001
+parent_case: IC-PDC-MED-001
+maturity: experimental
+tracking:
+  issue: 137
+  prescription_lifecycle_follow_up: 150
+  assurance_follow_up: 138
+purpose: >-
+  Test whether a verifier can establish a narrowly scoped refill-eligibility proposition
+  without receiving prescription image, diagnosis, medication history, caregiver data,
+  prescriber identity, or a durable cross-context subject identifier.
+proposition:
+  id: refill-eligibility-v1
+  statement: holder is eligible for one refill under a current synthetic medication-order reference
+  verifier_may_learn:
+    - eligible: true
+    - refill_scope: one_refill
+    - medication_class_ref
+    - freshness_bound: true
+  verifier_must_not_learn:
+    - subject_id
+    - prescription_image
+    - diagnosis
+    - medication_history
+    - caregiver_identity
+    - caregiver_graph
+    - prescriber_identity
+    - unrelated_care_data
+    - durable_cross_context_identifier
+constructions:
+  ordinary_minimized:
+    description: ordinary minimized presentation with a contextual subject reference
+    disclosed: [eligible, refill_scope, medication_class_ref, contextual_subject_ref]
+    expected_privacy: minimum_disclosure_but_contextual_identifier_visible
+  selective_disclosure:
+    description: disclose only the verifier-required refill claims from a larger synthetic credential
+    disclosed: [eligible, refill_scope, medication_class_ref]
+    expected_privacy: improved_attribute_minimization
+  unlinkable_zkp_candidate:
+    description: prove refill proposition without exposing subject or source credential identifier
+    disclosed: [eligible, refill_scope, medication_class_ref]
+    expected_privacy: candidate_cross_context_linkability_reduction
+    implementation_status: construction_model_only
+selection_rule: >-
+  Prefer ordinary minimisation unless the verifier needs a proposition whose required privacy
+  property cannot be satisfied without selective disclosure. Prefer selective disclosure over
+  a ZKP-specific construction unless measured linkability requires the stronger mechanism.
+claim_boundary:
+  - This profile does not establish production pharmacy interoperability.
+  - This profile does not establish legal authority to dispense medication.
+  - The ZKP construction is a modeled candidate unless cryptographic proof generation and verification are directly exercised.

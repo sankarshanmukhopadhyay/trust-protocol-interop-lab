@@ -1,0 +1,35 @@
+name: PDC refill disclosure evidence
+
+on:
+  pull_request:
+    paths:
+      - "cases/protected-delegated-care/**"
+      - "experiments/protected-delegated-care/**"
+      - ".github/workflows/pdc-refill-disclosure.yml"
+  push:
+    branches: [main]
+    paths:
+      - "cases/protected-delegated-care/**"
+      - "experiments/protected-delegated-care/**"
+      - ".github/workflows/pdc-refill-disclosure.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  pdc-refill-disclosure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Produce refill disclosure comparison evidence
+        run: python experiments/protected-delegated-care/run_refill_disclosure.py --output "${{ runner.temp }}/pdc-refill-disclosure.json"
+      - name: Upload refill disclosure evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: pdc-refill-disclosure
+          path: "${{ runner.temp }}/pdc-refill-disclosure.json"
