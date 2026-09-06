@@ -1,0 +1,15 @@
+current_evidence_target:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: e393e38da4941202143e293b555413d8c86ef3b3
+comparators:
+  - label: Dogwood RC-1
+    revision: cb01d0a758863fb3a02f9f4eef2c4f15f56c4c3b
+    role: historical-regression-comparator
+    may_satisfy_current_requirement: false
+    permitted_use:
+      - compare prior identical relationship-equivalent binder pressure
+      - inform regression test design
+    prohibited_use:
+      - relabel historical observations as current OpenVTC behavior
+      - satisfy a current-baseline DPIP evidence requirement
+      - promote RAHP state on its own
