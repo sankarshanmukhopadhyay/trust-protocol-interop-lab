@@ -1,0 +1,12 @@
+merge_gate:
+  repository_assurance: required
+  current_openvtc_track_a_evidence_workflow: required
+  current_runtime_artifact_inspection: required
+  upstream_checkout_clean: required
+  positive_control_detected: required
+  pressure_case_source_pinned: required
+  dpip_export_present: required
+prohibited_merge_basis:
+  - expected result only
+  - historical Dogwood result only
+  - generic harness self-test only
