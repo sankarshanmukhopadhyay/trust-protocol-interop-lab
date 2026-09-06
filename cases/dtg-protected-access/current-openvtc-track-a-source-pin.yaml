@@ -1,0 +1,9 @@
+source_pin:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: e393e38da4941202143e293b555413d8c86ef3b3
+  observed_as_main_on: '2026-09-06'
+  role: executed-current-baseline
+execution_rule: >-
+  The workflow must execute this exact immutable revision. If a later current-main
+  revision is desired, update the evidence tranche explicitly and generate a new
+  source-pinned artifact rather than silently moving this pin.
