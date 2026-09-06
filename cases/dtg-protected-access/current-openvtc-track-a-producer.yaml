@@ -1,0 +1,12 @@
+producer:
+  capability: composed-unlinkability-v1
+  adapter: experiments/dtg-protected-access/current_openvtc_context.py
+  capture: experiments/dtg-protected-access/capture_ab_runtime.py
+  workflow: .github/workflows/current-openvtc-track-a-evidence.yml
+  positive_control: cases/dtg-protected-access/current-openvtc-track-a-positive-control.yaml
+  pressure_case: cases/dtg-protected-access/current-openvtc-track-a-runtime-ab.yaml
+properties:
+  target_specific_adapter: true
+  generic_capture_semantics_changed: false
+  new_framework_introduced: false
+  privacy_judgment_performed_by_producer: false
