@@ -1,0 +1,9 @@
+rahp_reconciliation_hint:
+  current_evidence_available_for:
+    - DTG-371-P04
+    - DTG-371-P02
+    - DTG-371-P13
+  do_not_promote_automatically: true
+  likely_residual_if_status_task_unresolved: INDETERMINATE
+  likely_portfolio_colour_if_material_residual: AMBER
+  authority: non-normative-routing-hint
