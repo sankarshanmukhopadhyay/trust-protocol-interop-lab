@@ -1,0 +1,15 @@
+tracking_issue: 153
+artifacts:
+  executable:
+    - .github/workflows/current-openvtc-track-a-evidence.yml
+    - experiments/dtg-protected-access/current_openvtc_context.py
+  cases:
+    - cases/dtg-protected-access/current-openvtc-track-a-positive-control.yaml
+    - cases/dtg-protected-access/current-openvtc-track-a-runtime-ab.yaml
+  boundaries:
+    - cases/dtg-protected-access/current-openvtc-track-a-execution-boundary.yaml
+    - cases/dtg-protected-access/current-openvtc-track-a-regression-boundary.yaml
+    - cases/dtg-protected-access/current-openvtc-track-a-source-pin.yaml
+  handoff:
+    - cases/dtg-protected-access/current-openvtc-track-a-dpip-handoff.yaml
+status: ready-for-pr-runtime-validation
