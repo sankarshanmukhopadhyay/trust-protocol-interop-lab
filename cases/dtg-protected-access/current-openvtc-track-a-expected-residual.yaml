@@ -1,0 +1,10 @@
+expected_residual:
+  reason: selected current execution does not materially execute status/policy-discovery or Trust Task retention surfaces
+  requirements:
+    - ER-STATUS-AB
+    - ER-TASK-AB
+  producer_disposition: not-evidenced
+  dpip_disposition: evidence-required-unless-other-current-attributable-evidence-is-admitted
+  rahp_disposition: retain-indeterminate-where-material
+note: >-
+  This expectation does not substitute for the runtime artifact or DPIP judgment.
