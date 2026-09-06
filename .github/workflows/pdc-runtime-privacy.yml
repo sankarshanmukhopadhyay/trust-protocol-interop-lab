@@ -1,0 +1,40 @@
+name: PDC runtime privacy evidence
+
+on:
+  pull_request:
+    paths:
+      - 'cases/protected-delegated-care/**'
+      - 'experiments/protected-delegated-care/**'
+      - '.github/workflows/pdc-runtime-privacy.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cases/protected-delegated-care/**'
+      - 'experiments/protected-delegated-care/**'
+      - '.github/workflows/pdc-runtime-privacy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pdc-runtime-privacy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Produce DPIP-consumable PDC runtime privacy evidence
+        run: >-
+          python experiments/protected-delegated-care/run_runtime_privacy.py --check
+          --output "${{ runner.temp }}/pdc-runtime-privacy.json"
+      - name: Upload PDC runtime privacy evidence
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: pdc-runtime-privacy
+          path: ${{ runner.temp }}/pdc-runtime-privacy.json
+          if-no-files-found: error
