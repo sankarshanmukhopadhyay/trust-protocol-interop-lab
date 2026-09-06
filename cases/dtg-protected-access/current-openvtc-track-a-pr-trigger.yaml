@@ -1,0 +1,4 @@
+pr_trigger:
+  workflow_name: Current OpenVTC Track A evidence
+  path_match_expected: true
+  reason: branch changes workflow, current adapter and current A/B case files
