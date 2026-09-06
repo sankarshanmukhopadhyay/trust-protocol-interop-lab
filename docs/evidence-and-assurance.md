@@ -7,29 +7,11 @@ permalink: /evidence-assurance/
 ---
 # Evidence & Reproduction
 
-Use this section when the question is **“what does this result prove, and how can I independently inspect or reproduce it?”**
-
-## Evidence path
-
-```text
-case claim
-   ↓
-scenario / vector
-   ↓
-execution or structured review
-   ↓
-result + manifest + hashes
-   ↓
-reproduction instructions
-   ↓
-review / assurance disposition
-```
-
-A result is only as strong as the evidence needed to falsify it. Missing runtime or boundary evidence remains missing evidence; it is not converted into a pass.
+Use this section when the question is **“what does this result prove, and how can I independently inspect or reproduce it?”** This page is a navigation surface; the evidence semantics themselves are canonical in [Evidence model](evidence-model.md).
 
 ## Start here
 
-- [Evidence model](evidence-model.md) — what evidence artifacts mean and how claims bind to them.
+- [Evidence model](evidence-model.md) — evidence-package semantics, provenance, negative evidence, historical reproducibility and bounded conclusions.
 - [Evidence packages](../evidence/README.md) — case-specific manifests and retained outputs.
 - [RAHP review register](../reviews/rahp/README.md) — pressure reviews and assurance dispositions.
 - [Interoperability readiness](interoperability-readiness.md) — which cases have crossed which evidence gates.
@@ -43,6 +25,4 @@ A result is only as strong as the evidence needed to falsify it. Missing runtime
 4. Compare the produced outputs with the retained evidence manifest and hashes.
 5. Read any RAHP/adversarial review before interpreting the maturity label.
 
-## Claim boundary
-
-`Interoperability Tested` requires reproducible evidence for the bounded claim that was actually executed. Semantic reference-model testing does **not** become wire-protocol conformance, production security, legal authority, certification or complete upstream implementation merely because vectors pass.
+Interpret the resulting evidence only within the claim boundary defined by the case and [Evidence model](evidence-model.md). Repository-controlled execution does not by itself create certification, production-wide assurance or broader upstream authority.
