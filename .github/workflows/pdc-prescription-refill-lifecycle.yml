@@ -1,0 +1,35 @@
+name: PDC prescription refill lifecycle evidence
+
+on:
+  pull_request:
+    paths:
+      - "cases/protected-delegated-care/**"
+      - "experiments/protected-delegated-care/**"
+      - ".github/workflows/pdc-prescription-refill-lifecycle.yml"
+  push:
+    branches: [main]
+    paths:
+      - "cases/protected-delegated-care/**"
+      - "experiments/protected-delegated-care/**"
+      - ".github/workflows/pdc-prescription-refill-lifecycle.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  pdc-prescription-refill-lifecycle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Produce prescription-to-refill lifecycle evidence
+        run: python experiments/protected-delegated-care/run_prescription_refill_lifecycle.py --output "${{ runner.temp }}/pdc-prescription-refill-lifecycle.json"
+      - name: Upload prescription-to-refill lifecycle evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: pdc-prescription-refill-lifecycle
+          path: "${{ runner.temp }}/pdc-prescription-refill-lifecycle.json"
