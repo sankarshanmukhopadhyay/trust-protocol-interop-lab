@@ -156,7 +156,7 @@ This case is not:
 
 ## Reproduction
 
-The executable evidence producers are under [`experiments/protected-delegated-care/`](../../../experiments/protected-delegated-care/). Dedicated workflows retain artifacts for the current-authority boundary, runtime privacy evidence, refill disclosure comparison and prescription-to-refill lifecycle. The repository-wide `validate` context remains the canonical required status check.
+The executable evidence producers are under [`experiments/protected-delegated-care/`](../../experiments/protected-delegated-care/). Dedicated workflows retain artifacts for the current-authority boundary, runtime privacy evidence, refill disclosure comparison and prescription-to-refill lifecycle. The repository-wide `validate` context remains the canonical required status check.
 
 The central assurance invariant remains:
 
