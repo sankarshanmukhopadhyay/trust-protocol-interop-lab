@@ -1,0 +1,51 @@
+case_id: IC-PDC-MED-001
+issue: 136
+schema: interop-evidence-package/v1
+purpose: >-
+  Define the runtime privacy observations exported by the PDC experiment for DPIP
+  consumption. The package is evidence input, not a privacy conclusion.
+requirements:
+  - id: PDC-PRIV-DISCLOSURE-ROUTINE
+    title: Routine acknowledged reminders do not disclose caregiver-facing medication details
+    evidence_class: runtime-application-observation
+    expected: no_caregiver_disclosure
+  - id: PDC-PRIV-DISCLOSURE-EXCEPTION
+    title: Exception disclosure remains within the declared minimum matrix
+    evidence_class: runtime-application-observation
+    expected: bounded_minimum
+  - id: PDC-PRIV-CORRELATION
+    title: Contextual identifiers do not silently collapse subject, caregiver, channel and Trust Task scopes
+    evidence_class: runtime-composition-observation
+    expected: scoped_or_indeterminate
+  - id: PDC-PRIV-LATE-ACK
+    title: Late acknowledgement does not expand caregiver disclosure or rewrite event history
+    evidence_class: runtime-application-observation
+    expected: bounded_minimum
+observer_contexts:
+  - subject
+  - caregiver
+  - channel
+  - trust_task
+required_package_members:
+  - requirement_id
+  - evidence_class
+  - provenance
+  - observation_summary
+  - experiment
+  - surfaces
+result_semantics:
+  pass: runtime evidence directly demonstrates the bounded application-profile property
+  fail: runtime evidence demonstrates disclosure or correlation beyond the declared profile
+  indeterminate: evidence cannot establish the property at the claimed observer or provider boundary
+claim_boundary:
+  establishes:
+    - synthetic runtime disclosure observations
+    - machine-readable correlation-surface observations
+    - DPIP-consumable evidence packages
+  does_not_establish:
+    - provider-level confidentiality
+    - production privacy
+    - cryptographic unlinkability
+    - ZKP effectiveness
+    - full DPIP disposition
+    - RAHP assurance
