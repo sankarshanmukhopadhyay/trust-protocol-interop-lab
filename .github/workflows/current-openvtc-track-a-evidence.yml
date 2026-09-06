@@ -7,6 +7,7 @@ on:
       - 'experiments/dtg-protected-access/current_openvtc_context.py'
       - 'experiments/dtg-protected-access/capture_ab_runtime.py'
       - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/current-openvtc-track-a-positive-control.yaml'
       - 'cases/dtg-protected-access/current-openvtc-track-a-runtime-ab.yaml'
       - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
   push:
@@ -16,6 +17,7 @@ on:
       - 'experiments/dtg-protected-access/current_openvtc_context.py'
       - 'experiments/dtg-protected-access/capture_ab_runtime.py'
       - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/current-openvtc-track-a-positive-control.yaml'
       - 'cases/dtg-protected-access/current-openvtc-track-a-runtime-ab.yaml'
       - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
   workflow_dispatch:
@@ -33,23 +35,18 @@ jobs:
     steps:
       - name: Checkout Interop Lab producer
         uses: actions/checkout@v7
-
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.13'
-
       - name: Install evidence dependencies
         run: python -m pip install --disable-pip-version-check pyyaml
-
       - name: Install current VTI native build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libdbus-1-dev pkg-config
-
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
-
       - name: Checkout immutable current OpenVTC target
         uses: actions/checkout@v7
         with:
@@ -57,25 +54,32 @@ jobs:
           ref: e393e38da4941202143e293b555413d8c86ef3b3
           path: build/current-openvtc
           fetch-depth: 1
-
       - name: Verify immutable current target pin
         shell: bash
         run: |
           set -euo pipefail
           test "$(git -C "$OPENVTC_CHECKOUT" rev-parse HEAD)" = "$OPENVTC_REVISION"
           test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
-
-      - name: Execute current OpenVTC Track A A/B observation
+      - name: Execute current OpenVTC positive control
+        run: |
+          python experiments/dtg-protected-access/capture_ab_runtime.py \
+            cases/dtg-protected-access/current-openvtc-track-a-positive-control.yaml \
+            --output "${{ runner.temp }}/current-openvtc-positive-control.yaml"
+      - name: Execute current OpenVTC Track A pressure observation
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py \
             cases/dtg-protected-access/current-openvtc-track-a-runtime-ab.yaml \
             --output "${{ runner.temp }}/current-openvtc-track-a.yaml"
-
       - name: Verify evidence boundary
         run: |
           python - <<'PY'
           import pathlib, yaml
+          control = yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-positive-control.yaml').read_text())
           doc = yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-track-a.yaml').read_text())
+          assert control['experiment']['observed_join'] == 'detected'
+          cb = control['requirements']['ER-REL-DID-AB']['surfaces']['equivalent_relationship_binder']
+          assert cb['classification'] == 'identical'
+          assert cb['correlator_origin'] == 'fixture-supplied'
           assert doc['provenance']['implementation_repository'] == 'OpenVTC/verifiable-trust-infrastructure'
           assert doc['provenance']['implementation_revision'] == 'e393e38da4941202143e293b555413d8c86ef3b3'
           rel = doc['requirements']['ER-REL-DID-AB']['surfaces']
@@ -92,40 +96,43 @@ jobs:
           assert verifier['transaction_context']['classification'] == 'fresh'
           assert doc['experiment']['observed_join'] == 'not-detected'
           PY
-
       - name: Verify producer left upstream checkout clean
         shell: bash
         run: test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
-
-      - name: Export DPIP provided_evidence binding
+      - name: Export DPIP provided_evidence bindings
         run: |
+          python experiments/dtg-protected-access/export_dpip_evidence.py \
+            "${{ runner.temp }}/current-openvtc-positive-control.yaml" \
+            --output "${{ runner.temp }}/current-openvtc-positive-control-provided-evidence.json"
           python experiments/dtg-protected-access/export_dpip_evidence.py \
             "${{ runner.temp }}/current-openvtc-track-a.yaml" \
             --output "${{ runner.temp }}/current-openvtc-track-a-provided-evidence.json"
-
       - name: Summarize bounded result
         shell: bash
         run: |
           python - <<'PY'
           import os, pathlib, yaml
+          control = yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-positive-control.yaml').read_text())
           doc = yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-track-a.yaml').read_text())
           summary = pathlib.Path(os.environ['GITHUB_STEP_SUMMARY'])
           with summary.open('a') as out:
               print('## Current OpenVTC Track A runtime observation', file=out)
               print('', file=out)
               print(f"- Target: `{doc['provenance']['implementation_repository']}@{doc['provenance']['implementation_revision']}`", file=out)
+              print(f"- Positive control: `{control['experiment']['expected_join']}` / `{control['experiment']['observed_join']}`", file=out)
               print(f"- Pressure join: `{doc['experiment']['expected_join']}` / `{doc['experiment']['observed_join']}`", file=out)
               print('- ER-REL-DID-AB and ER-VERIFIER-AB: materially exercised by this path.', file=out)
               print('- ER-STATUS-AB and ER-TASK-AB: not-evidenced by this path; no absence claim manufactured.', file=out)
               print('- Dogwood: not executed; historical comparator only.', file=out)
               print('- Boundary: this is runtime evidence, not a privacy PASS or RAHP GREEN.', file=out)
           PY
-
       - name: Upload current attributable runtime evidence
         uses: actions/upload-artifact@v7
         with:
           name: current-openvtc-track-a-runtime-upstream-observation
           path: |
+            ${{ runner.temp }}/current-openvtc-positive-control.yaml
             ${{ runner.temp }}/current-openvtc-track-a.yaml
+            ${{ runner.temp }}/current-openvtc-positive-control-provided-evidence.json
             ${{ runner.temp }}/current-openvtc-track-a-provided-evidence.json
           if-no-files-found: error
