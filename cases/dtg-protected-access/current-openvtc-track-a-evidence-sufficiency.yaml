@@ -1,0 +1,13 @@
+producer_sufficiency:
+  source_attribution: required
+  positive_control: required
+  relationship_verifier_observation: required
+  status_task_observation: preserve-not-evidenced-if-unexecuted
+  dpip_export: required
+  upstream_cleanliness: required
+privacy_sufficiency:
+  owner: dtg-privacy-implementation-profile
+  predetermined: false
+assurance_sufficiency:
+  owner: rahp-toolkit
+  predetermined: false
