@@ -1,0 +1,3 @@
+stop: true
+until: dedicated current OpenVTC evidence workflow has produced an observed result
+reason: additional authored artifacts cannot substitute for runtime evidence
