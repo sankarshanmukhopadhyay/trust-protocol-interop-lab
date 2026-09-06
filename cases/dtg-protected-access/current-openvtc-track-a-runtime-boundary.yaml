@@ -1,0 +1,14 @@
+runtime_boundary:
+  executed:
+    - current VTI DID key generation support
+    - current VTI DIDComm session
+    - current VTI E2E responder/mediator support
+    - list-keys request/response round trip
+  not_executed:
+    - status lookup or status endpoint
+    - policy discovery
+    - Trust Task lifecycle
+    - retained task/relationship outcome evidence
+  consequence: >-
+    Only the first group can support target-attributable observations in this run.
+    The second group remains not-evidenced.
