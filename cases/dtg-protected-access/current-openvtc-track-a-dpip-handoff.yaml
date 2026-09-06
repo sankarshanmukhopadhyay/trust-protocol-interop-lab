@@ -1,0 +1,18 @@
+handoff: current-openvtc-track-a
+tracking_issue: 153
+producer: trust-protocol-interop-lab
+producer_capability: composed-unlinkability-v1
+target:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: e393e38da4941202143e293b555413d8c86ef3b3
+evidence_artifact_name: current-openvtc-track-a-runtime-upstream-observation
+requirements:
+  ER-REL-DID-AB: runtime-observation-produced
+  ER-VERIFIER-AB: runtime-observation-produced
+  ER-STATUS-AB: not-evidenced
+  ER-TASK-AB: not-evidenced
+consumer_instruction: >-
+  Create a new pinned comparable DPIP examination. Do not mutate the historical
+  Dogwood examination. Treat not-evidenced requirements as unresolved evidence gaps,
+  not PASS, FAIL, or implementation-wide absence. Evaluate the current runtime package
+  independently and return the bounded privacy judgment to RAHP.
