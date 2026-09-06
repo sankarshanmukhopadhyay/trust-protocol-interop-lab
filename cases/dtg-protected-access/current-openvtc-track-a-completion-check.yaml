@@ -1,0 +1,9 @@
+completion_check:
+  code_and_case_ready: true
+  runtime_workflow_ready: true
+  runtime_run_complete: false
+  artifact_inspected: false
+  dpip_handoff_ready: false
+rule: >-
+  Flip the final three fields only from observed GitHub Actions evidence; never by
+  expectation or repository authoring alone.
