@@ -1,0 +1,4 @@
+marker: ready-to-open-pr
+issue: 153
+branch: test/current-openvtc-track-a-evidence
+required_next_observation: GitHub Actions current OpenVTC Track A evidence workflow
