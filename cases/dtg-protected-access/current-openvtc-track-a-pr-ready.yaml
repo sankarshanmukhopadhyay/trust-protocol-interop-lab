@@ -1,0 +1,4 @@
+pr_ready: true
+branch: test/current-openvtc-track-a-evidence
+base: main
+issue: 153
