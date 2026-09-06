@@ -56,8 +56,18 @@ mappings:
 
   - requirement: enforce minimum disclosure at caregiver and channel boundaries
     expected_surface: application_profile_plus_dpip
-    status: application_profile
-    evidence_needed: runtime disclosure-policy traces and DPIP observation fixtures tracked by issue 136
+    status: adapter_seam
+    evidence_available:
+      - cases/protected-delegated-care/disclosure-matrix.yaml
+      - cases/protected-delegated-care/dpip-runtime-evidence-profile.yaml
+      - experiments/protected-delegated-care/run_runtime_privacy.py
+    observed_result: >-
+      Synthetic runtime traces demonstrate that a routine acknowledgement produces no
+      caregiver-facing payload, exception and late-ack payload fields remain within the
+      declared minimum disclosure matrix, and application-visible subject/caregiver/
+      channel/task references remain distinct. Cross-provider/network correlation remains
+      INDETERMINATE because those observer surfaces are not exercised.
+    evidence_needed: DPIP assessment of exported evidence packages plus provider/network observation evidence for any stronger confidentiality or unlinkability claim
 
   - requirement: pharmacy refill selective disclosure or unlinkable proof
     expected_surface: dtg_zkp_or_selective_disclosure
@@ -91,6 +101,18 @@ observed_integration_boundaries:
       PDC MUST fail closed as INDETERMINATE/BLOCKED rather than substituting any
       weaker or domain-specific surface for delegated-action authority.
 
+  - id: PDC-DTG-BND-003
+    topic: application disclosure evidence vs provider/network privacy
+    observation: >-
+      The runtime privacy harness can observe application-generated payloads, state,
+      event history and contextual references, but it does not observe provider logs,
+      network metadata, device metadata or colluding-service correlation surfaces.
+    classification: evidence_boundary
+    rule: >-
+      Application-level PASS results may support DPIP evidence intake for bounded
+      disclosure only. Provider confidentiality and cross-service unlinkability MUST
+      remain INDETERMINATE until attributable runtime observations exist.
+
 classification_values:
   direct: existing implementation surface used without case-local semantic substitution
   candidate: plausible mapping requiring executable evidence before claim
@@ -98,6 +120,7 @@ classification_values:
   adapter_seam: explicit temporary boundary standing in for an incomplete or unexercised implementation surface
   unresolved: required semantic mapping has not yet been established
   implementation_gap: current implementation does not expose the required exact surface at the pinned baseline
+  evidence_boundary: runtime evidence establishes a narrower observer scope than the strongest privacy claim
   deferred: outside IC-PDC-MED-001 initial claim boundary
 
 rules:
