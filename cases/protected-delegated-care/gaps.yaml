@@ -45,6 +45,23 @@ gaps:
     workaround: defer to follow-on refill case tracked by issue 137
     normative_change_proposed: false
 
+  - id: PDC-GAP-005
+    application_requirement: establish provider/network-level confidentiality and cross-service unlinkability for reminder and caregiver interactions
+    expected_capability: attributable runtime observations across channel provider, network/device metadata and colluding observer surfaces
+    observed_capability: >-
+      The PDC runtime privacy harness now demonstrates bounded application-generated
+      disclosure and distinct application-visible references, but does not observe
+      provider logs, network metadata, device metadata or service-side join behavior.
+    classification: evidence_gap
+    workaround: >-
+      Export application/runtime observations to DPIP using interop-evidence-package/v1
+      and preserve INDETERMINATE for provider confidentiality and stronger unlinkability
+      claims until attributable runtime evidence exists.
+    evidence:
+      - cases/protected-delegated-care/dpip-runtime-evidence-profile.yaml
+      - experiments/protected-delegated-care/run_runtime_privacy.py
+    normative_change_proposed: false
+
 rules:
   - No gap may be silently converted into an upstream semantic assumption.
   - A workaround must identify whether it is application-owned, adapter-backed, or implementation-specific.
