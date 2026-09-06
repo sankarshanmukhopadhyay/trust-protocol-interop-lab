@@ -1,0 +1,14 @@
+observer:
+  type: additive-test-probe
+  production_code_changed: false
+  persisted_in_target_checkout: false
+  committed_upstream: false
+observed_components:
+  - vti-e2e-tests
+  - vta-sdk DID key support
+  - vta-sdk DIDComm session
+  - existing TestVtaResponder E2E support
+claim_boundary: >-
+  Evidence is attributable to execution of the pinned target crates and test support
+  through the observer. It is not a claim that every VTI deployment or route exposes
+  the same surfaces.
