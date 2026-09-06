@@ -17,7 +17,8 @@ on:
   workflow_dispatch:
 permissions: {contents: read}
 jobs:
-  validate:
+  data-room-actuation:
+    name: data-room-actuation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
