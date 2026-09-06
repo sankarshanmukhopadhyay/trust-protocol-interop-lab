@@ -1,0 +1,13 @@
+pr_scope:
+  tracking_issue: 153
+  permitted:
+    - current OpenVTC target-specific adapter
+    - A/B cases and positive control
+    - workflow execution and artifact export
+    - bounded evidence/handoff documentation
+  excluded:
+    - generic evidence framework redesign
+    - upstream OpenVTC changes
+    - upstream DTG changes
+    - DPIP privacy judgment
+    - RAHP terminal assurance promotion
