@@ -1,0 +1,36 @@
+surfaces:
+  relationship_did:
+    execution: executed
+    expected: absent-on-selected-path
+  edge_identifier:
+    execution: executed
+    expected: absent-on-selected-path
+  equivalent_relationship_binder:
+    execution: executed
+    expected: fresh-in-pressure-case
+  status_handle:
+    execution: not-executed
+  status_endpoint:
+    execution: not-executed
+  policy_discovery_handle:
+    execution: not-executed
+  policy_endpoint:
+    execution: not-executed
+  task_identifier:
+    execution: not-executed
+  thread_identifier:
+    execution: not-executed
+  retained_relationship_evidence:
+    execution: not-executed
+  retained_outcome_evidence:
+    execution: not-executed
+  verifier_transcript:
+    execution: executed
+  challenge:
+    execution: executed
+  purpose:
+    execution: executed
+  transaction_context:
+    execution: executed
+  deliberate_join_attempt:
+    execution: executed
