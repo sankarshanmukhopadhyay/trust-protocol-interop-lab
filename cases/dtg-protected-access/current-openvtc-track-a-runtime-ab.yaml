@@ -1,0 +1,57 @@
+evidence_class: runtime-upstream-observation
+implementation:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: e393e38da4941202143e293b555413d8c86ef3b3
+experiment:
+  kind: unlinkability-pressure-case
+  expected_join: must-not-emerge
+contexts:
+  A:
+    verifier: current-openvtc-track-a-verifier-a
+    purpose: dtg-track-a-correlation-pressure-a
+    challenge: current-openvtc-track-a-challenge-a
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_context.py
+      - --context
+      - A
+      - --verifier
+      - current-openvtc-track-a-verifier-a
+      - --purpose
+      - dtg-track-a-correlation-pressure-a
+      - --challenge
+      - current-openvtc-track-a-challenge-a
+      - --client-seed
+      - '0x21'
+  B:
+    verifier: current-openvtc-track-a-verifier-b
+    purpose: dtg-track-a-correlation-pressure-b
+    challenge: current-openvtc-track-a-challenge-b
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_context.py
+      - --context
+      - B
+      - --verifier
+      - current-openvtc-track-a-verifier-b
+      - --purpose
+      - dtg-track-a-correlation-pressure-b
+      - --challenge
+      - current-openvtc-track-a-challenge-b
+      - --client-seed
+      - '0x42'
+surface_producers:
+  equivalent_relationship_binder: OpenVTC/verifiable-trust-infrastructure
+  verifier_transcript: OpenVTC/verifiable-trust-infrastructure
+  challenge: trust-protocol-interop-lab
+  purpose: trust-protocol-interop-lab
+  transaction_context: trust-protocol-interop-lab
+  deliberate_join_attempt: trust-protocol-interop-lab
+assurance_boundary: >-
+  This case executes current pinned OpenVTC/VTI E2E support with context-distinct
+  deterministic client identities. The relationship/verifier surfaces exercised by
+  this path are captured. Status/policy-discovery and Trust Task surfaces are deliberately
+  not marked executed, so the evidence contract records them as not-evidenced rather
+  than inferring absence. A non-detected join is bounded evidence for this execution
+  only and cannot establish a privacy PASS or RAHP GREEN. Dogwood is not executed and
+  remains historical regression evidence only.
