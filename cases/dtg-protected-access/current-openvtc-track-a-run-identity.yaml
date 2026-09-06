@@ -1,0 +1,9 @@
+run_identity:
+  producer_repo: sankarshanmukhopadhyay/trust-protocol-interop-lab
+  tracking_issue: 153
+  target_repo: OpenVTC/verifiable-trust-infrastructure
+  target_revision: e393e38da4941202143e293b555413d8c86ef3b3
+  evidence_class: runtime-upstream-observation
+  experiment_pair:
+    - positive-control
+    - unlinkability-pressure-case
