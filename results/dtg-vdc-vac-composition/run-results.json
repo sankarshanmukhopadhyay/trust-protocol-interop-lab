@@ -1,7 +1,7 @@
 {
   "all_expected_outcomes_matched": true,
   "case": "IC-DTG-VDC-VAC-COMPOSITION-EXP",
-  "claim_boundary": "semantic composition evidence only; proposed upstream VDC/VAC semantics are not represented as adopted DTG behavior",
+  "claim_boundary": "semantic composition evidence only; VDC semantics are adopted from merged credential-spec #19, while VAC semantics remain proposed upstream in #29",
   "evaluator_version": "0.1",
   "propositions": [
     "DTG-371-P06",
@@ -18,8 +18,9 @@
       "repository": "trustoverip/dtgwg-cred-spec"
     },
     "vdc": {
-      "authority_status": "proposed-upstream",
-      "head_sha": "ad5876f1b96e2149adec84d37d6595b4a212db9c",
+      "authority_status": "adopted-upstream-main",
+      "head_sha": "873a473e9aa9564b6751eee10e2561bcb7d767aa",
+      "merge_commit": "37074bdcd861c51f3e5b7868ce700832b17b73ce",
       "pull_request": 19,
       "repository": "trustoverip/dtgwg-cred-spec"
     }
