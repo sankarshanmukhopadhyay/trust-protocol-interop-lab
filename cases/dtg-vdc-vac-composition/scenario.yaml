@@ -4,8 +4,9 @@ source_pins:
   vdc:
     repository: trustoverip/dtgwg-cred-spec
     pull_request: 19
-    head_sha: ad5876f1b96e2149adec84d37d6595b4a212db9c
-    authority_status: proposed-upstream
+    head_sha: 873a473e9aa9564b6751eee10e2561bcb7d767aa
+    merge_commit: 37074bdcd861c51f3e5b7868ce700832b17b73ce
+    authority_status: adopted-upstream-main
   vac:
     repository: trustoverip/dtgwg-cred-spec
     pull_request: 29
