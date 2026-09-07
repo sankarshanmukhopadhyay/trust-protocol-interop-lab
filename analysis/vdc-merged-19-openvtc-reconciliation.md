@@ -50,7 +50,7 @@ Status vocabulary:
 
 | Merged #19 surface | Status | Evidence / judgment |
 |---|---|---|
-| Delegation is distinct from authority | `supported` at type/API boundary; runtime actuation remains `not-observable` | OpenVTC has distinct `DelegationCredential` and `AuthorityCredential` types and the `new_vdc` documentation says VDC never supplies authority. No consuming actuation path is evidenced here, so this does not prove end-to-end non-collapsibility. |
+| Delegation is distinct from authority | `supported` at type/API boundary; semantic non-substitution evidence passes; current OpenVTC actuation remains `not-observable` | OpenVTC has distinct `DelegationCredential` and `AuthorityCredential` types and the `new_vdc` documentation says VDC never supplies authority. Interop Lab's `dtg-vdc-vac-composition` negative vectors separately prove the semantic rule that valid delegation cannot substitute for current principal authority. No current OpenVTC consuming actuation path is evidenced here, so this does not claim end-to-end OpenVTC enforcement. |
 | Required non-empty `delegation.scope` | `not-implemented` | `new_vdc` accepts no scope and uses a basic `{id}` subject. |
 | Grant + matching acceptance required | `not-implemented` | no acceptance object/API or grant-reference surface is exposed by the inspected VDC constructor. |
 | Acceptance references grant by digest | `not-implemented` | no VDC acceptance/binder field is exposed. |
@@ -68,11 +68,11 @@ Status vocabulary:
 
 ## Negative invariant: VDC alone must not satisfy authority
 
-The source inspection supports only the **library type-boundary proposition**: VDC and VAC are distinct types, and the VDC constructor documentation explicitly states that delegation is not authority.
+Interop Lab already carries an executable semantic composition experiment at `experiments/dtg-vdc-vac-composition/run.py`. Its negative vectors include a valid VDC with no current principal authority and require `deny`; the inverse case, authority without representation, also requires `deny`. The experiment therefore provides executable **semantic non-substitution evidence** for the merged #19 rule.
 
-It does **not** supply an executable authority-decision API that consumes a VDC and can be attacked with “VDC alone”. Therefore the requested end-to-end negative case is classified `not-observable` at this pin rather than PASS. Once OpenVTC exposes a consuming authorization path aligned to merged #19, the regression must be executed there.
+As part of this reconciliation, that experiment is re-pinned so VDC #19 is `adopted-upstream-main` at final head `873a473e9aa9564b6751eee10e2561bcb7d767aa` / merge `37074bdcd861c51f3e5b7868ce700832b17b73ce`, while VAC #29 remains `proposed-upstream`. Its claim boundary now states that asymmetry explicitly.
 
-This distinction prevents a documentation statement from being over-read as runtime assurance.
+The inspected OpenVTC VDC surface still does **not** supply a consuming authority-decision API aligned to merged #19. Thus the semantic invariant is executable and passes in the Lab, while end-to-end enforcement by the current OpenVTC realization remains `not-observable`. This prevents either a documentation statement or a model-level fixture from being over-read as production implementation assurance.
 
 ## Privacy evidence disposition
 
@@ -87,23 +87,23 @@ Accordingly:
 
 ## RAHP proposition return
 
-This source inspection supports the following bounded return to RAHP #445/#397:
+This source inspection and the re-pinned semantic experiment support the following bounded return to RAHP #445/#397:
 
-| Proposition | Result from implementation inspection |
+| Proposition | Result |
 |---|---|
 | `P02` | merged semantic change confirmed; runtime VDC correlation evidence unavailable |
 | `P03` | adopted identifier-scope rule not enforceable/observable in current VDC API |
-| `P06` | delegation/authority type distinction supported; complete consuming-path separation unproven |
-| `P07` | required acceptance absent in current implementation |
-| `P09` | expiry semantics divergent; status/freshness absent |
-| `P13` | VDC effective-correlation surfaces remain unobservable |
-| `P14` | merged binder semantics not implemented; #38 residual remains external |
-| `P10` | invocation/common-control composition remains unresolved at current implementation pin |
+| `P06` | delegation/authority non-substitution has executable semantic evidence; current OpenVTC consuming-path enforcement remains unproven |
+| `P07` | required acceptance is adopted upstream but absent in current OpenVTC implementation |
+| `P09` | expiry semantics divergent; status/freshness absent in current OpenVTC implementation |
+| `P13` | VDC effective-correlation surfaces remain unobservable in the current implementation |
+| `P14` | merged binder semantics not implemented by the current target; #38 residual remains external |
+| `P10` | invocation/common-control composition remains unresolved at the current implementation pin |
 
 No historical #371 source-pinned evidence is rewritten by this result.
 
 ## Completion judgment
 
-**Interop source reconciliation: COMPLETE. Runtime VDC conformance/privacy assurance: NOT COMPLETE / EVIDENCE REQUIRED.**
+**Interop source reconciliation: COMPLETE. VDC semantic non-substitution evidence: PASS. Current OpenVTC VDC conformance/privacy assurance: NOT COMPLETE / EVIDENCE REQUIRED.**
 
-That is an intentional terminal result for this source pin: the missing runtime evidence is caused by a demonstrable implementation-version gap. Re-running unrelated Track A cases cannot close it. The next reassessment should be triggered by material movement in the OpenVTC VDC implementation or the remaining upstream dependencies, not by repeated execution against the same unavailable surfaces.
+That is an intentional terminal result for this source pin: the remaining runtime evidence is blocked by a demonstrable implementation-version gap. Re-running unrelated Track A cases cannot close it. The next reassessment should be triggered by material movement in the OpenVTC VDC implementation or the remaining upstream dependencies, not by repeated execution against the same unavailable surfaces.
