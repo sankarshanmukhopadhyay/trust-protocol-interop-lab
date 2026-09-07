@@ -1,0 +1,37 @@
+name: PDC runnable prototype
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/protected-delegated-care/**'
+      - '.github/workflows/pdc-demo.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/protected-delegated-care/**'
+      - '.github/workflows/pdc-demo.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Compile prototype
+        run: >-
+          python -m py_compile
+          experiments/protected-delegated-care/app.py
+          experiments/protected-delegated-care/test_app.py
+
+      - name: Test prototype authority and disclosure boundaries
+        working-directory: experiments/protected-delegated-care
+        run: python -m unittest -v test_app.py
