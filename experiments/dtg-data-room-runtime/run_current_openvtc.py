@@ -45,7 +45,7 @@ def main() -> int:
         require(handlers, "authorized by the chain the room issued and nothing else", "room authority is independent of host-local ACL/session state"),
         require(design, "removal stays forward-only", "removed member cannot read future epochs"),
         require(design, "one write-primary", "host topology has a defined single write-primary"),
-        require(design, "host-neutral by construction", "record identity does not name the host"),
+        require(design, "Host-neutral by construction", "record identity does not name the host"),
         require(anchoring, "not implemented", "witnessed epoch anchoring is explicitly not implemented"),
         require(design, "Untrusted in the human direction too", "human rendering threat is specified"),
         require(design, "data, never", "agent-memory instruction-isolation requirement is specified"),
