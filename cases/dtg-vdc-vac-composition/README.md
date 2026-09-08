@@ -1,16 +1,17 @@
 # DTG VDC × VAC composition — experimental evidence
 
 ## At a glance
-- **Status:** Pre-admission experimental evidence
-- **Purpose:** Test the proposed separation between **representation/delegation (VDC)** and **authority (VAC)**.
+- **Status:** Pre-admission experimental evidence against adopted Credential Spec WD02 semantics.
+- **Purpose:** Test the separation between **representation/delegation (VDC)** and **authority (VAC)**.
 - **Current conclusion:** Appointment to act for a principal and the principal's current authority are independent predicates; both must hold.
-- **Source pins:** VDC PR #19 @ `ad5876f1b96e2149adec84d37d6595b4a212db9c`; VAC PR #29 @ `84650749afd48798e1c8919a95be359c0367a1c9`.
+- **WD02 pin:** `trustoverip/dtgwg-cred-spec@67149716032318f7f29770e5d3e6f0d35e52b8c3`.
+- **Component merge pins:** VDC #19 → `37074bdcd861c51f3e5b7868ce700832b17b73ce`; VAC #29 → `4f7e66b6dfcd8eddc212c8002351a6ad814c60e1`.
 
 ## Why this matters
 "May act for someone" and "that someone is allowed to perform this action" are different governance statements. Collapsing them lets delegation create authority the principal never had, or lets authority imply an appointment that never existed.
 
 ## Composition in plain language
-**VDC** is treated as the proposed representation/delegation artifact. **VAC** is treated as the proposed authority artifact. The decision additionally preserves any independent delegate-eligibility requirement and exact task/invocation binding.
+**VDC** is the adopted representation/delegation artifact. **VAC** is the adopted authority artifact. The decision additionally preserves any independent delegate-eligibility requirement and exact task/invocation binding.
 
 ```text
 valid representation
@@ -40,8 +41,10 @@ authority != delegation/representation
 component validity != actuation permission
 ```
 
+The semantic non-substitution and current-authority vectors remain valid against the adopted WD02 source pin.
+
 ## What this status means
-The experiment is deliberately pre-admission and does not represent VDC or VAC proposals as adopted DTG behavior.
+The experiment is deliberately pre-admission composition evidence. It pressure-tests adopted specification semantics but is not production implementation or deployment assurance.
 
 ## What remains unresolved
-Final schemas, production cryptographic interoperability, authoritative lifecycle resolution, and future upstream changes remain outside the claim.
+Production cryptographic interoperability, target-implementation lifecycle behavior, and future upstream changes remain outside the claim.
