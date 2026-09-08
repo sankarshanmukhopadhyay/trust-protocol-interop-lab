@@ -1,8 +1,9 @@
 # IC-DTG-PERSONA-ROOM-001 — Persona × Data Room × Agent composition
 
-**Maturity/status:** pre-admission experimental; partially source-executable, composition runtime incomplete.
-
 ## At a glance
+- **Status:** Pre-admission experimental; partially source-executable, composition runtime incomplete.
+- **Purpose:** Pressure-test cross-context Persona, Data Room and agent authority failures that component-local validation cannot detect.
+- **Current conclusion:** Existing evidence resolves only bounded Persona and authority-substitution cases; aggregation, hostile-memory and full lifecycle composition remain evidence-required.
 
 This case pressure-tests failures that can arise even when each component-local access is individually legitimate. Its central invariant is that legitimate access across multiple contexts does not itself authorize aggregation, inference, disclosure or consequential action across those contexts.
 
