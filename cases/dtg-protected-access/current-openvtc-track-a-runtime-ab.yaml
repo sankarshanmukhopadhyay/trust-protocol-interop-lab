@@ -1,7 +1,7 @@
 evidence_class: runtime-upstream-observation
 implementation:
   repository: OpenVTC/verifiable-trust-infrastructure
-  revision: e393e38da4941202143e293b555413d8c86ef3b3
+  revision: 72bf5794071971da506eb7a5af8e4765c35c137c
 experiment:
   kind: unlinkability-pressure-case
   expected_join: must-not-emerge
