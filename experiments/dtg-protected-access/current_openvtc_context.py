@@ -19,7 +19,7 @@ import textwrap
 import uuid
 
 OPENVTC_REPOSITORY = "OpenVTC/verifiable-trust-infrastructure"
-OPENVTC_REVISION = "e393e38da4941202143e293b555413d8c86ef3b3"
+OPENVTC_REVISION = "72bf5794071971da506eb7a5af8e4765c35c137c"
 MARKER = "RAHP_RUNTIME_OBSERVATION="
 
 PROBE_TEMPLATE = r'''use ed25519_dalek::SigningKey;
