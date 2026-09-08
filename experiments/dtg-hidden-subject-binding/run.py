@@ -22,7 +22,21 @@ def evaluate(v: dict) -> dict:
 def build_result() -> dict:
     s=yaml.safe_load(SCENARIO.read_text(encoding='utf-8'))
     vectors=[evaluate(v) for v in s['vectors']]
-    return {'case':s['case'],'status':s['status'],'evaluator_version':'0.1','source_pins':s['source_pins'],'propositions':s['propositions'],'vectors':vectors,'all_expected_outcomes_matched':all(v['matches_expected'] for v in vectors),'claim_boundary':'semantic binding evidence only; production ZKP same-subject/common-control construction remains independently required'}
+    return {
+        'case':s['case'],
+        'status':s['status'],
+        'evaluator_version':'0.2',
+        'source_pins':s['source_pins'],
+        'propositions':s['propositions'],
+        'semantic_rule':s['rule'],
+        'vectors':vectors,
+        'all_expected_outcomes_matched':all(v['matches_expected'] for v in vectors),
+        'claim_boundary':(
+            'semantic common-control/non-substitution evidence against adopted WD02 plus a '
+            'source-pinned OpenVTC implementation boundary observation; production ZKP '
+            'same-subject/common-control construction remains independently required'
+        )
+    }
 
 def main() -> int:
     p=argparse.ArgumentParser(); p.add_argument('--write',action='store_true'); p.add_argument('--check',action='store_true'); a=p.parse_args()
