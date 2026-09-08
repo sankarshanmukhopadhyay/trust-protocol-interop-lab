@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sankarshanmukhopadhyay.github.io/trust-protocol-interop-lab/schemas/dpac-agent-security-result.schema.json",
+  "title": "DPAC external adversarial result",
+  "type": "object",
+  "required": [
+    "vector_id",
+    "attack_class",
+    "expected",
+    "observed",
+    "result",
+    "harness",
+    "target",
+    "evidence"
+  ],
+  "properties": {
+    "vector_id": {"type": "string", "pattern": "^DPAC-ASH-[0-9]{3}$"},
+    "attack_class": {"type": "string", "minLength": 1},
+    "expected": {
+      "type": "object",
+      "required": ["effect_delta"],
+      "properties": {
+        "effect_delta": {"type": "integer"},
+        "reason": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "observed": {
+      "type": "object",
+      "required": ["target_serviced"],
+      "properties": {
+        "target_serviced": {"type": ["boolean", "null"]},
+        "harness_verdict": {"type": ["string", "null"]},
+        "effect_delta": {"type": ["integer", "null"]},
+        "reason": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "result": {
+      "enum": ["pass", "fail", "not-applicable", "not-observable", "harness-gap"]
+    },
+    "harness": {
+      "type": "object",
+      "required": ["project", "version", "release_commit"],
+      "properties": {
+        "project": {"const": "msaleme/red-team-blue-team-agent-fabric"},
+        "version": {"const": "4.21.1"},
+        "release_commit": {"const": "455fa46d35c0c13539c835bd758baced04ca2aa9"},
+        "module": {"type": ["string", "null"]},
+        "test_ids": {"type": "array", "items": {"type": "string"}},
+        "raw_report": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "target": {
+      "type": "object",
+      "required": ["case_id", "experiment", "lab_revision"],
+      "properties": {
+        "case_id": {"const": "IC-DPAC-ACTUATION-001"},
+        "experiment": {"const": "dpac-enforced-boundary"},
+        "lab_revision": {"type": "string", "minLength": 7}
+      },
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["lab_observation"],
+      "properties": {
+        "effect_count_before": {"type": ["integer", "null"], "minimum": 0},
+        "effect_count_after": {"type": ["integer", "null"], "minimum": 0},
+        "effect_ids": {"type": "array", "items": {"type": "string"}},
+        "lab_observation": {"type": "string", "minLength": 1},
+        "harness_evidence_present": {"type": "boolean"},
+        "limitations": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
