@@ -1,0 +1,37 @@
+evidence_class: runtime-upstream-observation
+implementation:
+  repository: OpenVTC/verifiable-trust-infrastructure
+  revision: 72bf5794071971da506eb7a5af8e4765c35c137c
+experiment:
+  kind: unlinkability-pressure-case
+  expected_join: must-not-emerge
+contexts:
+  A:
+    verifier: current-openvtc-track-b-task-verifier-a
+    purpose: relationship-publish-evidence-a
+    challenge: current-openvtc-track-b-task-challenge-a
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_track_b_task_context.py
+      - --context
+      - A
+  B:
+    verifier: current-openvtc-track-b-task-verifier-b
+    purpose: relationship-publish-evidence-b
+    challenge: current-openvtc-track-b-task-challenge-b
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_track_b_task_context.py
+      - --context
+      - B
+surface_producers:
+  task_identifier: OpenVTC/verifiable-trust-infrastructure
+  thread_identifier: OpenVTC/verifiable-trust-infrastructure
+  retained_relationship_evidence: OpenVTC/verifiable-trust-infrastructure
+  retained_outcome_evidence: OpenVTC/verifiable-trust-infrastructure
+assurance_boundary: >-
+  This case executes the target's existing pairwise relationship publish integration
+  path twice and captures target-generated Trust Task response id/threadId, persisted
+  relationship id and VrcPublished audit id. The temporary instrumentation only exposes
+  values already produced by the target and is restored after each run. No privacy PASS
+  follows from fresh identifiers in these two executions.
