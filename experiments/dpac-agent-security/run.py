@@ -198,7 +198,7 @@ def main() -> int:
 
         dca = DelegationChainTests(url=f"{ADAPTER}/delegation")
         before = effect_count()
-        dca.test_dca_005_replay()
+        dca.test_dca_005_effect_replay()
         after = effect_count()
         dca_result = dca.results[-1]
         raw["DCA-005"] = result_dict(dca_result)
