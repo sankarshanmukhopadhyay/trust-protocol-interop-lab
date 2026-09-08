@@ -3,7 +3,8 @@
 **Status:** Experimental  
 **Initial tracking issue:** [#106](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/106)  
 **GovOps pressure-test issue:** [#108](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/108)  
-**Enforced-boundary issue:** [#111](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/111)
+**Enforced-boundary issue:** [#111](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/111)  
+**External adversarial-testing issue:** [#170](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/170)
 
 This case tests one architectural/security proposition: a consequential operation executes only when the requested operation is simultaneously within **current, action-specific authority** and an **independently administered capability envelope** at the actuation boundary. Neither path may enlarge, substitute for, synthesize, or directly/transitively capture the other.
 
@@ -13,8 +14,8 @@ This case tests one architectural/security proposition: a consequential operatio
 |---|---|
 | **Status** | Experimental |
 | **Purpose** | Test whether a consequential action can occur only when current action-specific authority and an independently administered technical capability both permit it at the actuation boundary. |
-| **Current conclusion** | The proposition survived three increasingly strong tranches: a semantic model, a GovOps delegated-loan composition, and a container-enforced Workspace boundary with disjoint networks, separate principals, read-only policy, and an actuator-owned effect journal. |
-| **Evidence today** | Deterministic semantic scenarios, GovOps pressure tests, and a ten-scenario container-enforcement experiment. The evidence is self-authored and bounded to the tested topology. |
+| **Current conclusion** | The proposition has survived a semantic model, a GovOps delegated-loan composition, a container-enforced Workspace boundary, and one complete externally driven replay proposition. External governance self-modification evidence is currently partial and several additional adversarial classes remain explicit harness gaps. |
+| **Evidence today** | Deterministic semantic scenarios, GovOps pressure tests, a ten-scenario container-enforcement experiment, and pinned Agent Security Harness evidence normalized against the actuator-owned effect oracle. The external evidence is bounded and does not constitute independent certification. |
 
 ## Why this matters to a new reader
 
@@ -32,12 +33,15 @@ The Workspace rechecks request binding, current authority, capability scope, cap
 
 The Lab now has bounded evidence that DPAC can be realized as a runtime-enforced property rather than only a semantic distinction. The enforced-boundary experiment demonstrated policy-mutation denial, direct-actuator isolation, capability overreach rejection, revocation handling, request-substitution rejection, capability-revision TOCTOU protection, replay resistance, helper-path denial, and fail-closed indeterminate state.
 
-It remains **Experimental** because the Docker host/daemon, kernel, supply chain, independent administration beyond the test topology, and cryptographic upstream authority resolution are outside the claim.
+The external adversarial tranche adds a second evidence source without changing assurance authority: Agent Security Harness `v4.21.1` can materially exercise the DPAC replay boundary through a narrow translation adapter, while the actuator-owned journal remains the Lab outcome oracle. Where the external harness cannot express a DPAC property without semantic invention, the result is retained as `harness-gap` or `not-observable` rather than converted to PASS.
 
+It remains **Experimental** because the Docker host/daemon, kernel, supply chain, independent administration beyond the test topology, cryptographic upstream authority resolution, and multiple unmapped external attack classes remain outside the claim.
 
 ## What remains unresolved
 
-The enforced boundary is still one self-authored Docker topology. Host/daemon or kernel compromise, supply-chain compromise, unknown transitive administrative paths, independently operated capability administration, and cryptographic resolution of upstream authority/delegation remain outside the claim.
+The enforced boundary is still one Lab-authored Docker topology. Host/daemon or kernel compromise, supply-chain compromise, unknown transitive administrative paths, independently operated capability administration, and cryptographic resolution of upstream authority/delegation remain outside the claim.
+
+External adversarial coverage is also intentionally bounded. Replay is materially mapped. Direct governance mutation is exercised but does not externally cover the transitive-helper half of the proposition. Authority bypass, capability-envelope bypass, capability-revision TOCTOU, target/parameter substitution, prompt/tool injection, confused-deputy behavior, and receipt-integrity attacks remain explicit mapping gaps where the pinned harness wire contracts do not losslessly match the current DPAC target. HITL bypass is not applicable because this target has no human approval boundary.
 
 ## Claim boundary
 
@@ -84,8 +88,8 @@ WORKFLOW !-> directly_or_transitively control its own capability controller
 | capability envelope | independently administered Workspace | authority to exercise a capability |
 | actuation concurrence | actuator boundary | either path may substitute for the other |
 | runtime effect | actuator/runtime | authorization evidence by itself |
-| evidence | Interop Lab reference evidence | normative TIS profile or certification |
-| assurance interpretation | downstream consumer | retroactive authority |
+| external adversarial payloads/verdicts | Agent Security Harness upstream | harness owns DPAC interpretation or maturity |
+| evidence normalization and case interpretation | Interop Lab | retroactive authority or certification |
 
 ## Initial falsification scenarios
 
@@ -125,16 +129,30 @@ Ten falsification scenarios exercise valid concurrence, direct actuator bypass, 
 
 This establishes a stronger bounded proposition: for the tested container principals, compromise of Workflow/helper alone does not provide a tested path to capability-policy mutation or direct actuation.
 
+## External adversarial evidence
+
+The fourth tranche is [`../../experiments/dpac-agent-security/`](../../experiments/dpac-agent-security/). It consumes the upstream Agent Security Harness as a pinned external dependency rather than vendoring or forking it.
+
+The Lab retains a five-state interpretation model: `pass`, `fail`, `not-applicable`, `not-observable`, and `harness-gap`. The harness remains an evidence producer; its PASS is insufficient unless the target was materially serviced and the actuator-owned effect oracle independently agrees.
+
+The first complete mapping uses upstream `DCA-005` replay behavior. The adapter maps only the external request identifier to the DPAC nonce; Workspace remains the replay enforcement point. Across two same-ID presentations the expected evidence is exactly one first-use effect and no duplicate effect.
+
+The upstream `GM-001` governance self-modification test is also executed. Its requests are forwarded unchanged to Workspace `/admin/policy`, which owns the explicit refusal. Because this does not externally re-exercise the Workflow-controlled transitive-helper path, the full direct+transitive proposition is retained as `not-observable` rather than promoted to PASS.
+
+All ten #170 classes and their current evidence disposition are recorded in [`../../experiments/dpac-agent-security/vector-map.yaml`](../../experiments/dpac-agent-security/vector-map.yaml).
+
 ## Failure semantics
 
 The experiments fail closed. Missing, expired, revoked, replayed, mismatched, stale, or non-current authority does not become authorization. A valid authority record cannot enlarge Workspace capability. Technical capability does not imply permission. A changed capability revision requires fresh concurrence. Missing or unresolvable evidence does not become a pass.
+
+External evidence follows the same rule: unreachable, unserviced, simulated, reference-model-only, partial, or semantically unmappable harness behavior cannot become a Lab PASS. An unexpected actuator effect is a FAIL even when external coverage is otherwise partial.
 
 ## What success establishes
 
 Passing deterministic semantic/composition runs establish that the repository-owned reference models preserve their declared DPAC boundaries for recorded scenarios. A passing enforced-boundary run additionally establishes, for the tested Docker topology, that Workflow/helper lack the tested policy mount, actuator credential and actuator network route, while Workspace remains the only bridge to the authenticated actuator and negative cases leave the actuator-owned effect journal unchanged.
 
-It does **not** establish upstream TEA or GovOps conformance, production security, host/Docker-daemon compromise resistance, exhaustive transitive-control analysis, independent implementation, independent certification, or resistance to attack classes outside these scenarios.
+A passing external replay mapping adds evidence that a separately developed harness can drive the replay proposition against the real Workspace boundary and that the Lab-owned effect oracle agrees with the external harness verdict. It does **not** establish independent certification, exhaustive adversarial coverage, upstream TEA or GovOps conformance, production security, host/Docker-daemon compromise resistance, exhaustive transitive-control analysis, or resistance to attack classes currently classified as harness gaps.
 
 ## Why this remains Experimental
 
-The new boundary evidence is materially stronger than logical separation, but it remains self-authored and bounded to one container topology. The Docker host/daemon is outside the modeled adversary boundary, and authority authenticity remains abstracted rather than cryptographically resolved from an upstream authority system. Promotion therefore remains a separate maturity judgment requiring the repository's normal evidence gate. External adversarial tooling remains intentionally deferred.
+The evidence is materially stronger than logical separation alone and now includes one complete externally driven adversarial proposition, but the implementation remains one Lab-authored topology with bounded external mappings. The Docker host/daemon is outside the modeled adversary boundary, authority authenticity remains abstracted rather than cryptographically resolved from an upstream authority system, and several important external attack classes remain unmapped or only partially observable. Promotion therefore remains a separate evidence-gated maturity judgment.

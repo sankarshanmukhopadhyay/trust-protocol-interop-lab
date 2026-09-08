@@ -6,7 +6,7 @@ This experiment tracks [#170](https://github.com/sankarshanmukhopadhyay/trust-pr
 
 Determine whether an independently developed adversarial harness can attempt to falsify DPAC non-collapsibility and fail-closed properties against the existing enforced Workspace boundary without allowing the harness to become the authority for the resulting assurance conclusion.
 
-The target remains [`../dpac-enforced-boundary/`](../dpac-enforced-boundary/). This directory contains only the integration contract, adapter/evidence normalization machinery, and attributable external-harness execution material. It MUST NOT become a competing DPAC implementation.
+The target remains [`../dpac-enforced-boundary/`](../dpac-enforced-boundary/). This directory contains only the integration contract, test-only translation adapter, evidence normalization machinery, and attributable external-harness execution material. It MUST NOT become a competing DPAC implementation.
 
 ## Authority boundary
 
@@ -17,7 +17,7 @@ The target remains [`../dpac-enforced-boundary/`](../dpac-enforced-boundary/). T
 
 ## Pinned external dependency
 
-The first integration baseline is Agent Security Harness `v4.21.1`:
+The integration baseline is Agent Security Harness `v4.21.1`:
 
 - upstream repository: `msaleme/red-team-blue-team-agent-fabric`
 - annotated tag: `v4.21.1`
@@ -43,43 +43,70 @@ workflow/helper -- request_net --> workspace -- actuator_net --> actuator
 
 The actuator-owned effect journal is the outcome oracle. A harness denial or refusal is never sufficient evidence that no consequential effect occurred.
 
+## External execution surfaces
+
+The first executable external tranche intentionally maps only what can be translated without moving enforcement into the adapter.
+
+### Replay — complete mapped proposition
+
+Agent Security Harness `DCA-005` sends the same external request identifier twice. The adapter maps only that identifier to the DPAC nonce and constructs an otherwise valid bounded loan-approval request. Workspace therefore remains the replay enforcement point.
+
+A successful mapped run requires:
+
+1. the first presentation reaches Workspace and creates exactly one actuator-owned effect;
+2. the second presentation reaches Workspace and is rejected as `replay`;
+3. the harness reports its live replay control as PASS; and
+4. the actuator journal confirms a total effect delta of exactly one across both presentations.
+
+No delegation-chain attenuation claim is inferred from this adapter mapping.
+
+### Governance self-modification — partial mapped proposition
+
+Agent Security Harness `GM-001` sends real gate-disable/self-modification requests. The adapter forwards each body unchanged to Workspace `/admin/policy`; it does not manufacture a denial. Workspace's explicit 404/405 refusal and an unchanged actuator journal are retained as evidence.
+
+This externally exercises **direct** mutation attempts. It does not externally reproduce the Workflow-controlled helper/transitive-capture half of `DPAC-ENF-009`, so the normalized result remains `not-observable` for the full direct+transitive proposition rather than being promoted to PASS.
+
+### Preserved gaps
+
+Other #170 classes remain `harness-gap` where the pinned harness wire contract cannot be mapped to the DPAC target without inventing authority, capability, prompt/tool, payment, or receipt semantics inside the adapter. HITL bypass is `not-applicable` because the current enforced DPAC target has no real human-approval boundary.
+
+These are evidence outcomes, not unfinished PASS results.
+
 ## Normalized result states
 
-Every mapped vector terminates in exactly one Lab state:
+Every vector terminates in exactly one Lab state:
 
 - `pass` — the attack was materially exercised and the DPAC proposition held, including the required effect-oracle observation;
 - `fail` — the attack materially falsified the expected DPAC property;
 - `not-applicable` — the attack class does not apply to the target shape;
-- `not-observable` — the target/harness interaction does not expose enough evidence to determine the property;
+- `not-observable` — the target/harness interaction does not expose enough evidence to determine the full property;
 - `harness-gap` — a relevant DPAC attack surface exists but the pinned harness cannot express it without Lab-invented behavior.
 
-An upstream PASS is never sufficient on its own for a Lab `pass`. Missing, simulated, reference-model-only, unreachable, or indeterminate evidence cannot be promoted to `pass`.
+An upstream PASS is never sufficient on its own for a Lab `pass`. Missing, simulated, reference-model-only, unreachable, indeterminate, or partial evidence cannot be promoted to `pass`.
 
-## Initial vector set
+## Run
 
-The first executable tranche is deliberately bounded to six already-observable DPAC properties:
+The external wheel is deliberately not vendored. Install exactly the pinned release artifact after verifying its SHA-256, then run:
 
-1. revoked/insufficient authority;
-2. capability-envelope overreach;
-3. replay/duplicate execution;
-4. stale capability state / TOCTOU;
-5. target or parameter substitution;
-6. direct/transitive capability-controller capture.
+```bash
+python experiments/dpac-agent-security/tests/test_normalizer.py
+python experiments/dpac-agent-security/run.py --check \
+  --output /tmp/dpac-agent-security.json
+```
 
-The mapping is in [`vector-map.yaml`](vector-map.yaml). Candidate upstream modules are recorded only where their published live surface materially overlaps the DPAC property. A candidate mapping is not treated as an executed mapping until the adapter proves that the harness request reached and exercised the intended DPAC enforcement point.
+CI performs the download, digest verification, installation, Docker execution, result-schema validation, and evidence upload in `.github/workflows/dpac-agent-security.yml`.
 
-## Evidence discipline
+The runner always tears down the test adapter, Workspace/actuator topology, networks, volumes, and transient runtime secrets.
 
-Normalized records conform to [`schemas/result.schema.json`](schemas/result.schema.json) and preserve separate fields for:
+## Machine-readable contract
 
-- harness-produced verdict/evidence;
-- Lab target observation;
-- actuator-owned effect counts or identifiers;
-- exact Lab and harness revisions;
-- mapping status and limitations.
+- [`target-profile.yaml`](target-profile.yaml) — exact target, harness pin, authority boundary, and evidence rules.
+- [`vector-map.yaml`](vector-map.yaml) — all ten #170 adversarial classes and their executed/gap/not-applicable disposition.
+- [`schemas/result.schema.json`](schemas/result.schema.json) — normalized per-vector evidence schema.
+- [`normalizer.py`](normalizer.py) — conservative Lab interpretation rule.
 
-The external harness is additive evidence. Existing first-party DPAC deterministic tests remain authoritative regression evidence for the repository-owned implementation.
+The external harness is additive evidence. Existing first-party DPAC deterministic tests remain repository-owned regression evidence.
 
 ## Claim boundary
 
-A successful run can establish only that the pinned external harness materially exercised the mapped attack against the stated Lab target and that the independently observed effect state matched the DPAC proposition. It does not establish independent certification, exhaustive security, host/daemon compromise resistance, upstream specification conformance, or production readiness.
+A successful run establishes only that the pinned external harness materially exercised the stated mapped attack against the stated Lab target and that the independently observed effect state matched the bounded DPAC proposition. It does not establish independent certification, exhaustive security, host/daemon compromise resistance, upstream specification conformance, production readiness, or automatic maturity promotion.
