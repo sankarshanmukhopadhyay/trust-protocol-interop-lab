@@ -16,6 +16,15 @@
   "properties": {
     "vector_id": {"type": "string", "pattern": "^DPAC-ASH-[0-9]{3}$"},
     "attack_class": {"type": "string", "minLength": 1},
+    "applicable": {"type": "boolean"},
+    "mapping": {
+      "type": "object",
+      "properties": {
+        "status": {"type": "string", "minLength": 1},
+        "coverage_complete": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
     "expected": {
       "type": "object",
       "required": ["effect_delta"],

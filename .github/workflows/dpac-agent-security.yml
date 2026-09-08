@@ -1,0 +1,81 @@
+name: DPAC external adversarial evidence
+
+on:
+  pull_request:
+    paths:
+      - 'cases/dpac-actuation/**'
+      - 'experiments/dpac-agent-security/**'
+      - 'experiments/dpac-enforced-boundary/**'
+      - '.github/workflows/dpac-agent-security.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  agent-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Download pinned Agent Security Harness wheel
+        env:
+          ASH_URL: https://github.com/msaleme/red-team-blue-team-agent-fabric/releases/download/v4.21.1/agent_security_harness-4.21.1-py3-none-any.whl
+        run: >-
+          curl --fail --location --retry 3 --silent --show-error
+          "$ASH_URL" -o "${{ runner.temp }}/agent_security_harness-4.21.1-py3-none-any.whl"
+
+      - name: Verify external harness artifact digest
+        working-directory: ${{ runner.temp }}
+        run: >-
+          echo '3daa21b6216ae81d9e5f1fe2e0016a064ac73db1b2a8a2fd71d6893683a1a99d  agent_security_harness-4.21.1-py3-none-any.whl'
+          | sha256sum --check --strict
+
+      - name: Install pinned external harness and validation dependencies
+        run: |
+          python -m pip install --disable-pip-version-check pyyaml jsonschema
+          python -m pip install --disable-pip-version-check --no-deps "${{ runner.temp }}/agent_security_harness-4.21.1-py3-none-any.whl"
+          python - <<'PY'
+          from importlib import metadata
+          assert metadata.version('agent-security-harness') == '4.21.1'
+          print('PASS pinned Agent Security Harness 4.21.1 installed')
+          PY
+
+      - name: Run normalization invariants
+        run: python experiments/dpac-agent-security/tests/test_normalizer.py
+
+      - name: Run external adversarial DPAC evidence
+        run: >-
+          python experiments/dpac-agent-security/run.py --check
+          --output "${{ runner.temp }}/dpac-agent-security.json"
+
+      - name: Validate normalized vector evidence schema
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import jsonschema
+
+          evidence = json.loads(Path('${{ runner.temp }}/dpac-agent-security.json').read_text())
+          schema = json.loads(Path('experiments/dpac-agent-security/schemas/result.schema.json').read_text())
+          records = evidence['records']
+          assert len(records) == 10, f'expected 10 normalized vectors, found {len(records)}'
+          for record in records:
+              jsonschema.validate(record, schema)
+          print('PASS 10 DPAC external adversarial records validate against result schema')
+          PY
+
+      - name: Upload normalized adversarial evidence
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: dpac-agent-security
+          path: ${{ runner.temp }}/dpac-agent-security.json
+          if-no-files-found: error
