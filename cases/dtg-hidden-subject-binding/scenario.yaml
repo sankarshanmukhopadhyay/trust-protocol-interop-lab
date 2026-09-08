@@ -1,13 +1,39 @@
 case: IC-DTG-HIDDEN-SUBJECT-BINDING-EXP
 status: pre-admission-experimental
 source_pins:
-  vac: {repository: trustoverip/dtgwg-cred-spec, pull_request: 29, head_sha: 84650749afd48798e1c8919a95be359c0367a1c9, authority_status: proposed-upstream}
-  vdc: {repository: trustoverip/dtgwg-cred-spec, pull_request: 19, head_sha: ad5876f1b96e2149adec84d37d6595b4a212db9c, authority_status: proposed-upstream}
+  wd02:
+    repository: trustoverip/dtgwg-cred-spec
+    revision: 67149716032318f7f29770e5d3e6f0d35e52b8c3
+    designation: Working Draft 02
+  vac:
+    repository: trustoverip/dtgwg-cred-spec
+    pull_request: 29
+    head_sha: 3f90af3a87779f23d5be446da8745a627748f79c
+    merge_commit: 4f7e66b6dfcd8eddc212c8002351a6ad814c60e1
+    authority_status: adopted-wd02
+  vdc:
+    repository: trustoverip/dtgwg-cred-spec
+    pull_request: 19
+    head_sha: 873a473e9aa9564b6751eee10e2561bcb7d767aa
+    merge_commit: 37074bdcd861c51f3e5b7868ce700832b17b73ce
+    authority_status: adopted-wd02
+  openvtc:
+    repository: OpenVTC/verifiable-trust-infrastructure
+    revision: 72bf5794071971da506eb7a5af8e4765c35c137c
+    implementation_note: >-
+      Current relationship/persona implementation explicitly documents that a VPC does
+      not itself bind the persona identifier to the relationship DID and that its
+      request-level proof-of-control workaround does not resolve Credential Spec #9.
 propositions: [DTG-371-P10, DTG-371-P13]
+rule: >-
+  Common-control or same-subject semantics must be established by evidence that proves
+  the required linkage in the current context. Identifier association, possession of
+  individually valid component credentials, or proof of control over only one identifier
+  does not establish control of another identifier or a reusable subject equivalence.
 vectors:
   - id: HSB-POS-001
     class: positive
-    relation: VMC-plus-VAC
+    relation: VMC-plus-VAC-with-explicit-binding-proof
     component_credentials_valid: true
     binding_required: true
     binding_proven: true
@@ -58,4 +84,31 @@ vectors:
     binding_proven: true
     context_binding_valid: true
     durable_correlator_exported: true
+    expected: deny
+  - id: HSB-NEG-006
+    class: negative
+    relation: identifier-association-without-common-control-proof
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: false
+    context_binding_valid: true
+    durable_correlator_exported: false
+    expected: deny
+  - id: HSB-NEG-007
+    class: negative
+    relation: proof-of-control-for-one-identifier-promoted-to-second-identifier
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: false
+    context_binding_valid: true
+    durable_correlator_exported: false
+    expected: deny
+  - id: HSB-NEG-008
+    class: negative
+    relation: request-level-pop-promoted-to-reusable-credential-level-subject-equivalence
+    component_credentials_valid: true
+    binding_required: true
+    binding_proven: false
+    context_binding_valid: true
+    durable_correlator_exported: false
     expected: deny
