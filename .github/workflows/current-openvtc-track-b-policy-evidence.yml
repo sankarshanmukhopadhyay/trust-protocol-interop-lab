@@ -1,0 +1,94 @@
+name: Current OpenVTC Track B policy evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/current-openvtc-track-b-policy-evidence.yml'
+      - 'experiments/dtg-protected-access/current_openvtc_track_b_policy_context.py'
+      - 'experiments/dtg-protected-access/capture_ab_runtime.py'
+      - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/current-openvtc-track-b-policy-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/current-openvtc-track-b-policy-evidence.yml'
+      - 'experiments/dtg-protected-access/current_openvtc_track_b_policy_context.py'
+      - 'experiments/dtg-protected-access/capture_ab_runtime.py'
+      - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/current-openvtc-track-b-policy-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
+      OPENVTC_REVISION: 72bf5794071971da506eb7a5af8e4765c35c137c
+    steps:
+      - name: Checkout Interop Lab producer
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install evidence dependencies
+        run: python -m pip install --disable-pip-version-check pyyaml
+      - name: Install VTI native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev pkg-config
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Checkout immutable OpenVTC target
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 72bf5794071971da506eb7a5af8e4765c35c137c
+          path: build/current-openvtc
+          fetch-depth: 1
+      - name: Verify immutable target pin
+        shell: bash
+        run: |
+          test "$(git -C "$OPENVTC_CHECKOUT" rev-parse HEAD)" = "$OPENVTC_REVISION"
+          test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
+      - name: Execute target-native policy A/B observation
+        run: |
+          python experiments/dtg-protected-access/capture_ab_runtime.py \
+            cases/dtg-protected-access/current-openvtc-track-b-policy-ab.yaml \
+            --output "${{ runner.temp }}/current-openvtc-track-b-policy.yaml"
+      - name: Verify attributable policy evidence
+        run: |
+          python - <<'PY'
+          import pathlib, yaml
+          doc=yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-track-b-policy.yaml').read_text())
+          assert doc['provenance']['implementation_repository']=='OpenVTC/verifiable-trust-infrastructure'
+          assert doc['provenance']['implementation_revision']=='72bf5794071971da506eb7a5af8e4765c35c137c'
+          s=doc['requirements']['ER-STATUS-AB']['surfaces']
+          assert s['policy_discovery_handle']['classification']=='fresh'
+          assert s['policy_endpoint']['classification']=='fresh'
+          assert s['policy_discovery_handle']['execution']['context_a']=='executed'
+          assert s['policy_discovery_handle']['execution']['context_b']=='executed'
+          assert doc['experiment']['observed_join']=='not-detected'
+          PY
+      - name: Verify target checkout restored clean
+        shell: bash
+        run: test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
+      - name: Export DPIP provided_evidence binding
+        run: |
+          python experiments/dtg-protected-access/export_dpip_evidence.py \
+            "${{ runner.temp }}/current-openvtc-track-b-policy.yaml" \
+            --output "${{ runner.temp }}/current-openvtc-track-b-policy-provided-evidence.json"
+      - name: Upload attributable Track B policy evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: current-openvtc-track-b-policy-runtime-upstream-observation
+          path: |
+            ${{ runner.temp }}/current-openvtc-track-b-policy.yaml
+            ${{ runner.temp }}/current-openvtc-track-b-policy-provided-evidence.json
+          if-no-files-found: error
