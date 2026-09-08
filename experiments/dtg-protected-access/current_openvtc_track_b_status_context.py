@@ -19,6 +19,7 @@ OPENVTC_REPOSITORY = "OpenVTC/verifiable-trust-infrastructure"
 OPENVTC_REVISION = "72bf5794071971da506eb7a5af8e4765c35c137c"
 STATUS_HANDLE = "revocation"
 STATUS_ENDPOINT = "https://vtc.example.com/v1/status-lists/revocation"
+MECHANICAL_LOCKFILES = {"Cargo.lock", "vtc-service/admin-ui/package-lock.json"}
 
 
 def run(*args: str, cwd: Path) -> subprocess.CompletedProcess[str]:
@@ -35,20 +36,17 @@ def verify_checkout(checkout: Path) -> None:
         )
 
 
-def restore_known_cargo_lock_refresh(checkout: Path) -> None:
-    """Cargo 1.98 may refresh only the tracked lockfile for this older target pin.
-
-    Preserve the cleanliness invariant by allowing exactly that mechanical refresh,
-    restoring the immutable target copy, and rejecting every other tracked mutation.
-    """
+def restore_known_build_lock_refreshes(checkout: Path) -> None:
+    """Restore only known lockfile rewrites caused by the newer CI toolchain."""
     status = run("git", "status", "--porcelain", "--untracked-files=no", cwd=checkout)
     lines = [line for line in status.stdout.splitlines() if line.strip()]
-    if not lines:
+    changed = {line[3:] for line in lines}
+    if not changed:
         return
-    if len(lines) == 1 and lines[0][3:] == "Cargo.lock":
-        restored = run("git", "checkout", "--", "Cargo.lock", cwd=checkout)
+    if changed.issubset(MECHANICAL_LOCKFILES):
+        restored = run("git", "checkout", "--", *sorted(changed), cwd=checkout)
         if restored.returncode != 0:
-            raise RuntimeError(restored.stderr.strip() or "could not restore Cargo.lock")
+            raise RuntimeError(restored.stderr.strip() or "could not restore build lockfiles")
         return
     raise RuntimeError(f"target test changed unexpected tracked files: {lines}")
 
@@ -68,7 +66,7 @@ def observe(checkout: Path, context: str) -> dict[str, object]:
         "--nocapture",
         cwd=checkout,
     )
-    restore_known_cargo_lock_refresh(checkout)
+    restore_known_build_lock_refreshes(checkout)
     if completed.returncode != 0:
         detail = "\n".join(x for x in (completed.stdout.strip(), completed.stderr.strip()) if x)
         raise RuntimeError(f"OpenVTC status-list integration test failed:\n{detail[-12000:]}")
@@ -91,8 +89,8 @@ def observe(checkout: Path, context: str) -> dict[str, object]:
         "producer_component": OPENVTC_REPOSITORY,
         "assurance_boundary": (
             "The target's own status-list integration test executed and verified a signed "
-            "revocation status-list response. Cargo.lock may be mechanically refreshed by "
-            "the newer CI Cargo and is restored before evidence return. Policy-discovery "
+            "revocation status-list response. Only known Cargo/npm lockfile rewrites caused "
+            "by the newer CI toolchain are restored before evidence return. Policy-discovery "
             "and Trust Task surfaces remain not-evidenced by this slice."
         ),
     }
