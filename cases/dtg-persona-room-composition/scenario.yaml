@@ -1,0 +1,93 @@
+case: IC-DTG-PERSONA-ROOM-001
+status: pre-admission-experimental
+purpose: >-
+  Make cross-context Persona, Data Room and agent authority failures falsifiable without
+  treating legitimate component-local access as aggregation or disclosure authority.
+source_pins:
+  trust_tasks: {repository: trustoverip/dtgwg-trust-tasks-tf, revision: 84a4329a5f797dec9d240c83ab5d564c120dde8f}
+  openvtc: {repository: OpenVTC/verifiable-trust-infrastructure, revision: 0a5897f0acf9e16eec8ee88ccb74d7b1afb0bd87}
+  dpip_contract: {repository: sankarshanmukhopadhyay/dtg-privacy-implementation-profile, issue: 214}
+related_cases:
+  - cases/dtg-data-room-actuation/scenario.yaml
+  - cases/dtg-hidden-subject-binding/scenario.yaml
+  - cases/dtg-vac-attenuation/scenario.yaml
+invariant: >-
+  Legitimate access to information in multiple contexts does not automatically authorize
+  aggregation, inference, disclosure or consequential action across those contexts.
+evidence_fields:
+  - proposition
+  - source_runtime_version
+  - preconditions
+  - authority_state
+  - action_attempted
+  - expected_result
+  - observed_result
+  - artifacts
+  - residual_uncertainty
+vectors:
+  - id: PR-COMP-NEG-A
+    proposition: P-PER-002
+    name: persona-over-disclosure
+    action_attempted: disclose attribute absent from authorized profile
+    expected_result: deny
+    activation: source-executable
+    evidence_basis: OpenVTC Persona disclosure preview/present implementation
+  - id: PR-COMP-NEG-B
+    proposition: P-PER-001
+    name: context-escape
+    action_attempted: use room-derived context authority to access agent-scoped Persona state
+    expected_result: deny
+    activation: source-executable
+    evidence_basis: OpenVTC Persona context-isolation boundary
+  - id: PR-COMP-NEG-C
+    proposition: P-PER-009
+    name: cross-context-aggregation-without-authority
+    action_attempted: combine family business community and Persona knowledge into one disclosure
+    expected_result: deny-or-explicit-authority-required
+    activation: waiting-composition-runtime
+    residual_uncertainty: no current executable composed agent policy surface establishes this negative case
+  - id: PR-COMP-NEG-D
+    proposition: P-ROOM-014
+    name: room-content-induced-persona-disclosure
+    action_attempted: malicious room record requests hidden Persona attributes and claims policy authority
+    expected_result: deny
+    activation: waiting-composition-runtime
+    residual_uncertainty: requires executable shared-memory to agent-to-Persona path
+  - id: PR-COMP-NEG-E
+    proposition: P-PER-007
+    name: agent-capability-escalation
+    action_attempted: request action beyond attenuated capability through parameters or room content
+    expected_result: deny
+    activation: reusable-existing-case
+    evidence_basis: cases/dtg-data-room-actuation/scenario.yaml and cases/dtg-vac-attenuation/scenario.yaml
+  - id: PR-COMP-NEG-F
+    proposition: P-ROOM-002
+    name: mixed-principal-authority-composition
+    action_attempted: combine membership and action authority from different principals
+    expected_result: deny
+    activation: reusable-existing-case
+    evidence_basis: cases/dtg-data-room-actuation/scenario.yaml and cases/dtg-hidden-subject-binding/scenario.yaml
+  - id: PR-COMP-NEG-G
+    proposition: P-ROOM-005
+    name: expiry-removal-revocation
+    action_attempted: repeat operation after Persona authority agent capability or room membership ends
+    expected_result: current-authority-controls
+    activation: partial-existing-case
+    evidence_basis: Data Room actuation covers stale/current authority; full composed lifecycle remains pending
+  - id: PR-COMP-NEG-H
+    proposition: P-ROOM-015
+    name: revoked-content-agent-memory
+    action_attempted: use cached or summarized room content after source record is deleted revoked or superseded
+    expected_result: observe-and-report
+    activation: waiting-agent-memory-runtime
+    residual_uncertainty: retrospective forgetting is not assumed
+privacy_routes:
+  - proposition: P-ROOM-007
+    provider: DPIP
+    experiment: E2/E4
+  - proposition: P-ROOM-008
+    provider: DPIP
+    experiment: E3
+  - proposition: P-PER-008
+    provider: DPIP
+    experiment: E6
