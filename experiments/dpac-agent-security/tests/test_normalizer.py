@@ -12,12 +12,12 @@ SPEC.loader.exec_module(module)
 normalize_record = module.normalize_record
 
 
-def record(*, verdict="PASS", serviced=True, expected=0, observed=0, mapping="executed", applicable=True):
+def record(*, verdict="PASS", serviced=True, expected=0, observed=0, mapping="executed", applicable=True, coverage_complete=True):
     return {
         "vector_id": "DPAC-ASH-001",
         "attack_class": "authority-bypass",
         "applicable": applicable,
-        "mapping": {"status": mapping},
+        "mapping": {"status": mapping, "coverage_complete": coverage_complete},
         "expected": {"effect_delta": expected},
         "observed": {
             "target_serviced": serviced,
@@ -44,31 +44,21 @@ def check(expected_result: str, **kwargs):
 
 
 def main() -> int:
-    # A material harness PASS plus agreeing independent effect oracle may pass.
     check("pass")
-
-    # Upstream PASS cannot hide an unexpected consequential effect.
     check("fail", verdict="PASS", expected=0, observed=1)
-
-    # Unserviced/unreachable targets never become PASS.
     check("not-observable", verdict="PASS", serviced=False)
-
-    # Upstream inconclusive remains non-observable even when the effect count is unchanged.
     check("not-observable", verdict="INCONCLUSIVE")
-
-    # A candidate/unresolved mapping is a harness gap, not an executed PASS.
     check("harness-gap", mapping="candidate")
     check("harness-gap", mapping="unresolved")
-
-    # A non-applicable boundary is stated directly.
     check("not-applicable", applicable=False)
-
-    # Harness FAIL with no unexpected effect is a disagreement, not a synthetic Lab PASS.
     check("not-observable", verdict="FAIL", expected=0, observed=0)
-
-    # Positive-control success requires the expected effect to occur exactly.
     check("pass", verdict="PASS", expected=1, observed=1)
     check("fail", verdict="PASS", expected=1, observed=0)
+
+    # Partial coverage cannot become a full Lab PASS, but an unexpected effect
+    # must still dominate the coverage downgrade and fail the proposition.
+    check("not-observable", verdict="PASS", coverage_complete=False)
+    check("fail", verdict="PASS", coverage_complete=False, expected=0, observed=1)
 
     print("PASS dpac-agent-security normalizer self-test")
     return 0

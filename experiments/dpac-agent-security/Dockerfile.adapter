@@ -1,0 +1,6 @@
+FROM python:3.13-alpine
+WORKDIR /app
+COPY adapter.py /app/adapter.py
+USER 10004:10004
+EXPOSE 8088
+CMD ["python", "/app/adapter.py"]
