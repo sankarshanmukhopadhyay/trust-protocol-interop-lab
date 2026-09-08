@@ -1,17 +1,22 @@
 case: IC-DTG-VDC-VAC-COMPOSITION-EXP
 status: pre-admission-experimental
 source_pins:
+  wd02:
+    repository: trustoverip/dtgwg-cred-spec
+    revision: 67149716032318f7f29770e5d3e6f0d35e52b8c3
+    designation: Working Draft 02
   vdc:
     repository: trustoverip/dtgwg-cred-spec
     pull_request: 19
     head_sha: 873a473e9aa9564b6751eee10e2561bcb7d767aa
     merge_commit: 37074bdcd861c51f3e5b7868ce700832b17b73ce
-    authority_status: adopted-upstream-main
+    authority_status: adopted-wd02
   vac:
     repository: trustoverip/dtgwg-cred-spec
     pull_request: 29
-    head_sha: 84650749afd48798e1c8919a95be359c0367a1c9
-    authority_status: proposed-upstream
+    head_sha: 3f90af3a87779f23d5be446da8745a627748f79c
+    merge_commit: 4f7e66b6dfcd8eddc212c8002351a6ad814c60e1
+    authority_status: adopted-wd02
 propositions: [DTG-371-P06, DTG-371-P07, DTG-371-P09, DTG-371-P14]
 rule: >-
   A represented action is admitted only when delegation for the requested act is valid,
@@ -44,7 +49,7 @@ vectors:
     expected: deny
   - id: VDV-NEG-002
     class: negative
-    description: current VAC-like authority exists but actor lacks representation to act in principal name
+    description: current VAC authority exists but actor lacks representation to act in principal name
     delegation_valid: false
     principal_authority_current: true
     delegate_eligibility_required: false
