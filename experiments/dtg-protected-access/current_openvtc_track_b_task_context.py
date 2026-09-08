@@ -57,6 +57,19 @@ def verify_checkout(checkout: Path) -> None:
         raise ValueError("OpenVTC checkout must be clean before Track B task observation")
 
 
+def restore_known_cargo_lock_refresh(checkout: Path) -> None:
+    status = run("git", "status", "--porcelain", "--untracked-files=no", cwd=checkout)
+    lines = [line for line in status.stdout.splitlines() if line.strip()]
+    if not lines:
+        return
+    if len(lines) == 1 and lines[0][3:] == "Cargo.lock":
+        restored = run("git", "checkout", "--", "Cargo.lock", cwd=checkout)
+        if restored.returncode != 0:
+            raise RuntimeError(restored.stderr.strip() or "could not restore Cargo.lock")
+        return
+    raise RuntimeError(f"target test changed unexpected tracked files: {lines}")
+
+
 def observe(checkout: Path, context: str) -> dict[str, object]:
     verify_checkout(checkout)
     path = checkout / TARGET_TEST
@@ -81,6 +94,7 @@ def observe(checkout: Path, context: str) -> dict[str, object]:
         )
     finally:
         path.write_text(original, encoding="utf-8")
+    restore_known_cargo_lock_refresh(checkout)
 
     if completed.returncode != 0:
         detail = "\n".join(x for x in (completed.stdout.strip(), completed.stderr.strip()) if x)
@@ -108,7 +122,8 @@ def observe(checkout: Path, context: str) -> dict[str, object]:
         "assurance_boundary": (
             "The target's existing pairwise relationship publish integration path executed. "
             "Values are target-generated Trust Task response, persisted relationship and audit "
-            "identifiers exposed only through temporary test instrumentation."
+            "identifiers exposed only through temporary test instrumentation. Cargo.lock may be "
+            "mechanically refreshed by CI Cargo and is restored before evidence return."
         ),
     }
 
