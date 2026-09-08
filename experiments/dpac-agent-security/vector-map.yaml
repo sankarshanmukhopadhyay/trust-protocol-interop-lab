@@ -1,0 +1,81 @@
+version: 1
+case_id: IC-DPAC-ACTUATION-001
+vectors:
+  - id: DPAC-ASH-001
+    attack_class: authority-bypass
+    proposition: revoked or insufficient action-specific authority cannot cause actuation
+    existing_dpac_scenario: DPAC-ENF-005-revoked-authority
+    expected_effect_delta: 0
+    candidate_harness:
+      module: protocol_tests.delegation_chain_harness
+      basis: live delegation-chain surface includes revocation, effective authority and tool-boundary enforcement
+      mapping_status: candidate
+    fallback_result: harness-gap
+
+  - id: DPAC-ASH-002
+    attack_class: capability-envelope-bypass
+    proposition: authority cannot enlarge the independently administered Workspace capability envelope
+    existing_dpac_scenario: DPAC-ENF-004-capability-overreach
+    expected_effect_delta: 0
+    candidate_harness:
+      module: protocol_tests.capability_profile_harness
+      basis: live capability-profile surface probes resource boundaries and mid-session privilege escalation
+      mapping_status: candidate
+    fallback_result: harness-gap
+
+  - id: DPAC-ASH-003
+    attack_class: replay-duplicate-execution
+    proposition: a consumed actuation request cannot cause a second consequential effect
+    existing_dpac_scenario: DPAC-ENF-008-replay-single-effect
+    expected_effect_delta: 0
+    candidate_harness:
+      module: protocol_tests.delegation_chain_harness
+      basis: DAP-11 defines repeated request identifier as replay and requires no second effect
+      mapping_status: candidate
+    fallback_result: harness-gap
+
+  - id: DPAC-ASH-004
+    attack_class: stale-state-toctou
+    proposition: a changed capability revision requires fresh concurrence before actuation
+    existing_dpac_scenario: DPAC-ENF-007-capability-revision-race
+    expected_effect_delta: 0
+    candidate_harness:
+      module: null
+      basis: no pinned upstream live-target contract has yet been shown to mutate the DPAC capability revision between check and actuation
+      mapping_status: unresolved
+    fallback_result: harness-gap
+
+  - id: DPAC-ASH-005
+    attack_class: target-parameter-substitution
+    proposition: changing the bound target or consequential parameter after authority evaluation cannot cause actuation
+    existing_dpac_scenario: DPAC-ENF-006-request-substitution
+    expected_effect_delta: 0
+    candidate_harness:
+      module: protocol_tests.delegation_chain_harness
+      basis: delegation live surface includes resource, constraint and effective-authority checks at the effect boundary
+      mapping_status: candidate
+    fallback_result: harness-gap
+
+  - id: DPAC-ASH-006
+    attack_class: direct-transitive-control-collapse
+    proposition: Workflow or a Workflow-controlled helper cannot modify or bypass its own Workspace capability controller
+    existing_dpac_scenario: DPAC-ENF-009-transitive-helper-denied
+    expected_effect_delta: 0
+    candidate_harness:
+      module: protocol_tests.governance_modification_harness
+      basis: live governance-modification surface attempts gate disable, threshold drift, permission escalation and related self-modification
+      mapping_status: candidate
+    fallback_result: harness-gap
+
+additional_issue_170_classes:
+  prompt-tool-injection:
+    status: deferred-until-adapter-demonstrates-real-actuation-path
+  confused-deputy:
+    status: candidate
+    note: delegation_chain_harness models ambient authority and tool-boundary confused-deputy behavior, but DPAC adapter mapping is not yet executed
+  hitl-bypass:
+    status: not-applicable
+    note: current enforced DPAC target has no real human-approval boundary
+  evidence-receipt-integrity:
+    status: deferred
+    note: preserve actuator journal as independent oracle before adding receipt-claim attacks

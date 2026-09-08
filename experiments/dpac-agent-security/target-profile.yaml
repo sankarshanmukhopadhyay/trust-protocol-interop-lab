@@ -1,0 +1,52 @@
+profile_version: 1
+case_id: IC-DPAC-ACTUATION-001
+tracking_issue: 170
+maturity: Experimental
+
+target:
+  experiment: dpac-enforced-boundary
+  source_path: experiments/dpac-enforced-boundary
+  interface:
+    status:
+      method: GET
+      path: /status
+    actuate:
+      method: POST
+      path: /actuate
+  enforcement_point: workspace
+  consequential_effect_owner: actuator
+  effect_oracle: actuator-owned journal
+
+harness:
+  project: msaleme/red-team-blue-team-agent-fabric
+  package: agent-security-harness
+  version: 4.21.1
+  tag: v4.21.1
+  tag_verification: unsigned
+  release_commit: 455fa46d35c0c13539c835bd758baced04ca2aa9
+  wheel:
+    filename: agent_security_harness-4.21.1-py3-none-any.whl
+    sha256: 3daa21b6216ae81d9e5f1fe2e0016a064ac73db1b2a8a2fd71d6893683a1a99d
+    release_url: https://github.com/msaleme/red-team-blue-team-agent-fabric/releases/download/v4.21.1/agent_security_harness-4.21.1-py3-none-any.whl
+
+authority_boundary:
+  harness_role: external-adversarial-evidence-producer
+  lab_role: proposition-owner-target-owner-evidence-interpreter
+  harness_output_is_automatic_assurance: false
+  harness_output_can_promote_maturity: false
+  rahp_orchestration: false
+
+result_states:
+  - pass
+  - fail
+  - not-applicable
+  - not-observable
+  - harness-gap
+
+evidence_rules:
+  harness_pass_requires_lab_effect_oracle: true
+  denial_alone_proves_no_effect: false
+  missing_or_indeterminate_becomes_pass: false
+  simulated_or_reference_model_only_becomes_pass: false
+  preserve_raw_harness_evidence: true
+  preserve_mapping_limitations: true
