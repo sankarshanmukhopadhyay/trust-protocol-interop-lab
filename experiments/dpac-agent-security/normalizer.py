@@ -33,13 +33,12 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
       * the vector applies;
       * its harness mapping was actually executed rather than merely proposed;
       * the target materially serviced the request;
-      * the harness returned PASS;
-      * the independently observed effect delta equals the DPAC expectation.
+      * the independently observed effect delta equals the DPAC expectation;
+      * the external harness returned PASS; and
+      * the mapped coverage is complete for the proposition being claimed.
 
-    Any observed consequential effect outside the expectation is a FAIL even if
-    the harness reports PASS. Disagreement in the other direction (harness FAIL
-    while the effect oracle still matches the DPAC expectation) is retained as
-    NOT-OBSERVABLE: the two evidence sources disagree about what was established.
+    An unexpected effect is a FAIL before any coverage downgrade is considered.
+    Partial coverage can therefore never hide a consequential failure.
     """
     out = json.loads(json.dumps(record))
 
@@ -57,11 +56,6 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
         out["result"] = "not-observable"
         return out
 
-    verdict = _verdict(observed.get("harness_verdict"))
-    if verdict in INCONCLUSIVE_WORDS or verdict is None:
-        out["result"] = "not-observable"
-        return out
-
     expected_delta = out.get("expected", {}).get("effect_delta")
     observed_delta = observed.get("effect_delta")
     if not isinstance(expected_delta, int) or not isinstance(observed_delta, int):
@@ -72,10 +66,17 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
         out["result"] = "fail"
         return out
 
+    if mapping.get("coverage_complete") is False:
+        out["result"] = "not-observable"
+        return out
+
+    verdict = _verdict(observed.get("harness_verdict"))
+    if verdict in INCONCLUSIVE_WORDS or verdict is None:
+        out["result"] = "not-observable"
+        return out
     if verdict in PASS_WORDS:
         out["result"] = "pass"
         return out
-
     if verdict in FAIL_WORDS:
         out["result"] = "not-observable"
         return out
@@ -85,7 +86,6 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_basic_shape(record: dict[str, Any]) -> list[str]:
-    """Cheap stdlib guard; repository JSON Schema validation remains separate."""
     errors: list[str] = []
     for key in ("vector_id", "attack_class", "expected", "observed", "harness", "target", "evidence"):
         if key not in record:
