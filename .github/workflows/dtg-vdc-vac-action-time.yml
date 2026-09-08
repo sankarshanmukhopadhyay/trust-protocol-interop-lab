@@ -1,0 +1,57 @@
+name: DTG VDC VAC action-time composition evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/dtg-vdc-vac-action-time.yml'
+      - 'experiments/dtg-vdc-vac-composition/run_action_time.py'
+      - 'experiments/dtg-vdc-vac-composition/run.py'
+      - 'cases/dtg-vdc-vac-composition/scenario.yaml'
+      - 'experiments/protected-delegated-care/authority_boundary.py'
+      - 'experiments/protected-delegated-care/run_authority_boundary.py'
+      - 'experiments/protected-delegated-care/core.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dtg-vdc-vac-action-time.yml'
+      - 'experiments/dtg-vdc-vac-composition/run_action_time.py'
+      - 'experiments/dtg-vdc-vac-composition/run.py'
+      - 'cases/dtg-vdc-vac-composition/scenario.yaml'
+      - 'experiments/protected-delegated-care/authority_boundary.py'
+      - 'experiments/protected-delegated-care/run_authority_boundary.py'
+      - 'experiments/protected-delegated-care/core.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  action-time-composition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install evidence dependencies
+        run: python -m pip install --disable-pip-version-check pyyaml
+      - name: Execute action-time composition evidence
+        run: |
+          python experiments/dtg-vdc-vac-composition/run_action_time.py > "${{ runner.temp }}/wd02-action-time.json"
+      - name: Verify terminal bounded result
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('${{ runner.temp }}/wd02-action-time.json')
+          doc=json.loads(p.read_text())
+          assert doc['all_expected_outcomes_matched'] is True
+          assert doc['runtime_conclusion'].startswith('INDETERMINATE/BLOCKED')
+          assert doc['vectors'][0]['state_mutation'] is False
+          assert all(v['matches_expected'] for v in doc['vectors'])
+          PY
+      - name: Upload action-time evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: wd02-vdc-vac-trust-task-action-time
+          path: ${{ runner.temp }}/wd02-action-time.json
+          if-no-files-found: error
