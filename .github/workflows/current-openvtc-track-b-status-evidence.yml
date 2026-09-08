@@ -1,0 +1,111 @@
+name: Current OpenVTC Track B status evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/current-openvtc-track-b-status-evidence.yml'
+      - 'experiments/dtg-protected-access/current_openvtc_track_b_status_context.py'
+      - 'experiments/dtg-protected-access/capture_ab_runtime.py'
+      - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/current-openvtc-track-b-status-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/current-openvtc-track-b-status-evidence.yml'
+      - 'experiments/dtg-protected-access/current_openvtc_track_b_status_context.py'
+      - 'experiments/dtg-protected-access/capture_ab_runtime.py'
+      - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+      - 'cases/dtg-protected-access/current-openvtc-track-b-status-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
+      OPENVTC_REVISION: 72bf5794071971da506eb7a5af8e4765c35c137c
+    steps:
+      - name: Checkout Interop Lab producer
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Install evidence dependencies
+        run: python -m pip install --disable-pip-version-check pyyaml
+
+      - name: Install VTI native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev pkg-config
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Checkout immutable OpenVTC target
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 72bf5794071971da506eb7a5af8e4765c35c137c
+          path: build/current-openvtc
+          fetch-depth: 1
+
+      - name: Verify immutable target pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C "$OPENVTC_CHECKOUT" rev-parse HEAD)" = "$OPENVTC_REVISION"
+          test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
+
+      - name: Execute target-native Track B status observation
+        run: |
+          python experiments/dtg-protected-access/capture_ab_runtime.py \
+            cases/dtg-protected-access/current-openvtc-track-b-status-ab.yaml \
+            --output "${{ runner.temp }}/current-openvtc-track-b-status.yaml"
+
+      - name: Verify attributable shared-status evidence
+        run: |
+          python - <<'PY'
+          import pathlib, yaml
+          doc = yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-track-b-status.yaml').read_text())
+          assert doc['provenance']['implementation_repository'] == 'OpenVTC/verifiable-trust-infrastructure'
+          assert doc['provenance']['implementation_revision'] == '72bf5794071971da506eb7a5af8e4765c35c137c'
+          status = doc['requirements']['ER-STATUS-AB']['surfaces']
+          assert status['status_handle']['classification'] == 'identical'
+          assert status['status_endpoint']['classification'] == 'identical'
+          assert status['status_handle']['correlator_origin'] == 'target-derived'
+          assert status['status_endpoint']['correlator_origin'] == 'target-derived'
+          assert status['policy_discovery_handle']['classification'] == 'not-evidenced'
+          assert status['policy_endpoint']['classification'] == 'not-evidenced'
+          assert doc['experiment']['expected_join'] == 'must-detect'
+          assert doc['experiment']['observed_join'] == 'detected'
+          task = doc['requirements']['ER-TASK-AB']['surfaces']
+          assert all(v['classification'] == 'not-evidenced' for v in task.values())
+          PY
+
+      - name: Verify producer left upstream checkout clean
+        shell: bash
+        run: test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
+
+      - name: Export DPIP provided_evidence binding
+        run: |
+          python experiments/dtg-protected-access/export_dpip_evidence.py \
+            "${{ runner.temp }}/current-openvtc-track-b-status.yaml" \
+            --output "${{ runner.temp }}/current-openvtc-track-b-status-provided-evidence.json"
+
+      - name: Upload attributable Track B status evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: current-openvtc-track-b-status-runtime-upstream-observation
+          path: |
+            ${{ runner.temp }}/current-openvtc-track-b-status.yaml
+            ${{ runner.temp }}/current-openvtc-track-b-status-provided-evidence.json
+          if-no-files-found: error
