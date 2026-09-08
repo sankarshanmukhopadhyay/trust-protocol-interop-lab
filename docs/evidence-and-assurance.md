@@ -11,6 +11,7 @@ Use this section when the question is **“what does this result prove, and how 
 
 ## Start here
 
+- [Current assurance evidence](current-assurance-evidence.md) — current RAHP/DPIP evidence-producing tranches, immutable OpenVTC pins, residual owners and claim boundaries.
 - [Evidence model](evidence-model.md) — evidence-package semantics, provenance, negative evidence, historical reproducibility and bounded conclusions.
 - [Evidence packages](../evidence/README.md) — case-specific manifests and retained outputs.
 - [RAHP review register](../reviews/rahp/README.md) — pressure reviews and assurance dispositions.
