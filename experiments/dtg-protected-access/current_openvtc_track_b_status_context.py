@@ -35,6 +35,24 @@ def verify_checkout(checkout: Path) -> None:
         )
 
 
+def restore_known_cargo_lock_refresh(checkout: Path) -> None:
+    """Cargo 1.98 may refresh only the tracked lockfile for this older target pin.
+
+    Preserve the cleanliness invariant by allowing exactly that mechanical refresh,
+    restoring the immutable target copy, and rejecting every other tracked mutation.
+    """
+    status = run("git", "status", "--porcelain", "--untracked-files=no", cwd=checkout)
+    lines = [line for line in status.stdout.splitlines() if line.strip()]
+    if not lines:
+        return
+    if len(lines) == 1 and lines[0][3:] == "Cargo.lock":
+        restored = run("git", "checkout", "--", "Cargo.lock", cwd=checkout)
+        if restored.returncode != 0:
+            raise RuntimeError(restored.stderr.strip() or "could not restore Cargo.lock")
+        return
+    raise RuntimeError(f"target test changed unexpected tracked files: {lines}")
+
+
 def observe(checkout: Path, context: str) -> dict[str, object]:
     verify_checkout(checkout)
     completed = run(
@@ -50,6 +68,7 @@ def observe(checkout: Path, context: str) -> dict[str, object]:
         "--nocapture",
         cwd=checkout,
     )
+    restore_known_cargo_lock_refresh(checkout)
     if completed.returncode != 0:
         detail = "\n".join(x for x in (completed.stdout.strip(), completed.stderr.strip()) if x)
         raise RuntimeError(f"OpenVTC status-list integration test failed:\n{detail[-12000:]}")
@@ -72,8 +91,9 @@ def observe(checkout: Path, context: str) -> dict[str, object]:
         "producer_component": OPENVTC_REPOSITORY,
         "assurance_boundary": (
             "The target's own status-list integration test executed and verified a signed "
-            "revocation status-list response. Policy-discovery and Trust Task surfaces were "
-            "not executed and therefore remain not-evidenced."
+            "revocation status-list response. Cargo.lock may be mechanically refreshed by "
+            "the newer CI Cargo and is restored before evidence return. Policy-discovery "
+            "and Trust Task surfaces remain not-evidenced by this slice."
         ),
     }
 
