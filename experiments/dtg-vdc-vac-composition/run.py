@@ -57,7 +57,7 @@ def build_result() -> dict:
         "semantic_rule": scenario["rule"],
         "vectors": vectors,
         "all_expected_outcomes_matched": all(v["matches_expected"] for v in vectors),
-        "claim_boundary": "semantic composition evidence only; VDC semantics are adopted from merged credential-spec #19, while VAC semantics remain proposed upstream in #29",
+        "claim_boundary": "semantic composition evidence against adopted WD02 semantics; this fixture tests non-substitution and current-authority logic, not production cryptographic interoperability",
     }
 
 
