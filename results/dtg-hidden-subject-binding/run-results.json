@@ -1,1 +1,166 @@
-{"case":"IC-DTG-HIDDEN-SUBJECT-BINDING-EXP","status":"pre-admission-experimental","evaluator_version":"0.1","source_pins":{"vac":{"repository":"trustoverip/dtgwg-cred-spec","pull_request":29,"head_sha":"84650749afd48798e1c8919a95be359c0367a1c9","authority_status":"proposed-upstream"},"vdc":{"repository":"trustoverip/dtgwg-cred-spec","pull_request":19,"head_sha":"ad5876f1b96e2149adec84d37d6595b4a212db9c","authority_status":"proposed-upstream"}},"propositions":["DTG-371-P10","DTG-371-P13"],"vectors":[{"id":"HSB-POS-001","class":"positive","relation":"VMC-plus-VAC","checks":{"component_credentials_valid":true,"required_binding_proven":true,"context_binding_valid":true,"no_durable_correlator_exported":true},"decision":"allow","expected":"allow","matches_expected":true},{"id":"HSB-NEG-001","class":"negative","relation":"VMC-plus-VAC-different-hidden-subjects","checks":{"component_credentials_valid":true,"required_binding_proven":false,"context_binding_valid":true,"no_durable_correlator_exported":true},"decision":"deny","expected":"deny","matches_expected":true},{"id":"HSB-NEG-002","class":"negative","relation":"VDC-plus-VAC-different-delegates","checks":{"component_credentials_valid":true,"required_binding_proven":false,"context_binding_valid":true,"no_durable_correlator_exported":true},"decision":"deny","expected":"deny","matches_expected":true},{"id":"HSB-NEG-003","class":"negative","relation":"common-control-two-pairwise-identifiers-different-controllers","checks":{"component_credentials_valid":true,"required_binding_proven":false,"context_binding_valid":true,"no_durable_correlator_exported":true},"decision":"deny","expected":"deny","matches_expected":true},{"id":"HSB-NEG-004","class":"negative","relation":"valid-binding-proof-replayed-to-different-context","checks":{"component_credentials_valid":true,"required_binding_proven":true,"context_binding_valid":false,"no_durable_correlator_exported":true},"decision":"deny","expected":"deny","matches_expected":true},{"id":"HSB-NEG-005","class":"negative","relation":"deliberate-reconnection-exports-durable-correlator","checks":{"component_credentials_valid":true,"required_binding_proven":true,"context_binding_valid":true,"no_durable_correlator_exported":false},"decision":"deny","expected":"deny","matches_expected":true}],"all_expected_outcomes_matched":true,"claim_boundary":"semantic binding evidence only; production ZKP same-subject/common-control construction remains independently required"}
+{
+  "all_expected_outcomes_matched": true,
+  "case": "IC-DTG-HIDDEN-SUBJECT-BINDING-EXP",
+  "claim_boundary": "semantic common-control/non-substitution evidence against adopted WD02 plus a source-pinned OpenVTC implementation boundary observation; production ZKP same-subject/common-control construction remains independently required",
+  "evaluator_version": "0.2",
+  "propositions": [
+    "DTG-371-P10",
+    "DTG-371-P13"
+  ],
+  "semantic_rule": "Common-control or same-subject semantics must be established by evidence that proves the required linkage in the current context. Identifier association, possession of individually valid component credentials, or proof of control over only one identifier does not establish control of another identifier or a reusable subject equivalence.",
+  "source_pins": {
+    "openvtc": {
+      "implementation_note": "Current relationship/persona implementation explicitly documents that a VPC does not itself bind the persona identifier to the relationship DID and that its request-level proof-of-control workaround does not resolve Credential Spec #9.",
+      "repository": "OpenVTC/verifiable-trust-infrastructure",
+      "revision": "72bf5794071971da506eb7a5af8e4765c35c137c"
+    },
+    "vac": {
+      "authority_status": "adopted-wd02",
+      "head_sha": "3f90af3a87779f23d5be446da8745a627748f79c",
+      "merge_commit": "4f7e66b6dfcd8eddc212c8002351a6ad814c60e1",
+      "pull_request": 29,
+      "repository": "trustoverip/dtgwg-cred-spec"
+    },
+    "vdc": {
+      "authority_status": "adopted-wd02",
+      "head_sha": "873a473e9aa9564b6751eee10e2561bcb7d767aa",
+      "merge_commit": "37074bdcd861c51f3e5b7868ce700832b17b73ce",
+      "pull_request": 19,
+      "repository": "trustoverip/dtgwg-cred-spec"
+    },
+    "wd02": {
+      "designation": "Working Draft 02",
+      "repository": "trustoverip/dtgwg-cred-spec",
+      "revision": "67149716032318f7f29770e5d3e6f0d35e52b8c3"
+    }
+  },
+  "status": "pre-admission-experimental",
+  "vectors": [
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": true
+      },
+      "class": "positive",
+      "decision": "allow",
+      "expected": "allow",
+      "id": "HSB-POS-001",
+      "matches_expected": true,
+      "relation": "VMC-plus-VAC-with-explicit-binding-proof"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": false
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-001",
+      "matches_expected": true,
+      "relation": "VMC-plus-VAC-different-hidden-subjects"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": false
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-002",
+      "matches_expected": true,
+      "relation": "VDC-plus-VAC-different-delegates"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": false
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-003",
+      "matches_expected": true,
+      "relation": "common-control-two-pairwise-identifiers-different-controllers"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": false,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-004",
+      "matches_expected": true,
+      "relation": "valid-binding-proof-replayed-to-different-context"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": false,
+        "required_binding_proven": true
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-005",
+      "matches_expected": true,
+      "relation": "deliberate-reconnection-exports-durable-correlator"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": false
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-006",
+      "matches_expected": true,
+      "relation": "identifier-association-without-common-control-proof"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": false
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-007",
+      "matches_expected": true,
+      "relation": "proof-of-control-for-one-identifier-promoted-to-second-identifier"
+    },
+    {
+      "checks": {
+        "component_credentials_valid": true,
+        "context_binding_valid": true,
+        "no_durable_correlator_exported": true,
+        "required_binding_proven": false
+      },
+      "class": "negative",
+      "decision": "deny",
+      "expected": "deny",
+      "id": "HSB-NEG-008",
+      "matches_expected": true,
+      "relation": "request-level-pop-promoted-to-reusable-credential-level-subject-equivalence"
+    }
+  ]
+}
