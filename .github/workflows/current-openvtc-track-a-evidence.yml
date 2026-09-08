@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 45
     env:
       OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
-      OPENVTC_REVISION: e393e38da4941202143e293b555413d8c86ef3b3
+      OPENVTC_REVISION: 72bf5794071971da506eb7a5af8e4765c35c137c
     steps:
       - name: Checkout Interop Lab producer
         uses: actions/checkout@v7
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: OpenVTC/verifiable-trust-infrastructure
-          ref: e393e38da4941202143e293b555413d8c86ef3b3
+          ref: 72bf5794071971da506eb7a5af8e4765c35c137c
           path: build/current-openvtc
           fetch-depth: 1
 
@@ -77,7 +77,7 @@ jobs:
           import pathlib, yaml
           doc = yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-track-a.yaml').read_text())
           assert doc['provenance']['implementation_repository'] == 'OpenVTC/verifiable-trust-infrastructure'
-          assert doc['provenance']['implementation_revision'] == 'e393e38da4941202143e293b555413d8c86ef3b3'
+          assert doc['provenance']['implementation_revision'] == '72bf5794071971da506eb7a5af8e4765c35c137c'
           rel = doc['requirements']['ER-REL-DID-AB']['surfaces']
           assert rel['equivalent_relationship_binder']['classification'] == 'fresh'
           assert rel['relationship_did']['classification'] == 'absent'
@@ -117,8 +117,7 @@ jobs:
               print(f"- Pressure join: `{doc['experiment']['expected_join']}` / `{doc['experiment']['observed_join']}`", file=out)
               print('- ER-REL-DID-AB and ER-VERIFIER-AB: materially exercised by this path.', file=out)
               print('- ER-STATUS-AB and ER-TASK-AB: not-evidenced by this path; no absence claim manufactured.', file=out)
-              print('- Dogwood: not executed; historical comparator only.', file=out)
-              print('- Boundary: this is runtime evidence, not a privacy PASS or RAHP GREEN.', file=out)
+              print('- Boundary: this is target-attributable runtime evidence, not a privacy PASS or RAHP GREEN.', file=out)
           PY
 
       - name: Upload current attributable runtime evidence
