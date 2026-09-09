@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Compose WD02 VDC/VAC semantics with the real Lab actuation boundary.
+"""Compose WD02 VDC/VAC semantics with executable action-time evidence.
 
-This is deliberately a cross-evidence evaluator. It does not pretend the current
-OpenVTC implementation exposes the entire adopted VDC/VAC contract. Instead it
-requires the semantic non-substitution layer to pass and verifies that the closest
-real consequential-action boundary fails closed, with no effect, when exact current
-authority cannot be resolved.
+The evaluator keeps three evidence layers distinct:
+1. adopted WD02 semantic vectors;
+2. an optional source-pinned credential implementation result;
+3. the Lab consequential-action boundary.
+
+A conformant credential component narrows the implementation gap. It does not by
+itself establish an integrated Trust Task/current-authority decision or a side effect.
 """
 from __future__ import annotations
 
@@ -30,9 +32,32 @@ def vector_by_id(result: dict, vector_id: str) -> dict:
     return next(v for v in result["vectors"] if v["id"] == vector_id)
 
 
-def build_result() -> dict:
+def validate_target_evidence(target: dict) -> None:
+    required_contract = {
+        "digest_multibase",
+        "proof_excluded_from_digest",
+        "vac_parent_digest",
+        "vdc_acceptance",
+        "vdc_chain_verification",
+        "valid_until_required",
+    }
+    if target.get("cargo_test") != "passed":
+        raise ValueError("target runtime evidence must record a passing cargo test")
+    contract = target.get("wd02_contract")
+    if not isinstance(contract, dict) or not required_contract.issubset(contract):
+        raise ValueError("target runtime evidence is missing required WD02 contract observations")
+    if not all(contract[key] is True for key in required_contract):
+        raise ValueError("target runtime evidence does not satisfy all bounded WD02 contract observations")
+    if not target.get("repository") or not target.get("revision"):
+        raise ValueError("target runtime evidence requires immutable repository/revision identity")
+
+
+def build_result(target_evidence: dict | None = None) -> dict:
     semantic = run_json("experiments/dtg-vdc-vac-composition/run.py")
     authority = run_json("experiments/protected-delegated-care/run_authority_boundary.py")
+
+    if target_evidence is not None:
+        validate_target_evidence(target_evidence)
 
     positive = vector_by_id(semantic, "VDV-POS-001")
     no_authority = vector_by_id(semantic, "VDV-NEG-001")
@@ -113,7 +138,7 @@ def build_result() -> dict:
         },
     ]
 
-    return {
+    result = {
         "case": "IC-DTG-VDC-VAC-COMPOSITION-EXP/action-time",
         "issue": 174,
         "status": "terminal-bounded-composition-evidence",
@@ -126,17 +151,34 @@ def build_result() -> dict:
         "vectors": vectors,
         "all_expected_outcomes_matched": all(v["matches_expected"] for v in vectors),
         "runtime_conclusion": "INDETERMINATE/BLOCKED where the exact external current-authority evaluator is unavailable; fail-closed and no-effect behavior is evidenced",
-        "claim_boundary": "Composition evidence at the Lab application/actuation boundary plus adopted WD02 semantic evidence. This does not claim current OpenVTC implements the complete adopted VDC/VAC runtime contract, production deployment assurance, or successful external side effects merely from credential/task validity.",
-        "remaining_gap": "No exact current OpenVTC delegated-action evaluator implementing the complete adopted VDC/VAC action-time contract was evidenced; absence is terminally represented as INDETERMINATE/BLOCKED rather than PASS.",
+        "claim_boundary": "Adopted WD02 semantics, bounded credential-runtime evidence where supplied, and Lab actuation evidence do not establish current consequential authority or successful external side effects merely from credential/task validity.",
     }
+
+    if target_evidence is None:
+        result["runtime_maturity"] = "SEMANTIC_PLUS_LAB_BOUNDARY"
+        result["remaining_gap"] = "No source-pinned WD02 credential implementation evidence was supplied, and no exact current OpenVTC delegated-action evaluator implementing the complete adopted VDC/VAC action-time contract was evidenced."
+    else:
+        result["target_runtime_evidence"] = target_evidence
+        result["source_pins"]["credential_implementation"] = {
+            "repository": target_evidence["repository"],
+            "revision": target_evidence["revision"],
+        }
+        result["runtime_maturity"] = "PARTIALLY_EVIDENCED"
+        result["remaining_gap"] = "The credential component is source-pinned and WD02-aligned for the exercised digest/VAC/VDC propositions, but no integrated Trust Task/current-authority evaluator was evidenced; status/revocation and deployment policy remain independently bounded."
+
+    return result
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--target-evidence", type=Path)
     args = parser.parse_args()
-    result = build_result()
+    target = None
+    if args.target_evidence:
+        target = json.loads(args.target_evidence.read_text(encoding="utf-8"))
+    result = build_result(target_evidence=target)
     text = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.write:
         RESULT.parent.mkdir(parents=True, exist_ok=True)
@@ -153,6 +195,6 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (RuntimeError, json.JSONDecodeError, StopIteration) as exc:
+    except (RuntimeError, json.JSONDecodeError, StopIteration, ValueError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         raise SystemExit(2)
