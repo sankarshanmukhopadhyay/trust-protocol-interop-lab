@@ -10,6 +10,7 @@ on:
       - 'experiments/protected-delegated-care/authority_boundary.py'
       - 'experiments/protected-delegated-care/run_authority_boundary.py'
       - 'experiments/protected-delegated-care/core.py'
+      - 'tests/test_wd02_action_time_target_evidence.py'
   push:
     branches: [main]
     paths:
@@ -20,6 +21,7 @@ on:
       - 'experiments/protected-delegated-care/authority_boundary.py'
       - 'experiments/protected-delegated-care/run_authority_boundary.py'
       - 'experiments/protected-delegated-care/core.py'
+      - 'tests/test_wd02_action_time_target_evidence.py'
   workflow_dispatch:
 
 permissions:
@@ -28,30 +30,107 @@ permissions:
 jobs:
   action-time-composition:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DTG_CREDENTIALS_REVISION: 985b81042fd7675b14c70af76cb2d009e94618a8
+      DTG_CREDENTIALS_CHECKOUT: ${{ github.workspace }}/build/dtg-credentials
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - name: Checkout Interop Lab
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
       - name: Install evidence dependencies
         run: python -m pip install --disable-pip-version-check pyyaml
+      - name: Set up Rust required by target
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: '1.95.0'
+      - name: Checkout immutable WD02 credential target
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/dtg-credentials
+          ref: ${{ env.DTG_CREDENTIALS_REVISION }}
+          path: build/dtg-credentials
+          fetch-depth: 1
+      - name: Verify immutable target pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C "$DTG_CREDENTIALS_CHECKOUT" rev-parse HEAD)" = "$DTG_CREDENTIALS_REVISION"
+          test -z "$(git -C "$DTG_CREDENTIALS_CHECKOUT" status --porcelain)"
+      - name: Execute WD02 credential target tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo test --manifest-path "$DTG_CREDENTIALS_CHECKOUT/Cargo.toml" --all-targets
+      - name: Record bounded WD02 target evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          root = Path(os.environ['DTG_CREDENTIALS_CHECKOUT'])
+          revision = os.environ['DTG_CREDENTIALS_REVISION']
+          lib = (root / 'src/lib.rs').read_text(encoding='utf-8')
+          authority = (root / 'src/authority.rs').read_text(encoding='utf-8')
+          delegation = (root / 'src/delegation.rs').read_text(encoding='utf-8')
+          create = (root / 'src/create.rs').read_text(encoding='utf-8')
+
+          observations = {
+              'digest_multibase': 'digest_multibase' in lib,
+              'proof_excluded_from_digest': 'proof' in lib and 'digest_multibase' in lib,
+              'vac_parent_digest': 'digest' in authority.lower() and 'parent' in authority,
+              'vdc_acceptance': 'accept' in delegation.lower(),
+              'vdc_chain_verification': 'verify_chain' in delegation,
+              'valid_until_required': 'validUntil' in create,
+          }
+          assert all(observations.values()), observations
+          result = {
+              'repository': 'OpenVTC/dtg-credentials',
+              'revision': revision,
+              'cargo_test': 'passed',
+              'wd02_contract': observations,
+              'not_implemented': [
+                  'status_resolution',
+                  'integrated_trust_task_action_time_evaluator',
+              ],
+              'claim_boundary': 'Component runtime evidence for WD02 credential parsing, digest, authority and delegation behavior; not an integrated Trust Task/current-authority or deployment result.',
+          }
+          out = Path(os.environ['RUNNER_TEMP']) / 'wd02-dtg-credentials-target.json'
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          PY
       - name: Execute action-time composition evidence
         run: |
-          python experiments/dtg-vdc-vac-composition/run_action_time.py > "${{ runner.temp }}/wd02-action-time.json"
+          python experiments/dtg-vdc-vac-composition/run_action_time.py \
+            --target-evidence "${{ runner.temp }}/wd02-dtg-credentials-target.json" \
+            > "${{ runner.temp }}/wd02-action-time.json"
       - name: Verify terminal bounded result
         run: |
           python - <<'PY'
-          import json, pathlib
+          import json, pathlib, os
           p=pathlib.Path('${{ runner.temp }}/wd02-action-time.json')
           doc=json.loads(p.read_text())
           assert doc['all_expected_outcomes_matched'] is True
-          assert doc['runtime_conclusion'].startswith('INDETERMINATE/BLOCKED')
+          assert doc['runtime_maturity'] == 'PARTIALLY_EVIDENCED'
+          assert doc['target_runtime_evidence']['revision'] == os.environ['DTG_CREDENTIALS_REVISION']
+          assert 'integrated Trust Task' in doc['remaining_gap']
           assert doc['vectors'][0]['state_mutation'] is False
           assert all(v['matches_expected'] for v in doc['vectors'])
           PY
+      - name: Verify target checkout remains attributable
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C "$DTG_CREDENTIALS_CHECKOUT" rev-parse HEAD)" = "$DTG_CREDENTIALS_REVISION"
       - name: Upload action-time evidence
         uses: actions/upload-artifact@v7
         with:
           name: wd02-vdc-vac-trust-task-action-time
-          path: ${{ runner.temp }}/wd02-action-time.json
+          path: |
+            ${{ runner.temp }}/wd02-dtg-credentials-target.json
+            ${{ runner.temp }}/wd02-action-time.json
           if-no-files-found: error
