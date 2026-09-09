@@ -2,96 +2,110 @@
 
 Tracking: [#188](https://github.com/sankarshanmukhopadhyay/trust-protocol-interop-lab/issues/188) · parent graduation gate: `sankarshanmukhopadhyay/rahp-toolkit#501`
 
-This document is the repository-visible accounting surface for the Lab workflow rationalisation required for graduation. The objective is not a minimum workflow count. The objective is an intentional workflow topology in which reusable execution mechanics are shared and proposition-specific differences are declarative where that boundary is evidence-backed.
+This is the repository-visible workflow accounting and disposition record for graduation. The objective is not a minimum workflow count. It is an intentional topology in which shared execution mechanics are reused when equivalence is evidenced, while materially different runtimes, privileges, evidence contracts, failure semantics and claim boundaries remain isolated.
 
 ## Disposition vocabulary
 
-- `RETAIN-INFRASTRUCTURE` — repository-level CI/release/publication or genuinely cross-cutting workflow identity remains justified.
-- `REUSABLE-WORKFLOW` — GitHub-level orchestration is the reusable boundary across materially different cases.
-- `COMMON-RUNNER + DECLARATIVE-CASE` — execution mechanics are equivalent and meaningful variation is case/configuration/fixtures/assertions.
-- `MERGE-FAMILY` — several workflows implement one semantically equivalent execution family and should converge behind shared machinery.
-- `RETIRE` — superseded/duplicate/no-longer-consumed workflow can be removed without deleting historical evidence.
-- `DEFER` — insufficient equivalence evidence or target/runtime instability makes rationalisation premature.
-
-## Characterisation gate
-
-No `MERGE-FAMILY`, `COMMON-RUNNER + DECLARATIVE-CASE`, or retirement migration should proceed until materially relevant current behaviour is represented by executable characterisation/equivalence evidence. That evidence must cover relevant positive, negative/adversarial, unavailable/indeterminate, source/runtime pin, evidence provenance, claim-boundary and failure/exit semantics.
+- `RETAIN-INFRASTRUCTURE` — repository CI, release, publication or application-test infrastructure whose workflow identity remains justified.
+- `REUSABLE-WORKFLOW` — GitHub-level orchestration is itself the reusable boundary.
+- `COMMON-RUNNER + DECLARATIVE-CASE` — execution mechanics are shared and proposition differences are expressed by characterized case/configuration/assertion data.
+- `MERGE-FAMILY` — candidate state used while equivalence is being established; not a final graduation disposition.
+- `RETIRE` — superseded/duplicate/no-longer-consumed workflow may be removed without losing required evidence/history.
+- `DEFER` — current evidence shows a distinct boundary or does not yet justify safe consolidation/retirement.
 
 `workflow green != assurance green` and `missing evidence != PASS` remain invariants.
 
-## Matrix
+## Final workflow matrix
 
-| Workflow | Trigger | Family | Runtime/environment | Runner/scripts | Source pin | Evidence output | Failure / claim boundary | Overlap | Current disposition | Rationale / next evidence |
-|---|---|---|---|---|---|---|---|---|---|---|
-| `anab-dcas-assurance.yml` | pending audit | specialist | pending audit | pending audit | pending audit | pending audit | pending audit | pending audit | `DEFER` | Distinct domain; inspect before proposing reuse. |
-| `ci.yml` | pending audit | infrastructure | repository CI | pending audit | n/a | validation results | CI success is not assurance PASS | repository-wide | `RETAIN-INFRASTRUCTURE` | Retain workflow identity; inspect duplicated validation commands for script-level reuse only. |
-| `composed-ab-evidence.yml` | pending audit | A/B privacy | pending audit | pending audit | pending audit | pending audit | pending audit | device/observer A/B family | `DEFER` | Analyse against DPIP #221 observer/experiment contract. |
-| `current-openvtc-data-room-evidence.yml` | PR/push path filters; manual | current OpenVTC runtime | Ubuntu, Python 3.13, Rust, DBus/pkg-config; target checkout | `experiments/dtg-data-room-runtime/run_current_openvtc.py` | `OpenVTC/verifiable-trust-infrastructure@56cd6e5b7116777f1d9734e76c9a7b0569870e19` | `current-openvtc-data-room-evidence.json` | verifies immutable target pin and clean checkout; artifact absence fails workflow; local execution result is not terminal RAHP/DPIP judgment | Shares checkout/build/pin/cleanliness/upload mechanics with Track A/B, but uses a different target revision, runner and evidence contract | `DEFER` | Do not merge merely on setup similarity. First determine whether target checkout/build/upload should be a reusable workflow while Data Room execution stays distinct. |
-| `current-openvtc-track-a-evidence.yml` | PR/push path filters; manual | current OpenVTC runtime / A-B | Ubuntu, Python 3.13, Rust, DBus/pkg-config; target checkout | `capture_ab_runtime.py`, `export_dpip_evidence.py`; context via case | `OpenVTC/verifiable-trust-infrastructure@72bf5794071971da506eb7a5af8e4765c35c137c` | runtime YAML + DPIP `provided_evidence` JSON | verifies immutable pin, clean checkout, bounded classifications; explicitly states evidence is not privacy PASS or RAHP GREEN | Strong mechanics overlap with Track B policy/status/task | `MERGE-FAMILY` candidate | Establish characterisation tests around shared setup, capture/export, provenance and bounded-result semantics before extracting reusable machinery. Track A has additional summary behavior and different assertions. |
-| `current-openvtc-track-b-policy-evidence.yml` | PR/push path filters; manual | current OpenVTC runtime / A-B | Ubuntu, Python 3.13, Rust, DBus/pkg-config; target checkout | `capture_ab_runtime.py`, `export_dpip_evidence.py`; policy context via case | `OpenVTC/verifiable-trust-infrastructure@72bf5794071971da506eb7a5af8e4765c35c137c` | runtime YAML + DPIP `provided_evidence` JSON | pin/cleanliness checks; policy surfaces must be fresh/executed; observed join must be `not-detected` | Near-identical orchestration to Track B status/task and substantial overlap with Track A | `MERGE-FAMILY` candidate | Characterise expected assertion set and output names, then test whether a case-declared assertion layer can replace inline workflow assertions safely. |
-| `current-openvtc-track-b-status-evidence.yml` | PR/push path filters; manual | current OpenVTC runtime / A-B | Ubuntu, Python 3.13, Rust, DBus/pkg-config; target checkout | `capture_ab_runtime.py`, `export_dpip_evidence.py`; status context via case | `OpenVTC/verifiable-trust-infrastructure@72bf5794071971da506eb7a5af8e4765c35c137c` | runtime YAML + DPIP `provided_evidence` JSON | pin/cleanliness checks; target-derived status correlators must be identical; must-detect join; non-exercised surfaces remain `not-evidenced` | Near-identical orchestration to Track B policy/task and substantial overlap with Track A | `MERGE-FAMILY` candidate | Preserve the deliberately opposite correlation expectation (`must-detect`) as declarative assertion data; never generalise this into a universal `not-detected` privacy expectation. |
-| `current-openvtc-track-b-task-evidence.yml` | PR/push path filters; manual | current OpenVTC runtime / A-B | Ubuntu, Python 3.13, Rust, DBus/pkg-config; target checkout | `capture_ab_runtime.py`, `export_dpip_evidence.py`; task context via case | `OpenVTC/verifiable-trust-infrastructure@72bf5794071971da506eb7a5af8e4765c35c137c` | runtime YAML + DPIP `provided_evidence` JSON | pin/cleanliness checks; task/thread/retained evidence must be fresh/executed; observed join `not-detected` | Near-identical orchestration to Track B policy/status and substantial overlap with Track A | `MERGE-FAMILY` candidate | Characterise task-specific assertions before extraction. Shared runner should consume case/assertion declarations rather than hard-code privacy outcome semantics. |
-| `device-metadata-ab-evidence.yml` | pending audit | A/B privacy | pending audit | pending audit | pending audit | pending audit | pending audit | observer A/B | `DEFER` | Analyse with DPIP #221. |
-| `device-metadata-observer-ab-evidence.yml` | pending audit | A/B privacy | pending audit | pending audit | pending audit | pending audit | pending audit | device A/B | `DEFER` | Analyse with DPIP #221. |
-| `dogwood-runtime-evidence.yml` | pending audit | legacy runtime | pending audit | pending audit | Dogwood-era | historical/runtime evidence | historical workflow success must not become current assurance | current OpenVTC evidence family | `DEFER` | Dogwood is a previous release. Determine active consumer and reproducibility value before deciding `RETIRE`; preserve historical evidence regardless. |
-| `dpac-agent-security.yml` | pending audit | specialist security | pending audit | pending audit | pending audit | pending audit | pending audit | pending audit | `DEFER` | Distinct specialist domain; inspect before proposing reuse. |
-| `dtg-action-vocabulary.yml` | pending audit | DTG authority/binding | pending audit | pending audit | pending audit | pending audit | pending audit | DTG/VTC family | `DEFER` | Audit execution mechanics. |
-| `dtg-data-room-actuation.yml` | pending audit | DTG authority/binding | pending audit | pending audit | pending audit | pending audit | pending audit | DTG/VTC family | `DEFER` | Audit execution mechanics. |
-| `dtg-hidden-subject-binding.yml` | pending audit | DTG authority/binding | pending audit | pending audit | pending audit | pending audit | pending audit | DTG/VTC family | `DEFER` | Audit execution mechanics. |
-| `dtg-vac-attenuation.yml` | pending audit | DTG authority/binding | pending audit | pending audit | pending audit | pending audit | pending audit | DTG/VTC family | `DEFER` | Audit execution mechanics. |
-| `dtg-vdc-vac-action-time.yml` | pending audit | DTG authority/binding | pending audit | pending audit | pending audit | pending audit | pending audit | DTG/VTC family | `DEFER` | Audit execution mechanics. |
-| `install-admin-did-binding.yml` | pending audit | DTG authority/binding | pending audit | pending audit | pending audit | pending audit | pending audit | binding family | `DEFER` | Audit execution mechanics. |
-| `pages.yml` | pending audit | infrastructure | GitHub Pages | pending audit | n/a | site | publication success is not assurance result | publication | `RETAIN-INFRASTRUCTURE` | Preserve deployment boundary. |
-| `pdc-current-authority.yml` | pending audit | protected delegated care | pending audit | pending audit | pending audit | pending audit | pending audit | PDC family | `DEFER` | Keep authority semantics distinct from privacy even if runner reuse emerges. |
-| `pdc-demo.yml` | pending audit | protected delegated care | pending audit | pending audit | pending audit | pending audit | pending audit | PDC family | `DEFER` | Audit demo versus evidence-producing role. |
-| `pdc-prescription-refill-lifecycle.yml` | pending audit | protected delegated care | pending audit | pending audit | pending audit | pending audit | pending audit | PDC family | `DEFER` | Audit lifecycle mechanics. |
-| `pdc-refill-disclosure.yml` | pending audit | protected delegated care | pending audit | pending audit | pending audit | pending audit | pending audit | PDC family | `DEFER` | Audit disclosure semantics. |
-| `pdc-runtime-privacy.yml` | pending audit | protected delegated care / privacy | pending audit | pending audit | pending audit | pending audit | pending audit | PDC + DPIP observability | `DEFER` | Evaluate against DPIP #221; privacy semantics stay DPIP-owned. |
-| `publish-release.yml` | pending audit | infrastructure | release | pending audit | pending audit | pending audit | release success is not assurance PASS | release | `RETAIN-INFRASTRUCTURE` | Preserve release boundary; inspect duplicated validation commands only. |
-| `vti-personhood-transport-equivalence.yml` | pending audit | specialist composition | pending audit | pending audit | pending audit | pending audit | pending audit | transport equivalence | `DEFER` | Distinct proposition; inspect before reuse. |
+| Workflow | Family / role | Material mechanics and evidence | Final disposition | Graduation rationale |
+|---|---|---|---|---|
+| `anab-dcas-assurance.yml` | Specialist assurance | Python 3.13; deterministic ANAB/DCAS decision reproduction via `experiments/anab-dcas-assurance/run.py --check` | `DEFER` | Domain-specific decision semantics already live in its runner. The thin path-scoped wrapper is not enough duplication to justify a universal workflow abstraction. |
+| `ci.yml` | Repository infrastructure | Repository-wide validation, executable cross-spec/ARA/PDC/DPAC evidence, generated-tree checks, link checks, BBS/Node evidence and Pages build | `RETAIN-INFRASTRUCTURE` | Canonical repository assurance boundary. Its breadth and branch-gate role are materially different from proposition-specific evidence workflows. |
+| `composed-ab-evidence.yml` | Reusable A/B evidence producer | Registered-producer validation, A/B self-tests, `run_composed_ab.py`, dispatch correlation/evidence-requirement inputs, durable 30-day evidence outbox | `REUSABLE-WORKFLOW` | Already exposes the correct cross-case GitHub-level producer boundary. Privacy interpretation remains DPIP-owned. |
+| `current-openvtc-data-room-evidence.yml` | Current OpenVTC Data Rooms | Immutable OpenVTC `56cd6e5...`; target-native Data Room runner; legacy + `rahp-evidence-producer-result/v1`; runtime-drift capture and source-tree restore; three artifacts | `DEFER` | Different target revision, runner, evidence envelope and runtime-drift semantics from the A/B family. Setup similarity alone is insufficient for consolidation. |
+| `current-openvtc-track-a-evidence.yml` | Current OpenVTC A/B | Thin caller of `reusable-current-openvtc-ab-evidence.yml`, characterized as `track-a`; same immutable `72bf579...` target | `COMMON-RUNNER + DECLARATIVE-CASE` | Migrated after #195 characterization and live-equivalence evidence in #200. Status/task remain explicitly `not-evidenced`; no privacy PASS/RAHP GREEN inference. |
+| `current-openvtc-track-b-policy-evidence.yml` | Current OpenVTC A/B + specialist integration | OpenVTC + immutable DPIP + immutable RAHP checkouts; DPIP privacy result; DPIP evaluator; RAHP `rahp-assessor-result/v1` validation; four artifacts | `DEFER` | Characterization proved this workflow materially deeper than the two-artifact evidence-export family. Retain until a reusable specialist-integration boundary is independently demonstrated. |
+| `current-openvtc-track-b-status-evidence.yml` | Current OpenVTC A/B positive control | Thin caller of reusable A/B workflow, characterized `track-b-status`; target-derived identical correlators; `must-detect` / `detected` | `COMMON-RUNNER + DECLARATIVE-CASE` | Migrated after characterization; live #200 evidence proved the opposite correlation expectation remains preserved rather than flattened. |
+| `current-openvtc-track-b-task-evidence.yml` | Current OpenVTC A/B | Thin caller of reusable A/B workflow, characterized `track-b-task`; fresh executed task/thread/retained evidence; `not-detected` | `COMMON-RUNNER + DECLARATIVE-CASE` | First migrated consumer. #198 proved repository and live source-pinned evidence equivalence before the family expanded. |
+| `reusable-current-openvtc-ab-evidence.yml` | Reusable current OpenVTC A/B orchestration | `workflow_call`; common Python/native/Rust setup; immutable target checkout; characterization admission; common runner; clean-tree check; upload | `REUSABLE-WORKFLOW` | Graduated reusable boundary for characterized two-artifact A/B members. It fails closed for unknown/deeper-integration members, including policy. |
+| `device-metadata-ab-evidence.yml` | Historical/device A/B privacy | Lab + immutable `OpenVTC/openvtc` and VTI checkouts; Rust/native/PCSC; historical device-metadata runner | `DEFER` | Observer-bound replacement exists, but retirement requires explicit output/provenance equivalence and active-consumer/history analysis. Do not delete historical evidence by implication. |
+| `device-metadata-observer-ab-evidence.yml` | Observer-bound device A/B privacy | Same external pins/runtime class; observer-scoped runner; DPIP-ready evidence | `DEFER` | Current semantic direction is observer-bound and aligned with DPIP #221, but its external target/runtime mechanics remain distinct from generic composed A/B execution. |
+| `dogwood-runtime-evidence.yml` | Historical Dogwood runtime | Immutable Dogwood RC-1 target; positive-control + pressure A/B; four attributable evidence artifacts | `DEFER` | Dogwood is a previous release. Workflow has reproducibility/regression value; retirement must be a separate historical-evidence retention decision, not a side effect of current-source convergence. |
+| `dpac-agent-security.yml` | Specialist external adversarial security | Downloads pinned external harness wheel; verifies SHA-256; installs no-deps; normalization tests; ten-record schema validation; artifact | `DEFER` | Materially distinct external dependency/security/evidence-normalization lifecycle positively justifies a bespoke workflow. |
+| `dtg-action-vocabulary.yml` | DTG semantic proposition | Checkout → Python 3.13 → PyYAML → case-owned `run.py --check` | `DEFER` | Wrapper is intentionally tiny and semantics already live in the case runner. Generalizing four lines of orchestration would add indirection without consolidating assurance meaning. |
+| `dtg-data-room-actuation.yml` | DTG authority/actuation proposition | Checkout → Python 3.13 → PyYAML → case-owned `run.py --check` | `DEFER` | Same low-cost wrapper pattern as other DTG checks, but no evidence that another GitHub-level abstraction improves isolation or reproducibility. |
+| `dtg-hidden-subject-binding.yml` | DTG subject/common-control proposition | Checkout → Python 3.13 → PyYAML → case-owned `run.py --check` | `DEFER` | Subject-binding semantics remain case-owned and common-control itself remains externally coordinated through RAHP #500. Do not freeze unresolved semantics into a generalized workflow. |
+| `dtg-vac-attenuation.yml` | DTG authority attenuation | Checkout → Python 3.13 → PyYAML → case-owned `run.py --check` | `DEFER` | Mechanically small wrapper; semantic logic is already reusable at runner/case level. No meaningful orchestration debt remains to remove. |
+| `dtg-vdc-vac-action-time.yml` | WD02 action-time composition | Produces JSON; asserts all vectors, `INDETERMINATE/BLOCKED`, no mutation, bounded terminal evidence; uploads artifact | `DEFER` | Distinct artifact and action-time failure/non-inference semantics justify isolation from the simple `run.py --check` wrappers. |
+| `install-admin-did-binding.yml` | Source-pinned binding falsifier | Lab + immutable VTI + immutable Trust Tasks; Rust/native deps; semantic alignment falsifier; artifact | `DEFER` | Distinct multi-repository source-pin and build lifecycle. Genericizing it would obscure the evidence attribution boundary. |
+| `pages.yml` | Publication infrastructure | Repository validation + Jekyll + Pages artifact/deployment with `pages:write` and OIDC | `RETAIN-INFRASTRUCTURE` | Publication permissions and deployment lifecycle are a distinct infrastructure boundary. |
+| `pdc-current-authority.yml` | Protected delegated care authority | Python current-authority actuation-boundary runner with `--check`; JSON evidence uploaded even on failure | `DEFER` | Authority-specific failure/effect evidence must not be conflated with PDC privacy or lifecycle evidence merely because the scenario is shared. |
+| `pdc-demo.yml` | PDC runnable application test | Python compile + application unit tests; no assurance-evidence artifact | `RETAIN-INFRASTRUCTURE` | This is prototype/application CI, not an evidence producer. Keeping it separate prevents application green from being confused with assurance green. |
+| `pdc-prescription-refill-lifecycle.yml` | PDC lifecycle evidence | Dedicated prescription-to-refill lifecycle runner and JSON artifact | `DEFER` | Lifecycle proposition/output is distinct; shared Python setup alone is insufficient basis for consolidation. |
+| `pdc-refill-disclosure.yml` | PDC disclosure evidence | Dedicated disclosure comparison runner and JSON artifact | `DEFER` | Disclosure semantics and artifact are distinct from authority/lifecycle; retain until characterization proves a common evidence runner is actually beneficial. |
+| `pdc-runtime-privacy.yml` | PDC privacy evidence | DPIP-consumable privacy runner with `--check`, JSON evidence uploaded even on failure | `DEFER` | Privacy interpretation is DPIP-owned; this target-specific producer retains a distinct claim boundary from other PDC evidence workflows. |
+| `publish-release.yml` | Release infrastructure | Triggered only after successful repository assurance on `main`; release/tag immutability checks; `contents:write` | `RETAIN-INFRASTRUCTURE` | Release publication is a privileged lifecycle boundary and should not share proposition-evidence orchestration. |
+| `vti-personhood-transport-equivalence.yml` | Specialist implementation equivalence | Immutable VTI; native/Rust + cache; REST/DIDComm/TSP cargo tests; shared-core source assertions; attributable artifact | `DEFER` | Distinct target-native multi-transport execution and Rust build semantics positively justify a bespoke workflow. |
 
-## First evidence-backed consolidation hypothesis: current OpenVTC Track A/B
+## Proven convergence: current OpenVTC A/B evidence-export subset
 
-The Track A and Track B policy/status/task workflows share a strong orchestration skeleton:
+The original Track A / Track B policy/status/task candidate was deliberately narrowed by executable characterization in #195 / PR #196. The characterization showed that policy now carries a materially deeper specialist integration chain, while Track A, status and task share one two-artifact execution boundary.
 
-1. checkout Lab producer;
-2. install Python 3.13 + PyYAML;
-3. install DBus/pkg-config native dependencies;
-4. install Rust;
-5. checkout the same immutable OpenVTC revision;
-6. verify exact revision and clean checkout;
-7. execute `capture_ab_runtime.py` against a case YAML;
-8. assert case-specific bounded observations;
-9. verify upstream checkout remains clean;
-10. execute `export_dpip_evidence.py`;
-11. upload runtime evidence + DPIP binding artifact.
+Migration followed the required sequence:
 
-The meaningful differences observed so far are primarily:
+1. characterize all four workflows and encode deliberate differences;
+2. introduce `scripts/run_current_openvtc_ab_member.py` and `reusable-current-openvtc-ab-evidence.yml`;
+3. migrate Track B task first in #197 / PR #198;
+4. prove repository assurance **and a live source-pinned Track B task run** green;
+5. migrate Track A and Track B status in #199 / PR #200;
+6. prove both live source-pinned runs green, including status `must-detect` / `detected` semantics;
+7. retain Track B policy outside the reusable two-artifact boundary.
 
-- context/case declaration;
-- case-specific assertion semantics, including a deliberate `must-detect` status case versus `not-detected` policy/task cases;
-- output/artifact naming;
-- Track A's additional bounded summary.
+This is the intended graduation result: common mechanics are shared without erasing proposition-specific semantics.
 
-This is sufficient to classify the family as a **consolidation candidate**, but not sufficient to refactor it yet. The next tranche must encode characterisation tests proving that those differences can be represented declaratively without changing claim boundaries or unavailable/not-evidenced semantics.
+## Why there are no forced `RETIRE` dispositions
 
-The Data Room workflow shares environment/bootstrap/pin-cleanliness/artifact mechanics but uses a different OpenVTC revision and a different runner/evidence shape. It therefore remains `DEFER` rather than being silently absorbed into the A/B family.
+The audit did not identify a workflow that can currently be removed with sufficient evidence **and** without losing an active execution boundary, historical reproducibility, privileged lifecycle or specialist claim boundary. In particular:
+
+- Dogwood and historical device-metadata execution carry reproducibility/history questions that require an explicit retention decision;
+- the observer-bound device workflow is not yet equivalence evidence for deleting the older producer;
+- small DTG Python wrappers contain little orchestration debt because the semantics already reside in their case-owned runners;
+- specialist, PDC and external-target workflows have materially distinct runtime or claim boundaries.
+
+Graduation does not require deletion for its own sake. `RETIRE` is reserved for evidence-backed supersession.
 
 ## New-workflow admission rule
 
-A new bespoke workflow should be added only when a materially distinct runtime/security boundary, external dependency lifecycle, privilege/secrets requirement, failure semantic, evidence collection mechanism, or reproducibility/claim-boundary isolation requirement cannot safely be expressed by existing reusable workflow/runner/case machinery.
+A new bespoke workflow should be created only when at least one materially distinct requirement cannot safely be represented by existing reusable workflow/runner/case machinery, such as:
 
-Otherwise new assurance work should normally add a declarative case/experiment, fixture/assertion set, target adapter, or registered evidence producer.
+- different runtime or security boundary;
+- materially different external dependency lifecycle or source-pin set;
+- distinct privilege/secrets requirement;
+- incompatible failure/unavailable semantics;
+- distinct evidence collection, packaging or return mechanism;
+- isolation needed for reproducibility or claim-boundary integrity.
+
+Otherwise new assurance work should normally add a declarative case/experiment, fixture/assertion set, target adapter or registered evidence producer.
 
 ## Completion state
 
-- [x] Establish complete workflow accounting baseline.
-- [x] Establish disposition vocabulary and admission rule.
-- [x] Deep-audit first consolidation candidate family (current OpenVTC Track A/B) and separate Data Room boundary.
-- [ ] Deep-audit A/B privacy family.
-- [ ] Deep-audit DTG/VTC authority/binding family.
-- [ ] Deep-audit protected delegated care family.
-- [ ] Deep-audit specialist workflows.
-- [ ] Resolve Dogwood historical-workflow disposition.
-- [ ] Add characterisation tests for the first proven-equivalent family before implementation consolidation.
-- [ ] Incrementally migrate and retire only after equivalence evidence passes.
+- [x] Complete workflow accounting baseline.
+- [x] Give every current workflow an explicit final disposition and rationale.
+- [x] Establish disposition vocabulary and new-workflow admission rule.
+- [x] Deep-audit current OpenVTC A/B and Data Room boundaries.
+- [x] Deep-audit A/B privacy/device family.
+- [x] Deep-audit DTG/VTC authority/binding family.
+- [x] Deep-audit protected delegated care family.
+- [x] Deep-audit specialist workflows and infrastructure.
+- [x] Resolve Dogwood to historical/reproducibility `DEFER`, not accidental deletion.
+- [x] Add characterization/equivalence tests before the first consolidation.
+- [x] Migrate one consumer first and prove live equivalence.
+- [x] Incrementally migrate the remaining eligible consumers.
+- [x] Preserve deliberately distinct policy/specialist/runtime boundaries.
+- [x] Record why no further retirement is currently evidence-safe.
+
+## Graduation conclusion
+
+The Lab can now add a normal assurance proposition without normally creating a new end-to-end Actions architecture. Where the proposition fits an existing execution class, it should add case/configuration/assertion data or a registered producer. A bespoke workflow remains appropriate only when the runtime, privilege, external dependency, evidence or claim boundary is materially distinct.
+
+That is the intended steady state: **shared mechanics where proven equivalent, explicit isolation where meaning or evidence differs.**
