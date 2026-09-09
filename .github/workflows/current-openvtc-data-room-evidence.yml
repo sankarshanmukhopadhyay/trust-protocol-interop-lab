@@ -107,9 +107,23 @@ jobs:
           assert len(r["evidence"]["artifacts"][0]["sha256"]) == 64
           assert "terminal assurance PASS" in r["claim_boundary"]["does_not_support"]
           PY
-      - name: Verify target checkout remains clean
+      - name: Capture target runtime drift and restore immutable checkout
         shell: bash
-        run: test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
+        run: |
+          set -euo pipefail
+          drift="${{ runner.temp }}/openvtc-runtime-drift.txt"
+          git -C "$OPENVTC_CHECKOUT" status --porcelain=v1 --untracked-files=all | tee "$drift"
+          # Target-native builds/tests may create or update local build/runtime material.
+          # Preserve that fact as evidence, then restore the source checkout before the
+          # final immutability check. Nothing is committed or pushed upstream.
+          git -C "$OPENVTC_CHECKOUT" reset --hard "$OPENVTC_REVISION"
+          git -C "$OPENVTC_CHECKOUT" clean -fdx
+      - name: Verify immutable target after execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C "$OPENVTC_CHECKOUT" rev-parse HEAD)" = "$OPENVTC_REVISION"
+          test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain --untracked-files=all)"
       - name: Upload attributable evidence
         uses: actions/upload-artifact@v7
         with:
@@ -117,4 +131,5 @@ jobs:
           path: |
             ${{ runner.temp }}/current-openvtc-data-room-evidence.json
             ${{ runner.temp }}/current-openvtc-data-room-portable-result.json
+            ${{ runner.temp }}/openvtc-runtime-drift.txt
           if-no-files-found: error
