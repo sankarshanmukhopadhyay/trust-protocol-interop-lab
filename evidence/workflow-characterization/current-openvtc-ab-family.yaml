@@ -52,7 +52,7 @@ members:
       - current-openvtc-track-b-policy-provided-evidence.json
       - current-openvtc-track-b-policy-privacy-observability.json
       - current-openvtc-track-b-policy-rahp-assessor-result.json
-    integration_depth: dpip-specialist-return-raHP-consumer
+    integration_depth: dpip-specialist-return-rahp-consumer
     expectations:
       ER-STATUS-AB:
         policy_discovery_handle:
