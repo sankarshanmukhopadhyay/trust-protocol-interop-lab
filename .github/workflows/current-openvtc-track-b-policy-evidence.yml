@@ -33,7 +33,9 @@ jobs:
       OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
       OPENVTC_REVISION: 72bf5794071971da506eb7a5af8e4765c35c137c
       DPIP_CHECKOUT: ${{ github.workspace }}/build/dpip-contract
-      DPIP_REVISION: c31e3cb94dfe8d292dfd9277323983afacde5663
+      DPIP_REVISION: ae4bea121d8e5a03ca2d35bfc97a63d9b69184ea
+      RAHP_CHECKOUT: ${{ github.workspace }}/build/rahp-contract
+      RAHP_REVISION: a8a3c39f1abc609b40cf4a9688b94ea58b52e172
     steps:
       - name: Checkout Interop Lab producer
         uses: actions/checkout@v7
@@ -53,15 +55,22 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: OpenVTC/verifiable-trust-infrastructure
-          ref: 72bf5794071971da506eb7a5af8e4765c35c137c
+          ref: ${{ env.OPENVTC_REVISION }}
           path: build/current-openvtc
           fetch-depth: 1
-      - name: Checkout immutable DPIP contract
+      - name: Checkout immutable DPIP specialist
         uses: actions/checkout@v7
         with:
           repository: sankarshanmukhopadhyay/dtg-privacy-implementation-profile
           ref: ${{ env.DPIP_REVISION }}
           path: build/dpip-contract
+          fetch-depth: 1
+      - name: Checkout immutable RAHP consumer
+        uses: actions/checkout@v7
+        with:
+          repository: sankarshanmukhopadhyay/rahp-toolkit
+          ref: ${{ env.RAHP_REVISION }}
+          path: build/rahp-contract
           fetch-depth: 1
       - name: Verify immutable pins
         shell: bash
@@ -71,6 +80,8 @@ jobs:
           test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
           test "$(git -C "$DPIP_CHECKOUT" rev-parse HEAD)" = "$DPIP_REVISION"
           test -z "$(git -C "$DPIP_CHECKOUT" status --porcelain)"
+          test "$(git -C "$RAHP_CHECKOUT" rev-parse HEAD)" = "$RAHP_REVISION"
+          test -z "$(git -C "$RAHP_CHECKOUT" status --porcelain)"
       - name: Execute target-native policy A/B observation
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py \
@@ -117,6 +128,34 @@ jobs:
           assert 'deployment-wide unlinkability' in doc['unsupported_inference']
           assert 'terminal assurance PASS' in doc['unsupported_inference']
           PY
+      - name: Produce portable DPIP specialist return
+        run: |
+          python "$DPIP_CHECKOUT/scripts/evaluate_privacy_observability.py" \
+            "${{ runner.temp }}/current-openvtc-track-b-policy-privacy-observability.json" \
+            --output "${{ runner.temp }}/current-openvtc-track-b-policy-rahp-assessor-result.json"
+      - name: Validate specialist return with RAHP generic consumer
+        run: |
+          python "$RAHP_CHECKOUT/tools/assessor_contract.py" \
+            "${{ runner.temp }}/current-openvtc-track-b-policy-rahp-assessor-result.json"
+          python - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('${{ runner.temp }}/current-openvtc-track-b-policy-rahp-assessor-result.json')
+          doc=json.loads(p.read_text())
+          assert doc['schema']=='rahp-assessor-result/v1'
+          assert doc['assessor']=='DPIP privacy observability'
+          assert doc['outcome']=='PASS'
+          assert doc['reason_code']=='bounded-privacy-supported'
+          assert 'terminal assurance PASS' in doc['action_required']
+          assert 'RAHP owns terminal assurance reconciliation' in doc['details']['ownership_boundary']
+          assert 'assurance_outcome' not in doc
+          assert 'terminal_state' not in doc
+          PY
+      - name: Verify specialist and consumer checkouts remain clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git -C "$DPIP_CHECKOUT" status --porcelain)"
+          test -z "$(git -C "$RAHP_CHECKOUT" status --porcelain)"
       - name: Upload attributable Track B policy evidence
         uses: actions/upload-artifact@v7
         with:
@@ -125,4 +164,5 @@ jobs:
             ${{ runner.temp }}/current-openvtc-track-b-policy.yaml
             ${{ runner.temp }}/current-openvtc-track-b-policy-provided-evidence.json
             ${{ runner.temp }}/current-openvtc-track-b-policy-privacy-observability.json
+            ${{ runner.temp }}/current-openvtc-track-b-policy-rahp-assessor-result.json
           if-no-files-found: error
