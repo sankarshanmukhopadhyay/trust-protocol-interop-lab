@@ -5,11 +5,15 @@ on:
     paths:
       - '.github/workflows/current-openvtc-data-room-evidence.yml'
       - 'experiments/dtg-data-room-runtime/run_current_openvtc.py'
+      - 'experiments/dtg-data-room-runtime/portable_evidence.py'
+      - 'tests/test_portable_evidence_result.py'
   push:
     branches: [main]
     paths:
       - '.github/workflows/current-openvtc-data-room-evidence.yml'
       - 'experiments/dtg-data-room-runtime/run_current_openvtc.py'
+      - 'experiments/dtg-data-room-runtime/portable_evidence.py'
+      - 'tests/test_portable_evidence_result.py'
   workflow_dispatch:
 
 permissions:
@@ -22,7 +26,8 @@ jobs:
     env:
       OPENVTC_REVISION: 56cd6e5b7116777f1d9734e76c9a7b0569870e19
       OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
-      VTC_SKIP_ADMIN_UI_BUILD: '1'
+      RAHP_PROPOSITION_KEY: rahp-obligation:11111111111111111111
+      RAHP_EVIDENCE_CONTRACT_KEY: rahp-evidence-contract:22222222222222222222
     steps:
       - name: Checkout Interop Lab producer
         uses: actions/checkout@v7
@@ -54,6 +59,54 @@ jobs:
           python experiments/dtg-data-room-runtime/run_current_openvtc.py \
             --target "$OPENVTC_CHECKOUT" \
             --output "${{ runner.temp }}/current-openvtc-data-room-evidence.json"
+      - name: Emit portable RAHP producer result
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import importlib.util
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          root = Path(os.environ["GITHUB_WORKSPACE"])
+          legacy_path = Path(os.environ["RUNNER_TEMP"]) / "current-openvtc-data-room-evidence.json"
+          portable_path = Path(os.environ["RUNNER_TEMP"]) / "current-openvtc-data-room-portable-result.json"
+          module_path = root / "experiments/dtg-data-room-runtime/portable_evidence.py"
+          spec = importlib.util.spec_from_file_location("portable_evidence", module_path)
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          legacy = json.loads(legacy_path.read_text(encoding="utf-8"))
+          digest = hashlib.sha256(legacy_path.read_bytes()).hexdigest()
+          result = module.build_portable_result(
+              legacy,
+              producer_revision=os.environ["GITHUB_SHA"],
+              artifact_sha256=digest,
+              proposition_key=os.environ["RAHP_PROPOSITION_KEY"],
+              evidence_contract_key=os.environ["RAHP_EVIDENCE_CONTRACT_KEY"],
+              execution_id=f"github-actions:{os.environ['GITHUB_RUN_ID']}:{os.environ['GITHUB_RUN_ATTEMPT']}",
+              execution_timestamp=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+          )
+          portable_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          PY
+      - name: Verify portable result has no characterization placeholders
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path(os.environ["RUNNER_TEMP"]) / "current-openvtc-data-room-portable-result.json"
+          r = json.loads(p.read_text())
+          assert r["producer"]["revision"] == os.environ["GITHUB_SHA"]
+          assert r["execution"]["timestamp"] != "1970-01-01T00:00:00Z"
+          assert r["obligation"]["proposition_key"] != "rahp-obligation:" + "0" * 20
+          assert r["obligation"]["evidence_contract_key"] != "rahp-evidence-contract:" + "0" * 20
+          assert len(r["evidence"]["artifacts"][0]["sha256"]) == 64
+          assert "terminal assurance PASS" in r["claim_boundary"]["does_not_support"]
+          PY
       - name: Verify target checkout remains clean
         shell: bash
         run: test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
@@ -61,5 +114,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: current-openvtc-data-room-runtime-observation
-          path: ${{ runner.temp }}/current-openvtc-data-room-evidence.json
+          path: |
+            ${{ runner.temp }}/current-openvtc-data-room-evidence.json
+            ${{ runner.temp }}/current-openvtc-data-room-portable-result.json
           if-no-files-found: error
