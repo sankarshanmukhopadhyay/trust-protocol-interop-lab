@@ -1,7 +1,16 @@
 from __future__ import annotations
 
 
-def build_portable_result(legacy: dict, producer_revision: str, artifact_sha256: str) -> dict:
+def build_portable_result(
+    legacy: dict,
+    producer_revision: str,
+    artifact_sha256: str,
+    *,
+    proposition_key: str,
+    evidence_contract_key: str,
+    execution_id: str,
+    execution_timestamp: str,
+) -> dict:
     target = legacy["target"]
     pin = {"repository": target["repository"], "revision": target["revision"], "role": "implementation"}
     case = legacy["case"]
@@ -14,15 +23,15 @@ def build_portable_result(legacy: dict, producer_revision: str, artifact_sha256:
             "revision": producer_revision,
         },
         "obligation": {
-            "proposition_key": "rahp-obligation:" + "0" * 20,
-            "evidence_contract_key": "rahp-evidence-contract:" + "0" * 20,
+            "proposition_key": proposition_key,
+            "evidence_contract_key": evidence_contract_key,
             "evidence_requirement_ids": sorted(legacy["propositions"].keys()),
         },
         "source": {"pins": [pin]},
         "execution": {
-            "id": case,
+            "id": execution_id,
             "runner": "run_current_openvtc.py",
-            "timestamp": "1970-01-01T00:00:00Z",
+            "timestamp": execution_timestamp,
             "determinism": "environment-dependent",
             "status": "succeeded",
         },
