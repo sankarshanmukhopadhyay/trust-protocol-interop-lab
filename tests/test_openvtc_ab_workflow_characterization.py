@@ -5,6 +5,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 CHARACTERIZATION = ROOT / "evidence" / "workflow-characterization" / "current-openvtc-ab-family.yaml"
+REUSABLE = ROOT / ".github" / "workflows" / "reusable-current-openvtc-ab-evidence.yml"
+COMMON_RUNNER = ROOT / "scripts" / "run_current_openvtc_ab_member.py"
 
 
 class OpenVTCABWorkflowCharacterizationTests(unittest.TestCase):
@@ -30,14 +32,25 @@ class OpenVTCABWorkflowCharacterizationTests(unittest.TestCase):
                 self.assertEqual(member["experiment_kind"], manifest["experiment"]["kind"])
                 self.assertEqual(member["expected_join"], manifest["experiment"]["expected_join"])
 
-    def test_workflows_still_use_characterized_runner_exporter_and_pin(self):
+    def test_direct_or_reusable_execution_still_reaches_characterized_mechanics(self):
+        reusable_text = REUSABLE.read_text(encoding="utf-8")
+        runner_text = COMMON_RUNNER.read_text(encoding="utf-8")
         for name, member in self.members.items():
             text = (ROOT / member["workflow"]).read_text(encoding="utf-8")
             with self.subTest(member=name):
-                self.assertIn(self.shared["implementation_revision"], text)
-                self.assertIn(self.shared["capture_runner"], text)
-                self.assertIn(self.shared["compatibility_exporter"], text)
-                self.assertIn("status --porcelain", text)
+                if "reusable-current-openvtc-ab-evidence.yml" in text:
+                    self.assertEqual("track-b-task", name)
+                    self.assertIn("member: track-b-task", text)
+                    self.assertIn(self.shared["implementation_revision"], reusable_text)
+                    self.assertIn("run_current_openvtc_ab_member.py", reusable_text)
+                    self.assertIn(self.shared["capture_runner"], runner_text)
+                    self.assertIn(self.shared["compatibility_exporter"], runner_text)
+                    self.assertIn("status --porcelain", reusable_text)
+                else:
+                    self.assertIn(self.shared["implementation_revision"], text)
+                    self.assertIn(self.shared["capture_runner"], text)
+                    self.assertIn(self.shared["compatibility_exporter"], text)
+                    self.assertIn("status --porcelain", text)
 
     def test_status_is_deliberate_positive_control_not_unlinkability_case(self):
         status = self.members["track-b-status"]
@@ -72,6 +85,7 @@ class OpenVTCABWorkflowCharacterizationTests(unittest.TestCase):
         workflow_text = (ROOT / policy["workflow"]).read_text(encoding="utf-8")
         self.assertIn("evaluate_privacy_observability.py", workflow_text)
         self.assertIn("tools/assessor_contract.py", workflow_text)
+        self.assertNotIn("reusable-current-openvtc-ab-evidence.yml", workflow_text)
 
     def test_expected_artifact_shapes_remain_intentionally_different(self):
         self.assertEqual(4, len(self.members["track-b-policy"]["expected_artifacts"]))
