@@ -1,0 +1,82 @@
+name: Reusable current OpenVTC A-B evidence
+
+on:
+  workflow_call:
+    inputs:
+      member:
+        description: Characterized evidence-export member key.
+        required: true
+        type: string
+      artifact_name:
+        description: Durable GitHub Actions artifact name preserved from the calling workflow.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
+      OPENVTC_REVISION: 72bf5794071971da506eb7a5af8e4765c35c137c
+    steps:
+      - name: Checkout Interop Lab producer
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Install evidence dependencies
+        run: python -m pip install --disable-pip-version-check pyyaml
+
+      - name: Install VTI native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev pkg-config
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Checkout immutable OpenVTC target
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: ${{ env.OPENVTC_REVISION }}
+          path: build/current-openvtc
+          fetch-depth: 1
+
+      - name: Verify immutable target pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C "$OPENVTC_CHECKOUT" rev-parse HEAD)" = "$OPENVTC_REVISION"
+          test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
+
+      - name: Validate characterized member admission
+        run: >-
+          python scripts/run_current_openvtc_ab_member.py
+          --member "${{ inputs.member }}"
+          --output-dir "${{ runner.temp }}/current-openvtc-ab"
+          --check-contract
+
+      - name: Execute characterized A/B evidence member
+        run: >-
+          python scripts/run_current_openvtc_ab_member.py
+          --member "${{ inputs.member }}"
+          --output-dir "${{ runner.temp }}/current-openvtc-ab"
+
+      - name: Verify producer left upstream checkout clean
+        shell: bash
+        run: test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
+
+      - name: Upload attributable runtime evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ${{ runner.temp }}/current-openvtc-ab/
+          if-no-files-found: error
