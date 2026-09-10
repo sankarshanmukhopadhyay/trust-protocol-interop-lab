@@ -1,0 +1,29 @@
+name: TRQP WP8 independent evidence
+
+on:
+  push:
+    branches:
+      - feat/trqp-wp8-independent-evidence
+    paths:
+      - 'cases/trqp-principal-verification-material/**'
+      - 'test/trqp-pki-independent.test.js'
+      - '.github/workflows/trqp-wp8-evidence.yml'
+  pull_request:
+    paths:
+      - 'cases/trqp-principal-verification-material/**'
+      - 'test/trqp-pki-independent.test.js'
+      - '.github/workflows/trqp-wp8-evidence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Execute IC-TRQP-PKI-001 independent matrix
+        run: node --test test/trqp-pki-independent.test.js
