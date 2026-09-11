@@ -78,7 +78,11 @@ jobs:
               'action_binding_and_non_widening': 'action.as_str()' in dtg and 'no link widens' in authz,
               'validity_window_checked': 'every link is within its validity window' in authz and 'chrono::Utc::now()' in dtg,
               'presenter_binding': 'presenter,' in dtg and 'NotThePresenter' in dtg,
-              'membership_authority_subject_coherence': 'same subject' in dtg and 'membership.issuer() != room.room_id' in dtg,
+              'membership_authority_subject_coherence': (
+                  'The pooling defence: membership and authority must describe one subject.' in dtg
+                  and 'membership.issuer() != room.room_id' in dtg
+                  and 'membership_and_authority_must_describe_one_subject' in dtg
+              ),
               'no_verifier_fails_closed': 'RefusesEverything' in authz and 'has no chain verifier configured' in authz,
               'private_without_zk_fails_closed': 'without_zk' in dtg and 'has no zero-knowledge profile configured' in dtg,
               'current_status_revocation': False,
