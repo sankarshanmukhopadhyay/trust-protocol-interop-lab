@@ -1,0 +1,117 @@
+name: Current VTI VAC use-time authority
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/vti-vac-use-time-authority.yml'
+      - 'experiments/vti-vac-use-time-authority/evaluate.py'
+      - 'tests/test_vti_vac_use_time_authority.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/vti-vac-use-time-authority.yml'
+      - 'experiments/vti-vac-use-time-authority/evaluate.py'
+      - 'tests/test_vti_vac_use_time_authority.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      VTI_REVISION: 8541848176ec9707e24b24f57b09eb9650935a95
+      VTI_CHECKOUT: ${{ github.workspace }}/build/current-vti
+    steps:
+      - name: Checkout Interop Lab
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install native target dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev pkg-config
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: '1.95.0'
+      - name: Checkout immutable current VTI target
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: ${{ env.VTI_REVISION }}
+          path: build/current-vti
+          fetch-depth: 1
+      - name: Verify target pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C "$VTI_CHECKOUT" rev-parse HEAD)" = "$VTI_REVISION"
+          test -z "$(git -C "$VTI_CHECKOUT" status --porcelain)"
+      - name: Execute vti-rooms target tests
+        run: cargo test --manifest-path "$VTI_CHECKOUT/Cargo.toml" -p vti-rooms --lib
+      - name: Execute vti-rooms-dtg target tests
+        run: cargo test --manifest-path "$VTI_CHECKOUT/Cargo.toml" -p vti-rooms-dtg --lib
+      - name: Characterize VAC use-time authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.util, json, os
+          from pathlib import Path
+
+          target = Path(os.environ['VTI_CHECKOUT'])
+          authz = (target / 'vti-rooms/src/authz.rs').read_text(encoding='utf-8')
+          dtg = (target / 'vti-rooms-dtg/src/lib.rs').read_text(encoding='utf-8')
+          handlers = (target / 'vtc-service/src/rooms/handlers.rs').read_text(encoding='utf-8')
+
+          observations = {
+              'presenter_from_request_proof': 'verify_trust_task_proof(state, doc)' in handlers,
+              'exact_action_authorize_before_effect': 'authz::authorize(' in handlers and 'Action::Write' in handlers,
+              'authorized_action_typestate': 'constructible only by' in authz and 'pub struct AuthorizedAction' in authz,
+              'credential_proof_verification': 'verify_proof_with_public_key' in dtg,
+              'room_root_and_scope_binding': '&room.room_id,\n            &room.room_id,' in dtg,
+              'action_binding_and_non_widening': 'action.as_str()' in dtg and 'no link widens' in authz,
+              'validity_window_checked': 'every link is within its validity window' in authz and 'chrono::Utc::now()' in dtg,
+              'presenter_binding': 'presenter,' in dtg and 'NotThePresenter' in dtg,
+              'membership_authority_subject_coherence': 'same subject' in dtg and 'membership.issuer() != room.room_id' in dtg,
+              'no_verifier_fails_closed': 'RefusesEverything' in authz and 'has no chain verifier configured' in authz,
+              'private_without_zk_fails_closed': 'without_zk' in dtg and 'has no zero-knowledge profile configured' in dtg,
+              'current_status_revocation': False,
+              'live_policy_lookup': False,
+              'vti_rooms_tests': 'passed',
+              'vti_rooms_dtg_tests': 'passed',
+          }
+
+          module_path = Path(os.environ['GITHUB_WORKSPACE']) / 'experiments/vti-vac-use-time-authority/evaluate.py'
+          spec = importlib.util.spec_from_file_location('vti_vac_use_time', module_path)
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          result = module.evaluate(observations, os.environ['VTI_REVISION'])
+          out = Path(os.environ['RUNNER_TEMP']) / 'vti-vac-use-time-authority.json'
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          assert result['evidence_maturity'] == 'SOURCE_PINNED_USE_TIME_AUTHORITY_EVIDENCE'
+          assert result['r001'] == 'PARTIALLY_DISCHARGED'
+          assert 'revocation' in result['remaining_gap']
+          PY
+      - name: Run Interop characterization tests
+        run: python -m unittest tests.test_vti_vac_use_time_authority
+      - name: Capture target drift and restore immutable checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C "$VTI_CHECKOUT" status --porcelain=v1 --untracked-files=all | tee "${{ runner.temp }}/vti-runtime-drift.txt"
+          git -C "$VTI_CHECKOUT" reset --hard "$VTI_REVISION"
+          git -C "$VTI_CHECKOUT" clean -fdx
+      - name: Upload attributable evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: current-vti-vac-use-time-authority
+          path: |
+            ${{ runner.temp }}/vti-vac-use-time-authority.json
+            ${{ runner.temp }}/vti-runtime-drift.txt
+          if-no-files-found: error
