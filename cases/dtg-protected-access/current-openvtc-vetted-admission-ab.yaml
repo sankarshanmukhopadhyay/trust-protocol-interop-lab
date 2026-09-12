@@ -4,9 +4,11 @@ implementation:
   repository: OpenVTC/openvtc
   revision: d402b9ad064aa4414ed2ee761be4fdf12004a5cd
 historical_lineage:
-  dpip_examination: 250
+  dpip_examination: 254
   historical_implementation_revision: f573861237e919445253cebe1eddc01c3fcdeb3b
   design_revision: 0fdbcf9121a8ef781a51d1dfa2a86404677d887f
+  rahp_residual: 641
+  lab_issue: 219
 experiment:
   kind: unlinkability-pressure-case
   expected_join: must-not-emerge
@@ -26,6 +28,8 @@ contexts:
       - did:example:community-a
       - --vetter
       - did:example:vetter-a
+      - --applicant
+      - did:example:applicant-a
   B:
     verifier: did:example:vetting-community-b
     observer_id: did:example:vetting-community-b
@@ -41,24 +45,82 @@ contexts:
       - did:example:community-b
       - --vetter
       - did:example:vetter-b
+      - --applicant
+      - did:example:applicant-b
 surface_producers:
+  active_persona_identifier: OpenVTC/openvtc::openvtc-core::vetting::VettingBook::start_application
+  target_community: OpenVTC/openvtc::openvtc-core::vetting::VettingBook::start_application
+  discovery_request_envelope: OpenVTC/openvtc::openvtc-core::vetting::wire::manifest_request
+  discovery_timestamp: OpenVTC/openvtc::openvtc-core::vetting::queries::CommunityQuery
+  vetter_identifier: OpenVTC/openvtc::openvtc-core::vetting::wire::vetter_list_request
+  directory_filters: OpenVTC/openvtc::openvtc-core::vetting::registry::DirectoryFilter
+  profile_metadata_classes: OpenVTC/openvtc::openvtc-core::vetting::registry::ProfileDraft
+  result_context: OpenVTC/openvtc::openvtc-core::vetting::queries::CommunityQuery
+  retained_directory_state: OpenVTC/openvtc::openvtc-core::vetting::queries::VettingBook::take_query
+  status_handle: OpenVTC/openvtc::openvtc-core::vetting::status::status_list_url
+  status_endpoint: OpenVTC/openvtc::openvtc-core::vetting::status::status_list_url
+  policy_discovery_handle: OpenVTC/openvtc::openvtc-core::vetting::wire::manifest_request
+  policy_endpoint: OpenVTC/openvtc::openvtc-core::vetting::wire::manifest_request
+  application_state: OpenVTC/openvtc::openvtc-core::vetting::VettingBook::start_application
+  last_sent_profile: OpenVTC/openvtc::openvtc-core::vetting::registry::VettingBook::record_profile_sent
+  response_or_refusal_state: OpenVTC/openvtc::openvtc-core::vetting::registry::VettingBook::on_profile_refused
+  retained_identifier: OpenVTC/openvtc::openvtc-core::vetting::applicant::Application
+  retention_boundary: OpenVTC/openvtc::openvtc-core::vetting::VettingBook
   ticket_identifier_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::issue
   ticket_uri_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::uri
   ticket_community_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::community
   retained_ticket_identifier_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket
 surface_execution_sources:
+  active_persona_identifier: runtime-persistence
+  target_community: runtime-persistence
+  discovery_request_envelope: runtime-read
+  discovery_timestamp: runtime-persistence
+  vetter_identifier: runtime-read
+  directory_filters: runtime-read
+  profile_metadata_classes: runtime-read
+  result_context: runtime-persistence
+  retained_directory_state: runtime-persistence
+  status_handle: runtime-read
+  status_endpoint: runtime-read
+  policy_discovery_handle: runtime-read
+  policy_endpoint: runtime-read
+  application_state: runtime-persistence
+  last_sent_profile: runtime-persistence
+  response_or_refusal_state: runtime-persistence
+  retained_identifier: runtime-persistence
+  retention_boundary: runtime-persistence
   ticket_identifier_fingerprint: runtime-read
   ticket_uri_fingerprint: runtime-read
   ticket_community_fingerprint: runtime-read
   retained_ticket_identifier_fingerprint: runtime-read
 surface_observers:
+  active_persona_identifier: A/B client observer
+  target_community: A/B client observer
+  discovery_request_envelope: A/B client observer
+  discovery_timestamp: A/B client observer
+  vetter_identifier: A/B client observer
+  directory_filters: A/B client observer
+  profile_metadata_classes: A/B client observer
+  result_context: A/B client observer
+  retained_directory_state: A/B client observer
+  status_handle: A/B client observer
+  status_endpoint: A/B client observer
+  policy_discovery_handle: A/B client observer
+  policy_endpoint: A/B client observer
+  application_state: A/B local protected-state observer
+  last_sent_profile: A/B local protected-state observer
+  response_or_refusal_state: A/B local protected-state observer
+  retained_identifier: A/B local protected-state observer
+  retention_boundary: A/B local protected-state observer
   ticket_identifier_fingerprint: A/B verifier observers
   ticket_uri_fingerprint: A/B verifier observers
   ticket_community_fingerprint: A/B verifier observers
   retained_ticket_identifier_fingerprint: A/B verifier observers
 assurance_boundary: >-
-  This executes only the public target-native ticket issuance/URI surface. Manifest discovery,
-  directory/profile lookup, grant-status network observation and application/profile retention
-  are deliberately left not-evidenced unless independently executed. Fresh ticket fingerprints
-  do not establish universal vetted-admission unlinkability. Detector positive/negative controls
-  are synthetic sensitivity checks using the same classifier and are not upstream target evidence.
+  This target-native probe exercises all five DPIP vetted-admission evidence families at the
+  pinned OpenVTC epoch. Status execution is bounded to target-native status URL validation;
+  it does not claim a live external status-list fetch. Directory evidence covers client-side
+  request/filter/profile metadata and transient query retention; it does not infer server-side
+  directory persistence. Retention evidence covers the target client's application/profile
+  state after a refusal transition. No raw ticket secret, personal claim, location/contact
+  value or full profile content is exported. No result establishes universal unlinkability or PASS.

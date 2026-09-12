@@ -1,4 +1,4 @@
-version: 4
+version: 5
 case: IC-DTG-PROTECTED-ACCESS-001
 purpose: >-
   Define provenance-bound A/B runtime evidence packages that the Interop Lab may
@@ -46,13 +46,13 @@ requirements:
   ER-VETTING-DISCOVERY-AB:
     title: Pre-admission identity and manifest-discovery observations
     summary: Observe whether pre-admission discovery exposes a stable applicant/persona identifier or request handle across unrelated community contexts.
-    source_issue: "DPIP #251"
-    surfaces: [applicant_identifier, community_context, manifest_request_handle]
+    source_issue: "DPIP #251 / RAHP #641"
+    surfaces: [active_persona_identifier, target_community, discovery_request_envelope, discovery_timestamp]
   ER-VETTER-DIRECTORY-AB:
     title: Vetter directory/profile cross-context observations
     summary: Observe stable vetter or directory/profile handles across unrelated community contexts without retaining unnecessary contact or location values.
-    source_issue: "DPIP #251"
-    surfaces: [vetter_identifier, directory_query_handle, profile_metadata_fingerprint]
+    source_issue: "DPIP #251 / RAHP #641"
+    surfaces: [vetter_identifier, directory_filters, profile_metadata_classes, result_context, retained_directory_state]
   ER-VETTING-TICKET-AB:
     title: Vetting ticket observability and reuse observations
     summary: Observe privacy-safe fingerprints for ticket and QR/link handles, community scope, and retained ticket identity; raw ticket secrets are forbidden.
@@ -61,8 +61,8 @@ requirements:
   ER-VETTING-RETENTION-AB:
     title: Retained vetted-admission state observations
     summary: Observe stable identifiers in persisted application/profile/response state across unrelated contexts and lifecycle boundaries.
-    source_issue: "DPIP #251"
-    surfaces: [application_state_identifier, last_sent_profile_identifier, response_state_identifier]
+    source_issue: "DPIP #251 / RAHP #641"
+    surfaces: [application_state, last_sent_profile, response_or_refusal_state, retained_identifier, retention_boundary]
 
 classification_values: [identical, derivably-related, fresh, absent, not-evidenced]
 execution_states:

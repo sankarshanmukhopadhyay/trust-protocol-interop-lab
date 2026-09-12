@@ -95,13 +95,31 @@ members:
     expected_artifacts: [current-openvtc-vetted-admission.yaml, current-openvtc-vetted-admission-provided-evidence.json]
     integration_depth: evidence-export
     expectations:
-      ER-VETTING-DISCOVERY-AB: {'*': {classification: not-evidenced}}
-      ER-VETTER-DIRECTORY-AB: {'*': {classification: not-evidenced}}
-      ER-STATUS-AB: {'*': {classification: not-evidenced}}
+      ER-VETTING-DISCOVERY-AB:
+        active_persona_identifier: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        target_community: {classification: fresh}
+        discovery_request_envelope: {classification: fresh}
+        discovery_timestamp: {classification: fresh}
+      ER-VETTER-DIRECTORY-AB:
+        vetter_identifier: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        directory_filters: {classification: fresh}
+        profile_metadata_classes: {classification: fresh}
+        result_context: {classification: fresh}
+        retained_directory_state: {classification: absent}
+      ER-STATUS-AB:
+        status_handle: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        status_endpoint: {classification: fresh}
+        policy_discovery_handle: {classification: fresh}
+        policy_endpoint: {classification: fresh}
       ER-VETTING-TICKET-AB:
         ticket_identifier_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
         ticket_uri_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
         ticket_community_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
         retained_ticket_identifier_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
-      ER-VETTING-RETENTION-AB: {'*': {classification: not-evidenced}}
-    claim_boundary_contains: [ticket-only bounded evidence, missing evidence is not PASS]
+      ER-VETTING-RETENTION-AB:
+        application_state: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        last_sent_profile: {classification: fresh}
+        response_or_refusal_state: {classification: fresh}
+        retained_identifier: {classification: fresh}
+        retention_boundary: {classification: fresh}
+    claim_boundary_contains: [bounded target-native evidence, missing evidence is not PASS]
