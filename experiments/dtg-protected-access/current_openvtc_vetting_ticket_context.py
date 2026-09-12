@@ -69,7 +69,11 @@ fn main() {
     };
     let manifest = wire::manifest_request(applicant, community).unwrap();
     book.ask(query(&manifest.id, community, persona, QueryKind::Manifest));
-    let manifest_wait = book.waiting_on(community, QueryKind::Manifest).unwrap();
+    let discovery_timestamp = book
+        .waiting_on(community, QueryKind::Manifest)
+        .unwrap()
+        .sent_at
+        .to_rfc3339();
     let manifest_envelope = serde_json::to_string(&manifest).unwrap();
 
     // Directory request and transient query-state consumption.
@@ -117,7 +121,7 @@ fn main() {
         "active_persona_identifier": fp(applicant),
         "target_community": fp(community),
         "discovery_request_envelope": fp(&manifest_envelope),
-        "discovery_timestamp": manifest_wait.sent_at.to_rfc3339(),
+        "discovery_timestamp": discovery_timestamp,
 
         "vetter_identifier": fp(vetter),
         "directory_filters": {"filter": filter, "community_fingerprint": fp(community)},
