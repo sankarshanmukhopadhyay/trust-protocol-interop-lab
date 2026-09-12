@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Execute a minimal OpenVTC vetting-ticket probe and emit privacy-safe observations.
 
-The probe compiles a tiny additive Rust consumer against the immutable OpenVTC checkout.
-It never modifies the checkout and never emits raw ticket codes, ids, secrets, or URIs.
+The probe copies the immutable OpenVTC checkout to a temporary workspace, adds one
+throw-away workspace member, and compiles against that copied workspace. This preserves
+the target's exact workspace dependency/patch graph while leaving the immutable checkout
+untouched. It never emits raw ticket codes, ids, secrets, or URIs.
 """
 from __future__ import annotations
 
@@ -10,6 +12,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 
@@ -47,16 +50,34 @@ fn main() {
 '''
 
 
+def copied_workspace(checkout: Path, root: Path) -> Path:
+    workspace = root / "openvtc-workspace"
+    shutil.copytree(checkout, workspace, ignore=shutil.ignore_patterns(".git", "target"))
+    cargo_path = workspace / "Cargo.toml"
+    cargo = cargo_path.read_text(encoding="utf-8")
+    needle = '  "openvtc",\n]'
+    if needle not in cargo:
+        raise RuntimeError("cannot locate OpenVTC workspace member list")
+    cargo_path.write_text(cargo.replace(needle, '  "openvtc",\n  "vetting-probe",\n]', 1), encoding="utf-8")
+    return workspace
+
+
 def run_probe(checkout: Path, community: str, vetter: str) -> dict:
     with tempfile.TemporaryDirectory(prefix="openvtc-vetting-probe-") as td:
-        root = Path(td)
-        cargo = f'''[package]\nname = "openvtc-vetting-probe"\nversion = "0.1.0"\nedition = "2024"\n\n[dependencies]\nopenvtc-core = {{ path = {json.dumps(str(checkout / "openvtc-core"))}, default-features = false }}\nchrono = "0.4"\nserde_json = "1"\nsha2 = "0.10"\n'''
-        (root / "Cargo.toml").write_text(cargo, encoding="utf-8")
-        (root / "src").mkdir()
-        (root / "src" / "main.rs").write_text(rust_source(), encoding="utf-8")
+        workspace = copied_workspace(checkout, Path(td))
+        probe = workspace / "vetting-probe"
+        (probe / "src").mkdir(parents=True)
+        (probe / "Cargo.toml").write_text(
+            '''[package]\nname = "openvtc-vetting-probe"\nversion = "0.1.0"\nedition.workspace = true\npublish = false\n\n[dependencies]\nopenvtc-core = { path = "../openvtc-core", default-features = false }\nchrono.workspace = true\nserde_json.workspace = true\nsha2.workspace = true\n''',
+            encoding="utf-8",
+        )
+        (probe / "src" / "main.rs").write_text(rust_source(), encoding="utf-8")
         completed = subprocess.run(
-            ["cargo", "run", "--quiet", "--manifest-path", str(root / "Cargo.toml"), "--", community, vetter],
-            text=True, capture_output=True, check=False,
+            ["cargo", "run", "--quiet", "-p", "openvtc-vetting-probe", "--", community, vetter],
+            cwd=workspace,
+            text=True,
+            capture_output=True,
+            check=False,
         )
         if completed.returncode:
             raise RuntimeError(completed.stderr.strip())
