@@ -28,7 +28,7 @@ use serde_json::json;
 fn fp(value: &str) -> String {
     let mut h = Sha256::new();
     h.update(value.as_bytes());
-    format!("sha256:{:x}", h.finalize())
+    format!("sha256:{}", hex::encode(h.finalize()))
 }
 
 fn main() {
@@ -68,7 +68,7 @@ def run_probe(checkout: Path, community: str, vetter: str) -> dict:
         probe = workspace / "vetting-probe"
         (probe / "src").mkdir(parents=True)
         (probe / "Cargo.toml").write_text(
-            '''[package]\nname = "openvtc-vetting-probe"\nversion = "0.1.0"\nedition.workspace = true\npublish = false\n\n[dependencies]\nopenvtc-core = { path = "../openvtc-core", default-features = false }\nchrono.workspace = true\nserde_json.workspace = true\nsha2.workspace = true\n''',
+            '''[package]\nname = "openvtc-vetting-probe"\nversion = "0.1.0"\nedition.workspace = true\npublish = false\n\n[dependencies]\nopenvtc-core = { path = "../openvtc-core", default-features = false }\nchrono.workspace = true\nhex.workspace = true\nserde_json.workspace = true\nsha2.workspace = true\n''',
             encoding="utf-8",
         )
         (probe / "src" / "main.rs").write_text(rust_source(), encoding="utf-8")
