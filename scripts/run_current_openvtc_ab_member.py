@@ -41,11 +41,18 @@ def member_contract(name: str) -> tuple[dict[str, Any], dict[str, Any]]:
     return model["shared"], member
 
 
+def target_contract(shared: dict[str, Any], member: dict[str, Any]) -> tuple[str, str]:
+    repository = str(member.get("implementation_repository") or shared["implementation_repository"])
+    revision = str(member.get("implementation_revision") or shared["implementation_revision"])
+    return repository, revision
+
+
 def validate_capture(shared: dict[str, Any], member: dict[str, Any], doc: dict[str, Any]) -> None:
+    expected_repository, expected_revision = target_contract(shared, member)
     provenance = doc.get("provenance") or {}
-    if provenance.get("implementation_repository") != shared["implementation_repository"]:
+    if provenance.get("implementation_repository") != expected_repository:
         raise ValueError("capture implementation repository does not match characterization")
-    if provenance.get("implementation_revision") != shared["implementation_revision"]:
+    if provenance.get("implementation_revision") != expected_revision:
         raise ValueError("capture implementation revision does not match characterization")
     experiment = doc.get("experiment") or {}
     if experiment.get("observed_join") != member["observed_join"]:
@@ -93,14 +100,15 @@ def run_checked(command: list[str]) -> None:
 
 def execute(member_name: str, output_dir: Path) -> tuple[Path, Path]:
     shared, member = member_contract(member_name)
+    expected_repository, expected_revision = target_contract(shared, member)
     manifest = ROOT / member["manifest"]
     manifest_doc = load_yaml(manifest)
     implementation = manifest_doc.get("implementation") or {}
     experiment = manifest_doc.get("experiment") or {}
-    if implementation.get("repository") != shared["implementation_repository"]:
-        raise ValueError("manifest repository differs from family characterization")
-    if implementation.get("revision") != shared["implementation_revision"]:
-        raise ValueError("manifest revision differs from family characterization")
+    if implementation.get("repository") != expected_repository:
+        raise ValueError("manifest repository differs from member characterization")
+    if implementation.get("revision") != expected_revision:
+        raise ValueError("manifest revision differs from member characterization")
     if experiment.get("kind") != member["experiment_kind"]:
         raise ValueError("manifest experiment kind differs from member characterization")
     if experiment.get("expected_join") != member["expected_join"]:
@@ -130,11 +138,12 @@ def main() -> int:
     args = parser.parse_args()
     try:
         shared, member = member_contract(args.member)
+        expected_repository, expected_revision = target_contract(shared, member)
         if args.check_contract:
             manifest = load_yaml(ROOT / member["manifest"])
-            assert manifest["implementation"]["repository"] == shared["implementation_repository"]
-            assert manifest["implementation"]["revision"] == shared["implementation_revision"]
-            print(f"PASS characterized reusable member {args.member}")
+            assert manifest["implementation"]["repository"] == expected_repository
+            assert manifest["implementation"]["revision"] == expected_revision
+            print(f"PASS characterized reusable member {args.member}: {expected_repository}@{expected_revision}")
             return 0
         capture, export = execute(args.member, args.output_dir)
         print(f"PASS {args.member}: {capture} {export}")
