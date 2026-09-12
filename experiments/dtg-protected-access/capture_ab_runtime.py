@@ -18,6 +18,7 @@ ALLOWED_CLASSES = {"runtime-upstream-observation", "synthetic-fixture-self-test"
 EXPERIMENT_KINDS = {"positive-control", "unlinkability-pressure-case"}
 ORIGINS = {"fixture-supplied", "target-derived", "composition-derived", "retained", "observer-derived", "none", "unknown"}
 SHA40 = re.compile(r"^[0-9a-f]{40}$", re.I)
+DPIP_METHODOLOGY_GATE = "dpip-ab-v1"
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -83,7 +84,7 @@ def build_experimental_design(contexts: dict[str, Any]) -> dict[str, Any]:
         observer_id = str(cfg.get("observer_id") or cfg.get("verifier") or "").strip()
         auth_principal = str(cfg.get("auth_principal") or "").strip()
         if not observer_id or not auth_principal:
-            raise ValueError(f"context {cid} requires observer_id/verifier and auth_principal")
+            raise ValueError(f"context {cid} requires observer_id/verifier and auth_principal for {DPIP_METHODOLOGY_GATE}")
         records.append({
             "id": cid,
             "instantiated": True,
@@ -140,7 +141,11 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
     for key in ("verifier", "purpose", "challenge"):
         if contexts["A"].get(key) == contexts["B"].get(key):
             raise ValueError(f"contexts A/B must use distinct {key} values")
-    experimental_design = build_experimental_design(contexts)
+
+    methodology_gate = str(manifest.get("methodology_gate") or "").strip()
+    if methodology_gate not in {"", DPIP_METHODOLOGY_GATE}:
+        raise ValueError(f"unsupported methodology_gate: {methodology_gate}")
+    experimental_design = build_experimental_design(contexts) if methodology_gate == DPIP_METHODOLOGY_GATE else None
 
     a_doc, b_doc = run_context("A", contexts["A"]), run_context("B", contexts["B"])
     contract = load_yaml(CONTRACT)
@@ -170,32 +175,43 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
                 "correlator_origin": origin,
                 "producer_component": str(producers.get(surface, a_doc.get("producer_component") or b_doc.get("producer_component") or repository)),
             }
-            if a_value is not None: entry["context_a"] = a_value
-            if b_value is not None: entry["context_b"] = b_value
+            if a_value is not None:
+                entry["context_a"] = a_value
+            if b_value is not None:
+                entry["context_b"] = b_value
             if a_exec and b_exec and classification in {"identical", "derivably-related", "fresh"}:
                 entry["execution_source"] = str(execution_sources.get(surface, "runtime-read"))
                 entry["observer"] = str(observers.get(surface, "A/B verifier observers"))
-            if derivation: entry["derivation_basis"] = derivation
-            if classification in {"identical", "derivably-related"}: join_surfaces.append(surface)
+            if derivation:
+                entry["derivation_basis"] = derivation
+            if classification in {"identical", "derivably-related"}:
+                join_surfaces.append(surface)
             surfaces[surface] = entry
-        requirements[rid] = {"observation_summary": f"A/B capture for {rid}; execution and correlator attribution are evidence, not a privacy conclusion.", "surfaces": surfaces}
+        requirements[rid] = {
+            "observation_summary": f"A/B capture for {rid}; execution and correlator attribution are evidence, not a privacy conclusion.",
+            "surfaces": surfaces,
+        }
 
     run_id = str(manifest.get("run_id") or f"ab-{uuid.uuid4()}")
     observed_at = str(manifest.get("observed_at") or datetime.now(timezone.utc).isoformat())
-    return {
+    capture: dict[str, Any] = {
         "evidence_class": evidence_class,
         "experiment": {"kind": experiment["kind"], "expected_join": expected, "observed_join": "detected" if join_surfaces else "not-detected", "join_surfaces": sorted(set(join_surfaces))},
-        "experimental_design": experimental_design,
         "provenance": {"producer": "trust-protocol-interop-lab", "run_id": run_id, "observed_at": observed_at, "implementation_repository": repository, "implementation_revision": revision, "context_a_run": str(a_doc.get("run_id") or f"{run_id}-A"), "context_b_run": str(b_doc.get("run_id") or f"{run_id}-B")},
         "context_descriptors": {"A": {k: contexts["A"].get(k) for k in ("verifier", "purpose", "challenge", "auth_principal")}, "B": {k: contexts["B"].get(k) for k in ("verifier", "purpose", "challenge", "auth_principal")}},
         "requirements": requirements,
-        "assurance_boundary": "This capture records runtime observations and attribution. Detector controls are synthetic sensitivity checks, not target evidence. It does not establish privacy PASS, unlinkability, or target-level fault.",
+        "assurance_boundary": "This capture records runtime observations and attribution. It does not establish privacy PASS, unlinkability, or target-level fault.",
     }
+    if experimental_design is not None:
+        capture["experimental_design"] = experimental_design
+        capture["assurance_boundary"] = "This capture records runtime observations and attribution. Detector controls are synthetic sensitivity checks, not target evidence. It does not establish privacy PASS, unlinkability, or target-level fault."
+    return capture
 
 
 def self_test() -> int:
     fixture = ROOT / "cases" / "dtg-protected-access" / "runtime-ab-harness.selftest.yaml"
     manifest = load_yaml(fixture)
+    manifest["methodology_gate"] = DPIP_METHODOLOGY_GATE
     for cid in ("A", "B"):
         manifest["contexts"][cid].setdefault("auth_principal", f"did:example:selftest-{cid.lower()}")
     capture = build_capture(manifest)
@@ -218,15 +234,22 @@ def main() -> int:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
-    if args.self_test: return self_test()
-    if not args.manifest: parser.error("manifest is required unless --self-test is used")
+    if args.self_test:
+        return self_test()
+    if not args.manifest:
+        parser.error("manifest is required unless --self-test is used")
     rendered = yaml.safe_dump(build_capture(load_yaml(args.manifest)), sort_keys=False)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(rendered, encoding="utf-8")
-    else: print(rendered, end="")
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(rendered, encoding="utf-8")
+    else:
+        print(rendered, end="")
     return 0
 
+
 if __name__ == "__main__":
-    try: raise SystemExit(main())
+    try:
+        raise SystemExit(main())
     except (ValueError, RuntimeError) as exc:
-        print(f"ERROR: {exc}", file=sys.stderr); raise SystemExit(2)
+        print(f"ERROR: {exc}", file=sys.stderr)
+        raise SystemExit(2)
