@@ -1,0 +1,48 @@
+evidence_class: runtime-upstream-observation
+implementation:
+  repository: OpenVTC/openvtc
+  revision: d402b9ad064aa4414ed2ee761be4fdf12004a5cd
+historical_lineage:
+  dpip_examination: 250
+  historical_implementation_revision: f573861237e919445253cebe1eddc01c3fcdeb3b
+  design_revision: 0fdbcf9121a8ef781a51d1dfa2a86404677d887f
+experiment:
+  kind: unlinkability-pressure-case
+  expected_join: must-not-emerge
+contexts:
+  A:
+    verifier: did:example:vetting-community-a
+    purpose: vetted-admission-a
+    challenge: vetting-a-2026-09-12
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_vetting_ticket_context.py
+      - --context
+      - A
+      - --community
+      - did:example:community-a
+      - --vetter
+      - did:example:vetter-a
+  B:
+    verifier: did:example:vetting-community-b
+    purpose: vetted-admission-b
+    challenge: vetting-b-2026-09-12
+    command:
+      - python
+      - experiments/dtg-protected-access/current_openvtc_vetting_ticket_context.py
+      - --context
+      - B
+      - --community
+      - did:example:community-b
+      - --vetter
+      - did:example:vetter-b
+surface_producers:
+  ticket_identifier_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::issue
+  ticket_uri_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::uri
+  ticket_community_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::community
+  retained_ticket_identifier_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket
+assurance_boundary: >-
+  This executes only the public target-native ticket issuance/URI surface. Manifest discovery,
+  directory/profile lookup, grant-status network observation and application/profile retention
+  are deliberately left not-evidenced unless independently executed. Fresh ticket fingerprints
+  do not establish universal vetted-admission unlinkability.
