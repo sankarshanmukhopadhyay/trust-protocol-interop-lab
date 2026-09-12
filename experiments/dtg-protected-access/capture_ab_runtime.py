@@ -67,6 +67,52 @@ def classify(a: Any, b: Any, a_executed: bool, b_executed: bool, derivation: str
     return "fresh"
 
 
+def detector_result(a: Any, b: Any) -> str:
+    """Use the same equality/join classifier as target observations for control sensitivity."""
+    return "detected" if classify(a, b, True, True) in {"identical", "derivably-related"} else "not-detected"
+
+
+def build_experimental_design(contexts: dict[str, Any]) -> dict[str, Any]:
+    positive = detector_result("seeded-correlator", "seeded-correlator")
+    negative = detector_result("negative-a", "negative-b")
+    if positive != "detected" or negative != "not-detected":
+        raise ValueError("A/B detector control sensitivity failed")
+    records = []
+    for cid in ("A", "B"):
+        cfg = contexts[cid]
+        observer_id = str(cfg.get("observer_id") or cfg.get("verifier") or "").strip()
+        auth_principal = str(cfg.get("auth_principal") or "").strip()
+        if not observer_id or not auth_principal:
+            raise ValueError(f"context {cid} requires observer_id/verifier and auth_principal")
+        records.append({
+            "id": cid,
+            "instantiated": True,
+            "observer_id": observer_id,
+            "auth_principal": auth_principal,
+        })
+    return {
+        "contexts": records,
+        "controls": {
+            "positive": {
+                "uses_same_detector": True,
+                "can_fail": True,
+                "result": positive,
+                "evidence_class": "synthetic-fixture-self-test",
+                "boundary": "Detector-sensitivity control only; not upstream target evidence.",
+            },
+            "negative": {
+                "uses_same_detector": True,
+                "can_fail": True,
+                "result": negative,
+                "evidence_class": "synthetic-fixture-self-test",
+                "boundary": "Detector-sensitivity control only; not upstream target evidence.",
+            },
+        },
+        "target_outcome_asserted": False,
+        "observed_join_derivation": "computed-from-recorded-observations",
+    }
+
+
 def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
     evidence_class = str(manifest.get("evidence_class") or "")
     if evidence_class not in ALLOWED_CLASSES:
@@ -94,6 +140,7 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
     for key in ("verifier", "purpose", "challenge"):
         if contexts["A"].get(key) == contexts["B"].get(key):
             raise ValueError(f"contexts A/B must use distinct {key} values")
+    experimental_design = build_experimental_design(contexts)
 
     a_doc, b_doc = run_context("A", contexts["A"]), run_context("B", contexts["B"])
     contract = load_yaml(CONTRACT)
@@ -101,6 +148,8 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
     derivations = manifest.get("derivations", {}) if isinstance(manifest.get("derivations", {}), dict) else {}
     origins = manifest.get("correlator_origins", {}) if isinstance(manifest.get("correlator_origins", {}), dict) else {}
     producers = manifest.get("surface_producers", {}) if isinstance(manifest.get("surface_producers", {}), dict) else {}
+    execution_sources = manifest.get("surface_execution_sources", {}) if isinstance(manifest.get("surface_execution_sources", {}), dict) else {}
+    observers = manifest.get("surface_observers", {}) if isinstance(manifest.get("surface_observers", {}), dict) else {}
     join_surfaces: list[str] = []
 
     for rid, requirement in contract["requirements"].items():
@@ -123,6 +172,9 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
             }
             if a_value is not None: entry["context_a"] = a_value
             if b_value is not None: entry["context_b"] = b_value
+            if a_exec and b_exec and classification in {"identical", "derivably-related", "fresh"}:
+                entry["execution_source"] = str(execution_sources.get(surface, "runtime-read"))
+                entry["observer"] = str(observers.get(surface, "A/B verifier observers"))
             if derivation: entry["derivation_basis"] = derivation
             if classification in {"identical", "derivably-related"}: join_surfaces.append(surface)
             surfaces[surface] = entry
@@ -133,22 +185,29 @@ def build_capture(manifest: dict[str, Any]) -> dict[str, Any]:
     return {
         "evidence_class": evidence_class,
         "experiment": {"kind": experiment["kind"], "expected_join": expected, "observed_join": "detected" if join_surfaces else "not-detected", "join_surfaces": sorted(set(join_surfaces))},
+        "experimental_design": experimental_design,
         "provenance": {"producer": "trust-protocol-interop-lab", "run_id": run_id, "observed_at": observed_at, "implementation_repository": repository, "implementation_revision": revision, "context_a_run": str(a_doc.get("run_id") or f"{run_id}-A"), "context_b_run": str(b_doc.get("run_id") or f"{run_id}-B")},
-        "context_descriptors": {"A": {k: contexts["A"].get(k) for k in ("verifier", "purpose", "challenge")}, "B": {k: contexts["B"].get(k) for k in ("verifier", "purpose", "challenge")}},
+        "context_descriptors": {"A": {k: contexts["A"].get(k) for k in ("verifier", "purpose", "challenge", "auth_principal")}, "B": {k: contexts["B"].get(k) for k in ("verifier", "purpose", "challenge", "auth_principal")}},
         "requirements": requirements,
-        "assurance_boundary": "This capture records runtime observations and attribution. Positive-control joins are expected. It does not establish privacy PASS, unlinkability, or target-level fault.",
+        "assurance_boundary": "This capture records runtime observations and attribution. Detector controls are synthetic sensitivity checks, not target evidence. It does not establish privacy PASS, unlinkability, or target-level fault.",
     }
 
 
 def self_test() -> int:
     fixture = ROOT / "cases" / "dtg-protected-access" / "runtime-ab-harness.selftest.yaml"
-    capture = build_capture(load_yaml(fixture))
+    manifest = load_yaml(fixture)
+    for cid in ("A", "B"):
+        manifest["contexts"][cid].setdefault("auth_principal", f"did:example:selftest-{cid.lower()}")
+    capture = build_capture(manifest)
     assert capture["evidence_class"] == "synthetic-fixture-self-test"
     assert capture["requirements"]["ER-REL-DID-AB"]["surfaces"]["relationship_did"]["classification"] == "identical"
     assert capture["requirements"]["ER-VERIFIER-AB"]["surfaces"]["challenge"]["classification"] == "fresh"
     assert capture["experiment"]["kind"] == "positive-control"
     assert capture["experiment"]["expected_join"] == "must-detect"
     assert capture["experiment"]["observed_join"] == "detected"
+    assert capture["experimental_design"]["controls"]["positive"]["result"] == "detected"
+    assert capture["experimental_design"]["controls"]["negative"]["result"] == "not-detected"
+    assert capture["experimental_design"]["target_outcome_asserted"] is False
     print("PASS protected-access two-context capture harness self-test")
     return 0
 
