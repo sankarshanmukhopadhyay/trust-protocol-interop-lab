@@ -1,4 +1,4 @@
-version: 1
+version: 2
 family: current-openvtc-ab-evidence
 parent_issue: 195
 shared:
@@ -20,45 +20,31 @@ members:
     experiment_kind: unlinkability-pressure-case
     expected_join: must-not-emerge
     observed_join: not-detected
-    expected_artifacts:
-      - current-openvtc-track-a.yaml
-      - current-openvtc-track-a-provided-evidence.json
+    expected_artifacts: [current-openvtc-track-a.yaml, current-openvtc-track-a-provided-evidence.json]
     integration_depth: evidence-export
     expectations:
       ER-REL-DID-AB:
         equivalent_relationship_binder: {classification: fresh}
         relationship_did: {classification: absent}
         edge_identifier: {classification: absent}
-      ER-STATUS-AB:
-        '*': {classification: not-evidenced}
-      ER-TASK-AB:
-        '*': {classification: not-evidenced}
+      ER-STATUS-AB: {'*': {classification: not-evidenced}}
+      ER-TASK-AB: {'*': {classification: not-evidenced}}
       ER-VERIFIER-AB:
         challenge: {classification: fresh}
         purpose: {classification: fresh}
         transaction_context: {classification: fresh}
-    claim_boundary_contains:
-      - privacy PASS
-      - RAHP GREEN
-
+    claim_boundary_contains: [privacy PASS, RAHP GREEN]
   track-b-policy:
     workflow: .github/workflows/current-openvtc-track-b-policy-evidence.yml
     manifest: cases/dtg-protected-access/current-openvtc-track-b-policy-ab.yaml
     experiment_kind: unlinkability-pressure-case
     expected_join: must-not-emerge
     observed_join: not-detected
-    expected_artifacts:
-      - current-openvtc-track-b-policy.yaml
-      - current-openvtc-track-b-policy-provided-evidence.json
-      - current-openvtc-track-b-policy-privacy-observability.json
-      - current-openvtc-track-b-policy-rahp-assessor-result.json
+    expected_artifacts: [current-openvtc-track-b-policy.yaml, current-openvtc-track-b-policy-provided-evidence.json, current-openvtc-track-b-policy-privacy-observability.json, current-openvtc-track-b-policy-rahp-assessor-result.json]
     integration_depth: dpip-specialist-return-rahp-consumer
     expectations:
       ER-STATUS-AB:
-        policy_discovery_handle:
-          classification: fresh
-          context_a_execution: executed
-          context_b_execution: executed
+        policy_discovery_handle: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
         policy_endpoint: {classification: fresh}
     specialist_expectations:
       dpip_schema: dpip-privacy-observability-result/v1
@@ -66,62 +52,56 @@ members:
       rahp_schema: rahp-assessor-result/v1
       rahp_outcome: PASS
       terminal_inference_forbidden: true
-    claim_boundary_contains:
-      - deployment-wide unlinkability
-      - terminal assurance PASS
-
+    claim_boundary_contains: [deployment-wide unlinkability, terminal assurance PASS]
   track-b-status:
     workflow: .github/workflows/current-openvtc-track-b-status-evidence.yml
     manifest: cases/dtg-protected-access/current-openvtc-track-b-status-ab.yaml
     experiment_kind: positive-control
     expected_join: must-detect
     observed_join: detected
-    expected_artifacts:
-      - current-openvtc-track-b-status.yaml
-      - current-openvtc-track-b-status-provided-evidence.json
+    expected_artifacts: [current-openvtc-track-b-status.yaml, current-openvtc-track-b-status-provided-evidence.json]
     integration_depth: evidence-export
     expectations:
       ER-STATUS-AB:
-        status_handle:
-          classification: identical
-          correlator_origin: target-derived
-        status_endpoint:
-          classification: identical
-          correlator_origin: target-derived
+        status_handle: {classification: identical, correlator_origin: target-derived}
+        status_endpoint: {classification: identical, correlator_origin: target-derived}
         policy_discovery_handle: {classification: not-evidenced}
         policy_endpoint: {classification: not-evidenced}
-      ER-TASK-AB:
-        '*': {classification: not-evidenced}
-    claim_boundary_contains:
-      - not a privacy defect
-
+      ER-TASK-AB: {'*': {classification: not-evidenced}}
+    claim_boundary_contains: [not a privacy defect]
   track-b-task:
     workflow: .github/workflows/current-openvtc-track-b-task-evidence.yml
     manifest: cases/dtg-protected-access/current-openvtc-track-b-task-ab.yaml
     experiment_kind: unlinkability-pressure-case
     expected_join: must-not-emerge
     observed_join: not-detected
-    expected_artifacts:
-      - current-openvtc-track-b-task.yaml
-      - current-openvtc-track-b-task-provided-evidence.json
+    expected_artifacts: [current-openvtc-track-b-task.yaml, current-openvtc-track-b-task-provided-evidence.json]
     integration_depth: evidence-export
     expectations:
       ER-TASK-AB:
-        task_identifier:
-          classification: fresh
-          context_a_execution: executed
-          context_b_execution: executed
-        thread_identifier:
-          classification: fresh
-          context_a_execution: executed
-          context_b_execution: executed
-        retained_relationship_evidence:
-          classification: fresh
-          context_a_execution: executed
-          context_b_execution: executed
-        retained_outcome_evidence:
-          classification: fresh
-          context_a_execution: executed
-          context_b_execution: executed
-    claim_boundary_contains:
-      - No privacy PASS
+        task_identifier: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        thread_identifier: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        retained_relationship_evidence: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        retained_outcome_evidence: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+    claim_boundary_contains: [No privacy PASS]
+  vetted-admission:
+    workflow: .github/workflows/current-openvtc-vetted-admission-evidence.yml
+    manifest: cases/dtg-protected-access/current-openvtc-vetted-admission-ab.yaml
+    implementation_repository: OpenVTC/openvtc
+    implementation_revision: d402b9ad064aa4414ed2ee761be4fdf12004a5cd
+    experiment_kind: unlinkability-pressure-case
+    expected_join: must-not-emerge
+    observed_join: not-detected
+    expected_artifacts: [current-openvtc-vetted-admission.yaml, current-openvtc-vetted-admission-provided-evidence.json]
+    integration_depth: evidence-export
+    expectations:
+      ER-VETTING-DISCOVERY-AB: {'*': {classification: not-evidenced}}
+      ER-VETTER-DIRECTORY-AB: {'*': {classification: not-evidenced}}
+      ER-STATUS-AB: {'*': {classification: not-evidenced}}
+      ER-VETTING-TICKET-AB:
+        ticket_identifier_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        ticket_uri_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        ticket_community_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+        retained_ticket_identifier_fingerprint: {classification: fresh, context_a_execution: executed, context_b_execution: executed}
+      ER-VETTING-RETENTION-AB: {'*': {classification: not-evidenced}}
+    claim_boundary_contains: [ticket-only bounded evidence, missing evidence is not PASS]

@@ -11,6 +11,16 @@ on:
         description: Durable GitHub Actions artifact name preserved from the calling workflow.
         required: true
         type: string
+      target_repository:
+        description: Immutable OpenVTC target repository.
+        required: false
+        type: string
+        default: OpenVTC/verifiable-trust-infrastructure
+      target_revision:
+        description: Immutable 40-hex target revision.
+        required: false
+        type: string
+        default: 72bf5794071971da506eb7a5af8e4765c35c137c
 
 permissions:
   contents: read
@@ -21,7 +31,7 @@ jobs:
     timeout-minutes: 45
     env:
       OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
-      OPENVTC_REVISION: 72bf5794071971da506eb7a5af8e4765c35c137c
+      OPENVTC_REVISION: ${{ inputs.target_revision }}
     steps:
       - name: Checkout Interop Lab producer
         uses: actions/checkout@v7
@@ -34,7 +44,7 @@ jobs:
       - name: Install evidence dependencies
         run: python -m pip install --disable-pip-version-check pyyaml
 
-      - name: Install VTI native build dependencies
+      - name: Install native build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libdbus-1-dev pkg-config
@@ -45,8 +55,8 @@ jobs:
       - name: Checkout immutable OpenVTC target
         uses: actions/checkout@v7
         with:
-          repository: OpenVTC/verifiable-trust-infrastructure
-          ref: ${{ env.OPENVTC_REVISION }}
+          repository: ${{ inputs.target_repository }}
+          ref: ${{ inputs.target_revision }}
           path: build/current-openvtc
           fetch-depth: 1
 

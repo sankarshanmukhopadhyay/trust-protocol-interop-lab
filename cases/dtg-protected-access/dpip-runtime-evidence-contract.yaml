@@ -1,4 +1,4 @@
-version: 3
+version: 4
 case: IC-DTG-PROTECTED-ACCESS-001
 purpose: >-
   Define provenance-bound A/B runtime evidence packages that the Interop Lab may
@@ -43,6 +43,26 @@ requirements:
     summary: Observe credential/presentation/request binding and retained evidence identifiers across independent verifier contexts.
     source_issue: "RAHP #310"
     surfaces: [credential_identifier, presentation_identifier, proof_or_request_binding, status_handle, verifier_transcript, retained_evidence_reference]
+  ER-VETTING-DISCOVERY-AB:
+    title: Pre-admission identity and manifest-discovery observations
+    summary: Observe whether pre-admission discovery exposes a stable applicant/persona identifier or request handle across unrelated community contexts.
+    source_issue: "DPIP #251"
+    surfaces: [applicant_identifier, community_context, manifest_request_handle]
+  ER-VETTER-DIRECTORY-AB:
+    title: Vetter directory/profile cross-context observations
+    summary: Observe stable vetter or directory/profile handles across unrelated community contexts without retaining unnecessary contact or location values.
+    source_issue: "DPIP #251"
+    surfaces: [vetter_identifier, directory_query_handle, profile_metadata_fingerprint]
+  ER-VETTING-TICKET-AB:
+    title: Vetting ticket observability and reuse observations
+    summary: Observe privacy-safe fingerprints for ticket and QR/link handles, community scope, and retained ticket identity; raw ticket secrets are forbidden.
+    source_issue: "DPIP #251"
+    surfaces: [ticket_identifier_fingerprint, ticket_uri_fingerprint, ticket_community_fingerprint, retained_ticket_identifier_fingerprint]
+  ER-VETTING-RETENTION-AB:
+    title: Retained vetted-admission state observations
+    summary: Observe stable identifiers in persisted application/profile/response state across unrelated contexts and lifecycle boundaries.
+    source_issue: "DPIP #251"
+    surfaces: [application_state_identifier, last_sent_profile_identifier, response_state_identifier]
 
 classification_values: [identical, derivably-related, fresh, absent, not-evidenced]
 execution_states:
