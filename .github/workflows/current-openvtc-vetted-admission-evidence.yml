@@ -1,0 +1,37 @@
+name: Current OpenVTC vetted-admission evidence
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/current-openvtc-vetted-admission-evidence.yml'
+      - '.github/workflows/reusable-current-openvtc-ab-evidence.yml'
+      - 'scripts/run_current_openvtc_ab_member.py'
+      - 'evidence/workflow-characterization/current-openvtc-ab-family.yaml'
+      - 'cases/dtg-protected-access/current-openvtc-vetted-admission-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+      - 'experiments/dtg-protected-access/current_openvtc_vetting_ticket_context.py'
+      - 'experiments/dtg-protected-access/capture_ab_runtime.py'
+      - 'experiments/dtg-protected-access/export_dpip_evidence.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/current-openvtc-vetted-admission-evidence.yml'
+      - '.github/workflows/reusable-current-openvtc-ab-evidence.yml'
+      - 'scripts/run_current_openvtc_ab_member.py'
+      - 'evidence/workflow-characterization/current-openvtc-ab-family.yaml'
+      - 'cases/dtg-protected-access/current-openvtc-vetted-admission-ab.yaml'
+      - 'cases/dtg-protected-access/dpip-runtime-evidence-contract.yaml'
+      - 'experiments/dtg-protected-access/current_openvtc_vetting_ticket_context.py'
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    uses: ./.github/workflows/reusable-current-openvtc-ab-evidence.yml
+    with:
+      member: vetted-admission
+      artifact_name: current-openvtc-vetted-admission-runtime-upstream-observation
+      target_repository: OpenVTC/openvtc
+      target_revision: d402b9ad064aa4414ed2ee761be4fdf12004a5cd
