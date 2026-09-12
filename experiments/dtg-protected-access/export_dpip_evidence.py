@@ -35,6 +35,26 @@ def validate_capture(capture: dict[str, Any], contract: dict[str, Any]) -> list[
             errors.append("positive-control must expect join detection")
         elif experiment["kind"] == "unlinkability-pressure-case" and experiment.get("expected_join") != "must-not-emerge":
             errors.append("unlinkability pressure case must not expect a seeded join")
+    if isinstance(experiment, dict) and experiment.get("kind") == "unlinkability-pressure-case":
+        design = capture.get("experimental_design")
+        if not isinstance(design, dict):
+            errors.append("unlinkability-pressure-case requires experimental_design")
+        else:
+            contexts = design.get("contexts")
+            if not isinstance(contexts, list) or len(contexts) < 2:
+                errors.append("experimental_design requires two instantiated contexts")
+            controls = design.get("controls")
+            if not isinstance(controls, dict):
+                errors.append("experimental_design requires controls")
+            else:
+                if (controls.get("positive") or {}).get("result") != "detected":
+                    errors.append("positive detector control must be detected")
+                if (controls.get("negative") or {}).get("result") != "not-detected":
+                    errors.append("negative detector control must be not-detected")
+            if design.get("target_outcome_asserted") is not False:
+                errors.append("experimental_design.target_outcome_asserted must be false")
+            if design.get("observed_join_derivation") != "computed-from-recorded-observations":
+                errors.append("experimental_design must derive observed_join from recorded observations")
     provenance = capture.get("provenance")
     if not isinstance(provenance, dict):
         return errors + ["provenance must be a mapping"]
@@ -67,6 +87,11 @@ def validate_capture(capture: dict[str, Any], contract: dict[str, Any]) -> list[
             execution = observation.get("execution")
             if not isinstance(execution, dict) or execution.get("context_a") not in {"executed", "not-executed"} or execution.get("context_b") not in {"executed", "not-executed"}:
                 errors.append(f"{rid}.{surface} invalid execution state")
+            if classification in {"identical", "derivably-related", "fresh"}:
+                if observation.get("execution_source") not in {"runtime-read", "runtime-transport", "runtime-persistence"}:
+                    errors.append(f"{rid}.{surface} requires runtime execution_source")
+                if not str(observation.get("observer") or "").strip():
+                    errors.append(f"{rid}.{surface} requires observer")
             if origins and observation.get("correlator_origin") not in origins:
                 errors.append(f"{rid}.{surface} invalid correlator_origin")
         if not str(supplied.get("observation_summary") or "").strip():
@@ -95,28 +120,17 @@ def export_bindings(capture: dict[str, Any], contract: dict[str, Any]) -> dict[s
             "summary": requirement.get("summary"),
             "evidence_class": evidence_class,
             "experiment": capture.get("experiment"),
+            "experimental_design": capture.get("experimental_design"),
             "observer": observer,
             "provenance": {k: provenance[k] for k in contract.get("required_provenance", [])},
             "source_pins": source_pins,
             "observation_summary": observed["observation_summary"],
             "surfaces": observed["surfaces"],
         })
-    return {"schema": "interop-evidence-bundle/v1", "experiment": capture.get("experiment"), "provided_evidence": bindings, "human_summary": {"title": "Protected-access A/B runtime evidence package", "explanation": "Bindings preserve observer context, experiment kind, execution state, correlator origin and immutable runtime provenance.", "boundary": "Export validity proves package structure and attribution, not privacy PASS or universal unlinkability. Positive-control joins are expected detector evidence."}}
+    return {"schema": "interop-evidence-bundle/v1", "experiment": capture.get("experiment"), "provided_evidence": bindings, "human_summary": {"title": "Protected-access A/B runtime evidence package", "explanation": "Bindings preserve observer context, experiment design, execution state, correlator origin and immutable runtime provenance.", "boundary": "Export validity proves package structure and attribution, not privacy PASS or universal unlinkability. Detector controls are synthetic sensitivity checks, not target evidence."}}
 
 
-def export_privacy_observability_result(
-    capture: dict[str, Any],
-    *,
-    requirement_id: str,
-    surface_names: list[str],
-    experiment_id: str,
-) -> dict[str, Any]:
-    """Project selected A/B observations into DPIP's reusable privacy semantics.
-
-    Generic producer identity, source pins and artifact provenance remain outside this
-    DPIP result and belong to the RAHP producer envelope. This function owns only the
-    bounded privacy observation and interpretation inputs.
-    """
+def export_privacy_observability_result(capture: dict[str, Any], *, requirement_id: str, surface_names: list[str], experiment_id: str) -> dict[str, Any]:
     if not surface_names:
         raise ValueError("privacy observability export requires at least one surface")
     requirements = capture.get("requirements")
@@ -131,13 +145,7 @@ def export_privacy_observability_result(
         if not isinstance(observation, dict):
             raise ValueError(f"{requirement_id} missing selected privacy surface {name}")
         selected.append((name, observation))
-
-    all_executed = all(
-        isinstance(obs.get("execution"), dict)
-        and obs["execution"].get("context_a") == "executed"
-        and obs["execution"].get("context_b") == "executed"
-        for _, obs in selected
-    )
+    all_executed = all(isinstance(obs.get("execution"), dict) and obs["execution"].get("context_a") == "executed" and obs["execution"].get("context_b") == "executed" for _, obs in selected)
     join_surfaces = sorted(name for name, obs in selected if obs.get("classification") in JOIN_CLASSES)
     if not all_executed:
         result, signal, effective_join = "evidence-incomplete", "not-tested", False
@@ -145,52 +153,26 @@ def export_privacy_observability_result(
         result, signal, effective_join = "not-supported", "found", True
     else:
         result, signal, effective_join = "supported", "not-found", False
-
     experiment = capture.get("experiment") if isinstance(capture.get("experiment"), dict) else {}
     if experiment.get("kind") != "unlinkability-pressure-case":
         raise ValueError("DPIP privacy observability result requires an unlinkability-pressure-case, not a positive control")
-
     evidence_class = str(capture.get("evidence_class") or "")
     return {
         "schema": "dpip-privacy-observability-result/v1",
-        "experiment": {
-            "id": experiment_id,
-            "privacy_proposition": "Across independently configured verifier contexts, the selected observed surfaces should not expose a stable join within this bounded A/B experiment.",
-            "comparison": {"kind": "A/B", "scenarios": ["A", "B"]},
-            "required_observer_planes": ["verifier"],
-            "minimum_evidence_class": evidence_class,
-            "reproducibility": "source-pinned",
-        },
-        "observer_planes": [{
-            "id": "verifier",
-            "direct_observables": surface_names,
-            "derived_or_joinable": join_surfaces,
-            "privilege": "ordinary",
-            "threat_model": "in-scope",
-            "composition_notes": [f"Selected from {requirement_id}; other observer planes are not measured by this result."],
-        }],
-        "correlation": {
-            "signal": signal,
-            "effective_join": effective_join,
-            "composition": join_surfaces,
-        },
+        "experiment": {"id": experiment_id, "privacy_proposition": "Across independently configured verifier contexts, the selected observed surfaces should not expose a stable join within this bounded A/B experiment.", "comparison": {"kind": "A/B", "scenarios": ["A", "B"]}, "required_observer_planes": ["verifier"], "minimum_evidence_class": evidence_class, "reproducibility": "source-pinned"},
+        "observer_planes": [{"id": "verifier", "direct_observables": surface_names, "derived_or_joinable": join_surfaces, "privilege": "ordinary", "threat_model": "in-scope", "composition_notes": [f"Selected from {requirement_id}; other observer planes are not measured by this result."]}],
+        "correlation": {"signal": signal, "effective_join": effective_join, "composition": join_surfaces},
         "result": result,
         "executed": all_executed,
-        "unsupported_inference": [
-            "deployment-wide unlinkability",
-            "host, network, device, audit, or privileged-observer unlinkability",
-            "terminal assurance PASS",
-        ],
-        "residual_uncertainty": [
-            "The result is limited to the selected surfaces and declared verifier observer plane.",
-            "Other implementations, revisions, deployments and observer planes require independent evidence.",
-        ],
+        "unsupported_inference": ["deployment-wide unlinkability", "host, network, device, audit, or privileged-observer unlinkability", "terminal assurance PASS"],
+        "residual_uncertainty": ["The result is limited to the selected surfaces and declared verifier observer plane.", "Other implementations, revisions, deployments and observer planes require independent evidence."],
     }
 
 
 def self_test() -> int:
     contract = load_contract()
-    capture: dict[str, Any] = {"evidence_class": "synthetic-fixture-self-test", "experiment": {"kind": "unlinkability-pressure-case", "expected_join": "must-not-emerge", "observed_join": "not-detected", "join_surfaces": []}, "context_descriptors": {"A": {"verifier": "v-a", "purpose": "p-a", "challenge": "c-a"}, "B": {"verifier": "v-b", "purpose": "p-b", "challenge": "c-b"}}, "provenance": {"producer": "trust-protocol-interop-lab", "run_id": "test-run-001", "observed_at": "2026-08-30T00:00:00Z", "implementation_repository": "example/runtime", "implementation_revision": "a" * 40, "context_a_run": "context-a-001", "context_b_run": "context-b-001"}, "requirements": {}}
+    design = {"contexts": [{"id": "A", "instantiated": True, "observer_id": "v-a", "auth_principal": "p-a"}, {"id": "B", "instantiated": True, "observer_id": "v-b", "auth_principal": "p-b"}], "controls": {"positive": {"uses_same_detector": True, "can_fail": True, "result": "detected"}, "negative": {"uses_same_detector": True, "can_fail": True, "result": "not-detected"}}, "target_outcome_asserted": False, "observed_join_derivation": "computed-from-recorded-observations"}
+    capture: dict[str, Any] = {"evidence_class": "synthetic-fixture-self-test", "experiment": {"kind": "unlinkability-pressure-case", "expected_join": "must-not-emerge", "observed_join": "not-detected", "join_surfaces": []}, "experimental_design": design, "context_descriptors": {"A": {"verifier": "v-a", "purpose": "p-a", "challenge": "c-a", "auth_principal": "p-a"}, "B": {"verifier": "v-b", "purpose": "p-b", "challenge": "c-b", "auth_principal": "p-b"}}, "provenance": {"producer": "trust-protocol-interop-lab", "run_id": "test-run-001", "observed_at": "2026-08-30T00:00:00Z", "implementation_repository": "example/runtime", "implementation_revision": "a" * 40, "context_a_run": "context-a-001", "context_b_run": "context-b-001"}, "requirements": {}}
     for rid, req in contract["requirements"].items():
         capture["requirements"][rid] = {"observation_summary": f"Self-test {rid}", "surfaces": {s: {"classification": "not-evidenced", "execution": {"context_a": "not-executed", "context_b": "not-executed"}, "correlator_origin": "none", "producer_component": "self-test"} for s in req.get("surfaces", [])}}
     assert validate_capture(capture, contract) == []
@@ -198,14 +180,10 @@ def self_test() -> int:
     assert len(result["provided_evidence"]) == len(contract["requirements"])
     credential = next(x for x in result["provided_evidence"] if x["requirement_id"] == "ER-CREDENTIAL-ID-AB")
     assert credential["schema"] == "interop-evidence-package/v1"
+    assert credential["experimental_design"]["controls"]["positive"]["result"] == "detected"
     assert len(credential["observer"]["contexts"]) == 2
     assert credential["source_pins"][0]["revision"] == "a" * 40
-    privacy = export_privacy_observability_result(
-        capture,
-        requirement_id="ER-STATUS-AB",
-        surface_names=["policy_discovery_handle", "policy_endpoint"],
-        experiment_id="self-test-policy-discovery-ab",
-    )
+    privacy = export_privacy_observability_result(capture, requirement_id="ER-STATUS-AB", surface_names=["policy_discovery_handle", "policy_endpoint"], experiment_id="self-test-policy-discovery-ab")
     assert privacy["schema"] == "dpip-privacy-observability-result/v1"
     assert privacy["result"] == "evidence-incomplete"
     print("PASS observer-bound DPIP runtime evidence exporter self-test")
@@ -222,32 +200,19 @@ def main() -> int:
     p.add_argument("--privacy-experiment-id")
     p.add_argument("--self-test", action="store_true")
     args = p.parse_args()
-    if args.self_test:
-        return self_test()
-    if not args.capture:
-        p.error("capture is required unless --self-test is used")
+    if args.self_test: return self_test()
+    if not args.capture: p.error("capture is required unless --self-test is used")
     text = args.capture.read_text(encoding="utf-8")
     capture = json.loads(text) if args.capture.suffix.lower() == ".json" else yaml.safe_load(text)
-    if not isinstance(capture, dict):
-        raise SystemExit("capture must be a mapping")
+    if not isinstance(capture, dict): raise SystemExit("capture must be a mapping")
     rendered = json.dumps(export_bindings(capture, load_contract()), indent=2, sort_keys=True) + "\n"
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(rendered, encoding="utf-8")
-    elif not args.privacy_output:
-        print(rendered, end="")
-
+        args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(rendered, encoding="utf-8")
+    elif not args.privacy_output: print(rendered, end="")
     if args.privacy_output:
-        if not args.privacy_requirement or not args.privacy_surfaces or not args.privacy_experiment_id:
-            p.error("--privacy-output requires --privacy-requirement, --privacy-surfaces and --privacy-experiment-id")
-        privacy = export_privacy_observability_result(
-            capture,
-            requirement_id=args.privacy_requirement,
-            surface_names=[x.strip() for x in args.privacy_surfaces.split(",") if x.strip()],
-            experiment_id=args.privacy_experiment_id,
-        )
-        args.privacy_output.parent.mkdir(parents=True, exist_ok=True)
-        args.privacy_output.write_text(json.dumps(privacy, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        if not args.privacy_requirement or not args.privacy_surfaces or not args.privacy_experiment_id: p.error("--privacy-output requires --privacy-requirement, --privacy-surfaces and --privacy-experiment-id")
+        privacy = export_privacy_observability_result(capture, requirement_id=args.privacy_requirement, surface_names=[x.strip() for x in args.privacy_surfaces.split(",") if x.strip()], experiment_id=args.privacy_experiment_id)
+        args.privacy_output.parent.mkdir(parents=True, exist_ok=True); args.privacy_output.write_text(json.dumps(privacy, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return 0
 
 
