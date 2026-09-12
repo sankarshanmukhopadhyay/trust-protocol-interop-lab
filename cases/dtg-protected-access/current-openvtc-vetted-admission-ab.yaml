@@ -12,6 +12,8 @@ experiment:
 contexts:
   A:
     verifier: did:example:vetting-community-a
+    observer_id: did:example:vetting-community-a
+    auth_principal: did:example:vetter-a
     purpose: vetted-admission-a
     challenge: vetting-a-2026-09-12
     command:
@@ -25,6 +27,8 @@ contexts:
       - did:example:vetter-a
   B:
     verifier: did:example:vetting-community-b
+    observer_id: did:example:vetting-community-b
+    auth_principal: did:example:vetter-b
     purpose: vetted-admission-b
     challenge: vetting-b-2026-09-12
     command:
@@ -41,8 +45,19 @@ surface_producers:
   ticket_uri_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::uri
   ticket_community_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket::community
   retained_ticket_identifier_fingerprint: OpenVTC/openvtc::openvtc-core::vetting::tickets::Ticket
+surface_execution_sources:
+  ticket_identifier_fingerprint: runtime-read
+  ticket_uri_fingerprint: runtime-read
+  ticket_community_fingerprint: runtime-read
+  retained_ticket_identifier_fingerprint: runtime-read
+surface_observers:
+  ticket_identifier_fingerprint: A/B verifier observers
+  ticket_uri_fingerprint: A/B verifier observers
+  ticket_community_fingerprint: A/B verifier observers
+  retained_ticket_identifier_fingerprint: A/B verifier observers
 assurance_boundary: >-
   This executes only the public target-native ticket issuance/URI surface. Manifest discovery,
   directory/profile lookup, grant-status network observation and application/profile retention
   are deliberately left not-evidenced unless independently executed. Fresh ticket fingerprints
-  do not establish universal vetted-admission unlinkability.
+  do not establish universal vetted-admission unlinkability. Detector positive/negative controls
+  are synthetic sensitivity checks using the same classifier and are not upstream target evidence.
