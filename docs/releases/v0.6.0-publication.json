@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "tag": "v0.6.0",
+  "title": "v0.6.0 — Current Implementation Evidence & Semantic Preservation",
+  "notes_file": "docs/releases/v0.6.0.md",
+  "status": "pending-publication",
+  "authority": {
+    "release_baseline": "validated protected main after coordinated release-prep merge"
+  },
+  "claim_boundary": "Publication versions the repository and bounded evidence baseline only; it does not create certification, production-security, legal-effect, standards-endorsement, universal privacy or blanket-interoperability claims."
+}
