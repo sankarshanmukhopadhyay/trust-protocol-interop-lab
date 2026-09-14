@@ -35,23 +35,18 @@ jobs:
     steps:
       - name: Checkout Interop Lab producer
         uses: actions/checkout@v7
-
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.13'
-
       - name: Install evidence dependencies
         run: python -m pip install --disable-pip-version-check pyyaml
-
       - name: Install native build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libdbus-1-dev pkg-config
-
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
-
       - name: Checkout immutable OpenVTC target
         uses: actions/checkout@v7
         with:
@@ -59,31 +54,47 @@ jobs:
           ref: ${{ inputs.target_revision }}
           path: build/current-openvtc
           fetch-depth: 1
-
       - name: Verify immutable target pin
         shell: bash
         run: |
           set -euo pipefail
           test "$(git -C "$OPENVTC_CHECKOUT" rev-parse HEAD)" = "$OPENVTC_REVISION"
           test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
-
+      - name: Bind clean-room producer adapters to frozen target
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          old='72bf5794071971da506eb7a5af8e4765c35c137c'
+          new=os.environ['OPENVTC_REVISION']
+          paths=[
+            Path('experiments/dtg-protected-access/current_openvtc_context.py'),
+            Path('experiments/dtg-protected-access/current_openvtc_track_b_status_context.py'),
+            Path('experiments/dtg-protected-access/current_openvtc_track_b_task_context.py'),
+            Path('experiments/dtg-protected-access/current_openvtc_track_b_policy_context.py'),
+          ]
+          for path in paths:
+            text=path.read_text()
+            if old not in text:
+              raise SystemExit(f'expected historical adapter pin not found: {path}')
+            path.write_text(text.replace(old,new))
+          PY
       - name: Validate characterized member admission
         run: >-
           python scripts/run_current_openvtc_ab_member.py
           --member "${{ inputs.member }}"
           --output-dir "${{ runner.temp }}/current-openvtc-ab"
           --check-contract
-
       - name: Execute characterized A/B evidence member
         run: >-
           python scripts/run_current_openvtc_ab_member.py
           --member "${{ inputs.member }}"
           --output-dir "${{ runner.temp }}/current-openvtc-ab"
-
       - name: Verify producer left upstream checkout clean
         shell: bash
         run: test -z "$(git -C "$OPENVTC_CHECKOUT" status --porcelain)"
-
       - name: Upload attributable runtime evidence
         uses: actions/upload-artifact@v7
         with:
