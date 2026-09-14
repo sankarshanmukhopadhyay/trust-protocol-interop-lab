@@ -1,7 +1,7 @@
 evidence_class: runtime-upstream-observation
 implementation:
   repository: OpenVTC/verifiable-trust-infrastructure
-  revision: 72bf5794071971da506eb7a5af8e4765c35c137c
+  revision: 76eae3f8093cc09fc6d47428833a158e326a981f
 experiment:
   kind: unlinkability-pressure-case
   expected_join: must-not-emerge
@@ -48,10 +48,9 @@ surface_producers:
   transaction_context: trust-protocol-interop-lab
   deliberate_join_attempt: trust-protocol-interop-lab
 assurance_boundary: >-
-  This case executes current pinned OpenVTC/VTI E2E support with context-distinct
-  deterministic client identities. The relationship/verifier surfaces exercised by
-  this path are captured. Status/policy-discovery and Trust Task surfaces are deliberately
-  not marked executed, so the evidence contract records them as not-evidenced rather
-  than inferring absence. A non-detected join is bounded evidence for this execution
-  only and cannot establish a privacy PASS or RAHP GREEN. Dogwood is not executed and
-  remains historical regression evidence only.
+  Clean-room re-execution against VTI 76eae3f. This case must earn its observations
+  again at the frozen target. The relationship/verifier surfaces actually exercised
+  by this path are captured; non-executed status/policy-discovery and Trust Task
+  surfaces remain not-evidenced. A non-detected join is bounded evidence for this
+  execution only and cannot establish a privacy PASS or RAHP GREEN. Historical
+  Dogwood and 72bf579 observations are comparison inputs only.

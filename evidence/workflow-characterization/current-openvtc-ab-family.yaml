@@ -1,9 +1,9 @@
-version: 2
+version: 3
 family: current-openvtc-ab-evidence
 parent_issue: 195
 shared:
   implementation_repository: OpenVTC/verifiable-trust-infrastructure
-  implementation_revision: 72bf5794071971da506eb7a5af8e4765c35c137c
+  implementation_revision: 76eae3f8093cc09fc6d47428833a158e326a981f
   capture_runner: experiments/dtg-protected-access/capture_ab_runtime.py
   compatibility_exporter: experiments/dtg-protected-access/export_dpip_evidence.py
   evidence_class: runtime-upstream-observation
@@ -13,6 +13,7 @@ shared:
     - workflow-green-is-not-privacy-pass
     - workflow-green-is-not-terminal-assurance-pass
     - non-executed-surface-is-not-evidenced
+    - clean-room-recharacterization-required
 members:
   track-a:
     workflow: .github/workflows/current-openvtc-track-a-evidence.yml
