@@ -28,7 +28,7 @@ class Wd02ActionTimeTargetEvidenceTests(unittest.TestCase):
         self.assertEqual(target, result["target_runtime_evidence"])
         self.assertEqual("PARTIALLY_EVIDENCED", result["runtime_maturity"])
         self.assertIn("integrated Trust Task", result["remaining_gap"])
-        self.assertIn("does not establish current consequential authority", result["claim_boundary"])
+        self.assertIn("do not establish current consequential authority", result["claim_boundary"])
         self.assertTrue(result["all_expected_outcomes_matched"])
 
 
