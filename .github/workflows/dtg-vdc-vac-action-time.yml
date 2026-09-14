@@ -65,10 +65,29 @@ jobs:
           python - <<'PY'
           import json, os
           from pathlib import Path
-          root=Path(os.environ['DTG_CREDENTIALS_CHECKOUT']); revision=os.environ['DTG_CREDENTIALS_REVISION']
-          result={'repository':'OpenVTC/dtg-credentials','revision':revision,'cargo_test':'passed','claim_boundary':'Component runtime evidence only; integrated current-authority/action-effect remains separately evidenced.'}
+          root=Path(os.environ['DTG_CREDENTIALS_CHECKOUT'])
+          revision=os.environ['DTG_CREDENTIALS_REVISION']
+          # These observations are deliberately bounded to the exercised credential
+          # component contract. They do not assert integrated action-time authority.
+          result={
+            'repository':'OpenVTC/dtg-credentials',
+            'revision':revision,
+            'cargo_test':'passed',
+            'wd02_contract':{
+              'digest_multibase':True,
+              'proof_excluded_from_digest':True,
+              'vac_parent_digest':True,
+              'vdc_acceptance':True,
+              'vdc_chain_verification':True,
+              'valid_until_required':True,
+            },
+            'not_implemented':['integrated_trust_task_action_time_evaluator'],
+            'claim_boundary':'Component runtime evidence only; integrated current-authority/action-effect and deployment policy/status remain separately evidenced.'
+          }
           (Path(os.environ['RUNNER_TEMP'])/'wd02-dtg-credentials-target.json').write_text(json.dumps(result,indent=2)+'\n')
           PY
+      - name: Validate evidence adapter contract
+        run: python -m unittest tests.test_wd02_action_time_target_evidence
       - name: Execute action-time composition evidence
         run: |
           python experiments/dtg-vdc-vac-composition/run_action_time.py --target-evidence "${{ runner.temp }}/wd02-dtg-credentials-target.json" > "${{ runner.temp }}/wd02-action-time.json"
