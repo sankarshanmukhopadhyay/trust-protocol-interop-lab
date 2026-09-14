@@ -20,7 +20,7 @@ on:
         description: Immutable 40-hex target revision.
         required: false
         type: string
-        default: 72bf5794071971da506eb7a5af8e4765c35c137c
+        default: 76eae3f8093cc09fc6d47428833a158e326a981f
 
 permissions:
   contents: read
