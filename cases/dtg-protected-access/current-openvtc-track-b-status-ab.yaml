@@ -1,7 +1,7 @@
 evidence_class: runtime-upstream-observation
 implementation:
   repository: OpenVTC/verifiable-trust-infrastructure
-  revision: 72bf5794071971da506eb7a5af8e4765c35c137c
+  revision: 76eae3f8093cc09fc6d47428833a158e326a981f
 experiment:
   kind: positive-control
   expected_join: must-detect
@@ -10,20 +10,12 @@ contexts:
     verifier: current-openvtc-track-b-status-verifier-a
     purpose: observe-shared-status-surface-a
     challenge: current-openvtc-track-b-status-challenge-a
-    command:
-      - python
-      - experiments/dtg-protected-access/current_openvtc_track_b_status_context.py
-      - --context
-      - A
+    command: [python, experiments/dtg-protected-access/current_openvtc_track_b_status_context.py, --context, A]
   B:
     verifier: current-openvtc-track-b-status-verifier-b
     purpose: observe-shared-status-surface-b
     challenge: current-openvtc-track-b-status-challenge-b
-    command:
-      - python
-      - experiments/dtg-protected-access/current_openvtc_track_b_status_context.py
-      - --context
-      - B
+    command: [python, experiments/dtg-protected-access/current_openvtc_track_b_status_context.py, --context, B]
 correlator_origins:
   status_handle: target-derived
   status_endpoint: target-derived
@@ -31,7 +23,7 @@ surface_producers:
   status_handle: OpenVTC/verifiable-trust-infrastructure
   status_endpoint: OpenVTC/verifiable-trust-infrastructure
 assurance_boundary: >-
-  Positive-control evidence: the same verifier-facing status-list purpose and endpoint
-  are intentionally observable in both contexts and therefore MUST be detected as a
-  shared surface. This establishes attributable observability, not a privacy defect.
-  Policy-discovery and Trust Task surfaces remain not-evidenced by this Track B slice.
+  Clean-room positive control at VTI 76eae3f: the same verifier-facing status-list
+  purpose and endpoint are intentionally observable in both contexts and MUST be
+  detected as shared. This establishes target-attributable observability, not a privacy
+  defect. Policy-discovery and Trust Task surfaces remain not-evidenced by this slice.
