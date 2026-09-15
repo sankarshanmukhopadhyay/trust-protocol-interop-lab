@@ -1,0 +1,44 @@
+schema: interop-actuation-case/v1
+case: IC-DTG-CREDENTIAL-TASK-ACTUATION-001
+issue: 163
+purpose: >-
+  Pressure-test the credential -> Trust Task -> consequential-actuation seam to the
+  actual observable implementation boundary without manufacturing missing behavior.
+source_epoch:
+  credential_spec: trustoverip/dtgwg-cred-spec@37074bdcd861c51f3e5b7868ce700832b17b73ce
+  trust_tasks: trustoverip/dtgwg-trust-tasks-tf@84a4329a5f797dec9d240c83ab5d564c120dde8f
+  openvtc: OpenVTC/verifiable-trust-infrastructure@3f21929ae5ce870f7c17726120d4aa1c1acbf13c
+  dtg_credentials: OpenVTC/dtg-credentials@5cb04fab2d9272ee891b352a4886343ccc86b52b
+propositions: [P03, P04, P05, P08, P09]
+classifications: [supported, divergent, not-implemented, not-observable]
+vectors:
+  - id: CTA-POS-001
+    expected: allow
+    proposition: current authority plus representation plus exact task binding permits actuation
+  - id: CTA-NEG-001
+    expected: deny
+    proposition: withdrawn current authority cannot be replaced by valid delegation
+  - id: CTA-NEG-002
+    expected: deny
+    proposition: current authority cannot replace required representation
+  - id: CTA-NEG-003
+    expected: deny
+    proposition: action outside credential or delegation scope fails closed
+  - id: CTA-NEG-004
+    expected: deny
+    proposition: presenter subject or relationship mismatch fails closed
+  - id: CTA-NEG-005
+    expected: deny
+    proposition: invocation and Trust Task semantic mismatch fails closed
+  - id: CTA-NEG-006
+    expected: no-second-effect
+    proposition: replay cannot create a second consequential effect
+  - id: CTA-NEG-007
+    expected: deny
+    proposition: key or capability possession cannot substitute for action-specific authority
+  - id: CTA-NEG-008
+    expected: deny
+    proposition: authority cannot substitute for an independently required capability envelope
+claim_boundary: >-
+  Component, semantic-fixture and Lab evidence remain separately attributable. A supported
+  component vector is not an integrated OpenVTC consequential-authority conformance claim.
