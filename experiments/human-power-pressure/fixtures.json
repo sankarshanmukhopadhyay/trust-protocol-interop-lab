@@ -1,0 +1,99 @@
+[
+  {
+    "comparison_group": "correlation-service-session",
+    "family": "correlation",
+    "id": "CORRELATION_CROSS_SESSION",
+    "observations": {
+      "authorization": {"presented": true, "validity_observed": true},
+      "correlation": {"declared_scope": "pairwise", "effective_scope": "cross-session-stable", "observer_evidence": {"cross_context_linkable": false, "cross_session_linkable": true, "mechanism": "server-side retained mapping"}, "presented_scope": "pairwise", "requested_scope": "pairwise", "retained_scope": "cross-session"}
+    },
+    "schema": "interop-human-power-fixture/v1",
+    "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-session", "semantics": "exercise the same bounded service across sessions"},
+    "variant": "cross-session-observed"
+  },
+  {
+    "comparison_group": "correlation-service-session", "family": "correlation", "id": "CORRELATION_GOVERNED_STABLE",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "correlation": {"declared_scope": "account", "effective_scope": "account", "governance_basis": "continuity for user-managed account history", "observer_evidence": {"cross_context_linkable": false, "cross_session_linkable": true}, "presented_scope": "account", "purpose_bound": true, "requested_scope": "account", "retained_scope": "account-lifecycle"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-session", "semantics": "exercise the same bounded service across sessions"}, "variant": "governed-stable"
+  },
+  {
+    "comparison_group": "correlation-service-session", "family": "correlation", "id": "CORRELATION_SCOPED",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "correlation": {"declared_scope": "pairwise", "effective_scope": "pairwise", "observer_evidence": {"cross_context_linkable": false, "cross_session_linkable": false}, "presented_scope": "pairwise", "requested_scope": "pairwise", "retained_scope": "session"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-session", "semantics": "exercise the same bounded service across sessions"}, "variant": "scoped"
+  },
+  {
+    "comparison_group": "correlation-service-session", "family": "correlation", "id": "CORRELATION_STABLE_DEMAND",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "correlation": {"declared_scope": "pairwise", "effective_scope": "cross-session-stable", "observer_evidence": {"cross_context_linkable": false, "cross_session_linkable": true}, "presented_scope": "stable-account", "requested_scope": "stable-account", "retained_scope": "cross-session"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-session", "semantics": "exercise the same bounded service across sessions"}, "variant": "stable-demand"
+  },
+  {
+    "comparison_group": "decision-feature-access", "family": "decision-feature", "id": "DECISION_FEATURE_GOVERNED_RISK",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "decision": {"declared_features": ["eligibility", "service_region"], "evaluated_features": {"eligibility": true, "service_region": "in-area"}, "governance_basis": "service legally limited to covered region", "outcome": "permit", "purpose_bound": true}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "access-decision", "semantics": "decide access using the same primary eligibility credential facts"}, "variant": "governed-relevant-feature"
+  },
+  {
+    "comparison_group": "decision-feature-access", "family": "decision-feature", "id": "DECISION_FEATURE_HIDDEN_COMMUNITY",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "decision": {"declared_features": ["eligibility"], "evaluated_features": {"community_membership": "community-A", "eligibility": true}, "outcome": "deny"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "access-decision", "semantics": "decide access using the same primary eligibility credential facts"}, "variant": "hidden-community"
+  },
+  {
+    "comparison_group": "decision-feature-access", "family": "decision-feature", "id": "DECISION_FEATURE_PRIMARY_ONLY",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "decision": {"declared_features": ["eligibility"], "evaluated_features": {"eligibility": true}, "outcome": "permit"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "access-decision", "semantics": "decide access using the same primary eligibility credential facts"}, "variant": "primary-only"
+  },
+  {
+    "comparison_group": "disclosure-adult-eligibility", "family": "disclosure", "id": "DISCLOSURE_ENHANCED_ASSURANCE",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "disclosure": {"available_minimal": ["age_over_18"], "disclosed": ["age_over_18", "legal_name"], "governance_basis": "regulated account recovery requires name match", "purpose_bound": true, "requested": ["age_over_18", "legal_name"]}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "adult-eligibility", "semantics": "prove adult eligibility for a bounded service"}, "variant": "governed-enhanced-assurance"
+  },
+  {
+    "comparison_group": "disclosure-adult-eligibility", "family": "disclosure", "id": "DISCLOSURE_EXPANDED",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "disclosure": {"available_minimal": ["age_over_18"], "disclosed": ["age_over_18", "date_of_birth", "full_name", "home_address"], "purpose_bound": false, "requested": ["age_over_18", "date_of_birth", "full_name", "home_address"]}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "adult-eligibility", "semantics": "prove adult eligibility for a bounded service"}, "variant": "expanded"
+  },
+  {
+    "comparison_group": "disclosure-adult-eligibility", "family": "disclosure", "id": "DISCLOSURE_MINIMAL",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "disclosure": {"available_minimal": ["age_over_18"], "disclosed": ["age_over_18"], "purpose_bound": true, "requested": ["age_over_18"]}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "adult-eligibility", "semantics": "prove adult eligibility for a bounded service"}, "variant": "minimal"
+  },
+  {
+    "comparison_group": "refusal-high-dependency", "family": "refusal", "id": "REFUSAL_BUNDLED_DEFAULT",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "interaction": {"bundled_authorization": true, "default_state": "preselected", "prompt_count_after_refusal": 0, "purpose_specific": false, "reversible": true}, "refusal": {"available": true, "consequence": "application-not-submitted", "continuation_path": "none"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-application", "semantics": "submit an application to a high-dependency service"}, "variant": "bundled-default"
+  },
+  {
+    "comparison_group": "refusal-high-dependency", "family": "refusal", "id": "REFUSAL_HIGH_DEPENDENCY_DENIAL",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "interaction": {"bundled_authorization": false, "default_state": "unselected", "prompt_count_after_refusal": 0, "purpose_specific": false, "reversible": false}, "refusal": {"available": true, "consequence": "service-denied", "continuation_path": "none"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-application", "semantics": "submit an application to a high-dependency service"}, "variant": "service-denial"
+  },
+  {
+    "comparison_group": "refusal-high-dependency", "family": "refusal", "id": "REFUSAL_INFORMED_COUNTERCASE",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "interaction": {"bundled_authorization": false, "default_state": "unselected", "explanation_present": true, "prompt_count_after_refusal": 0, "purpose_specific": true, "reversible": true}, "refusal": {"available": true, "consequence": "continue-with-limited-function", "continuation_path": "limited-service"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-application", "semantics": "submit an application to a high-dependency service"}, "variant": "informed-reversible"
+  },
+  {
+    "comparison_group": "refusal-high-dependency", "family": "refusal", "id": "REFUSAL_PROMPT_LOOP",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "interaction": {"bundled_authorization": false, "default_state": "unselected", "prompt_count_after_refusal": 3, "purpose_specific": false, "reversible": true}, "refusal": {"available": true, "consequence": "blocked-until-choice", "continuation_path": "same-prompt"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-application", "semantics": "submit an application to a high-dependency service"}, "variant": "prompt-loop"
+  },
+  {
+    "comparison_group": "refusal-high-dependency", "family": "refusal", "id": "REFUSAL_PROPORTIONATE",
+    "observations": {"authorization": {"presented": true, "validity_observed": true}, "interaction": {"bundled_authorization": false, "default_state": "unselected", "prompt_count_after_refusal": 0, "purpose_specific": true, "reversible": true}, "refusal": {"available": true, "consequence": "continue-with-minimal-path", "continuation_path": "manual-review"}},
+    "schema": "interop-human-power-fixture/v1", "source": {"kind": "synthetic-pressure-test", "revision": "fixture-v1"},
+    "task": {"id": "service-application", "semantics": "submit an application to a high-dependency service"}, "variant": "proportionate"
+  }
+]

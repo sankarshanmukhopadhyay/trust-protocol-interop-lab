@@ -44,6 +44,22 @@ jobs:
       - name: Validate standards corpus v2
         run: python scripts/validate_standards_v2.py
 
+      - name: Run human-power pressure contract tests
+        run: python -m unittest tests/test_human_power_pressure.py -v
+
+      - name: Run human-power composition pressure evidence
+        run: >-
+          python experiments/human-power-pressure/run.py --check
+          --output "${{ runner.temp }}/human-power-pressure-evidence.json"
+
+      - name: Upload human-power pressure evidence
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: human-power-pressure-evidence
+          path: ${{ runner.temp }}/human-power-pressure-evidence.json
+          if-no-files-found: error
+
       - name: Run executable cross-spec tests
         run: |
           python experiments/xsp-001/run.py
