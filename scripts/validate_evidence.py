@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import hashlib, json
+import hashlib, importlib.util, json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 cases={c['id']:c for c in json.loads((ROOT/'catalog/interoperability-cases.yaml').read_text())['cases']}
@@ -27,4 +27,16 @@ for p in ROOT.rglob('evidence-manifest.json'):
         assert result.get('status')==d['result_summary'].get('status'), f'{p}: result status mismatch'
         if case.get('status')=='interoperability-tested':
             assert result.get('status')=='pass', f'{p}: tested case must have passing result'
-print(f'evidence: PASS ({count} executed evidence manifests; hashes and claim scopes verified)')
+
+# DPIP evidence obligations are acquisition requests, not interoperability findings.
+# Validate the reference #191 register through the same evidence CI without creating
+# a new workflow or pretending targetless obligations have been executed.
+admit_path=ROOT/'experiments/dpip-evidence-obligation/admit.py'
+spec=importlib.util.spec_from_file_location('dpip_evidence_admit', admit_path)
+mod=importlib.util.module_from_spec(spec); assert spec.loader; spec.loader.exec_module(mod)
+obligations=json.loads((ROOT/'experiments/dpip-evidence-obligation/dpip-191-obligations.json').read_text())['obligations']
+admissions=[mod.evaluate(x) for x in obligations]
+assert len(admissions)==3, 'DPIP #191 must expose three bounded obligations'
+assert all(x['admission']=='BLOCKED' and x['reason']=='NO_TARGET' for x in admissions), 'targetless DPIP #191 obligations must remain blocked'
+assert all('privacy PASS/FAIL' in x['claim_boundary']['lab_may_not_claim'] for x in admissions), 'Lab privacy authority boundary missing'
+print(f'evidence: PASS ({count} executed evidence manifests; hashes and claim scopes verified; {len(admissions)} DPIP obligations correctly bounded)')
