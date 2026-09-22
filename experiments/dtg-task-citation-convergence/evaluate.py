@@ -17,7 +17,6 @@ it without reinterpreting the experiment.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
@@ -35,16 +34,7 @@ class TriState(str, Enum):
     UNRESOLVED = "unresolved"
 
 
-@dataclass(frozen=True)
-class AuthorityState:
-    trust_tasks_17: str = "merged"
-    credential_56: str = "open-proposal"
-    vti_33: str = "open-proposal"
-    zkp_11: str = "open-proposal"
-
-
-AUTHORITY_STATE = AuthorityState()
-
+AUTHORITY_STATE = {\n    "trust_tasks_17": "merged",\n    "credential_56": "open-proposal",\n    "vti_33": "open-proposal",\n    "zkp_11": "open-proposal",\n}
 
 def _bool(observations: dict[str, Any], key: str) -> bool | None:
     value = observations.get(key)
