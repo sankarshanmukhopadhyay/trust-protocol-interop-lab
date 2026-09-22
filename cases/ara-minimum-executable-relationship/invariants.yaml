@@ -185,3 +185,16 @@ invariants:
     falsification_vectors:
       - ARA-NEG-041-AGREEMENT-CLOSURE-AS-RELATIONSHIP-CLOSURE
     fail_condition: lifecycle transition propagates beyond its governed scope without evidence/authority
+
+  - id: ARA-I23-COLLECTIVE-AUTHORITY-NOT-MEMBER-MULTIPLICITY
+    statement: Individually valid member evidence does not establish a collective act; current membership, the current exercise rule, exact-action binding, and enough distinct qualifying members are separately required.
+    owning_boundary: workflow-policy-gate-and-composition
+    required_positive_evidence:
+      - AAC-PERMIT-COLLECTIVE-2-OF-3
+    falsification_vectors:
+      - AAC-DENY-COLLECTIVE-1-OF-3
+      - AAC-INDETERMINATE-COLLECTIVE-RULE-MISSING
+      - AAC-DENY-COLLECTIVE-STALE-MEMBERSHIP
+      - AAC-DENY-COLLECTIVE-STALE-RULE
+      - AAC-DENY-COLLECTIVE-DUPLICATE-MEMBER
+    fail_condition: individually valid participants, duplicate participation, or stale composition state is upgraded into a current collective-authority permit
