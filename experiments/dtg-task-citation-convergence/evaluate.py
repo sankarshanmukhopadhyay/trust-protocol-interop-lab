@@ -34,7 +34,12 @@ class TriState(str, Enum):
     UNRESOLVED = "unresolved"
 
 
-AUTHORITY_STATE = {\n    "trust_tasks_17": "merged",\n    "credential_56": "open-proposal",\n    "vti_33": "open-proposal",\n    "zkp_11": "open-proposal",\n}
+AUTHORITY_STATE = {
+    "trust_tasks_17": "merged",
+    "credential_56": "open-proposal",
+    "vti_33": "open-proposal",
+    "zkp_11": "open-proposal",
+}
 
 def _bool(observations: dict[str, Any], key: str) -> bool | None:
     value = observations.get(key)
