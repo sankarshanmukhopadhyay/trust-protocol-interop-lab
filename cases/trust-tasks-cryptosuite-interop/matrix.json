@@ -1,0 +1,84 @@
+{
+  "schema": "trust-tasks-cryptosuite-interop-matrix/v1",
+  "status": "downstream-interoperability-evidence",
+  "claim_boundary": "Capability-set interoperability only. This fixture does not perform cryptographic verification and is not an upstream conformance claim.",
+  "implementations": [
+    {
+      "id": "impl-jcs-only",
+      "supported_cryptosuites": [
+        "eddsa-jcs-2022"
+      ]
+    },
+    {
+      "id": "impl-rdfc-only",
+      "supported_cryptosuites": [
+        "eddsa-rdfc-2022"
+      ]
+    },
+    {
+      "id": "impl-dual",
+      "supported_cryptosuites": [
+        "eddsa-jcs-2022",
+        "eddsa-rdfc-2022"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "CSI-001",
+      "producer": "impl-jcs-only",
+      "consumer": "impl-dual",
+      "document_cryptosuite": "eddsa-jcs-2022",
+      "proof_state": "valid",
+      "expected": "verify-capable"
+    },
+    {
+      "id": "CSI-002",
+      "producer": "impl-jcs-only",
+      "consumer": "impl-rdfc-only",
+      "document_cryptosuite": "eddsa-jcs-2022",
+      "proof_state": "valid",
+      "expected": "unsupported-cryptosuite"
+    },
+    {
+      "id": "CSI-003",
+      "producer": "impl-rdfc-only",
+      "consumer": "impl-jcs-only",
+      "document_cryptosuite": "eddsa-rdfc-2022",
+      "proof_state": "valid",
+      "expected": "unsupported-cryptosuite"
+    },
+    {
+      "id": "CSI-004",
+      "producer": "impl-rdfc-only",
+      "consumer": "impl-dual",
+      "document_cryptosuite": "eddsa-rdfc-2022",
+      "proof_state": "valid",
+      "expected": "verify-capable"
+    },
+    {
+      "id": "CSI-005",
+      "producer": "impl-jcs-only",
+      "consumer": "impl-dual",
+      "document_cryptosuite": "eddsa-jcs-2022",
+      "proof_state": "invalid",
+      "expected": "invalid-proof"
+    },
+    {
+      "id": "CSI-006",
+      "producer": "impl-jcs-only",
+      "consumer": "impl-dual",
+      "document_cryptosuite": "unknown-suite",
+      "proof_state": "valid",
+      "expected": "unsupported-cryptosuite"
+    },
+    {
+      "id": "CSI-007",
+      "producer": "impl-jcs-only",
+      "consumer": "impl-dual",
+      "document_cryptosuite": "eddsa-rdfc-2022",
+      "proof_state": "valid",
+      "expected": "producer-capability-mismatch"
+    }
+  ]
+}
