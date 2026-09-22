@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "case_id": "IC-ARA-REL-001",
   "tranche": "authority-at-material-commitment",
   "vectors": [
@@ -80,6 +80,175 @@
         "approval_required": false
       },
       "expected": "indeterminate"
+    },
+    {
+      "id": "AAC-PERMIT-COLLECTIVE-2-OF-3",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "scope_satisfied": true,
+        "approval_required": false,
+        "collective_authority": {
+          "principal_id": "did:example:collective",
+          "threshold_required": 2,
+          "current_members": ["did:example:a", "did:example:b", "did:example:c"],
+          "membership_evidence": "current",
+          "rule_evidence": "current",
+          "approvals": [
+            {
+              "member": "did:example:a",
+              "action_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+              "valid": true
+            },
+            {
+              "member": "did:example:b",
+              "action_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+              "valid": true
+            }
+          ]
+        }
+      },
+      "expected": "permit"
+    },
+    {
+      "id": "AAC-DENY-COLLECTIVE-1-OF-3",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "scope_satisfied": true,
+        "approval_required": false,
+        "collective_authority": {
+          "principal_id": "did:example:collective",
+          "threshold_required": 2,
+          "current_members": ["did:example:a", "did:example:b", "did:example:c"],
+          "membership_evidence": "current",
+          "rule_evidence": "current",
+          "approvals": [
+            {
+              "member": "did:example:a",
+              "action_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+              "valid": true
+            }
+          ]
+        }
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "AAC-INDETERMINATE-COLLECTIVE-RULE-MISSING",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "scope_satisfied": true,
+        "approval_required": false,
+        "collective_authority": {
+          "principal_id": "did:example:collective",
+          "threshold_required": 2,
+          "current_members": ["did:example:a", "did:example:b", "did:example:c"],
+          "membership_evidence": "current",
+          "rule_evidence": "missing",
+          "approvals": [
+            {
+              "member": "did:example:a",
+              "action_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+              "valid": true
+            },
+            {
+              "member": "did:example:b",
+              "action_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+              "valid": true
+            }
+          ]
+        }
+      },
+      "expected": "indeterminate"
+    },
+    {
+      "id": "AAC-DENY-COLLECTIVE-STALE-MEMBERSHIP",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+        "scope_satisfied": true,
+        "approval_required": false,
+        "collective_authority": {
+          "principal_id": "did:example:collective",
+          "threshold_required": 2,
+          "current_members": ["did:example:a", "did:example:c", "did:example:d"],
+          "membership_evidence": "stale",
+          "rule_evidence": "current",
+          "approvals": [
+            {
+              "member": "did:example:a",
+              "action_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+              "valid": true
+            },
+            {
+              "member": "did:example:b",
+              "action_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+              "valid": true
+            }
+          ]
+        }
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "AAC-DENY-COLLECTIVE-STALE-RULE",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "scope_satisfied": true,
+        "approval_required": false,
+        "collective_authority": {
+          "principal_id": "did:example:collective",
+          "threshold_required": 2,
+          "current_members": ["did:example:a", "did:example:b", "did:example:c"],
+          "membership_evidence": "current",
+          "rule_evidence": "stale",
+          "approvals": [
+            {
+              "member": "did:example:a",
+              "action_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+              "valid": true
+            },
+            {
+              "member": "did:example:b",
+              "action_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+              "valid": true
+            }
+          ]
+        }
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "AAC-DENY-COLLECTIVE-DUPLICATE-MEMBER",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "scope_satisfied": true,
+        "approval_required": false,
+        "collective_authority": {
+          "principal_id": "did:example:collective",
+          "threshold_required": 2,
+          "current_members": ["did:example:a", "did:example:b", "did:example:c"],
+          "membership_evidence": "current",
+          "rule_evidence": "current",
+          "approvals": [
+            {
+              "member": "did:example:a",
+              "action_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+              "valid": true
+            },
+            {
+              "member": "did:example:a",
+              "action_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+              "valid": true
+            }
+          ]
+        }
+      },
+      "expected": "deny"
     }
   ]
 }
