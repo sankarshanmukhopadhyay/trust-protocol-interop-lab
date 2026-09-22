@@ -1,0 +1,29 @@
+name: Trust Tasks cryptosuite interoperability
+
+on:
+  pull_request:
+    paths:
+      - 'cases/trust-tasks-cryptosuite-interop/**'
+      - 'experiments/trust-tasks-cryptosuite-interop/**'
+      - 'tests/test_trust_tasks_cryptosuite_interop.py'
+      - '.github/workflows/trust-tasks-cryptosuite-interop.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cases/trust-tasks-cryptosuite-interop/**'
+      - 'experiments/trust-tasks-cryptosuite-interop/**'
+      - 'tests/test_trust_tasks_cryptosuite_interop.py'
+      - '.github/workflows/trust-tasks-cryptosuite-interop.yml'
+
+jobs:
+  cryptosuite-interop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run capability matrix
+        run: python experiments/trust-tasks-cryptosuite-interop/run.py --check
+      - name: Run negative fixture tests
+        run: python -m pytest -q tests/test_trust_tasks_cryptosuite_interop.py
