@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "case_id": "IC-ARA-REL-001",
+  "tranche": "authority-at-material-commitment",
+  "vectors": [
+    {
+      "id": "AAC-PERMIT-001",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "scope_satisfied": true,
+        "approval_required": false
+      },
+      "expected": "permit"
+    },
+    {
+      "id": "AAC-DENY-REVOKED",
+      "input": {
+        "authority_state": "revoked",
+        "action_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "scope_satisfied": true,
+        "approval_required": false
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "AAC-DENY-SCOPE",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "scope_satisfied": false,
+        "approval_required": false
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "AAC-INDETERMINATE-APPROVAL",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "scope_satisfied": true,
+        "approval_required": true
+      },
+      "expected": "indeterminate"
+    },
+    {
+      "id": "AAC-DENY-WRONG-APPROVAL",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "scope_satisfied": true,
+        "approval_required": true,
+        "approval": {
+          "action_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "valid": true
+        }
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "AAC-DENY-STALE-APPROVAL",
+      "input": {
+        "authority_state": "active",
+        "action_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "scope_satisfied": true,
+        "approval_required": true,
+        "approval": {
+          "action_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "valid": false
+        }
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "AAC-INDETERMINATE-STATUS",
+      "input": {
+        "authority_state": "unavailable",
+        "action_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "scope_satisfied": true,
+        "approval_required": false
+      },
+      "expected": "indeterminate"
+    }
+  ]
+}
