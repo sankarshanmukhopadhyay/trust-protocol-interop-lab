@@ -32,3 +32,27 @@ python experiments/ara-authority-at-commitment/run.py \
 ## Claim boundary
 
 This is deterministic Lab evidence for the modeled authority decision boundary. It is not legal advice, a claim of contractual enforceability, A2A conformance, ARPA certification, production authorization assurance or evidence that a particular cryptographic mandate format is universally sufficient.
+
+## Collective authority extension
+
+The same commitment boundary now exercises an authority that is held by a
+collective principal and exercised under a current threshold rule. The model
+deliberately separates the principal from the participating controllers.
+
+A collective permit requires all of the following:
+
+- current authority state for the accountable principal;
+- current membership evidence;
+- a current threshold/exercise rule;
+- exact-action binding for every counted approval;
+- enough **distinct** current members to satisfy the threshold.
+
+The negative vectors preserve three non-inference rules:
+
+1. valid member identity or signatures do not independently establish the collective act;
+2. component validity does not synthesize a missing composition rule;
+3. stale membership or threshold state cannot authorize a new commitment.
+
+This is a bounded deterministic fixture. It does not choose a threshold
+cryptosystem or require Trust Tasks to adopt a particular representation for a
+collective party.
