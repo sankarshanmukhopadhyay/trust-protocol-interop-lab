@@ -1,0 +1,46 @@
+{
+  "schema": "interop-source-characterization/v1",
+  "case": "IC-DTG-TASK-CITATION-CONVERGENCE-001",
+  "issue": 233,
+  "target": {
+    "repository": "OpenVTC/verifiable-trust-infrastructure",
+    "revision": "1099d7b24366b9d390f24201dc6db308fda70e21"
+  },
+  "observed_source_semantics": {
+    "taskContext": {
+      "implemented": true,
+      "meaning": "threadId of the Trust Task exchange in which the credential was issued",
+      "evidence_path": "vtc-service/src/credentials/task_context.rs",
+      "presentation_path": "vtc-service/src/credentials/exchange/verify.rs"
+    },
+    "taskDigestMultibase": {
+      "implemented": false,
+      "basis": "repository code search at the pinned revision returned no taskDigest or taskDigestMultibase occurrences"
+    },
+    "initiating_document_binding": {
+      "implemented": false,
+      "basis": "the implemented resolver compares taskContext directly and verbatim with the current exchange threadId"
+    },
+    "outcome_evidence": {
+      "normative_guard_acknowledged_in_source_comments": true,
+      "implemented_exact_pairing_path": false,
+      "basis": "source comments state that matching outcome evidence is required, but the pinned implementation exposes no task digest / initiating-document pairing mechanism"
+    }
+  },
+  "classification": {
+    "new_initiating_document_plus_digest_path": "not-implemented",
+    "runtime_correlation_result": "unresolved"
+  },
+  "authority_boundary": {
+    "trust_tasks_17": "merged",
+    "credential_56": "open-proposal",
+    "vti_33": "open-proposal",
+    "zkp_11": "open-proposal"
+  },
+  "non_inference": [
+    "source characterization is not runtime evidence",
+    "presence of taskContext handling does not establish the newer initiating-document plus digest semantics",
+    "source comments describing an outcome-evidence requirement do not establish executable outcome-evidence verification",
+    "absence of a new runtime path does not establish privacy"
+  ]
+}

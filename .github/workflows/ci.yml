@@ -47,6 +47,11 @@ jobs:
       - name: Run human-power pressure contract tests
         run: python -m unittest tests/test_human_power_pressure.py -v
 
+      - name: Run task-citation convergence contract tests
+        run: |
+          python -m unittest tests/test_dtg_task_citation_convergence.py -v
+          python -m unittest tests/test_dtg_task_citation_source_characterization.py -v
+
       - name: Run human-power composition pressure evidence
         run: >-
           python experiments/human-power-pressure/run.py --check
