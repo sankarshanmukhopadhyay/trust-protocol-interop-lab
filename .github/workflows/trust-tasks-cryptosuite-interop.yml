@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install test dependency
+        run: python -m pip install pytest
       - name: Run capability matrix
         run: python experiments/trust-tasks-cryptosuite-interop/run.py --check
       - name: Run negative fixture tests
