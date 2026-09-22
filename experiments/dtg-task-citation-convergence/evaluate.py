@@ -201,10 +201,10 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
         "case": str(case.get("case") or "IC-DTG-TASK-CITATION-CONVERGENCE-001"),
         "issue": 233,
         "authority_state": {
-            "trust_tasks_17": AUTHORITY_STATE.trust_tasks_17,
-            "credential_56": AUTHORITY_STATE.credential_56,
-            "vti_33": AUTHORITY_STATE.vti_33,
-            "zkp_11": AUTHORITY_STATE.zkp_11,
+            "trust_tasks_17": AUTHORITY_STATE["trust_tasks_17"],
+            "credential_56": AUTHORITY_STATE["credential_56"],
+            "vti_33": AUTHORITY_STATE["vti_33"],
+            "zkp_11": AUTHORITY_STATE["zkp_11"],
         },
         "source_pins": {
             "trust_tasks_pr_17_merge": "2bdc08bc55e48fd3bd4e03cd665b26d266f75c11",
