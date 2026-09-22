@@ -1,0 +1,27 @@
+name: ARA authority at commitment
+
+on:
+  pull_request:
+    paths:
+      - "cases/ara-minimum-executable-relationship/authority-at-commitment*"
+      - "experiments/ara-authority-at-commitment/**"
+      - ".github/workflows/ara-authority-at-commitment.yml"
+  push:
+    branches: [main]
+    paths:
+      - "cases/ara-minimum-executable-relationship/authority-at-commitment*"
+      - "experiments/ara-authority-at-commitment/**"
+
+permissions:
+  contents: read
+
+jobs:
+  authority-at-commitment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run deterministic authority-at-commitment vectors
+        run: python experiments/ara-authority-at-commitment/run.py --check
