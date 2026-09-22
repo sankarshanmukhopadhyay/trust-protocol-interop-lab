@@ -10,7 +10,8 @@ Final admission: [#32](https://github.com/sankarshanmukhopadhyay/trust-protocol-
 Follow-along guide: [FOLLOW-ALONG.md](FOLLOW-ALONG.md)  
 Architecture-to-code map: [architecture-to-code.yaml](architecture-to-code.yaml)  
 Final claim boundary: [final-claim-boundary.md](final-claim-boundary.md)  
-Evidence manifest: [../../evidence/ara-minimum-executable-relationship/evidence-manifest.json](../../evidence/ara-minimum-executable-relationship/evidence-manifest.json)
+Evidence manifest: [../../evidence/ara-minimum-executable-relationship/evidence-manifest.json](../../evidence/ara-minimum-executable-relationship/evidence-manifest.json)  
+Authority-at-material-commitment extension: [authority-at-commitment.md](authority-at-commitment.md)
 
 ## At a glance
 
