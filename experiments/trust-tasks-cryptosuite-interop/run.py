@@ -20,7 +20,14 @@ def evaluate(case: dict, implementations: dict[str, dict]) -> str:
     producer = implementations[case["producer"]]
     consumer = implementations[case["consumer"]]
     suite = case["document_cryptosuite"]
+    known_suites = {
+        supported
+        for implementation in implementations.values()
+        for supported in implementation["supported_cryptosuites"]
+    }
 
+    if suite not in known_suites:
+        return "unsupported-cryptosuite"
     if suite not in producer["supported_cryptosuites"]:
         return "producer-capability-mismatch"
     if suite not in consumer["supported_cryptosuites"]:
