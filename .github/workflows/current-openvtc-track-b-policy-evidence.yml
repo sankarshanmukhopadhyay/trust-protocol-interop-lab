@@ -31,11 +31,11 @@ jobs:
     timeout-minutes: 45
     env:
       OPENVTC_CHECKOUT: ${{ github.workspace }}/build/current-openvtc
-      OPENVTC_REVISION: 72bf5794071971da506eb7a5af8e4765c35c137c
+      OPENVTC_REVISION: 3551ceda3431707b2364eae6d30d50d94cec29dc
       DPIP_CHECKOUT: ${{ github.workspace }}/build/dpip-contract
-      DPIP_REVISION: ae4bea121d8e5a03ca2d35bfc97a63d9b69184ea
+      DPIP_REVISION: ad2ca48e9e1c69b16329e24ef27a917158435abf
       RAHP_CHECKOUT: ${{ github.workspace }}/build/rahp-contract
-      RAHP_REVISION: a8a3c39f1abc609b40cf4a9688b94ea58b52e172
+      RAHP_REVISION: d80c559e95b35c63f3c0f91dd56cb09f83dd31b7
     steps:
       - name: Checkout Interop Lab producer
         uses: actions/checkout@v7
@@ -93,7 +93,7 @@ jobs:
           import pathlib, yaml
           doc=yaml.safe_load(pathlib.Path('${{ runner.temp }}/current-openvtc-track-b-policy.yaml').read_text())
           assert doc['provenance']['implementation_repository']=='OpenVTC/verifiable-trust-infrastructure'
-          assert doc['provenance']['implementation_revision']=='72bf5794071971da506eb7a5af8e4765c35c137c'
+          assert doc['provenance']['implementation_revision']=='3551ceda3431707b2364eae6d30d50d94cec29dc'
           s=doc['requirements']['ER-STATUS-AB']['surfaces']
           assert s['policy_discovery_handle']['classification']=='fresh'
           assert s['policy_endpoint']['classification']=='fresh'
