@@ -35,3 +35,4 @@ jobs:
     with:
       member: track-b-task
       artifact_name: current-openvtc-track-b-task-runtime-upstream-observation
+      target_revision: 3551ceda3431707b2364eae6d30d50d94cec29dc
