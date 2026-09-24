@@ -77,9 +77,10 @@ jobs:
           ]
           for path in paths:
             text=path.read_text()
-            if old not in text:
-              raise SystemExit(f'expected historical adapter pin not found: {path}')
-            path.write_text(text.replace(old,new))
+            if old in text:
+              path.write_text(text.replace(old,new))
+            elif new not in text:
+              raise SystemExit(f'expected historical or current adapter pin not found: {path}')
           PY
       - name: Validate characterized member admission
         run: >-
