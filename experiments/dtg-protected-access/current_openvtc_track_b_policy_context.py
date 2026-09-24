@@ -5,7 +5,7 @@ import argparse, json, os, subprocess, sys, uuid
 from pathlib import Path
 
 REPO="OpenVTC/verifiable-trust-infrastructure"
-REV="3551ceda3431707b2364eae6d30d50d94cec29dc"
+REV="72bf5794071971da506eb7a5af8e4765c35c137c"
 MARKER="RAHP_TRACK_B_POLICY="
 TARGET=Path("vtc-service/tests/policies.rs")
 MECHANICAL_LOCKFILES={"Cargo.lock","vtc-service/admin-ui/package-lock.json"}
