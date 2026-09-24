@@ -82,6 +82,24 @@ jobs:
           test -z "$(git -C "$DPIP_CHECKOUT" status --porcelain)"
           test "$(git -C "$RAHP_CHECKOUT" rev-parse HEAD)" = "$RAHP_REVISION"
           test -z "$(git -C "$RAHP_CHECKOUT" status --porcelain)"
+      - name: Bind policy observation case to immutable target
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          old='72bf5794071971da506eb7a5af8e4765c35c137c'
+          new=os.environ['OPENVTC_REVISION']
+          for path in (
+              Path('experiments/dtg-protected-access/current_openvtc_track_b_policy_context.py'),
+              Path('cases/dtg-protected-access/current-openvtc-track-b-policy-ab.yaml'),
+          ):
+              text=path.read_text()
+              if old not in text:
+                  raise SystemExit(f'expected historical policy pin not found: {path}')
+              path.write_text(text.replace(old,new))
+          PY
       - name: Execute target-native policy A/B observation
         run: |
           python experiments/dtg-protected-access/capture_ab_runtime.py \
