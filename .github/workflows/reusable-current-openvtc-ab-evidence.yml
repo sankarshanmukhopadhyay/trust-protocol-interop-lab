@@ -20,7 +20,7 @@ on:
         description: Immutable 40-hex target revision.
         required: false
         type: string
-        default: 3551ceda3431707b2364eae6d30d50d94cec29dc
+        default: 76eae3f8093cc09fc6d47428833a158e326a981f
 
 permissions:
   contents: read
@@ -77,10 +77,9 @@ jobs:
           ]
           for path in paths:
             text=path.read_text()
-            if old in text:
-              path.write_text(text.replace(old,new))
-            elif new not in text:
-              raise SystemExit(f'expected historical or current adapter pin not found: {path}')
+            if old not in text:
+              raise SystemExit(f'expected historical adapter pin not found: {path}')
+            path.write_text(text.replace(old,new))
           PY
       - name: Validate characterized member admission
         run: >-
