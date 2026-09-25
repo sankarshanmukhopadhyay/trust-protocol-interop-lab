@@ -3,7 +3,7 @@
   "tag": "v0.7.0",
   "title": "v0.7.0 — Portable Evidence, Authority Composition & Current-Epoch Revalidation",
   "notes_file": "docs/releases/v0.7.0.md",
-  "status": "pending-publication",
+  "status": "published",
   "authority": {
     "release_baseline": "validated protected main after v0.7.0 release-prep merge"
   },
