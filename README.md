@@ -1,6 +1,6 @@
 # Trust Protocol Interop Lab
 
-**Current stable release: v0.6.0 — Current Implementation Evidence & Semantic Preservation**
+**Current stable release: v0.7.0 — Portable Evidence, Authority Composition & Current-Epoch Revalidation**
 
 Experimental compositions, bindings, profiles, mappings, negative tests and interoperability evidence connecting independently governed trust infrastructure, agent and application protocols.
 
@@ -16,16 +16,18 @@ The working model is:
 
 **upstream specifications → bounded Interop Case → semantic ownership + invariants → positive/negative scenarios → executable evidence → bounded findings → candidate upstream/downstream feedback**
 
-## What v0.6.0 adds
+## What v0.7.0 adds
 
-v0.6.0 packages the major post-v0.5 transition from primarily modelled executable-governance experiments to **source-pinned current implementation evidence**. The release includes:
+v0.7.0 packages the post-v0.6 tranche around **portable evidence obligations, authority-at-commitment composition, interoperability preconditions and current-epoch evidence refresh**:
 
-- current VTI/OpenVTC evidence for resolved-effect binding, credential issuance replay convergence, VAC use-time authority, personhood transport equivalence and Trust Task credential paths;
-- current OpenVTC Data Rooms evidence across room, membership, policy/status/task and vetted-admission surfaces where the implementation exposes testable behavior;
-- protected delegated care evidence for current authority, prescription/refill lifecycle, refill disclosure and runtime privacy boundaries;
-- explicit separation between evidence a target currently exposes and propositions that remain untestable or deployment-dependent;
-- stronger portable evidence packages and A/B harnesses consumed by RAHP and DPIP without allowing the Lab to become the authority for their assurance/privacy conclusions;
-- retained claim boundaries for closed execution issues: bounded evidence proves the exercised proposition only, not universal implementation or ecosystem conformance.
+- a deterministic human-power pressure evidence program with portable machine-verifiable observation packages and explicit counter-cases;
+- admission/execution support for DPIP evidence obligations without allowing the Lab to issue privacy or broader assurance conclusions;
+- task-citation convergence machinery separating exact citation binding, completion evidence, action authority and correlation observations;
+- authority-at-material-commitment vectors for current authority, revocation, scope, approval binding and unavailable status;
+- collective-authority composition evidence covering threshold satisfaction, stale membership/rules and duplicate participation;
+- cryptosuite capability-floor evidence showing why optional suite choice without a shared floor does not guarantee independent implementation interoperability;
+- current proof-required-route evidence that distinguishes remediated dispatcher controls from still-reachable bearer-route divergence;
+- a 2026-09-24 source-pinned refresh of the evidence surfaces consumed by the DTG/VTC clean-room assurance epoch.
 
 ## Start here
 
@@ -36,21 +38,33 @@ v0.6.0 packages the major post-v0.5 transition from primarily modelled executabl
 - [Methods & Architecture](docs/methods.md)
 - [Repository and artifact status](STATUS.md)
 - [Roadmap](ROADMAP.md)
-- [v0.6.0 release notes](docs/releases/v0.6.0.md)
+- [v0.7.0 release notes](docs/releases/v0.7.0.md)
 
 ## Current evidence families
 
-### Current VTI / OpenVTC
+### Portable evidence and specialist handoff
 
-The Lab contains independently bounded evidence pipelines for current implementation behavior, including resolved-effect binding, replay convergence, use-time authority, Trust Task credential paths and transport-sensitive/personhood behavior. Evidence is pinned to the target revision and observation surface. Where a live status lookup, upstream semantic primitive or independent implementation is absent, the Lab records that absence rather than fabricating a substitute.
+The Lab can now accept bounded evidence obligations from DPIP, preserve their target revision, observer scope, required maturity, observations and claim boundaries, and report whether the requested observation can actually be produced. Targetless or unavailable runtime obligations are blocked rather than replaced by synthetic substitutes.
 
-### Data Rooms and vetted admission
+Human-power pressure evidence is likewise emitted as neutral observations and derived signals. DPIP and RAHP remain the owners of privacy and broader assurance judgment.
 
-Current target-native OpenVTC probes exercise the Data Rooms and vetted-admission surfaces that are actually observable. Private-room ZK, same-subject/common-control semantics, witnessed anchoring/freshness, migration, operator-control and other missing surfaces remain separate evidence triggers.
+### Authority at material commitment
 
-### Protected delegated care
+The ARA evidence surface now exercises whether authority is current at the point a material act is committed. Single-actor and collective-authority cases distinguish current authority, revocation, scope, approval binding, threshold satisfaction, stale membership/rules, duplicate participation and unavailable status.
 
-`IC-PDC-MED-001` remains an important composed application case. v0.6 evidence covers deterministic delegated-care behavior, current-authority checks, prescription-to-refill lifecycle, disclosure comparisons and runtime privacy observations. Passing these bounded experiments does not establish production clinical suitability or legal authorization.
+Identity/signature evidence remains necessary input, not independent authority.
+
+### Task citation, proof and correlation
+
+The Lab separately evaluates exact task citation, completion evidence, action authority and correlation. Current source characterization is not silently promoted into runtime conformance. Missing implementation or observation surfaces remain explicit `not-implemented` / `not-observable` evidence states.
+
+### Cryptosuite capability floor
+
+A dedicated interoperability fixture demonstrates that a shared supported cryptosuite is a necessary verification precondition. Unsupported suite, invalid proof and producer capability mismatch remain distinct outcomes. The fixture does not choose an MTI suite or claim cryptographic implementation conformance.
+
+### Current DTG / VTI evidence epoch
+
+The September 24 evidence refresh re-pins the Trust Task → credential path, keyed replay convergence, VAC use-time authority/binding, and selected A/B privacy observer surfaces to the current VTI/DPIP/RAHP source epoch. Historical evidence remains lineage rather than a substitute for current execution.
 
 ## Interop cases
 
@@ -64,15 +78,9 @@ A passing validation or experiment demonstrates that the named repository artifa
 
 A current implementation result can strengthen, fail or leave a proposition indeterminate; it cannot rewrite the upstream specification or the owning assurance/privacy model.
 
-## Coordinated release context
+## Release context
 
-v0.6.0 is the Interop Lab member of the September 2026 coordinated RAHP / DPIP / Trust Protocol Interop Lab release tranche. The repositories remain independently versioned and governed:
-
-- **Lab:** produces bounded executable interoperability/implementation evidence;
-- **DPIP:** evaluates composed privacy properties over admissible evidence;
-- **RAHP:** owns the broader assurance lifecycle, residual ownership and terminal posture.
-
-This separation lets evidence move without collapsing authority.
+v0.7.0 is independently versioned from RAHP and DPIP. The Lab produces bounded executable observations and evidence packages; DPIP evaluates privacy propositions over admissible evidence; RAHP owns the broader assurance lifecycle and residual reconciliation. This separation lets evidence move without collapsing authority.
 
 ## Repository structure
 
@@ -106,7 +114,7 @@ python scripts/generate_readiness.py
 python scripts/check_links.py
 ```
 
-The `Repository assurance` workflow additionally executes the bounded cross-specification, PDC, ARA, DPAC and evidence-producer tests represented in the current repository.
+The `Repository assurance` workflow additionally executes the bounded cross-specification, PDC, ARA, DPAC, human-power, task-citation and evidence-producer tests represented in the current repository.
 
 ## Governance boundary
 
@@ -114,7 +122,7 @@ Upstream remains authoritative. The Lab owns only its experimental compositions,
 
 ## Release status
 
-**v0.6.0 — Current Implementation Evidence & Semantic Preservation** supersedes v0.5.0 as the latest stable Lab release. v0.5.0 remains the immutable Executable Governance Experiments baseline.
+**v0.7.0 — Portable Evidence, Authority Composition & Current-Epoch Revalidation** supersedes v0.6.0 as the latest stable Lab release. v0.6.0 remains the immutable Current Implementation Evidence & Semantic Preservation baseline.
 
 ## License
 
