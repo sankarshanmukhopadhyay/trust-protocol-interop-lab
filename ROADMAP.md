@@ -1,30 +1,29 @@
 # Trust Protocol Interop Lab roadmap
 
-## Current release boundary — v0.6.0
+## Current release boundary — v0.7.0
 
-v0.6.0 stabilizes the Lab's transition from primarily modelled executable-governance experiments to **current implementation evidence and semantic-preservation testing**. It packages the bounded current VTI/OpenVTC, Data Rooms, vetted-admission and protected delegated-care evidence that can be reproduced at the release boundary.
+v0.7.0 stabilizes the Lab's post-v0.6 transition to **portable evidence obligations, authority-at-commitment composition and current-epoch evidence refresh**. It extends the Lab's evidence-production role without giving it privacy, policy, legal-effect or whole-portfolio assurance authority.
 
-## Completed v0.6 tranche
+## Completed v0.7 tranche
 
-1. **Resolved-effect binding:** evidence distinguishes an authorized/requested operation from the effect that actually occurred.
-2. **Credential replay convergence:** repeated/replayed issuance paths are exercised against lifecycle convergence expectations.
-3. **VAC use-time authority:** bounded tests distinguish possession/presentation from current authority at action time.
-4. **Personhood transport equivalence:** implementation behavior can be compared across exposed transports without assuming semantic equivalence.
-5. **Trust Task credential paths:** task/credential composition is exercised as a bounded implementation surface rather than inferred from component conformance.
-6. **Current OpenVTC Data Rooms:** target-native evidence advances only the room, policy, status, task and membership propositions actually exposed by the implementation.
-7. **Vetted admission:** residual privacy/evidence families are exercised with explicit observer and persistence surfaces.
-8. **Protected delegated care:** current-authority, refill lifecycle, disclosure and runtime privacy evidence expands the real-world composed case.
-9. **Cross-repository evidence production:** evidence packages are suitable for consumption by RAHP/DPIP while those repositories retain judgment authority.
+1. **Human-power pressure evidence:** deterministic observation packages for disclosure, correlation, refusal/interaction pressure and consequential-decision features with governed counter-cases.
+2. **DPIP evidence-obligation admission:** bounded intake that preserves target, observer, maturity and claim boundaries and blocks targetless or governance-only runtime requests.
+3. **Task-citation convergence evidence:** separate propositions for exact task citation, completion evidence, action authority and correlation, with explicit not-implemented/not-observable states.
+4. **Authority at material commitment:** positive, negative and indeterminate vectors for current authority, revocation, scope, approval binding and unavailable status.
+5. **Collective authority:** threshold, stale-membership, stale-rule and duplicate-participation cases integrated into the existing ARA authority model.
+6. **Cryptosuite capability floor:** executable evidence that disjoint supported-suite sets prevent verification interoperability even when each implementation is internally valid.
+7. **Proof-required route characterization:** current evidence distinguishes remediated dispatcher proof/freshness/replay controls from remaining bearer-route divergence.
+8. **2026-09-24 current-epoch refresh:** revalidated Trust Task → credential, replay, VAC and selected privacy observer surfaces against current source pins.
 
-## Post-v0.6 priorities
+## Post-v0.7 priorities
 
-1. Add genuine two-implementation substitution and migration fixtures when independent conformant implementations exist; do not simulate independence merely to close evidence debt.
-2. Extend private-room and same-subject/common-control execution when upstream primitives and target behavior become available.
-3. Add witnessed anchoring/freshness, operator-control and deployment-level evidence where the proposition requires those evidence classes.
-4. Expand redress, continuation, correction and closure paths across agent/delegation compositions.
-5. Keep current-target probes source-pinned and refresh them only on material upstream/implementation changes.
-6. Maintain negative tests that distinguish capability, authority, authorization, execution, evidence and assurance.
-7. Improve evidence portability and provenance without making the Lab an assurance or privacy authority.
+1. Complete workflow-surface rationalisation (#191) using characterization/equivalence evidence before retiring or merging evidence workflows.
+2. Continue target-runtime task-citation observations as implementations expose the newer initiating-document/digest and outcome-evidence surfaces.
+3. Produce signed-operation step-up evidence when the current implementation exposes the sessionless privileged-operation path required by RAHP.
+4. Add genuine two-implementation substitution/migration fixtures when independent conformant implementations exist; do not simulate independence to close evidence debt.
+5. Extend private-room, same-subject/common-control, anchoring/freshness, operator-control and deployment evidence only where the target/runtime surface exists.
+6. Resume protected delegated-care external-adopter maturity work (#166) after higher-priority evidence/assurance items.
+7. Keep current-target probes source-pinned and rerun them only on material source or implementation changes.
 
 ## Non-regression rules
 
@@ -34,8 +33,12 @@ v0.6.0 stabilizes the Lab's transition from primarily modelled executable-govern
 - A component PASS does not imply composition interoperability.
 - Lab evidence does not automatically create a RAHP PASS or DPIP privacy PASS.
 - Missing implementation surfaces remain explicit evidence gaps.
+- Source characterization is not target-runtime execution.
+- Identity/signature or capability evidence is not automatically current action authority.
 - Closed experiment issues retain their bounded claim language and successor residual owners.
 
-## Historical boundary
+## Historical boundaries
 
-v0.5.0 **Executable Governance Experiments** remains an immutable historical release. Earlier release notes and publication records remain unchanged under `docs/releases/`.
+v0.6.0 **Current Implementation Evidence & Semantic Preservation** remains the source-pinned current-implementation evidence baseline.
+
+v0.5.0 **Executable Governance Experiments** remains the earlier immutable executable-governance baseline.
