@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "tag": "v0.7.0",
+  "title": "v0.7.0 — Portable Evidence, Authority Composition & Current-Epoch Revalidation",
+  "notes_file": "docs/releases/v0.7.0.md",
+  "status": "pending-publication",
+  "authority": {
+    "release_baseline": "validated protected main after v0.7.0 release-prep merge"
+  },
+  "claim_boundary": "Publication versions the repository and bounded evidence baseline only; it does not create certification, production-security, legal-effect, standards-endorsement, universal privacy or blanket-interoperability claims."
+}
