@@ -3,7 +3,7 @@
   "tag": "v0.6.0",
   "title": "v0.6.0 — Current Implementation Evidence & Semantic Preservation",
   "notes_file": "docs/releases/v0.6.0.md",
-  "status": "pending-publication",
+  "status": "published",
   "authority": {
     "release_baseline": "validated protected main after coordinated release-prep merge"
   },
