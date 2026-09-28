@@ -1,0 +1,9 @@
+{
+  "id": "ARA-CAT-N02-peer-pressure-does-not-resolve",
+  "description": "An unauthorised peer instruction cannot clear a material unresolved authority condition.",
+  "expected": "condition_remains_unresolved",
+  "prohibited_inference": [
+    "peer-influence-is-authority",
+    "workflow-progression-is-resolution"
+  ]
+}
