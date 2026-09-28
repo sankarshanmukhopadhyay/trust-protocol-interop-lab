@@ -1,0 +1,8 @@
+{
+  "id": "ARA-CAT-N04-out-of-scope-delegate-does-not-resolve",
+  "description": "A delegate with unrelated authority cannot resolve the condition for the requested action.",
+  "expected": "condition_remains_unresolved",
+  "prohibited_inference": [
+    "some-authority-implies-relevant-authority"
+  ]
+}
