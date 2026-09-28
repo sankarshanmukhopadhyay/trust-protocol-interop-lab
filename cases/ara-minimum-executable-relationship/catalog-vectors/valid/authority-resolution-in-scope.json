@@ -1,0 +1,7 @@
+{
+  "id": "ARA-CAT-P02-in-scope-authority-resolution",
+  "description": "A material authority condition may resolve when a valid delegate holding the exact required scope is current at commitment.",
+  "expected": "resolved_authority_change",
+  "resolution_basis": "authority_change",
+  "authority_changed": true
+}

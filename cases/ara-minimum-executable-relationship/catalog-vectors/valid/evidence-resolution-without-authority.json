@@ -1,0 +1,7 @@
+{
+  "id": "ARA-CAT-P03-evidence-resolution-without-authority",
+  "description": "Authoritative evidence may change the factual predicate that required approval without creating or transferring authority.",
+  "expected": "resolved_evidence_change",
+  "resolution_basis": "evidence_change",
+  "authority_changed": false
+}

@@ -338,3 +338,14 @@ Likely follow-on experiments include:
 - human-factors testing of Relationship Views.
 
 The architecture-to-code map and documentation-foundation check are intended to keep those future additions traceable to the architecture rather than accumulating as disconnected features.
+
+
+## Decision-resolution pressure extension
+
+The admitted relationship model now includes a bounded pressure test for authority non-amplification and explicit resolution. It verifies that non-authoritative peer pressure, repetition, unrelated delegated scope, and workflow progression do not clear a material unresolved condition, while legitimate authority, evidence, policy, and lifecycle changes remain distinguishable resolution bases.
+
+See [Decision resolution](decision-resolution.md) and reproduce with:
+
+```bash
+python experiments/ara-decision-resolution/run.py --check
+```
