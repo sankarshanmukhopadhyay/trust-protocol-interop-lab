@@ -1,0 +1,9 @@
+{
+  "id": "ARA-CAT-N03-repetition-does-not-amplify-authority",
+  "description": "Repeated or aggregated non-authoritative assertions cannot manufacture authority.",
+  "expected": "condition_remains_unresolved",
+  "prohibited_inference": [
+    "repetition-creates-authority",
+    "consensus-creates-authority"
+  ]
+}
