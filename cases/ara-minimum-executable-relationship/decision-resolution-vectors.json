@@ -1,0 +1,83 @@
+{
+  "case_id": "IC-ARA-REL-001",
+  "proposition": "A material unresolved condition persists until an admissible authority, evidence, policy, lifecycle, or correction event changes its basis; non-authoritative influence and workflow progression do not resolve it.",
+  "research_provenance": [
+    "https://github.com/JessHines360/protocol-of-care-for-agents",
+    "https://github.com/JessHines360/protocol-of-care-for-agents/blob/main/BRIEF.md",
+    "https://github.com/JessHines360/protocol-of-care-for-agents/blob/main/experiments/SIMULATION_01_RUNBOOK.md"
+  ],
+  "scenarios": [
+    {
+      "id": "ARA-DR-001",
+      "event": "unauthorized_peer",
+      "condition_before": "unresolved",
+      "expected_condition": "unresolved",
+      "resolution_basis": "none",
+      "authority_changed": false
+    },
+    {
+      "id": "ARA-DR-002",
+      "event": "repeated_peer_assertions",
+      "condition_before": "unresolved",
+      "expected_condition": "unresolved",
+      "resolution_basis": "none",
+      "authority_changed": false
+    },
+    {
+      "id": "ARA-DR-003",
+      "event": "out_of_scope_delegate",
+      "condition_before": "unresolved",
+      "expected_condition": "unresolved",
+      "resolution_basis": "none",
+      "authority_changed": false
+    },
+    {
+      "id": "ARA-DR-004",
+      "event": "in_scope_delegate",
+      "condition_before": "unresolved",
+      "expected_condition": "resolved",
+      "resolution_basis": "authority_change",
+      "authority_changed": true
+    },
+    {
+      "id": "ARA-DR-005",
+      "event": "authoritative_evidence_changes_predicate",
+      "condition_before": "unresolved",
+      "expected_condition": "resolved",
+      "resolution_basis": "evidence_change",
+      "authority_changed": false
+    },
+    {
+      "id": "ARA-DR-006",
+      "event": "legitimate_policy_change",
+      "condition_before": "unresolved",
+      "expected_condition": "resolved",
+      "resolution_basis": "policy_change",
+      "authority_changed": false
+    },
+    {
+      "id": "ARA-DR-007",
+      "event": "workflow_progression_only",
+      "condition_before": "unresolved",
+      "expected_condition": "unresolved",
+      "resolution_basis": "none",
+      "authority_changed": false
+    },
+    {
+      "id": "ARA-DR-008",
+      "event": "authority_revoked_before_commitment",
+      "condition_before": "resolved",
+      "expected_condition": "unresolved",
+      "resolution_basis": "lifecycle_change",
+      "authority_changed": true
+    },
+    {
+      "id": "ARA-DR-009",
+      "event": "evidence_stale_before_commitment",
+      "condition_before": "resolved",
+      "expected_condition": "unresolved",
+      "resolution_basis": "lifecycle_change",
+      "authority_changed": false
+    }
+  ]
+}
