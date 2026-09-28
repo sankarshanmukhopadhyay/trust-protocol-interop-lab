@@ -189,6 +189,9 @@ jobs:
       - name: Run ARA final admission evidence
         run: python experiments/ara-program-admission/run.py --check
 
+      - name: Run ARA decision-resolution pressure evidence
+        run: python experiments/ara-decision-resolution/run.py --check
+
       - name: Run ARA documentation-foundation check
         run: python experiments/ara-documentation-foundation/run.py --check
 
