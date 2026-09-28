@@ -20,7 +20,7 @@ Generated from the machine-readable case catalog.
 | IC-XSP-002 | interoperability-tested | yes | yes | 4 | 7 | yes |
 | IC-DTG-PROTECTED-ACCESS-001 | candidate | yes | yes | 0 | 0 | no |
 | IC-GOVOPS-EXEC-TRUST-001 | candidate | yes | yes | 2 | 8 | no |
-| IC-ARA-REL-001 | interoperability-tested | yes | yes | 1 | 1 | yes |
+| IC-ARA-REL-001 | interoperability-tested | yes | yes | 3 | 5 | yes |
 | IC-PDC-MED-001 | experimental | yes | yes | 0 | 0 | no |
 | IC-DPAC-ACTUATION-001 | experimental | yes | yes | 0 | 0 | no |
 
