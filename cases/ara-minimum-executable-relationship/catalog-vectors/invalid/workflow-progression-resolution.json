@@ -1,0 +1,8 @@
+{
+  "id": "ARA-CAT-N05-workflow-progression-does-not-resolve",
+  "description": "Advancing planning or preparation does not resolve a material condition when no admissible authority, evidence, policy, lifecycle, or correction event occurred.",
+  "expected": "condition_remains_unresolved",
+  "prohibited_inference": [
+    "workflow-progression-is-resolution"
+  ]
+}
