@@ -32,6 +32,11 @@ class TestPDCAdopterWalkthrough(unittest.TestCase):
         cls.server.server_close()
         cls.thread.join(timeout=2)
 
+    def setUp(self) -> None:
+        # Each walkthrough is independently reproducible; no test may inherit
+        # authoritative state changed by a preceding scenario.
+        self.request("/api/reset", "POST")
+
     def request(self, path: str, method: str = "GET") -> dict:
         data = None
         headers = {}
@@ -61,7 +66,6 @@ class TestPDCAdopterWalkthrough(unittest.TestCase):
         self.assertFalse(denied["result"]["state_mutation"])
 
     def test_documented_missing_evidence_is_indeterminate(self) -> None:
-        self.request("/api/reset", "POST")
         self.request("/api/authority-evidence/remove", "POST")
 
         result = self.request("/api/caregiver/re-reminder", "POST")
@@ -70,7 +74,6 @@ class TestPDCAdopterWalkthrough(unittest.TestCase):
         self.assertFalse(result["result"]["state_mutation"])
 
     def test_http_view_preserves_minimum_disclosure(self) -> None:
-        self.request("/api/reset", "POST")
         view = self.request("/api/state")
         payload = view["caregiver_exception"]
 
