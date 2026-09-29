@@ -79,3 +79,27 @@ This is a **bounded deterministic reference implementation**. It is application-
 In particular, the implementation does not locally fill the unresolved DTG/VTC mappings recorded in `cases/protected-delegated-care/gaps.yaml`. The later integration tranche must replace explicit seams with concrete implementation surfaces and compare observed behavior without changing this acceptance contract merely to make the integration pass.
 
 No real medication, prescription, diagnosis, patient identity, phone number, clinical rule, WhatsApp API, OCR/LLM decision, pharmacy flow, selective-disclosure proof, or ZKP is used here.
+
+
+## Clean-room adopter check
+
+Issue #166 requires a real external-adopter run before it can close. The repository also
+provides a reproducible clean-room check that exercises the same documented walkthrough
+through the public HTTP surface rather than calling the controller directly:
+
+```bash
+cd experiments/protected-delegated-care
+python -m unittest -v test_app.py test_adopter_walkthrough.py
+```
+
+The clean-room check establishes that a fresh consumer following the documented API path
+can reproduce:
+
+- `PERMIT -> revoke -> DENY`;
+- missing authority evidence -> `INDETERMINATE`;
+- the declared minimum-disclosure caregiver payload.
+
+This automated check is **not** external-adopter evidence. It cannot establish
+time-to-first-success, conceptual misunderstandings, documentation friction, or whether
+a developer unfamiliar with the project independently interprets the evidence correctly.
+Those observations remain the human evidence gate in issue #166.

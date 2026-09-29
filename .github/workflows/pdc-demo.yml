@@ -31,7 +31,8 @@ jobs:
           python -m py_compile
           experiments/protected-delegated-care/app.py
           experiments/protected-delegated-care/test_app.py
+          experiments/protected-delegated-care/test_adopter_walkthrough.py
 
       - name: Test prototype authority and disclosure boundaries
         working-directory: experiments/protected-delegated-care
-        run: python -m unittest -v test_app.py
+        run: python -m unittest -v test_app.py test_adopter_walkthrough.py
