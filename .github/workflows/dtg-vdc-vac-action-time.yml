@@ -55,17 +55,17 @@ jobs:
           set -euo pipefail
           test "$(git -C "$DTG_CREDENTIALS_CHECKOUT" rev-parse HEAD)" = "$DTG_CREDENTIALS_REVISION"
           test -z "$(git -C "$DTG_CREDENTIALS_CHECKOUT" status --porcelain)"
-      # The immutable target does not commit Cargo.lock. The unconstrained
-      # transitive resolve selected messaging-core 0.1.11, whose non-exhaustive
-      # Inbound breaks messaging-sdk 0.22.0 (E0639). Reproduce the compatible
-      # resolved epoch without changing tracked target sources.
-      - name: Resolve and retain credential test dependency graph
+      # The immutable target does not ship Cargo.lock. A fresh resolver
+      # selected messaging-core 0.1.11, incompatible with SDK 0.22.0
+      # (E0639). This Lab-owned lock is the exact graph proven by native CI;
+      # do not re-resolve or change tracked upstream source during collection.
+      - name: Install verified credential target dependency lock
         shell: bash
         run: |
           set -euo pipefail
-          manifest="$DTG_CREDENTIALS_CHECKOUT/Cargo.toml"
-          cargo generate-lockfile --manifest-path "$manifest"
-          cargo update --manifest-path "$manifest" -p affinidi-messaging-core --precise 0.1.7
+          lock="$DTG_CREDENTIALS_CHECKOUT/Cargo.lock"
+          install -m 0644 "experiments/dtg-vdc-vac-composition/locks/dtg-credentials-66376c01.Cargo.lock" "$lock"
+          printf '%s  %s\n' '0ab883de1791d1941ea256489cf718a72be73570f285d606450954d09c3588eb' "$lock" | sha256sum --check --
           python - <<'PY'
           import os, pathlib, tomllib
           lock = pathlib.Path(os.environ['DTG_CREDENTIALS_CHECKOUT']) / 'Cargo.lock'
@@ -73,21 +73,9 @@ jobs:
           versions = [p['version'] for p in packages if p['name'] == 'affinidi-messaging-core']
           assert versions == ['0.1.7'], f'unexpected affinidi-messaging-core versions: {versions}'
           PY
-          sha256sum "$DTG_CREDENTIALS_CHECKOUT/Cargo.lock"
           test "$(git -C "$DTG_CREDENTIALS_CHECKOUT" rev-parse HEAD)" = "$DTG_CREDENTIALS_REVISION"
           test -z "$(git -C "$DTG_CREDENTIALS_CHECKOUT" status --porcelain)"
-      # Temporary transport of the verified generated lock into the Lab-owned
-      # repository. Remove after the canonical lockfile is committed.
-      - name: Export resolved credential lockfile for review
-        shell: bash
-        run: |
-          python - <<'PY'
-          import json, os, pathlib
-          lock=(pathlib.Path(os.environ['DTG_CREDENTIALS_CHECKOUT']) / 'Cargo.lock').read_text()
-          for offset in range(0, len(lock), 1024):
-              print('LAB_LOCK_CHUNK:' + json.dumps(lock[offset:offset+1024]))
-          PY
-      - name: Execute credential target tests with resolved lockfile
+      - name: Execute credential target tests with immutable lockfile
         shell: bash
         run: cargo test --manifest-path "$DTG_CREDENTIALS_CHECKOUT/Cargo.toml" --locked --all-targets
       - name: Retain resolved dependency graph for reproducible validation
