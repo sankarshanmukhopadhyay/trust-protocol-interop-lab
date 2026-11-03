@@ -29,6 +29,7 @@ SCENARIOS = (
     ("over-raised-limit", "RAHP-1174", "vtc-service", "a_document_over_its_raised_limit_is_refused", "lib"),
     ("undeclared-default-limit", "RAHP-1174", "vtc-service", "a_document_over_the_default_is_refused_for_a_type_that_declares_nothing", "lib"),
     ("standing-and-budget-boundary", "RAHP-1174", "vtc-service", "a_raised_limit_needs_an_issuer_with_standing", "lib"),
+    ("signed-consumer-full-chunk", "RAHP-1174", "vtc-service", "a_full_size_chunk_fits_and_a_larger_one_is_refused", "it"),
 )
 SOURCE_ANCHORS = {
     "vtc-service/src/trust_tasks/size.rs": (
@@ -38,6 +39,11 @@ SOURCE_ANCHORS = {
         "a_document_over_the_default_is_refused_for_a_type_that_declares_nothing",
         "a_raised_limit_needs_an_issuer_with_standing",
         "LARGE_DOCUMENT_GLOBAL_BUDGET_PER_WINDOW",
+    ),
+    "vtc-service/tests/it/website_spine.rs": (
+        "a_full_size_chunk_fits_and_a_larger_one_is_refused",
+        "let admin = admin(&vtc).await;",
+        "std::fs::read(dir.path().join(\"site/big.bin\"))",
     ),
     "vti-specs-vtc/trust-tasks/vtc/website/upload/chunk/0.1.bundle.json": (
         '"maxDocumentBytes":{"request":360448,"response":null}',
@@ -175,8 +181,8 @@ def collect(target: Path, output: Path, timeout: int = 900) -> dict:
         "attempts": attempts, "assurance_state": "INDETERMINATE",
         "composition_pass": 0, "discharged_propositions": [],
         "limitations": [
-            "The existing target-native tests exercise the size-gate and source policy mapping, not a complete signed/authorized request through the actual consumer endpoint.",
-            "The fixture does not execute separate 262144-byte and 360448-byte signed tasks at every exact boundary.",
+            "Five native size-policy/standing tests exercise size gates, while one integration test exercises signed administrator full-chunk upload; the latter is not an exact signed maxDocumentBytes boundary matrix.",
+            "No paired signed full-document measurements exactly below/at/above each of 262144 and 360448 bytes are recorded.",
             "A signed in-bound request may still fail another independent authorization or policy check; success is not required to establish admission-only behavior.",
             "The presence of maxDocumentBytes in a bundle or binding is not alone evidence of enforced transport admission.",
             "No cross-transport, deployment, denial-of-service, or composed assurance PASS is inferred.",
