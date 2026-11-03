@@ -36,6 +36,25 @@ python3 experiments/eucalyptus-vti-consumption/run.py \
 
 The output directory must be new. Verification detects missing, additional or changed files. `--require-native-pass` returns nonzero when any required vector was not verified as a passing native test. This is an **engineering gate**, not an assurance certification. The full integrity-verified packet still uses `assurance_state=INDETERMINATE`, `composition_pass=0` and `discharged_euc_propositions=[]`.
 
+## Post-restart convergence: source-pinned feasibility gate
+
+The [restart feasibility probe](restart_readiness.py) examines the **same immutable target revision** and produces `eucalyptus-restart-feasibility.json` with per-file source hashes and source anchors. It intentionally records `consumer_post_restart_observation=NOT_EXECUTED`, `assurance_state=INDETERMINATE`, and `composition_pass=0`. A successful feasibility workflow is **not** a restart experiment.
+
+The frozen VTI service's `build_test_app_with` creates and owns a fresh temporary fjall store. The keyed `keys/create` native test runs both attempts through one router; it cannot construct another router over the original store after teardown. The E2E `simulate_restart` helper separately demonstrates that a **service-management snapshot** can survive store reopening. Neither observation demonstrates the *keyed Trust Task effect* survives a reconstructed service.
+
+At the dispatch boundary, the sequence is `idempotency::claim` → task execution → `idempotency::record_outcome`. Source also shows a ten-minute in-flight grace period followed by reclaim, and the code explicitly logs that failure to record an outcome may allow a retry to rerun the task. **Hypothesis requiring a test:** an interruption after the concrete effect is committed but before recording completion can produce a second effect after the in-flight claim is reclaimed. This is not an observed exploit or deterministic failure claim. A separate storage error takes the unguarded path by documented design; it must not be presented as an idempotency guarantee.
+
+```bash
+python3 -m unittest tests.test_eucalyptus_restart_readiness -v
+python3 experiments/eucalyptus-vti-consumption/restart_readiness.py \
+  --target /tmp/vti-eucalyptus \
+  --output /tmp/eucalyptus-restart-feasibility.json
+```
+
+**A qualifying test seam requires** reconstructing the actual VTA service/router over the retained database, submitting a signed keyed operation before and after restart, inspecting real effect identity/count and a changed-payload refusal, and separately injecting an interruption at the effect-commit/completion boundary. It must preserve the target implementation's semantics and declare any test-harness-only additions as a separate producer revision. Do not modify the immutable Eucalyptus baseline or silently treat a new helper as native target evidence.
+
+The current disposition is **blocked on a persistent consumer reconstruction and fault-injection fixture**. The earlier four native fixture PASS observations remain independently valid but cannot close the restart acceptance requirement. Before investing in a new helper, the VTI implementation owner should determine whether the necessary state reattachment and injection boundary can be exposed without enlarging production API surface.
+
 ## What remains before #966 can close
 
 These in-process observations are a first usable consumer execution surface. They do not yet satisfy the full #966 proposal:
