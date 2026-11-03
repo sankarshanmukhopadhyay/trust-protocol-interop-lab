@@ -65,13 +65,13 @@ jobs:
           set -euo pipefail
           manifest="$DTG_CREDENTIALS_CHECKOUT/Cargo.toml"
           cargo generate-lockfile --manifest-path "$manifest"
-          cargo update --manifest-path "$manifest" -p affinidi-messaging-core --precise 0.1.10
+          cargo update --manifest-path "$manifest" -p affinidi-messaging-core --precise 0.1.6
           python - <<'PY'
           import os, pathlib, tomllib
           lock = pathlib.Path(os.environ['DTG_CREDENTIALS_CHECKOUT']) / 'Cargo.lock'
           packages = tomllib.loads(lock.read_text())['package']
           versions = [p['version'] for p in packages if p['name'] == 'affinidi-messaging-core']
-          assert versions == ['0.1.10'], f'unexpected affinidi-messaging-core versions: {versions}'
+          assert versions == ['0.1.6'], f'unexpected affinidi-messaging-core versions: {versions}'
           PY
           sha256sum "$DTG_CREDENTIALS_CHECKOUT/Cargo.lock"
           test "$(git -C "$DTG_CREDENTIALS_CHECKOUT" rev-parse HEAD)" = "$DTG_CREDENTIALS_REVISION"
