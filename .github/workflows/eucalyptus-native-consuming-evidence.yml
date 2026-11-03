@@ -23,7 +23,6 @@ jobs:
       CARGO_PROFILE_DEV_CODEGEN_UNITS: '1'
       CARGO_PROFILE_DEV_BUILD_OVERRIDE_CODEGEN_UNITS: '1'
       VTI_REVISION: '49f5f1beb61adc34bdf7cf0bd3eb10f594415b80'
-      CARGO_TARGET_DIR: ${{ runner.temp }}/eucalyptus-native-target
     steps:
       - name: Checkout independent Lab evidence producer
         uses: actions/checkout@v7
@@ -56,6 +55,8 @@ jobs:
           sudo apt-get install -y libdbus-1-dev libpcsclite-dev pkg-config clang cmake
       - name: Execute source-pinned positive, negative and replay fixtures
         shell: bash
+        env:
+          CARGO_TARGET_DIR: ${{ runner.temp }}/eucalyptus-native-target
         run: |
           set -euo pipefail
           python3 experiments/eucalyptus-vti-consumption/run.py \
