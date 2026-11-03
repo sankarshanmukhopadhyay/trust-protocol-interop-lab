@@ -1,0 +1,76 @@
+name: VTI task-size admission evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/vti-task-size-admission.yml'
+      - 'experiments/vti-task-size-admission/**'
+      - 'tests/test_vti_task_size_admission.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      RUSTUP_TOOLCHAIN: '1.95.0'
+      CARGO_BUILD_JOBS: '2'
+      CARGO_INCREMENTAL: '0'
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      CARGO_PROFILE_DEV_CODEGEN_UNITS: '1'
+      CARGO_PROFILE_DEV_BUILD_OVERRIDE_CODEGEN_UNITS: '1'
+      VTI_REVISION: '9d781a7333a198ef24ec229f59ff8fbcae3b1346'
+    steps:
+      - name: Checkout independent Lab evidence producer
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Falsify evidence-collector false-success cases
+        run: python3 -m unittest tests.test_vti_task_size_admission -v
+      - name: Checkout immutable VTI consumer source
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 9d781a7333a198ef24ec229f59ff8fbcae3b1346
+          path: build/vti-size-target
+          persist-credentials: false
+      - name: Require unmodified pinned source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C build/vti-size-target rev-parse HEAD)" = "$VTI_REVISION"
+          test -z "$(git -C build/vti-size-target diff HEAD --)"
+      - name: Provision target-native build prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.95.0 --profile minimal
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev libpcsclite-dev pkg-config clang cmake
+      - name: Execute source-native size and signed upload tests
+        shell: bash
+        env:
+          CARGO_TARGET_DIR: ${{ runner.temp }}/vti-size-native-target
+        run: |
+          set -euo pipefail
+          python3 experiments/vti-task-size-admission/run.py \
+            --target build/vti-size-target \
+            --output "$RUNNER_TEMP/vti-size-admission-evidence" \
+            --timeout-seconds 3000
+          python3 experiments/vti-task-size-admission/run.py \
+            --verify "$RUNNER_TEMP/vti-size-admission-evidence" \
+            --require-native-pass
+      - name: Retain evidence, including failed/unavailable observations
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vti-size-admission-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/vti-size-admission-evidence/
+          retention-days: 14
+          if-no-files-found: warn
