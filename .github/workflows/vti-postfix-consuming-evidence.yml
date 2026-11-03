@@ -1,0 +1,76 @@
+name: Post-fix VTI native consuming-path evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/vti-postfix-consuming-evidence.yml'
+      - 'experiments/vti-postfix-consumption/**'
+      - 'tests/test_vti_postfix_consumption.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      RUSTUP_TOOLCHAIN: '1.95.0'
+      CARGO_BUILD_JOBS: '2'
+      CARGO_INCREMENTAL: '0'
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      CARGO_PROFILE_DEV_CODEGEN_UNITS: '1'
+      CARGO_PROFILE_DEV_BUILD_OVERRIDE_CODEGEN_UNITS: '1'
+      VTI_REVISION: '2fc769fddbe2ee6f87a5b8a8ce048d8f5ffeef84'
+    steps:
+      - name: Checkout Lab evidence producer
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Check collector negative cases
+        run: python3 -m unittest tests.test_vti_postfix_consumption -v
+      - name: Checkout exact post-fix VTI target
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 2fc769fddbe2ee6f87a5b8a8ce048d8f5ffeef84
+          path: build/vti-postfix
+          persist-credentials: false
+      - name: Verify pinned clean source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C build/vti-postfix rev-parse HEAD)" = "$VTI_REVISION"
+          test -z "$(git -C build/vti-postfix diff HEAD --)"
+      - name: Install native prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.95.0 --profile minimal
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev libpcsclite-dev pkg-config clang cmake
+      - name: Execute exact native regressions and qualify evidence
+        shell: bash
+        env:
+          CARGO_TARGET_DIR: ${{ runner.temp }}/vti-postfix-native-target
+        run: |
+          set -euo pipefail
+          python3 experiments/vti-postfix-consumption/run.py \
+            --target build/vti-postfix \
+            --output "$RUNNER_TEMP/vti-postfix-evidence" \
+            --timeout-seconds 900
+          python3 experiments/vti-postfix-consumption/run.py \
+            --verify "$RUNNER_TEMP/vti-postfix-evidence" \
+            --require-native-pass
+      - name: Retain bounded source-native observation packet
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vti-postfix-native-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/vti-postfix-evidence/
+          retention-days: 14
+          if-no-files-found: warn
