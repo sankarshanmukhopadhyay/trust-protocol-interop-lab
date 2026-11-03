@@ -55,9 +55,38 @@ jobs:
           set -euo pipefail
           test "$(git -C "$DTG_CREDENTIALS_CHECKOUT" rev-parse HEAD)" = "$DTG_CREDENTIALS_REVISION"
           test -z "$(git -C "$DTG_CREDENTIALS_CHECKOUT" status --porcelain)"
-      - name: Execute credential target tests
+      # The immutable target does not commit Cargo.lock. The unconstrained
+      # transitive resolve selected messaging-core 0.1.11, whose non-exhaustive
+      # Inbound breaks messaging-sdk 0.22.0 (E0639). Reproduce the compatible
+      # resolved epoch without changing tracked target sources.
+      - name: Resolve and retain credential test dependency graph
         shell: bash
-        run: cargo test --manifest-path "$DTG_CREDENTIALS_CHECKOUT/Cargo.toml" --all-targets
+        run: |
+          set -euo pipefail
+          manifest="$DTG_CREDENTIALS_CHECKOUT/Cargo.toml"
+          cargo generate-lockfile --manifest-path "$manifest"
+          cargo update --manifest-path "$manifest" -p affinidi-messaging-core --precise 0.1.10
+          python - <<'PY'
+          import os, pathlib, tomllib
+          lock = pathlib.Path(os.environ['DTG_CREDENTIALS_CHECKOUT']) / 'Cargo.lock'
+          packages = tomllib.loads(lock.read_text())['package']
+          versions = [p['version'] for p in packages if p['name'] == 'affinidi-messaging-core']
+          assert versions == ['0.1.10'], f'unexpected affinidi-messaging-core versions: {versions}'
+          PY
+          sha256sum "$DTG_CREDENTIALS_CHECKOUT/Cargo.lock"
+          test "$(git -C "$DTG_CREDENTIALS_CHECKOUT" rev-parse HEAD)" = "$DTG_CREDENTIALS_REVISION"
+          test -z "$(git -C "$DTG_CREDENTIALS_CHECKOUT" status --porcelain)"
+      - name: Execute credential target tests with resolved lockfile
+        shell: bash
+        run: cargo test --manifest-path "$DTG_CREDENTIALS_CHECKOUT/Cargo.toml" --locked --all-targets
+      - name: Retain resolved dependency graph for reproducible validation
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: credential-target-resolved-cargo-lock
+          path: ${{ github.workspace }}/build/dtg-credentials/Cargo.lock
+          retention-days: 30
+          if-no-files-found: warn
       - name: Record bounded target evidence
         shell: bash
         run: |
