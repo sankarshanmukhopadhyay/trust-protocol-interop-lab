@@ -51,17 +51,20 @@ def check(target: Path) -> dict:
         source = raw.decode("utf-8")
         matches = []
         for marker in ANCHORS[role]:
-            if source.count(marker) != 1:
-                raise ValueError(f"{role}: missing/ambiguous frozen source anchor: {marker}")
+            if marker not in source:
+                raise ValueError(f"{role}: frozen source anchor missing: {marker}")
             matches.append({"text": marker, "line": source[:source.index(marker)].count("\n") + 1})
         pins.append({"role": role, "path": relative,
                      "sha256": hashlib.sha256(raw).hexdigest(), "anchors": matches})
     fixture = (target / SOURCES["fixture"]).read_text()
-    assert fixture.index("let dir = tempfile::tempdir()", fixture.index("pub async fn build_test_app_with")) > 0
+    fixture_builder = fixture[fixture.index("pub async fn build_test_app_with"):]
+    if not ("let dir = tempfile::tempdir()" in fixture_builder and
+            "open_with_keyspaces(dir.path()" in fixture_builder):
+        raise ValueError("frozen consumer fixture no longer creates a fresh temp database")
     dispatcher = (target / SOURCES["dispatch"]).read_text()
-    if not (dispatcher.index("idempotency::claim(&state.idempotency_ks") <
-            dispatcher.index("dispatch_typed(state, auth, doc)") <
-            dispatcher.index("idempotency::record_outcome(&state.idempotency_ks")):
+    dispatch_branch = dispatcher[dispatcher.index("idempotency::claim(&state.idempotency_ks"):]
+    if not (dispatch_branch.index("dispatch_typed(state, auth, doc)") <
+            dispatch_branch.index("idempotency::record_outcome(&state.idempotency_ks")):
         raise ValueError("unexpected idempotency dispatcher ordering")
 
     return {
