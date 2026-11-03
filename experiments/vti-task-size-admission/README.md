@@ -13,7 +13,7 @@
 
 ## Executed by this evidence producer
 
-The source-pinned runner selects five existing VTC **native Rust unit/integration-fixture tests**: policy lookup, exact-limit acceptance by the size checker, refusal above the raised limit, default refusal for an undeclared task, and issuer-standing enforcement. It records immutable target pin, source SHA-256 inventory, native commands, full logs, one counted test per scenario, return code, duration, and packet integrity. Collector mock outputs are **only calibration inputs**.
+The source-pinned runner selects six existing VTC **native Rust unit/integration-fixture tests**: policy lookup, exact-limit acceptance by the size checker, refusal above the raised limit, default refusal for an undeclared task, and issuer-standing enforcement. It records immutable target pin, source SHA-256 inventory, native commands, full logs, one counted test per scenario, return code, duration, and packet integrity. Collector mock outputs are **only calibration inputs**.
 
 ```bash
 python3 -m unittest tests.test_vti_task_size_admission -v
@@ -30,7 +30,7 @@ Requires Rust 1.95, the system prerequisites declared by [the workflow](../../.g
 
 ## Explicit residuals and negative pressure
 
-The five source-native tests **do not** establish RAHP #1174's full acceptance contract: the relevant size tests use padded JSON, not independently verified signed/authorized documents through the deployed consumer endpoint. The two independently declared maxima have not been exercised at their exact boundaries with valid signed documents in this package. HTTP body buffering, DIDComm/TSP equivalence, no-effect proofs for rejected operations, configured budgets, and external deployment are also not established. Complete the missing consumer-level matrix under RAHP #1174 before any end-to-end assertion.
+The six source-native tests **do not** establish RAHP #1174's full acceptance contract: five size-policy tests use padded JSON or fixture admission; the sixth is a real signed administrator VTC upload integration test that verifies persisted file content and rejects an oversized chunk **configuration**. It does not measure full serialized signed request lengths at the exact two declared maxima. The two independently declared maxima have not been exercised at their exact boundaries with valid signed documents in this package. HTTP body buffering, DIDComm/TSP equivalence, no-effect proofs for rejected operations, configured budgets, and external deployment are also not established. Complete the missing consumer-level matrix under RAHP #1174 before any end-to-end assertion.
 
 The runner must continue to report `INDETERMINATE`, `composition_pass=0`, and no discharged RAHP propositions even when all selected native tests pass. For a future qualified matrix, record request bytes **including proof**, source/consumer revisions, issuer standing and authorization, precisely attributable rejection stage, actual response and effects, transport configuration, and packet integrity. Include the second declared task type plus the undeclared negative control.
 
