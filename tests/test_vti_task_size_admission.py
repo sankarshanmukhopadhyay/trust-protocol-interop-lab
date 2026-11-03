@@ -20,8 +20,8 @@ class TaskSizeEvidenceTests(unittest.TestCase):
     def test_exact_separate_pin_and_real_native_filters(self):
         self.assertEqual("9d781a7333a198ef24ec229f59ff8fbcae3b1346", runner.TARGET_SHA)
         self.assertNotEqual("49f5f1beb61adc34bdf7cf0bd3eb10f594415b80", runner.TARGET_SHA)
-        self.assertEqual(5, len(runner.SCENARIOS))
-        self.assertEqual(5, len({s[0] for s in runner.SCENARIOS}))
+        self.assertEqual(6, len(runner.SCENARIOS))
+        self.assertEqual(6, len({s[0] for s in runner.SCENARIOS}))
         self.assertEqual({"RAHP-1174"}, {s[1] for s in runner.SCENARIOS})
         for _, _, pkg, test, kind in runner.SCENARIOS:
             cmd = runner.command(pkg, test, kind)
@@ -56,7 +56,7 @@ class TaskSizeEvidenceTests(unittest.TestCase):
             self.assertEqual("INDETERMINATE", result["assurance_state"])
             self.assertEqual(0, result["composition_pass"])
             self.assertEqual([], result["discharged_propositions"])
-            self.assertEqual(5, len(result["attempts"]))
+            self.assertEqual(6, len(result["attempts"]))
             self.assertEqual("partial", runner.verify(root / "run")["status"])
             with self.assertRaisesRegex(ValueError, "new output"):
                 runner.collect(root, root / "run")
@@ -67,7 +67,7 @@ class TaskSizeEvidenceTests(unittest.TestCase):
     def test_failed_native_vector_never_promotes(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            answers = [(0, ONE_PASS, "", False)] * 4 + [(101, ONE_FAIL, "", False)]
+            answers = [(0, ONE_PASS, "", False)] * 5 + [(101, ONE_FAIL, "", False)]
             with patch.object(runner, "admit", return_value=[]), \
                  patch.object(runner, "git", return_value="f" * 40), \
                  patch.object(runner, "execute", side_effect=answers):
