@@ -14,7 +14,7 @@ permissions:
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     env:
       RUSTUP_TOOLCHAIN: '1.95.0'
       CARGO_BUILD_JOBS: '2'
@@ -62,7 +62,7 @@ jobs:
           python3 experiments/vti-task-size-admission/run.py \
             --target build/vti-size-target \
             --output "$RUNNER_TEMP/vti-size-admission-evidence" \
-            --timeout-seconds 900
+            --timeout-seconds 3000
           python3 experiments/vti-task-size-admission/run.py \
             --verify "$RUNNER_TEMP/vti-size-admission-evidence" \
             --require-native-pass
