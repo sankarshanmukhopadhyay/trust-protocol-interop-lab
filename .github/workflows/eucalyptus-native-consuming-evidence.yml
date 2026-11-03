@@ -1,0 +1,77 @@
+name: Frozen Eucalyptus consuming-path evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/eucalyptus-native-consuming-evidence.yml'
+      - 'experiments/eucalyptus-vti-consumption/**'
+      - 'tests/test_eucalyptus_native_consumption.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      RUSTUP_TOOLCHAIN: '1.95.0'
+      CARGO_BUILD_JOBS: '2'
+      CARGO_INCREMENTAL: '0'
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      CARGO_PROFILE_DEV_CODEGEN_UNITS: '1'
+      CARGO_PROFILE_DEV_BUILD_OVERRIDE_CODEGEN_UNITS: '1'
+      VTI_REVISION: '49f5f1beb61adc34bdf7cf0bd3eb10f594415b80'
+      CARGO_TARGET_DIR: ${{ runner.temp }}/eucalyptus-native-target
+    steps:
+      - name: Checkout independent Lab evidence producer
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Validate collector evidence boundaries before execution
+        run: python -m unittest tests.test_eucalyptus_native_consumption -v
+      - name: Checkout exact Eucalyptus VTI target
+        uses: actions/checkout@v7
+        with:
+          repository: OpenVTC/verifiable-trust-infrastructure
+          ref: 49f5f1beb61adc34bdf7cf0bd3eb10f594415b80
+          path: build/eucalyptus-vti
+          persist-credentials: false
+      - name: Verify immutable target revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C build/eucalyptus-vti rev-parse HEAD)" = "$VTI_REVISION"
+          test -z "$(git -C build/eucalyptus-vti diff HEAD --)"
+      - name: Provision pinned native build prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.95.0 --profile minimal
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev libpcsclite-dev pkg-config clang cmake
+      - name: Execute source-pinned positive, negative and replay fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 experiments/eucalyptus-vti-consumption/run.py \
+            --target build/eucalyptus-vti \
+            --output "$RUNNER_TEMP/eucalyptus-consuming-evidence" \
+            --timeout-seconds 900
+      - name: Verify integrity and require all selected native tests executed
+        run: |
+          python3 experiments/eucalyptus-vti-consumption/run.py \
+            --verify "$RUNNER_TEMP/eucalyptus-consuming-evidence" \
+            --require-native-pass
+      - name: Retain raw diagnostics and sealed evidence even when a test fails
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: eucalyptus-consuming-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/eucalyptus-consuming-evidence/
+          retention-days: 14
+          if-no-files-found: warn
