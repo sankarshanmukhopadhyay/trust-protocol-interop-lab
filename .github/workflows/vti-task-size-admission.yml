@@ -53,7 +53,7 @@ jobs:
           rustup toolchain install 1.95.0 --profile minimal
           sudo apt-get update
           sudo apt-get install -y libdbus-1-dev libpcsclite-dev pkg-config clang cmake
-      - name: Execute source-native size-admission tests
+      - name: Execute source-native size and signed upload tests
         shell: bash
         env:
           CARGO_TARGET_DIR: ${{ runner.temp }}/vti-size-native-target
