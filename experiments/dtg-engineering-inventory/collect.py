@@ -19,6 +19,36 @@ PINS = {
     "sankarshanmukhopadhyay/trust-protocol-interop-lab": "364d538977b790635fe250c36d16ed15a08f7556",
 }
 IMPLEMENTATIONS = {"dtg-credentials", "verifiable-trust-infrastructure"}
+# Profiles observed in the pinned VTI .github/workflows/ci.yml. These are
+# dependency-tree observations, not build or platform conformance results.
+VTI_PROFILES = {
+    "vta_tee_rest_didcomm": ["-p", "vta-service", "--no-default-features", "--features", "tee,rest,didcomm"],
+    "vta_rest_didcomm": ["-p", "vta-service", "--no-default-features", "--features", "rest,didcomm"],
+    "vta_rest": ["-p", "vta-service", "--no-default-features", "--features", "rest"],
+    "vta_setup_tsp": ["-p", "vta-service", "--no-default-features", "--features", "setup,keyring,rest,tsp,cli-synthesis"],
+    "vta_aws": ["-p", "vta-service", "--no-default-features", "--features", "aws-secrets,keyring,rest"],
+    "vta_azure": ["-p", "vta-service", "--no-default-features", "--features", "azure-secrets,keyring,rest"],
+    "vta_setup_didcomm": ["-p", "vta-service", "--no-default-features", "--features", "setup,keyring,rest,didcomm,cli-synthesis"],
+    "vta_config_seed": ["-p", "vta-service", "--features", "config-seed"],
+    "vta_config_seed_secrets": ["-p", "vta-service", "--features", "config-seed,vault-secrets,k8s-secrets"],
+    "vta_tee_webs": ["-p", "vta-service", "--no-default-features", "--features", "tee,rest,didcomm,webs"],
+    "vta_transport_harness": ["-p", "vta-service", "--features", "transport-harness"],
+    "vtc_transport_harness": ["-p", "vtc-service", "--features", "transport-harness"],
+    "vtc_vetting_voting": ["-p", "vtc-service", "--features", "vetting-pcs,voting"],
+    "sdk_attest": ["-p", "vta-sdk", "--features", "attest-verify"],
+    "sdk_transfer": ["-p", "vta-sdk", "--features", "client,sealed-transfer,provision-integration"],
+    "sdk_vetting": ["-p", "vta-sdk", "--features", "client,vetting"],
+    "sdk_all": ["-p", "vta-sdk", "--all-features"],
+    "tee_overlay": ["-p", "vta-tee", "--features", "tenant-overlay"],
+    "rooms_mls": ["-p", "vti-rooms", "--no-default-features", "--features", "mls"],
+    "room_host_didcomm": ["-p", "room-host", "--features", "didcomm"],
+    "workspace_all": ["--workspace", "--all-features"],
+    "enclave_base": ["-p", "vta-enclave", "--no-default-features", "--features", "rest,didcomm,vsock-store,vsock-log"],
+    "enclave_overlay": ["-p", "vta-enclave", "--no-default-features", "--features", "rest,didcomm,vsock-store,vsock-log,tenant-overlay"],
+    "enclave_webs": ["-p", "vta-enclave", "--no-default-features", "--features", "rest,didcomm,vsock-store,vsock-log,webs"],
+    "common_vsock": ["-p", "vti-common", "--features", "vsock-store,encryption"],
+}
+CREDENTIAL_PROFILES = {"all": ["--all-features"], "no_default": ["--no-default-features"]}
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -33,7 +63,7 @@ def command(cwd, output, name, args, records, timeout=180):
     records.append({"id": name, "argv": args, "exit": code, "seconds": round(time.monotonic()-start, 3)})
     return code == 0
 
-def collect(repo, pin, work, out):
+def collect(repo, pin, work, out, credential_lock=None, credential_lock_sha256=None):
     name = repo.split("/")[-1]
     dst = work / name
     dst.mkdir()
@@ -60,13 +90,20 @@ def collect(repo, pin, work, out):
         return result
     lock = dst / "Cargo.lock"
     generated = not lock.exists()
-    if generated and (name != "dtg-credentials" or not run("generate_lock", "cargo", "+1.95.0", "generate-lockfile", timeout=300)):
+    supplied = name == "dtg-credentials" and credential_lock is not None
+    if supplied:
+        if not generated or digest(credential_lock) != credential_lock_sha256:
+            result["state"] = "dependency_blocked"
+            result["blocker"] = "supplied lock conflicts with source or digest"
+            return result
+        lock.write_bytes(credential_lock.read_bytes())
+    elif generated and (name != "dtg-credentials" or not run("generate_lock", "cargo", "+1.95.0", "generate-lockfile", timeout=300)):
         result["state"] = "dependency_blocked"
         return result
     if not lock.is_file():
         result["state"] = "dependency_blocked"
         return result
-    result["lock_provenance"] = "generated" if generated else "tracked"
+    result["lock_provenance"] = "supplied_verified" if supplied else ("generated" if generated else "tracked")
     result["lock_sha256_before"] = digest(lock)
     (out / "Cargo.lock").write_bytes(lock.read_bytes())
     ok = True
@@ -77,6 +114,12 @@ def collect(repo, pin, work, out):
         ("duplicates", ["tree", "--locked", "--duplicates"]),
     ]:
         ok = run(label, "cargo", "+1.95.0", *args, timeout=300) and ok
+    profiles = CREDENTIAL_PROFILES if name == "dtg-credentials" else VTI_PROFILES
+    result["profiles"] = {}
+    for label, args in profiles.items():
+        success = run("profile_" + label, "cargo", "+1.95.0", "tree", "--locked", "-e", "features", *args, timeout=90)
+        result["profiles"][label] = "resolved" if success else "blocked"
+        ok = success and ok
     result["lock_sha256_after"] = digest(lock) if lock.is_file() else None
     clean = run("tracked_diff", "git", "diff", "--exit-code", "HEAD")
     status_ok = run("final_status", "git", "status", "--porcelain", "--untracked-files=all")
@@ -89,7 +132,15 @@ def collect(repo, pin, work, out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--credential-lock", type=Path)
+    parser.add_argument("--credential-lock-sha256")
     args = parser.parse_args()
+    if bool(args.credential_lock) != bool(args.credential_lock_sha256):
+        parser.error("credential lock and expected SHA-256 must be supplied together")
+    if args.credential_lock:
+        args.credential_lock = args.credential_lock.resolve()
+        if not args.credential_lock.is_file() or digest(args.credential_lock) != args.credential_lock_sha256:
+            parser.error("credential lock missing or digest mismatch")
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
     records = []
@@ -98,7 +149,7 @@ def main():
     results = []
     with tempfile.TemporaryDirectory(prefix="tpil-wp01-") as tmp:
         for repo, pin in PINS.items():
-            results.append(collect(repo, pin, Path(tmp), out / repo.split("/")[-1]))
+            results.append(collect(repo, pin, Path(tmp), out / repo.split("/")[-1], args.credential_lock, args.credential_lock_sha256))
     summary = {"scope": "source tree and cargo resolution only; no native build, test or conformance claim",
                "platform": platform.platform(), "run_id": os.environ.get("GITHUB_RUN_ID"),
                "runner_commands": records, "targets": results}
