@@ -1,6 +1,6 @@
 # DTG/VTI engineering assessment — WP01 inventory (2026-11-24)
 
-Status: partial source inventory, not runtime evidence. Parent #259; WP01 #260. Source retrieval via GitHub at immutable refs; full checkout and dependency resolution blocked in current execution environment (DNS resolution for github.com failed; cargo and gh absent). No upstream writes.
+Status: executed source and dependency inventory; not native build or runtime evidence. Parent #259; WP01 #260. Source retrieval via GitHub at immutable refs; full checkout and dependency resolution blocked in current execution environment (DNS resolution for github.com failed; cargo and gh absent). No upstream writes.
 
 ## Source baseline
 
@@ -93,4 +93,23 @@ Record exit status and stderr per command; unsupported configurations are explic
 - WP02/03 readiness remains conditional; no G1 admission or maturity promotion.
 - First vertical slices: credential parsing/verification/authority; VTA/VTC task dispatch and durable mutation; state recovery. Client/forge/mobile/TEE deployment only when required by an admitted proposition.
 
-No new workflow or dependency introduced by this document. This is a reviewable partial inventory, not an evidence manifest or completion of #260.
+The collector and workflow added by PR #272 are restricted to source/dependency observations. See execution reconciliation below.
+
+
+## Executed inventory reconciliation
+
+- Initial run 45321875470 / artifact 14887244178, archive SHA-256 34ef77231261d213d2a3ed4eccf663ddccbafd5933909aa32dede8b4c84bc359.
+- Expanded run 45322471460 / artifact 14888097752, archive SHA-256 771c2a7801934a1498835a2a82a96b19b8013efbea360287308663ff33217e55. Downloaded archive and all 161 manifest-listed file hashes independently checked. Runner checkout recorded as 1e581f1d8abababc59143b68f8192305978385c4 (PR merge checkout, not branch head).
+- All six pinned source trees acquired; both implementations resolved locked default/no-default metadata and 27 feature profiles (2 credential, 25 VTI). No compilation or target tests implied.
+- Exact generated credential lock SHA-256 005ac82537244c460d47450bacdcdb553c6526d8595f64ff6320cc37daf41572 now retained at experiments/dtg-engineering-inventory/locks/dtg-credentials-cbae70f8.Cargo.lock. VTI tracked lock SHA-256 29790be4507f147f9c0cf39d96d767a7b527421978b3a2ebb3a2cbf5f3f463fb. Final workflow replays the versioned lock without downloading an older artifact.
+- Reproduce from PR checkout using Python 3.13, Git and Rust 1.95.0: `python experiments/dtg-engineering-inventory/collect.py --output /tmp/wp01-observations --credential-lock experiments/dtg-engineering-inventory/locks/dtg-credentials-cbae70f8.Cargo.lock --credential-lock-sha256 005ac82537244c460d47450bacdcdb553c6526d8595f64ff6320cc37daf41572`; then from the output directory run `sha256sum --check SHA256SUMS`. Output directory must not exist. The workflow is network-enabled and read-only, with bounded command/job timeouts.
+
+## Historical attribution disposition
+
+Historical artifacts independently downloaded and archive digests verified: 10379865808 (#163), 10087128733 (#174), 10088370973 (#203), 10192669229 (#208), 10193079490 (#210), and 10795450058, 10794948383, 10794849165, 10795520707, 10794499174, 10795083200 (#243). Historical run IDs: 34924700795, 34307256014, 34310631415, 34583222186, 34584195587 and 35968025734, 35968025970, 35968025726, 35968025742, 35968025746, 35968025958 respectively. #235 runner experiments/ara-authority-at-commitment/run.py and #238 experiments/trust-tasks-cryptosuite-interop/run.py are semantic fixtures (runs 35736285386, 35748900915; no retained artifact returned). #241 source report analysis/rahp-767-proof-required-bearer-evidence.md, PR #242, is historical source characterization. #163 runner experiments/dtg-credential-task-actuation/run.py. #243 reused the existing VTI credential/replay/VAC and A/B workflow families; no new independent native test claim inferred.
+
+For #243 Track B task and status, historical job logs show checkout of 3551ceda3431707b2364eae6d30d50d94cec29dc, but exported evidence declares 76eae3f8093cc09fc6d47428833a158e326a981f. Policy export matches the intended pin. **Quarantine task/status exports for current-epoch attribution**; preserve original bytes. Current producer source at Lab baseline reveals split target identity: reusable workflow checks checkout against input, while scripts/run_current_openvtc_ab_member.py validates against characterization/manifest; both current case manifests and shared characterization declare 76eae3f. Capture derives provenance from manifest. Workflow substitutes only an older adapter pin, not characterization or manifests. This establishes missing cross-boundary binding, not historical runtime behavior or exact historical root cause without inspecting historical producer tree. WP03 owns fail-closed regression and explicit target binding before future reuse; no retrospective relabeling. DPIP/RAHP interpretation remains with owners.
+
+## WP02/03 admission inputs
+
+Pinned VTI WD0.2.0, Credentials WD0.6.0, Trust Tasks WD0.7.0 are working drafts. VTI Appendix F is informative, not a waiver. F.1 authority encoding; F.2 replay, freshness and versioning; F.3 delivery/session/resolution; F.4 audit and identifiers; F.5 community authority; F.6 custody; F.7 closed; F.5a administrative authority. Map actual clauses in WP02. Upstream #1641 and #1684 closed; treat bearer retirement as regression hypothesis, not open defect. Existing VTI CI includes nextest, separate VTC tests, feature matrix, locked MSRV, cargo-deny, scheduled advisories, fuzz build/run, transport harnesses, enclave and mobile builds. Credentials CI includes clippy, default/all/no-default tests, package and MSRV checks. WP03 must reuse those paths and distinguish upstream results from independent reruns. Mobile/WASM/platform-specific build and standalone enclave proxy are conditional, outside this Linux dependency inventory; explicitly admit if required. Security policy alternate locations remain unverified; no sensitive publication authorized. Full call-path verification belongs to WP02/03, not inferred from module inventory.
