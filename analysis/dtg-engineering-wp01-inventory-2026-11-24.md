@@ -1,6 +1,6 @@
 # DTG/VTI engineering assessment — WP01 inventory (2026-11-24)
 
-Status: executed source and dependency inventory; not native build or runtime evidence. Parent #259; WP01 #260. Source retrieval via GitHub at immutable refs; full checkout and dependency resolution blocked in current execution environment (DNS resolution for github.com failed; cargo and gh absent). No upstream writes.
+Status: executed source and dependency inventory; not native build or runtime evidence. Parent #259; WP01 #260. Source retrieval via GitHub at immutable refs; Initial local acquisition was blocked; hosted acquisition and dependency resolution subsequently succeeded. No upstream writes.
 
 ## Source baseline
 
@@ -40,7 +40,7 @@ Root Cargo.lock not found for credential pin. TPIL already has an explicit histo
 
 ## Reuse reconciliation
 
-Paths below were recovered from merge records and selected current pinned files; retained historical CI artifact bytes and hashes have not been independently acquired. All cited prior issues are closed; no historical result is asserted current.
+Paths below were recovered from merge records and selected current pinned files; historical artifact acquisition and attribution disposition are recorded below. All cited prior issues are closed; no historical result is asserted current.
 
 | Issue | Exact runner/workflow or provenance | Output/claim and action |
 |---|---|---|
@@ -59,7 +59,7 @@ Paths below were recovered from merge records and selected current pinned files;
 
 The three VTI historical workflows above invoke cargo test -p vta-service --lib without --locked in inspected source. That observation does not establish actual historical dependency drift; current WP03 must explicitly check lock integrity before and after execution.
 
-## Clean-checkout execution packet (not executed here)
+## Manual acquisition reference (superseded by executed collector)
 
 Use a disposable network-enabled Linux environment with Git, Rust 1.95.0, Python and native dependencies (existing credential workflow installs libdbus-1-dev and pkg-config; verify VTI requirements). For each source row:
 
@@ -86,11 +86,11 @@ Record exit status and stderr per command; unsupported configurations are explic
 
 ## Residuals and gate
 
-- Full pinned checkout, full tree inventory, complete dependency/feature resolution and SHA-256 manifests: blocked by local network/toolchain.
-- Historical runner/manifest/CI artifact reconciliation: partial; exact paths above are observed, historical uploaded bytes not retrieved.
+- Pinned trees and selected Linux feature profiles acquired and verified in hosted execution; native builds remain WP03.
+- Historical artifacts reconciled below; mismatched target attribution quarantined for WP03.
 - Root upstream SECURITY.md lookup returned 404 for both implementations; alternate locations and org channel remain unverified.
 - Source-level entry points, actual call graph, known divergences and supported deployment configurations remain incomplete.
-- WP02/03 readiness remains conditional; no G1 admission or maturity promotion.
+- WP02 may derive scoped oracles after inventory review; WP03 owns native baseline and evidence binding; no G1 admission or maturity promotion.
 - First vertical slices: credential parsing/verification/authority; VTA/VTC task dispatch and durable mutation; state recovery. Client/forge/mobile/TEE deployment only when required by an admitted proposition.
 
 The collector and workflow added by PR #272 are restricted to source/dependency observations. See execution reconciliation below.
@@ -103,6 +103,8 @@ The collector and workflow added by PR #272 are restricted to source/dependency 
 - All six pinned source trees acquired; both implementations resolved locked default/no-default metadata and 27 feature profiles (2 credential, 25 VTI). No compilation or target tests implied.
 - Exact generated credential lock SHA-256 005ac82537244c460d47450bacdcdb553c6526d8595f64ff6320cc37daf41572 now retained at experiments/dtg-engineering-inventory/locks/dtg-credentials-cbae70f8.Cargo.lock. VTI tracked lock SHA-256 29790be4507f147f9c0cf39d96d767a7b527421978b3a2ebb3a2cbf5f3f463fb. Final workflow replays the versioned lock without downloading an older artifact.
 - Reproduce from PR checkout using Python 3.13, Git and Rust 1.95.0: `python experiments/dtg-engineering-inventory/collect.py --output /tmp/wp01-observations --credential-lock experiments/dtg-engineering-inventory/locks/dtg-credentials-cbae70f8.Cargo.lock --credential-lock-sha256 005ac82537244c460d47450bacdcdb553c6526d8595f64ff6320cc37daf41572`; then from the output directory run `sha256sum --check SHA256SUMS`. Output directory must not exist. The workflow is network-enabled and read-only, with bounded command/job timeouts.
+
+- Repository-owned lock replay: run 45323289062 succeeded. Consolidated inventory head 26a9c009b733a9db8f8323294208f83cefa977d9 passed inventory run 45323389741 and Repository assurance run 45323388109. Artifact 14887719417, reported archive SHA-256 83afed6551ad13b40661b0956b347973bd2b91c2c0b018933a28ba56e18ca0bf.
 
 ## Historical attribution disposition
 
