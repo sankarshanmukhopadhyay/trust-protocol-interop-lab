@@ -7,7 +7,6 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  actions: read
 jobs:
   collect:
     runs-on: ubuntu-latest
@@ -21,25 +20,13 @@ jobs:
           python-version: '3.13'
       - name: Install Rust 1.95.0
         run: rustup toolchain install 1.95.0 --profile minimal
-      # One-time transfer of the already verified public Cargo.lock into the
-      # versioned evidence branch. No write permissions or upstream mutation.
-      - name: Retrieve exact WP01 credential lock
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh run download 45321875470 --repo "$GITHUB_REPOSITORY" -n dtg-engineering-inventory -D "$RUNNER_TEMP/wp01-original"
-          lock="$RUNNER_TEMP/wp01-original/dtg-credentials/Cargo.lock"
-          printf '%s  %s\n' '005ac82537244c460d47450bacdcdb553c6526d8595f64ff6320cc37daf41572' "$lock" | sha256sum --check --
-          echo 'WP01_CREDENTIAL_LOCK_BASE64_BEGIN'
-          base64 -w 76 "$lock"
-          echo 'WP01_CREDENTIAL_LOCK_BASE64_END'
       - name: Collect pinned source and dependency observations
         env:
           GIT_TERMINAL_PROMPT: '0'
         run: >-
           python experiments/dtg-engineering-inventory/collect.py
           --output "${{ runner.temp }}/dtg-engineering-inventory"
-          --credential-lock "${{ runner.temp }}/wp01-original/dtg-credentials/Cargo.lock"
+          --credential-lock experiments/dtg-engineering-inventory/locks/dtg-credentials-cbae70f8.Cargo.lock
           --credential-lock-sha256 005ac82537244c460d47450bacdcdb553c6526d8595f64ff6320cc37daf41572
       - name: Verify recorded artifact integrity
         if: always()
