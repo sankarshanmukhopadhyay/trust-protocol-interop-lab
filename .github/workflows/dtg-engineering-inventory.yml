@@ -1,0 +1,38 @@
+name: DTG engineering inventory
+on:
+  pull_request:
+    paths:
+      - 'experiments/dtg-engineering-inventory/**'
+      - '.github/workflows/dtg-engineering-inventory.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install Rust 1.95.0
+        run: rustup toolchain install 1.95.0 --profile minimal
+      - name: Collect pinned source and dependency observations
+        env:
+          GIT_TERMINAL_PROMPT: '0'
+        run: python experiments/dtg-engineering-inventory/collect.py --output "${{ runner.temp }}/dtg-engineering-inventory"
+      - name: Verify recorded artifact integrity
+        if: always()
+        working-directory: ${{ runner.temp }}/dtg-engineering-inventory
+        run: sha256sum --check SHA256SUMS
+      - name: Retain observations including blocked targets
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: dtg-engineering-inventory
+          path: ${{ runner.temp }}/dtg-engineering-inventory/
+          if-no-files-found: error
+          retention-days: 30
